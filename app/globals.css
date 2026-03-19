@@ -401,12 +401,17 @@ html { scroll-behavior: smooth; }
   gap: 12px;
 }
 
-/* Pain point cards — static, not interactive */
+/* Pain point cards */
 .lp-pain-card {
   background: white;
   border: 1px solid #E8E6E1;
   border-radius: 14px;
   padding: 20px 20px 18px;
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+.lp-pain-card:hover {
+  background: #F7F5F2;
+  border-color: #C8C4BC;
 }
 
 /* CTA button — white focus ring ensures keyboard visibility on teal background */
