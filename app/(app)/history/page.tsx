@@ -11,7 +11,7 @@ export default async function HistoryPage() {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) redirect('/auth')
+  if (!user) redirect('/login')
 
   // Fetch baby
   const { data: memberData } = await supabase

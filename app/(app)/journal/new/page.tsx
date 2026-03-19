@@ -18,7 +18,7 @@ export default function NewJournalEntryPage() {
       if (data.user) {
         setUserId(data.user.id)
       } else {
-        router.push('/auth')
+        router.push('/login')
       }
     })
   }, [router])

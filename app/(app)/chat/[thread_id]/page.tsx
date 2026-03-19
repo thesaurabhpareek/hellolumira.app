@@ -18,7 +18,7 @@ export default async function ChatThreadPage({ params }: PageProps) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) redirect('/auth')
+  if (!user) redirect('/login')
 
   // Fetch profile and baby membership in parallel
   const [{ data: profileData }, { data: memberData }] = await Promise.all([

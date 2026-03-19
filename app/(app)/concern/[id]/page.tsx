@@ -53,7 +53,7 @@ export default function ConcernFlowPage() {
       const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
-        router.push('/auth')
+        router.push('/login')
         return
       }
       setProfileId(user.id)

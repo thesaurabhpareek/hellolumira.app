@@ -16,11 +16,15 @@ vi.mock('@/lib/supabase/server', () => ({
       if (table === 'consent_records') {
         return {
           select: vi.fn(() => ({
-            eq: vi.fn(() => ({
-              order: vi.fn(() => ({
-                limit: vi.fn().mockResolvedValue({ data: [], error: null }),
-              })),
-            })),
+            eq: vi.fn().mockReturnValue(
+              Object.assign(Promise.resolve({ data: [], error: null }), {
+                order: vi.fn(() => ({
+                  limit: vi.fn().mockResolvedValue({ data: [], error: null }),
+                })),
+                single: vi.fn().mockResolvedValue({ data: null }),
+                maybeSingle: vi.fn().mockResolvedValue({ data: null }),
+              })
+            ),
           })),
           insert: mockInsert,
         }
@@ -30,6 +34,7 @@ vi.mock('@/lib/supabase/server', () => ({
           select: vi.fn(() => ({
             eq: vi.fn(() => ({
               single: mockSingle,
+              maybeSingle: vi.fn().mockResolvedValue({ data: { id: 'prefs-1' }, error: null }),
             })),
           })),
           update: vi.fn(() => ({
@@ -49,26 +54,39 @@ vi.mock('@/lib/supabase/server', () => ({
       if (table === 'baby_profiles') {
         return {
           select: vi.fn(() => ({
-            eq: vi.fn().mockResolvedValue({ data: [] }),
+            eq: vi.fn().mockReturnValue(
+              Object.assign(Promise.resolve({ data: [], error: null }), {
+                single: vi.fn().mockResolvedValue({ data: null }),
+                maybeSingle: vi.fn().mockResolvedValue({ data: null }),
+              })
+            ),
           })),
         }
       }
       if (table === 'baby_profile_members') {
         return {
           select: vi.fn(() => ({
+            eq: vi.fn().mockReturnValue(
+              Object.assign(Promise.resolve({ data: [], error: null }), {
+                single: vi.fn().mockResolvedValue({ data: null }),
+                maybeSingle: vi.fn().mockResolvedValue({ data: null }),
+              })
+            ),
             in: vi.fn(() => ({
               neq: vi.fn().mockResolvedValue({ count: 0 }),
             })),
           })),
         }
       }
-      // General fallback for profiles, daily_checkins, etc
+      // General fallback for profiles, daily_checkins, weekly_summaries, pattern_observations, etc
       return {
         select: vi.fn(() => ({
-          eq: vi.fn().mockReturnValue({
-            single: vi.fn().mockResolvedValue({ data: null }),
-            maybeSingle: vi.fn().mockResolvedValue({ data: null }),
-          }),
+          eq: vi.fn().mockReturnValue(
+            Object.assign(Promise.resolve({ data: [], error: null }), {
+              single: vi.fn().mockResolvedValue({ data: null }),
+              maybeSingle: vi.fn().mockResolvedValue({ data: null }),
+            })
+          ),
         })),
       }
     }),
@@ -232,12 +250,15 @@ describe('POST /api/privacy/request-export', () => {
     expect(res.status).toBe(401)
   })
 
-  it('returns 200 with request_id for authenticated user', async () => {
+  it('returns 200 with request_id and download_token for authenticated user', async () => {
     const res = await postExport(makePostRequest('http://localhost/api/privacy/request-export', {}))
     expect(res.status).toBe(200)
     const json = await res.json()
     expect(json.request_id).toBeDefined()
     expect(json.status).toBe('ready')
+    expect(json.download_token).toBeDefined()
+    expect(typeof json.download_token).toBe('string')
+    expect(json.expires_at).toBeDefined()
   })
 })
 
@@ -287,7 +308,9 @@ describe('POST /api/privacy/request-deletion', () => {
     expect(res.status).toBe(200)
     const json = await res.json()
     expect(json.request_id).toBeDefined()
-    expect(json.status).toBe('pending')
-    expect(json.message).toContain('30 days')
+    expect(json.status).toBe('pending_verification')
+    expect(json.verification_token).toBeDefined()
+    expect(typeof json.verification_token).toBe('string')
+    expect(json.message).toContain('verify')
   })
 })

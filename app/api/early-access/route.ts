@@ -8,6 +8,8 @@
  * @since March 2026
  */
 
+export const dynamic = 'force-dynamic'
+
 import { createClient } from '@supabase/supabase-js'
 import { NextRequest, NextResponse } from 'next/server'
 

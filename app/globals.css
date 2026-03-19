@@ -98,7 +98,7 @@
     line-height: 1.6;
     min-height: 100dvh;
     overflow-x: hidden;
-    overscroll-behavior-y: none;
+    -webkit-overflow-scrolling: touch;
   }
 
   /* Ensure all interactive elements meet 48px minimum tap target on touch devices */
@@ -211,6 +211,7 @@
     transition: opacity 0.15s ease, transform 0.1s ease;
     cursor: pointer;
     border: none;
+    text-decoration: none;
   }
   .btn-primary:hover { opacity: 0.92; }
   .btn-primary:active { transform: scale(0.98); }
@@ -232,6 +233,7 @@
     width: 100%;
     transition: all 0.15s ease;
     cursor: pointer;
+    text-decoration: none;
   }
   .btn-ghost:hover { background: var(--color-surface); border-color: var(--color-primary-mid); color: var(--color-primary); }
 

@@ -1,9 +1,13 @@
-// app/(app)/profile/page.tsx — Profile
+// app/(app)/profile/page.tsx — Enhanced Profile with gamification
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { getBabyAgeInfo } from '@/lib/baby-age'
+import { BADGES } from '@/lib/badges'
 import SignOutButton from './SignOutButton'
+import DeleteAccountLink from './DeleteAccountLink'
+import ProfileCompletionArc from './ProfileCompletionArc'
+import BadgesGrid from './BadgesGrid'
 import type { Profile, BabyProfile } from '@/types/app'
 
 export default async function ProfilePage() {
@@ -13,10 +17,10 @@ export default async function ProfilePage() {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) redirect('/auth')
+  if (!user) redirect('/login')
 
-  // Fetch profile, baby membership, and partner count in parallel
-  const [{ data: profileData }, { data: memberData }, { count: partnerCount }] =
+  // Fetch profile, baby membership, partner count, and checkin count in parallel
+  const [{ data: profileData }, { data: memberData }, { count: partnerCount }, { count: checkinCount }] =
     await Promise.all([
       supabase
         .from('profiles')
@@ -33,6 +37,10 @@ export default async function ProfilePage() {
         .from('baby_profile_members')
         .select('*', { count: 'exact', head: true })
         .neq('profile_id', user.id),
+      supabase
+        .from('daily_checkins')
+        .select('*', { count: 'exact', head: true })
+        .eq('profile_id', user.id),
     ])
 
   if (!profileData) redirect('/onboarding')
@@ -53,6 +61,28 @@ export default async function ProfilePage() {
 
   const ageInfo = baby ? getBabyAgeInfo(baby) : null
   const hasPartner = (partnerCount ?? 0) > 0
+  const hasCheckin = (checkinCount ?? 0) > 0
+
+  // Profile completeness calculation
+  const completionFactors = {
+    hasName: !!profile.first_name,
+    hasBaby: !!baby,
+    hasCheckin,
+    hasNotifications: false, // placeholder — no notification prefs check yet
+    hasPrivacy: false, // placeholder — no privacy prefs check yet
+  }
+  const completionPct =
+    (completionFactors.hasName ? 20 : 0) +
+    (completionFactors.hasBaby ? 20 : 0) +
+    (completionFactors.hasCheckin ? 20 : 0) +
+    (completionFactors.hasNotifications ? 20 : 0) +
+    (completionFactors.hasPrivacy ? 20 : 0)
+
+  // Placeholder points (no badge tracking in DB yet)
+  const totalPoints = 0
+
+  // First 6 badges as unearned for display
+  const displayBadges = BADGES.slice(0, 6)
 
   return (
     <div
@@ -73,40 +103,50 @@ export default async function ProfilePage() {
           className="lumira-card mb-4"
           style={{ display: 'flex', alignItems: 'center', gap: '16px' }}
         >
-          {/* Avatar circle */}
+          {/* Large emoji avatar circle */}
           <div
             style={{
-              width: '56px',
-              height: '56px',
+              width: '72px',
+              height: '72px',
               borderRadius: '50%',
-              background: 'var(--color-primary-light)',
+              background: 'linear-gradient(135deg, var(--color-primary-light), var(--color-primary-mid))',
+              border: '2.5px solid var(--color-primary)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               flexShrink: 0,
             }}
           >
-            <span
-              style={{
-                fontSize: '22px',
-                fontWeight: 700,
-                color: 'var(--color-primary)',
-              }}
-            >
-              {profile.first_name?.charAt(0)?.toUpperCase() || '?'}
-            </span>
+            <span style={{ fontSize: '32px' }}>🌿</span>
           </div>
           <div>
             <p
               style={{
-                fontSize: '18px',
+                fontSize: '20px',
                 fontWeight: 700,
                 color: 'var(--color-slate)',
-                marginBottom: '2px',
+                marginBottom: '4px',
               }}
             >
               {profile.first_name}
             </p>
+            {profile.first_time_parent && (
+              <span
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  padding: '3px 10px',
+                  borderRadius: '100px',
+                  background: 'var(--color-accent-light)',
+                  color: 'var(--color-accent)',
+                  fontWeight: 600,
+                  fontSize: '12px',
+                  marginBottom: '4px',
+                }}
+              >
+                First-time parent
+              </span>
+            )}
             <p
               style={{
                 fontSize: '14px',
@@ -115,6 +155,77 @@ export default async function ProfilePage() {
             >
               {user.email}
             </p>
+          </div>
+        </div>
+
+        {/* Points display */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '12px',
+            marginBottom: '16px',
+          }}
+        >
+          <span
+            style={{
+              fontSize: '18px',
+              fontWeight: 700,
+              color: 'var(--color-accent)',
+            }}
+          >
+            ✨ {totalPoints} points
+          </span>
+        </div>
+
+        {/* Completion arc */}
+        <div className="lumira-card mb-4">
+          <p
+            style={{
+              fontSize: '13px',
+              fontWeight: 600,
+              color: 'var(--color-muted)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px',
+              marginBottom: '16px',
+            }}
+          >
+            Profile Completeness
+          </p>
+          <ProfileCompletionArc percentage={completionPct} />
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '8px',
+              marginTop: '16px',
+            }}
+          >
+            {[
+              { label: 'Name', done: completionFactors.hasName },
+              { label: 'Baby', done: completionFactors.hasBaby },
+              { label: 'Check-in', done: completionFactors.hasCheckin },
+              { label: 'Notifications', done: completionFactors.hasNotifications },
+              { label: 'Privacy', done: completionFactors.hasPrivacy },
+            ].map((item) => (
+              <span
+                key={item.label}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  padding: '4px 10px',
+                  borderRadius: '100px',
+                  background: item.done ? 'var(--color-primary-light)' : '#F3F4F6',
+                  color: item.done ? 'var(--color-primary)' : '#9CA3AF',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                }}
+              >
+                {item.done ? '✓' : '○'} {item.label}
+              </span>
+            ))}
           </div>
         </div>
 
@@ -206,6 +317,48 @@ export default async function ProfilePage() {
           </div>
         )}
 
+        {/* Badges section */}
+        <div className="lumira-card mb-4">
+          <p
+            style={{
+              fontSize: '13px',
+              fontWeight: 600,
+              color: 'var(--color-muted)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px',
+              marginBottom: '16px',
+            }}
+          >
+            Your Badges
+          </p>
+          <BadgesGrid badges={displayBadges} earnedIds={[]} />
+        </div>
+
+        {/* About You section */}
+        <div className="lumira-card mb-4">
+          <p
+            style={{
+              fontSize: '13px',
+              fontWeight: 600,
+              color: 'var(--color-muted)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px',
+              marginBottom: '16px',
+            }}
+          >
+            About You
+          </p>
+          <p
+            style={{
+              fontSize: '14px',
+              color: 'var(--color-muted)',
+              lineHeight: 1.6,
+            }}
+          >
+            As you use Lumira, we&apos;ll learn more about your preferences and parenting style. This section will grow with you.
+          </p>
+        </div>
+
         {/* Partner status */}
         <div className="lumira-card mb-4">
           <p
@@ -262,9 +415,25 @@ export default async function ProfilePage() {
               </span>
             </div>
           ) : (
-            <p style={{ fontSize: '14px', color: 'var(--color-muted)', lineHeight: 1.5 }}>
-              No partner connected yet. You can invite them from Settings.
-            </p>
+            <Link
+              href="/settings"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '48px',
+                padding: '0 20px',
+                borderRadius: 'var(--radius-md)',
+                background: 'var(--color-primary-light)',
+                color: 'var(--color-primary)',
+                fontSize: '14px',
+                fontWeight: 600,
+                textDecoration: 'none',
+                transition: 'opacity 0.15s ease',
+              }}
+            >
+              Invite your partner
+            </Link>
           )}
         </div>
 
@@ -283,70 +452,57 @@ export default async function ProfilePage() {
             Quick links
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            <Link
-              href="/settings"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: '14px 4px',
-                borderRadius: '8px',
-                textDecoration: 'none',
-                color: 'var(--color-slate)',
-                transition: 'background 0.15s ease',
-                minHeight: '48px',
-              }}
-            >
-              <div>
-                <p style={{ fontWeight: 600, fontSize: '15px', marginBottom: '2px' }}>
-                  Settings
-                </p>
-                <p style={{ fontSize: '13px', color: 'var(--color-muted)' }}>
-                  Account preferences, notifications
-                </p>
+            {[
+              { href: '/settings', title: 'Settings', subtitle: 'Account preferences, notifications' },
+              { href: '/settings/privacy', title: 'Privacy & Data', subtitle: 'AI processing, data retention, exports' },
+              { href: '/share', title: 'Share Lumira', subtitle: 'Invite friends and family' },
+            ].map((link, i, arr) => (
+              <div key={link.href}>
+                <Link
+                  href={link.href}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '14px 4px',
+                    borderRadius: '8px',
+                    textDecoration: 'none',
+                    color: 'var(--color-slate)',
+                    transition: 'background 0.15s ease',
+                    minHeight: '48px',
+                  }}
+                >
+                  <div>
+                    <p style={{ fontWeight: 600, fontSize: '15px', marginBottom: '2px' }}>
+                      {link.title}
+                    </p>
+                    <p style={{ fontSize: '13px', color: 'var(--color-muted)' }}>
+                      {link.subtitle}
+                    </p>
+                  </div>
+                  <span style={{ color: 'var(--color-muted)', fontSize: '18px' }}>
+                    &rsaquo;
+                  </span>
+                </Link>
+                {i < arr.length - 1 && (
+                  <div
+                    style={{
+                      height: '1px',
+                      background: 'var(--color-border)',
+                      margin: '0 4px',
+                    }}
+                  />
+                )}
               </div>
-              <span style={{ color: 'var(--color-muted)', fontSize: '18px' }}>
-                &rsaquo;
-              </span>
-            </Link>
-            <div
-              style={{
-                height: '1px',
-                background: 'var(--color-border)',
-                margin: '0 4px',
-              }}
-            />
-            <Link
-              href="/settings/privacy"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: '14px 4px',
-                borderRadius: '8px',
-                textDecoration: 'none',
-                color: 'var(--color-slate)',
-                transition: 'background 0.15s ease',
-                minHeight: '48px',
-              }}
-            >
-              <div>
-                <p style={{ fontWeight: 600, fontSize: '15px', marginBottom: '2px' }}>
-                  Privacy &amp; Data
-                </p>
-                <p style={{ fontSize: '13px', color: 'var(--color-muted)' }}>
-                  AI processing, data retention, exports
-                </p>
-              </div>
-              <span style={{ color: 'var(--color-muted)', fontSize: '18px' }}>
-                &rsaquo;
-              </span>
-            </Link>
+            ))}
           </div>
         </div>
 
         {/* Sign out */}
         <SignOutButton />
+
+        {/* Delete account */}
+        <DeleteAccountLink />
 
         {/* Member since */}
         <p

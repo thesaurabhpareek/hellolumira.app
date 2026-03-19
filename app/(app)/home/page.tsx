@@ -6,6 +6,8 @@ import { getBabyAgeInfo } from '@/lib/baby-age'
 import WeekGuideCard from '@/components/app/WeekGuideCard'
 import PatternFlagCard from '@/components/app/PatternFlagCard'
 import PregnancyProgressBadge from '@/components/app/PregnancyProgressBadge'
+import ProfilePromptCard from '@/components/app/ProfilePromptCard'
+import ShareCard from '@/components/app/ShareCard'
 import type { Profile, BabyProfile, DailyCheckin, PatternType } from '@/types/app'
 
 export default async function HomePage() {
@@ -15,7 +17,7 @@ export default async function HomePage() {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) redirect('/auth')
+  if (!user) redirect('/login')
 
   // Fetch profile and baby membership in parallel
   const [{ data: profileData }, { data: memberData }] = await Promise.all([
@@ -153,7 +155,7 @@ export default async function HomePage() {
           <div
             style={{
               background: 'var(--color-green-light)',
-              border: '1px solid #9AE6B4',
+              border: '1px solid var(--color-green)',
               borderRadius: 'var(--radius-lg)',
               padding: '14px 20px',
               marginBottom: '16px',
@@ -177,6 +179,14 @@ export default async function HomePage() {
             babyName={baby.name ?? undefined}
           />
         </div>
+
+        {/* Profile prompt card — shown when profile incomplete */}
+        {!profile.first_time_parent && (
+          <ProfilePromptCard missingItem="Tell us a bit more about yourself" />
+        )}
+
+        {/* Share card */}
+        <ShareCard />
       </div>
 
       {/* Bottom sticky bar — positioned above AppShell bottom nav */}

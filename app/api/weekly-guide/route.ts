@@ -7,9 +7,12 @@
  * @since March 2026
  */
 
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { callClaudeJSON } from '@/lib/claude'
+import { checkRateLimit } from '@/lib/rate-limit'
 import type { Stage, WeeklyGuideContent } from '@/types/app'
 
 const PREGNANCY_GUIDE_PROMPT = `You write weekly pregnancy guides. Warm, honest, occasionally witty. Respond ONLY with valid JSON (no markdown fences): { "opening": "2 sentences, warm, week-specific", "baby_development": "what's happening with the baby at exactly week N", "body_changes": ["thing parent may feel 1", "...2", "...3"], "whats_usually_normal": ["common worry 1 normalised", "...2"], "focus_this_week": ["actionable 1", "...2", "...3"], "watch_outs": ["specific cue — when to call midwife or OB"] }`
@@ -62,7 +65,14 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // TODO: Add rate limiting - max 20 requests per minute per user
+    // Rate limiting — max 20 requests per minute per user
+    const rateLimit = await checkRateLimit(user.id)
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { error: true, fallback_message: 'You\'re sending requests too quickly. Please wait a moment and try again.' },
+        { status: 429, headers: { 'Retry-After': String(rateLimit.retryAfter) } }
+      )
+    }
 
     const supabase = await createServiceClient()
 

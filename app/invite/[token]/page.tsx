@@ -39,7 +39,7 @@ export default async function InvitePage({ params }: Props) {
           <p style={{ color: 'var(--color-muted)', marginBottom: '24px' }}>
             This invite link is invalid, expired, or has already been used.
           </p>
-          <a href="/auth" className="btn-primary">
+          <a href="/login" className="btn-primary">
             Sign in to Lumira
           </a>
         </div>

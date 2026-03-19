@@ -8,10 +8,13 @@
  * @since March 2026
  */
 
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { MASTER_SYSTEM_PROMPT, callClaudeJSON } from '@/lib/claude'
 import { getBabyAgeInfo } from '@/lib/baby-age'
+import { sanitizeForPrompt } from '@/lib/sanitize-prompt'
 import type { BabyProfile, DailyCheckin } from '@/types/app'
 
 const WEEKLY_SUMMARY_PROMPT = `You generate a concise weekly summary for a parent's journal. Warm, observational, supportive. Respond ONLY with valid JSON (no markdown fences):
@@ -153,7 +156,7 @@ export async function GET(request: NextRequest) {
 
         const concernSummary =
           (concerns || []).length > 0
-            ? `Concerns this week: ${(concerns || []).map((c) => c.concern_type).join(', ')}`
+            ? `Concerns this week: ${(concerns || []).map((c) => sanitizeForPrompt(c.concern_type)).join(', ')}`
             : 'No specific concerns logged this week.'
 
         const userMessage = `Generate a weekly summary for week ${weekNumber} of ${year}.\n\nCheck-ins:\n${checkinSummary}\n\n${concernSummary}`

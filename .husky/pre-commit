@@ -1,0 +1,20 @@
+#!/bin/sh
+# Scan for leaked secrets before committing
+
+PATTERNS=(
+  "SUPABASE_SERVICE_ROLE_KEY"
+  "ANTHROPIC_API_KEY"
+  "RESEND_API_KEY"
+  "TWILIO_AUTH_TOKEN"
+  "CRON_SECRET"
+  "sk-ant-"
+  "re_[a-zA-Z0-9]{20,}"
+)
+
+for pattern in "${PATTERNS[@]}"; do
+  if git diff --cached --diff-filter=d | grep -qE "[\"\']?${pattern}[\"\']?\s*[:=]"; then
+    echo "ERROR: Potential secret found in staged files: $pattern"
+    echo "Remove the secret and use environment variables instead."
+    exit 1
+  fi
+done

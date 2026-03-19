@@ -30,7 +30,7 @@ export default function PartnerInviteClient({ babyName, token, babyId }: Props) 
       const { error } = await supabase.auth.signInWithOtp({
         email: email.trim(),
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback?next=/home`,
+          emailRedirectTo: `${window.location.origin}/login/callback?next=/home`,
         },
       })
       if (error) throw error

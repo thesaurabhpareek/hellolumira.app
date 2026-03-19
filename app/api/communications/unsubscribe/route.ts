@@ -8,6 +8,8 @@
  * @since March 2026
  */
 
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/server'
 import { recordConsent } from '@/lib/consent'

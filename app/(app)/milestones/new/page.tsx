@@ -43,7 +43,7 @@ export default function NewMilestonePage() {
     const supabase = createClient()
     const load = async () => {
       const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { router.push('/auth'); return }
+      if (!user) { router.push('/login'); return }
       setUserId(user.id)
 
       const { data: memberData } = await supabase

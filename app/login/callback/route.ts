@@ -1,4 +1,7 @@
-// app/auth/callback/route.ts — Auth callback handler
+// app/login/callback/route.ts — Auth callback handler
+
+export const dynamic = 'force-dynamic'
+
 import { createClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -37,5 +40,5 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  return NextResponse.redirect(`${origin}/auth?error=callback_failed`)
+  return NextResponse.redirect(`${origin}/login?error=callback_failed`)
 }

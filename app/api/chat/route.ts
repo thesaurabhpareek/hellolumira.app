@@ -10,6 +10,8 @@
  * @since March 2026
  */
 
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import anthropic, { MASTER_SYSTEM_PROMPT } from '@/lib/claude'
@@ -20,6 +22,7 @@ import { scanForRedFlags } from '@/lib/red-flag-scanner'
 import { classifyConcern } from '@/lib/chat/classifier'
 import { checkRateLimit } from '@/lib/rate-limit'
 import { sanitizeInput, SECURITY_HEADERS } from '@/lib/utils'
+import { sanitizeForPrompt } from '@/lib/sanitize-prompt'
 import { isValidUUID, validateArray, verifyBabyOwnership } from '@/lib/validation'
 import type { BabyProfile, Profile, EmotionalSignal } from '@/types/app'
 import type { EscalationLevel, ConcernCategory } from '@/types/chat'
@@ -72,7 +75,7 @@ export async function POST(request: NextRequest) {
     }
 
     const { baby_id, profile_id, thread_id, conversation_history } = body
-    const message = sanitizeInput(body.message || '', 5000)
+    const message = sanitizeForPrompt(sanitizeInput(body.message || '', 5000))
 
     if (!baby_id || typeof baby_id !== 'string') {
       return NextResponse.json(
@@ -127,13 +130,13 @@ export async function POST(request: NextRequest) {
       data: { user },
     } = await supabase.auth.getUser()
     if (!user || user.id !== profile_id) {
-      return NextResponse.json({ error: true, message: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: true, message: 'Unauthorized' }, { status: 401, headers: SECURITY_HEADERS })
     }
 
     // 2. Verify user is a member of this baby profile (IDOR prevention)
     const isMember = await verifyBabyOwnership(supabase, user.id, baby_id)
     if (!isMember) {
-      return NextResponse.json({ error: true, message: 'Access denied' }, { status: 403 })
+      return NextResponse.json({ error: true, message: 'Access denied' }, { status: 403, headers: SECURITY_HEADERS })
     }
 
     // 3. Fetch baby and profile in parallel with specific columns
@@ -249,7 +252,7 @@ export async function POST(request: NextRequest) {
     const safeHistory = Array.isArray(conversation_history) ? conversation_history : []
     const historyForClaude = safeHistory.length > 0
       ? safeHistory
-          .map(m => `${m.role === 'user' ? profile.first_name : 'Lumira'}: ${m.content}`)
+          .map(m => `${m.role === 'user' ? profile.first_name : 'Lumira'}: ${sanitizeForPrompt(String(m.content || ''))}`)
           .join('\n\n')
       : ''
 

@@ -1,4 +1,4 @@
-// app/auth/page.tsx — Magic link auth
+// app/login/page.tsx — Magic link auth
 'use client'
 
 import { useState } from 'react'
@@ -24,7 +24,7 @@ export default function AuthPage() {
       const { error } = await supabase.auth.signInWithOtp({
         email: email.trim(),
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          emailRedirectTo: `${window.location.origin}/login/callback`,
         },
       })
       if (error) throw error
@@ -75,7 +75,7 @@ export default function AuthPage() {
             className="text-h1 mb-2"
             style={{ color: 'var(--color-slate)' }}
           >
-            Sign in to Lumira
+            Welcome to Lumira
           </h1>
           <p className="text-body-muted mb-6">
             Enter your email and we&apos;ll send you a magic link.

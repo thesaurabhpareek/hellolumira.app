@@ -47,7 +47,7 @@ function Toggle({
         height: '30px',
         minWidth: '52px',
         borderRadius: '15px',
-        background: checked ? '#5B8C6B' : '#CBD5E0',
+        background: checked ? '#3D8178' : '#CBD5E0',
         border: 'none',
         cursor: disabled ? 'not-allowed' : 'pointer',
         transition: 'background 0.2s ease',
@@ -156,7 +156,7 @@ export default function PrivacySettingsPage() {
       } = await supabase.auth.getUser()
 
       if (!user) {
-        router.push('/auth')
+        router.push('/login')
         return
       }
 
@@ -244,7 +244,7 @@ export default function PrivacySettingsPage() {
 
     // Record consent change for relevant toggles
     if (field === 'ai_processing_enabled' || field === 'analytics_enabled') {
-      const consentType = field === 'ai_processing_enabled' ? 'data_processing' : 'analytics_cookies'
+      const consentType = field === 'ai_processing_enabled' ? 'data_processing' : 'analytics'
       const action = value ? 'granted' : 'withdrawn'
       await supabase.from('consent_records').insert({
         profile_id: userId,
@@ -455,7 +455,7 @@ export default function PrivacySettingsPage() {
                   gap: '12px',
                   padding: '14px 16px',
                   borderRadius: '10px',
-                  border: `1.5px solid ${prefs?.data_retention_months === months ? '#5B8C6B' : 'var(--color-border)'}`,
+                  border: `1.5px solid ${prefs?.data_retention_months === months ? '#3D8178' : 'var(--color-border)'}`,
                   background:
                     prefs?.data_retention_months === months
                       ? 'rgba(91, 140, 107, 0.06)'
@@ -471,7 +471,7 @@ export default function PrivacySettingsPage() {
                   checked={prefs?.data_retention_months === months}
                   onChange={() => updatePref('data_retention_months', months)}
                   style={{
-                    accentColor: '#5B8C6B',
+                    accentColor: '#3D8178',
                     width: '18px',
                     height: '18px',
                     cursor: 'pointer',

@@ -36,7 +36,7 @@ export default function ChatError({
           style={{
             fontSize: '1.125rem',
             fontWeight: 600,
-            color: '#4A6741',
+            color: '#3D8178',
             marginBottom: '0.75rem',
           }}
         >
@@ -57,7 +57,7 @@ export default function ChatError({
           onClick={reset}
           style={{
             padding: '0.625rem 1.5rem',
-            backgroundColor: '#4A6741',
+            backgroundColor: '#3D8178',
             color: '#FFFFFF',
             border: 'none',
             borderRadius: '0.5rem',

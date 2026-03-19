@@ -53,7 +53,7 @@ export default function OnboardingPage() {
       if (data.user) {
         setUserId(data.user.id)
       } else {
-        router.push('/auth')
+        router.push('/login')
       }
     })
   }, [router])
@@ -85,15 +85,28 @@ export default function OnboardingPage() {
     try {
       const supabase = createClient()
 
-      // Upsert profile
-      const { error: profileError } = await supabase.from('profiles').upsert({
-        id: userId,
-        first_name: firstName.trim(),
-        first_time_parent: firstTimeParent,
-        first_checkin_complete: false,
-        updated_at: new Date().toISOString(),
-      })
-      if (profileError) throw profileError
+      // Update profile (trigger may have already created the row on signup)
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({
+          first_name: firstName.trim(),
+          first_time_parent: firstTimeParent,
+          first_checkin_complete: false,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', userId)
+
+      // If update fails (no row yet), insert instead
+      if (updateError) {
+        const { error: insertError } = await supabase.from('profiles').insert({
+          id: userId,
+          first_name: firstName.trim(),
+          first_time_parent: firstTimeParent,
+          first_checkin_complete: false,
+          updated_at: new Date().toISOString(),
+        })
+        if (insertError) throw insertError
+      }
 
       // Determine stage
       const stage: Stage = mode === 'pregnancy' ? 'pregnancy' : 'infant'
@@ -179,8 +192,9 @@ export default function OnboardingPage() {
         void supabase.from('concern_sessions').insert({
           baby_id: newBabyId,
           profile_id: userId,
-          concern_type: 'general',
-          initial_message: initialConcern.trim().slice(0, 2000),
+          stage,
+          concern_type: 'other',
+          answers: [{ question_id: 'initial', question_text: 'Initial concern', answer: initialConcern.trim().slice(0, 2000) }],
           created_at: new Date().toISOString(),
         })
       }

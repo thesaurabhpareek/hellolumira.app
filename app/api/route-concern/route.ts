@@ -7,10 +7,13 @@
  * @since March 2026
  */
 
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { checkRateLimit } from '@/lib/rate-limit'
 import { callClaudeJSON } from '@/lib/claude'
+import { sanitizeForPrompt } from '@/lib/sanitize-prompt'
 import type { Stage, ConcernType } from '@/types/app'
 
 const VALID_CONCERN_TYPES: ConcernType[] = [
@@ -64,7 +67,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Sanitize and validate free_text
-    const free_text = typeof body.free_text === 'string' ? body.free_text.trim().slice(0, 2000) : ''
+    const free_text = typeof body.free_text === 'string' ? sanitizeForPrompt(body.free_text.trim().slice(0, 2000)) : ''
     if (!free_text) {
       return NextResponse.json({ concern_type: 'other' })
     }

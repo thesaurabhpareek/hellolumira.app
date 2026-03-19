@@ -1,17 +1,20 @@
-// app/(app)/checkin/page.tsx — Check-in thread
+// app/(app)/checkin/page.tsx — Check-in thread with email prefill support
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import CheckinThread from '@/components/app/CheckinThread'
 import type { Profile, BabyProfile, DailyCheckin } from '@/types/app'
 
-export default async function CheckinPage() {
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
+
+export default async function CheckinPage({ searchParams }: { searchParams: SearchParams }) {
   const supabase = await createClient()
+  const resolvedParams = await searchParams
 
   const {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) redirect('/auth')
+  if (!user) redirect('/login')
 
   // Fetch profile and baby membership in parallel
   const [{ data: profileData }, { data: memberData }] = await Promise.all([
@@ -38,11 +41,22 @@ export default async function CheckinPage() {
     .eq('checkin_date', today)
     .maybeSingle()
 
+  // Parse prefill from email link (e.g., ?prefill=sleep_quality:poor)
+  let prefill: { field: string; value: string } | null = null
+  const prefillParam = typeof resolvedParams.prefill === 'string' ? resolvedParams.prefill : null
+  if (prefillParam) {
+    const [field, value] = prefillParam.split(':')
+    if (field && value) {
+      prefill = { field, value }
+    }
+  }
+
   return (
     <CheckinThread
       profile={profileData as Profile}
       baby={babyData as BabyProfile}
       existingCheckin={checkinData as DailyCheckin | null}
+      prefill={prefill}
     />
   )
 }

@@ -7,6 +7,8 @@
  * @since March 2026
  */
 
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { recordConsent } from '@/lib/consent'
@@ -102,6 +104,9 @@ export async function PUT(request: NextRequest) {
     if (body.ai_processing_enabled !== undefined) {
       updatePayload.ai_processing_enabled = body.ai_processing_enabled
     }
+    if (body.product_improvement_enabled !== undefined) {
+      updatePayload.product_improvement_enabled = body.product_improvement_enabled
+    }
     if (body.data_retention_months !== undefined) {
       updatePayload.data_retention_months = body.data_retention_months
     }
@@ -180,7 +185,7 @@ export async function PUT(request: NextRequest) {
       ) {
         const action = body.analytics_enabled ? 'granted' : 'withdrawn'
         consentPromises.push(
-          recordConsent(user.id, 'analytics_cookies' as AppConsentType, action, consentOptions),
+          recordConsent(user.id, 'analytics' as AppConsentType, action, consentOptions),
           logAudit(
             body.analytics_enabled ? 'consent_granted' : 'consent_withdrawn',
             user.id,

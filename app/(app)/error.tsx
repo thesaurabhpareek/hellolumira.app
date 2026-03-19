@@ -36,7 +36,7 @@ export default function AppError({
           style={{
             fontSize: '1.25rem',
             fontWeight: 600,
-            color: '#4A6741',
+            color: '#3D8178',
             marginBottom: '0.75rem',
           }}
         >
@@ -58,7 +58,7 @@ export default function AppError({
             onClick={reset}
             style={{
               padding: '0.625rem 1.25rem',
-              backgroundColor: '#4A6741',
+              backgroundColor: '#3D8178',
               color: '#FFFFFF',
               border: 'none',
               borderRadius: '0.5rem',
@@ -74,8 +74,8 @@ export default function AppError({
             style={{
               padding: '0.625rem 1.25rem',
               backgroundColor: 'transparent',
-              color: '#4A6741',
-              border: '1px solid #4A6741',
+              color: '#3D8178',
+              border: '1px solid #3D8178',
               borderRadius: '0.5rem',
               fontSize: '0.9rem',
               fontWeight: 500,

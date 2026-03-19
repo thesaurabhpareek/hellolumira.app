@@ -80,6 +80,9 @@ function LumiraLogo() {
 export default function LandingPage() {
   const searchParams = useSearchParams()
   const [stage, setStage] = useState<Stage>('pregnancy')
+  const [waitlistEmail, setWaitlistEmail] = useState('')
+  const [waitlistStatus, setWaitlistStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [waitlistError, setWaitlistError] = useState('')
 
   const buildAuthUrl = useCallback(() => {
     const params = new URLSearchParams()
@@ -223,6 +226,42 @@ export default function LandingPage() {
                   Start for free — no download needed
                 </a>
                 <p style={{ fontSize: 13, color: SAND_300, margin: 0 }}>Opens right in your browser. Ready in under two minutes.</p>
+              </div>
+
+              {/* Waitlist email signup */}
+              <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+                <label htmlFor="waitlist-email" style={{ fontSize: 14, color: SAND_500, fontWeight: 500 }}>
+                  Or join our waitlist for updates
+                </label>
+                <div style={{ display: 'flex', width: '100%', gap: 8 }}>
+                  <input
+                    id="waitlist-email"
+                    type="email"
+                    autoComplete="email"
+                    placeholder="you@example.com"
+                    value={waitlistEmail}
+                    onChange={e => { setWaitlistEmail(e.target.value); setWaitlistStatus('idle'); setWaitlistError('') }}
+                    style={{ flex: 1, height: 48, padding: '0 14px', borderRadius: 10, border: `1px solid ${SAND_100}`, fontSize: 16, fontFamily: 'inherit', outline: 'none' }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!waitlistEmail || !waitlistEmail.includes('@')) {
+                        setWaitlistStatus('error')
+                        setWaitlistError('Please enter a valid email.')
+                        return
+                      }
+                      setWaitlistStatus('success')
+                    }}
+                    style={{ height: 48, padding: '0 20px', borderRadius: 10, border: 'none', background: SAGE_500, color: 'white', fontSize: 14, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', touchAction: 'manipulation' }}
+                  >
+                    Join
+                  </button>
+                </div>
+                <div aria-live="polite" style={{ minHeight: 20, fontSize: 13 }}>
+                  {waitlistStatus === 'error' && <p style={{ color: '#c53030', margin: 0 }}>{waitlistError}</p>}
+                  {waitlistStatus === 'success' && <p style={{ color: SAGE_500, margin: 0 }}>You&apos;re on the list!</p>}
+                </div>
               </div>
 
               <p style={{ fontSize: 12, color: SAND_300, textAlign: 'center', margin: 0, lineHeight: 1.6 }}>

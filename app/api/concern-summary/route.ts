@@ -8,6 +8,8 @@
  * @since March 2026
  */
 
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { MASTER_SYSTEM_PROMPT, callClaudeJSON } from '@/lib/claude'
@@ -15,6 +17,7 @@ import { buildContextBlock } from '@/lib/context-builder'
 import { getBabyAgeInfo } from '@/lib/baby-age'
 import { checkRateLimit } from '@/lib/rate-limit'
 import { isValidUUID, isValidEnum, validateArray, verifyBabyOwnership } from '@/lib/validation'
+import { sanitizeForPrompt } from '@/lib/sanitize-prompt'
 import type { Stage, AISummary, ConcernAnswer, BabyProfile } from '@/types/app'
 
 const CONCERN_SUMMARY_PROMPT = `You are generating a structured concern summary for a parent. Be honest, warm, and specific. Never alarming, but never dismissive.
@@ -140,11 +143,11 @@ export async function POST(request: NextRequest) {
     const answersText = answers
       .map((a) => {
         const answerStr = Array.isArray(a.answer) ? a.answer.join(', ') : a.answer
-        return `Q: ${a.question_text}\nA: ${answerStr}`
+        return `Q: ${a.question_text}\nA: ${sanitizeForPrompt(String(answerStr))}`
       })
       .join('\n\n')
 
-    const userMessage = `Concern type: ${concern_type}\nStage: ${stage}\n\nParent's answers:\n${answersText}\n\nGenerate a structured concern summary.`
+    const userMessage = `Concern type: ${sanitizeForPrompt(concern_type)}\nStage: ${stage}\n\nParent's answers:\n${answersText}\n\nGenerate a structured concern summary.`
 
     const aiSummary = await callClaudeJSON<AISummary>(fullSystemPrompt, userMessage, 1200)
 

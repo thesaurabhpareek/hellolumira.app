@@ -21,10 +21,18 @@ export default function LegalLayout({
           __html: `
             .legal-layout {
               min-height: 100dvh;
+              height: auto;
               background: #FAFAF8;
               font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
               color: #2D3748;
               overflow-y: auto;
+              -webkit-overflow-scrolling: touch;
+              overscroll-behavior-y: auto;
+            }
+            html:has(.legal-layout), html:has(.legal-layout) body {
+              overflow-y: auto !important;
+              height: auto !important;
+              min-height: 0 !important;
             }
             .legal-topbar {
               position: sticky;

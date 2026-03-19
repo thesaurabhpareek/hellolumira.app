@@ -31,7 +31,7 @@ export default async function ConcernPage() {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) redirect('/auth')
+  if (!user) redirect('/login')
 
   const { data: memberData } = await supabase
     .from('baby_profile_members')

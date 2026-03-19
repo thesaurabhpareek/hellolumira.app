@@ -8,6 +8,8 @@
  * @since March 2026
  */
 
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { MASTER_SYSTEM_PROMPT, callClaudeJSON } from '@/lib/claude'
@@ -16,6 +18,7 @@ import { getBabyAgeInfo } from '@/lib/baby-age'
 import { inferEmotionalSignal } from '@/lib/emotional-signals'
 import { checkRateLimit } from '@/lib/rate-limit'
 import { isValidUUID, validateArray, verifyBabyOwnership } from '@/lib/validation'
+import { sanitizeForPrompt } from '@/lib/sanitize-prompt'
 import type { Stage, ConversationMessage, EmotionalSignal, BabyProfile } from '@/types/app'
 
 const CHECKIN_SYSTEM_PROMPT = `You are conducting a warm, brief daily check-in. Ask ONE question at a time. Keep messages short (1-3 sentences). Be genuinely curious.
@@ -86,7 +89,7 @@ export async function POST(request: NextRequest) {
 
     const { baby_id, profile_id, stage, is_opening, conversation_so_far } = body
     // Sanitize message: trim and enforce max length
-    const message = body.message ? body.message.trim().slice(0, 5000) : ''
+    const message = body.message ? sanitizeForPrompt(body.message.trim().slice(0, 5000)) : ''
 
     const supabase = await createClient()
 
@@ -145,7 +148,7 @@ export async function POST(request: NextRequest) {
     const historyText =
       conversation_so_far.length > 0
         ? conversation_so_far
-            .map((m) => `${m.role === 'lumira' ? 'Lumira' : profileData.first_name}: ${m.content}`)
+            .map((m) => `${m.role === 'lumira' ? 'Lumira' : profileData.first_name}: ${sanitizeForPrompt(String(m.content || ''))}`)
             .join('\n')
         : ''
 

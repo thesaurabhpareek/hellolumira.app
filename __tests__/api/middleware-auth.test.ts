@@ -6,28 +6,34 @@
 import { describe, it, expect } from 'vitest'
 
 // Inline the protected paths from middleware.ts to verify coverage
-const PROTECTED_PATHS = ['/home', '/checkin', '/concern', '/history', '/journal', '/milestones', '/settings']
+const PROTECTED_PATHS = ['/home', '/checkin', '/concern', '/history', '/journal', '/milestones', '/settings', '/chat', '/tribes', '/content', '/profile']
 
 describe('Middleware — Auth Guard (TC-007)', () => {
   it('all critical routes are in the protected list', () => {
-    const criticalRoutes = ['/home', '/checkin', '/concern', '/history', '/journal', '/settings']
+    const criticalRoutes = ['/home', '/checkin', '/concern', '/history', '/journal', '/settings', '/chat', '/profile', '/tribes', '/content']
     for (const route of criticalRoutes) {
       expect(PROTECTED_PATHS.some(p => route.startsWith(p))).toBe(true)
     }
   })
 
-  it('/chat should be protected (MISSING — needs to be added)', () => {
-    // GAP: /chat is not in the protected paths list in middleware.ts
-    // This means unauthenticated users could access chat routes
+  it('/chat is protected', () => {
     const isChatProtected = PROTECTED_PATHS.some(p => '/chat'.startsWith(p))
-    // This will FAIL — documenting the gap
-    // expect(isChatProtected).toBe(true)
-    expect(isChatProtected).toBe(false) // Current state — this is a BUG
+    expect(isChatProtected).toBe(true)
   })
 
-  it('/profile should be protected (MISSING — needs to be added)', () => {
+  it('/profile is protected', () => {
     const isProfileProtected = PROTECTED_PATHS.some(p => '/profile'.startsWith(p))
-    expect(isProfileProtected).toBe(false) // Current state — gap
+    expect(isProfileProtected).toBe(true)
+  })
+
+  it('/tribes is protected', () => {
+    const isTribesProtected = PROTECTED_PATHS.some(p => '/tribes'.startsWith(p))
+    expect(isTribesProtected).toBe(true)
+  })
+
+  it('/content is protected', () => {
+    const isContentProtected = PROTECTED_PATHS.some(p => '/content'.startsWith(p))
+    expect(isContentProtected).toBe(true)
   })
 
   it('API routes are excluded from middleware matcher (by design)', () => {

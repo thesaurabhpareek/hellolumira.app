@@ -1,13 +1,18 @@
 /**
  * @module RequestDeletionAPI
  * @description POST /api/privacy/request-deletion — GDPR/CCPA right-to-erasure.
- *   Creates a pending deletion request (does NOT immediately delete data).
- *   Requires explicit { confirmation: "DELETE" } to prevent accidental triggers.
+ *   Creates a pending deletion request with a verification token (does NOT
+ *   immediately delete data). Requires explicit { confirmation: "DELETE" } to
+ *   prevent accidental triggers. Returns a verification token that must be
+ *   submitted to /api/privacy/verify-deletion to execute the actual deletion.
  *   Warns if co-parents are linked to shared baby profiles.
- * @version 1.0.0
+ * @version 2.0.0
  * @since March 2026
  */
 
+export const dynamic = 'force-dynamic'
+
+import crypto from 'crypto'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { logAudit } from '@/lib/audit'
@@ -51,14 +56,18 @@ export async function POST(request: NextRequest) {
     const serviceClient = await createServiceClient()
     const now = new Date().toISOString()
 
-    // Create deletion request (does NOT immediately delete)
+    // Generate a secure verification token
+    const verificationToken = crypto.randomBytes(32).toString('hex')
+
+    // Create deletion request with verification token
     const { data: deletionRequest, error: insertError } = await serviceClient
       .from('data_deletion_requests')
       .insert({
         profile_id: user.id,
-        status: 'pending',
+        status: 'pending_verification',
         request_type: 'full_deletion',
         requested_at: now,
+        verification_token: verificationToken,
       })
       .select()
       .single()
@@ -107,9 +116,10 @@ export async function POST(request: NextRequest) {
 
     const response: Record<string, unknown> = {
       request_id: deletionRequest.id,
-      status: 'pending',
+      status: 'pending_verification',
+      verification_token: verificationToken,
       message:
-        'Your deletion request has been received. We will process it within 30 days.',
+        'Your deletion request has been received. Please verify by submitting the verification token to /api/privacy/verify-deletion.',
     }
 
     if (coParentWarning) {

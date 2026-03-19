@@ -19,6 +19,7 @@ interface Props {
   profile: Profile
   baby: BabyProfile
   existingCheckin: DailyCheckin | null
+  prefill?: { field: string; value: string } | null
 }
 
 interface LumiraMessage {
@@ -45,7 +46,7 @@ const INFANT_INTRO = `Hey! I'm Lumira — I'm here to help you navigate life wit
 
 How did things go last night? How's your baby doing today?`
 
-export default function CheckinThread({ profile, baby, existingCheckin }: Props) {
+export default function CheckinThread({ profile, baby, existingCheckin, prefill }: Props) {
   const router = useRouter()
   const [messages, setMessages] = useState<Message[]>([])
   const [inputValue, setInputValue] = useState('')
@@ -59,10 +60,12 @@ export default function CheckinThread({ profile, baby, existingCheckin }: Props)
   const [conversationLog, setConversationLog] = useState<ConversationMessage[]>(
     existingCheckin?.conversation_log || []
   )
+  const [prefillToast, setPrefillToast] = useState<string | null>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputBarRef = useRef<HTMLDivElement>(null)
   const initialized = useRef(false)
+  const prefillApplied = useRef(false)
 
   const scrollToBottom = useCallback(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -177,6 +180,42 @@ export default function CheckinThread({ profile, baby, existingCheckin }: Props)
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Handle email prefill — auto-submit the prefilled field value
+  useEffect(() => {
+    if (!prefill || prefillApplied.current) return
+    prefillApplied.current = true
+
+    const PREFILL_LABELS: Record<string, Record<string, string>> = {
+      sleep_quality: {
+        poor: 'Got it \u2014 sleep was rough last night',
+        ok: 'Got it \u2014 sleep was okay last night',
+        good: 'Got it \u2014 sleep went well last night',
+      },
+    }
+
+    const toastMsg = PREFILL_LABELS[prefill.field]?.[prefill.value] || `Got it \u2014 ${prefill.field}: ${prefill.value}`
+    setPrefillToast(toastMsg)
+
+    // Auto-dismiss toast after 4 seconds
+    const timer = setTimeout(() => setPrefillToast(null), 4000)
+
+    // Submit the prefill as a field selection via the API
+    fetch('/api/checkin-conversation', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        baby_id: baby.id,
+        profile_id: profile.id,
+        stage: baby.stage,
+        message: `${prefill.field}: ${prefill.value}`,
+        is_opening: false,
+        conversation_so_far: [],
+      }),
+    }).catch(() => {})
+
+    return () => clearTimeout(timer)
+  }, [prefill, baby.id, baby.stage, profile.id])
+
   useEffect(() => {
     scrollToBottom()
   }, [messages, scrollToBottom])
@@ -279,6 +318,31 @@ export default function CheckinThread({ profile, baby, existingCheckin }: Props)
         flexDirection: 'column',
       }}
     >
+      {/* Prefill toast from email link */}
+      {prefillToast && (
+        <div
+          className="animate-fade-in"
+          style={{
+            position: 'fixed',
+            top: '16px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: 'var(--color-primary)',
+            color: '#ffffff',
+            padding: '10px 20px',
+            borderRadius: 'var(--radius-md)',
+            fontSize: '14px',
+            fontWeight: 600,
+            zIndex: 100,
+            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+            maxWidth: '90vw',
+            textAlign: 'center',
+          }}
+        >
+          {prefillToast}
+        </div>
+      )}
+
       {/* Wellbeing overlay */}
       {showWellbeing && (
         <WellbeingPrompt onDismiss={() => setShowWellbeing(false)} />

@@ -37,7 +37,7 @@ function Toggle({
         height: '30px',
         minWidth: '52px',
         borderRadius: '15px',
-        background: checked ? '#5B8C6B' : '#CBD5E0',
+        background: checked ? '#3D8178' : '#CBD5E0',
         border: 'none',
         cursor: disabled ? 'not-allowed' : 'pointer',
         transition: 'background 0.2s ease',
@@ -217,7 +217,7 @@ export default function NotificationSettingsPage() {
       } = await supabase.auth.getUser()
 
       if (!user) {
-        router.push('/auth')
+        router.push('/login')
         return
       }
 

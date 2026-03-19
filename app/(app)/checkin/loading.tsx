@@ -16,7 +16,7 @@ export default function CheckinLoading() {
             width: '2rem',
             height: '2rem',
             border: '3px solid #E5E7EB',
-            borderTopColor: '#4A6741',
+            borderTopColor: '#3D8178',
             borderRadius: '50%',
             animation: 'spin 0.8s linear infinite',
             margin: '0 auto 1rem',

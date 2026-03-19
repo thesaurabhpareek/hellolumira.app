@@ -22,7 +22,7 @@ export default async function ConcernSummaryPage({ params, searchParams }: Props
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) redirect('/auth')
+  if (!user) redirect('/login')
 
   const { data: sessionData, error } = await supabase
     .from('concern_sessions')

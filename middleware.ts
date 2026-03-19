@@ -2,7 +2,7 @@
  * @module Middleware
  * @description Next.js edge middleware for authentication and security headers.
  *   Routes are classified as public (no auth) or protected (requires session).
- *   Logged-in users on /auth are redirected to /home or /onboarding depending
+ *   Logged-in users on /login are redirected to /home or /onboarding depending
  *   on profile completeness. All responses include security headers (X-Frame-Options,
  *   CSP, Referrer-Policy, Permissions-Policy).
  * @version 1.0.0
@@ -13,7 +13,7 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 /** Set of public route prefixes that do not require authentication. */
-const PUBLIC_PREFIXES = ['/', '/auth', '/onboarding', '/terms', '/privacy', '/legal', '/invite']
+const PUBLIC_PREFIXES = ['/', '/login', '/onboarding', '/terms', '/privacy', '/legal', '/invite']
 
 /** Set of protected route prefixes that require an active session. */
 const PROTECTED_PREFIXES = ['/home', '/checkin', '/concern', '/history', '/journal', '/milestones', '/settings', '/chat', '/tribes', '/content', '/profile']
@@ -22,10 +22,10 @@ const PROTECTED_PREFIXES = ['/home', '/checkin', '/concern', '/history', '/journ
  * Edge middleware: handles auth redirects and security headers.
  *
  * Flow:
- * 1. Public routes pass through (except /auth, which checks for logged-in redirect).
+ * 1. Public routes pass through (except /login, which checks for logged-in redirect).
  * 2. If Supabase keys are missing, fail closed — only allow public paths.
- * 3. Protected routes redirect to /auth if no session.
- * 4. Logged-in users on /auth redirect to /home or /onboarding.
+ * 3. Protected routes redirect to /login if no session.
+ * 4. Logged-in users on /login redirect to /home or /onboarding.
  * 5. Security headers are appended to all responses.
  */
 export async function middleware(request: NextRequest) {
@@ -34,8 +34,8 @@ export async function middleware(request: NextRequest) {
   // Public routes — no auth required
   const isPublicRoute = pathname === '/' || PUBLIC_PREFIXES.some((p) => p !== '/' && pathname.startsWith(p))
   if (isPublicRoute) {
-    // Still need to handle logged-in user redirects from /auth below
-    if (pathname !== '/auth') {
+    // Still need to handle logged-in user redirects from /login below
+    if (pathname !== '/login') {
       return NextResponse.next()
     }
   }
@@ -44,10 +44,10 @@ export async function middleware(request: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
   if (!supabaseUrl || !supabaseAnonKey) {
-    const publicPaths = ['/', '/auth', '/onboarding', '/terms', '/privacy', '/legal']
+    const publicPaths = ['/', '/login', '/onboarding', '/terms', '/privacy', '/legal']
     const isPublic = publicPaths.some((p) => pathname === p || pathname.startsWith(p + '/'))
     if (!isPublic) {
-      return NextResponse.redirect(new URL('/auth', request.url))
+      return NextResponse.redirect(new URL('/login', request.url))
     }
     return NextResponse.next()
   }
@@ -73,15 +73,15 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // Protected routes — redirect to /auth if not logged in
+  // Protected routes — redirect to /login if not logged in
   const isProtected = PROTECTED_PREFIXES.some((p) => pathname.startsWith(p))
 
   if (isProtected && !user) {
-    return NextResponse.redirect(new URL('/auth', request.url))
+    return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  // Redirect logged-in users away from auth pages
-  if (user && (pathname === '/auth')) {
+  // Redirect logged-in users away from login page
+  if (user && (pathname === '/login')) {
     const { data: profile } = await supabase
       .from('profiles')
       .select('first_name')
