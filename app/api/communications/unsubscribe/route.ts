@@ -14,6 +14,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/server'
 import { recordConsent } from '@/lib/consent'
 import { logAudit } from '@/lib/audit'
+import { SECURITY_HEADERS } from '@/lib/utils'
 
 /** Maps unsubscribe type to the communication_preferences column to disable. */
 const TYPE_TO_COLUMN: Record<string, string> = {
@@ -118,7 +119,7 @@ function htmlResponse(title: string, body: string, status = 200): NextResponse {
 
   return new NextResponse(html, {
     status,
-    headers: { 'Content-Type': 'text/html; charset=utf-8' },
+    headers: { ...SECURITY_HEADERS, 'Content-Type': 'text/html; charset=utf-8' },
   })
 }
 
@@ -144,10 +145,12 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Validate JWT token
-    const secret = process.env.UNSUBSCRIBE_JWT_SECRET || process.env.SUPABASE_JWT_SECRET
+    // Validate JWT token — requires UNSUBSCRIBE_JWT_SECRET to be explicitly set.
+    // We intentionally do NOT fall back to SUPABASE_JWT_SECRET because that would
+    // allow any valid Supabase auth token to be used as an unsubscribe token.
+    const secret = process.env.UNSUBSCRIBE_JWT_SECRET
     if (!secret) {
-      console.error('[unsubscribe] No JWT secret configured')
+      console.error('[unsubscribe] UNSUBSCRIBE_JWT_SECRET is not configured')
       return htmlResponse('Error', 'Unable to process your request. Please try again later.', 500)
     }
 
