@@ -13,10 +13,10 @@ export default function LegalHubPage() {
   return (
     <>
       <h1 className="legal-h1">Legal</h1>
-      <p style={{ fontSize: '15px', color: '#718096', marginBottom: '32px', lineHeight: 1.6 }}>
+      <p style={{ fontSize: '15px', color: '#5A6478', marginBottom: '32px', lineHeight: 1.6 }}>
         These documents govern your use of Lumira. We have written them to be as clear and
         readable as possible. If you have questions about anything below, please contact us
-        at <a href="mailto:legal@hellolumira.app" style={{ color: '#3D8178' }}>legal@hellolumira.app</a>.
+        at <a href="mailto:legal@hellolumira.app" style={{ color: '#2C6058', textDecoration: 'underline', textUnderlineOffset: '2px' }}>legal@hellolumira.app</a>.
       </p>
 
       <div className="legal-card-grid">
@@ -56,11 +56,11 @@ export default function LegalHubPage() {
         </div>
       </div>
 
-      <div style={{ marginTop: '36px', fontSize: '13px', color: '#A0AEC0', lineHeight: 1.5 }}>
+      <div style={{ marginTop: '36px', fontSize: '13px', color: '#5A6478', lineHeight: 1.5 }}>
         <p>
           Lumira is operated from Silicon Valley, California, United States.
-          For general legal enquiries: <a href="mailto:legal@hellolumira.app" style={{ color: '#3D8178' }}>legal@hellolumira.app</a>.
-          For privacy-specific enquiries: <a href="mailto:privacy@hellolumira.app" style={{ color: '#3D8178' }}>privacy@hellolumira.app</a>.
+          For general legal enquiries: <a href="mailto:legal@hellolumira.app" style={{ color: '#2C6058', textDecoration: 'underline', textUnderlineOffset: '2px' }}>legal@hellolumira.app</a>.
+          For privacy-specific enquiries: <a href="mailto:privacy@hellolumira.app" style={{ color: '#2C6058', textDecoration: 'underline', textUnderlineOffset: '2px' }}>privacy@hellolumira.app</a>.
         </p>
       </div>
     </>

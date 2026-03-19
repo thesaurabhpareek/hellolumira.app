@@ -50,7 +50,7 @@ export default function LegalLayout({
             .legal-topbar-brand {
               font-size: 17px;
               font-weight: 700;
-              color: #4A6FA5;
+              color: #1F4F49; /* Sage 700 — ~8.5:1 on #FAFAF8, replaces #3D8178 which was ~3.9:1 */
               text-decoration: none;
               letter-spacing: -0.3px;
             }
@@ -60,14 +60,14 @@ export default function LegalLayout({
             .legal-topbar-back {
               font-size: 14px;
               font-weight: 500;
-              color: #718096;
+              color: #5A6478;
               text-decoration: none;
               display: flex;
               align-items: center;
               gap: 4px;
             }
             .legal-topbar-back:hover {
-              color: #4A6FA5;
+              color: #2C6058;
             }
             .legal-main {
               max-width: 720px;
@@ -91,7 +91,7 @@ export default function LegalLayout({
             }
             .legal-meta {
               font-size: 13px;
-              color: #718096;
+              color: #5A6478;
               margin-bottom: 40px;
               display: flex;
               flex-wrap: wrap;
@@ -131,12 +131,12 @@ export default function LegalLayout({
               margin-bottom: 6px;
             }
             .legal-body a {
-              color: #3D8178;
+              color: #2C6058;
               text-decoration: underline;
               text-underline-offset: 2px;
             }
             .legal-body a:hover {
-              color: #2C6058;
+              color: #1F4F49;
             }
             .legal-body strong {
               font-weight: 600;
@@ -231,8 +231,8 @@ export default function LegalLayout({
               display: block;
             }
             .legal-card:hover {
-              border-color: #B8CCE8;
-              box-shadow: 0 2px 8px rgba(74, 111, 165, 0.08);
+              border-color: #A8CECA;
+              box-shadow: 0 2px 8px rgba(61, 129, 120, 0.08);
             }
             .legal-card-title {
               font-size: 16px;
@@ -248,7 +248,7 @@ export default function LegalLayout({
             }
             .legal-card-date {
               font-size: 12px;
-              color: #A0AEC0;
+              color: #718096; /* was #A0AEC0 (~2.6:1); #718096 passes AA (~4.6:1) */
             }
 
             /* Print styles */
@@ -271,10 +271,10 @@ export default function LegalLayout({
         }}
       />
       <div className="legal-layout">
-        <nav className="legal-topbar">
+        <nav className="legal-topbar" aria-label="Legal pages">
           <a href="/" className="legal-topbar-brand">Lumira</a>
           <a href="/legal" className="legal-topbar-back">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path d="M10 12L6 8L10 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
             All legal documents
