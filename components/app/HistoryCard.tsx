@@ -146,7 +146,7 @@ export default function HistoryCard({ date, stage, checkin, concerns }: Props) {
       {/* No checkin */}
       {!checkin && (
         <p style={{ fontSize: '13px', color: 'var(--color-muted)', marginBottom: concerns?.length ? '10px' : '0' }}>
-          No check-in logged
+          No check-in on this day
         </p>
       )}
 
