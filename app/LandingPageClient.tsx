@@ -23,8 +23,8 @@ const COPY: Record<Stage, { headline: string; sub: string }> = {
     sub: 'Week-by-week guidance on your body and your baby \u2014 from someone who notices what you\u2019re afraid to ask about, and never makes you feel behind.',
   },
   infant: {
-    headline: 'The fourth trimester is hard. We see that.',
-    sub: 'Daily check-ins that help you keep track of sleep, feeding, and how your baby is changing \u2014 so nothing slips through the cracks between appointments.',
+    headline: 'Every stage brings new questions. You don\u2019t have to answer them alone.',
+    sub: 'Age-matched guidance for every week of your little one\u2019s first years \u2014 sleep, feeding, development milestones, and the questions you didn\u2019t even know to ask.',
   },
 }
 
@@ -49,31 +49,38 @@ const HOW_IT_WORKS = [
   { num: '3', text: 'Lumira helps you notice things that are easy to overlook \u2014 so you can bring them up with your care team.' },
 ]
 
-// ── Logo — womb-shaped curve (open arch pointing up) with circle dot at peak ──
+// ── Logo — stacked: icon centred above wordmark ──
 function LumiraLogo() {
   return (
-    <svg
-      viewBox="0 0 220 48"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-label="Lumira"
-      style={{ width: 'clamp(130px, 18vw, 185px)', height: 'auto' }}
-    >
-      {/* Circle dot at the peak */}
-      <circle cx="16" cy="9" r="5" fill="#C4844E" />
-
-      {/* Womb arch — wide, rounded U shape opening upward.
-          Starts and ends at the bottom, curves up and over like a womb/dome. */}
-      <path
-        d="M 3,38 C 3,14 29,14 29,38"
-        fill="none"
-        stroke="#3D8178"
-        strokeWidth="2.4"
-        strokeLinecap="round"
-      />
-
-      {/* Wordmark */}
-      <text x="38" y="36" fontFamily="'Plus Jakarta Sans', -apple-system, sans-serif" fontSize="30" fontWeight="700" fill="#1A1A2E" letterSpacing="-0.7">Lumira</text>
-    </svg>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+      {/* Icon only: arch + dot */}
+      <svg
+        viewBox="0 0 32 36"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+        style={{ width: 'clamp(48px, 9vw, 64px)', height: 'auto' }}
+      >
+        {/* Amber dot at peak */}
+        <circle cx="16" cy="6" r="5.5" fill="#C4844E" />
+        {/* Arch dome */}
+        <path
+          d="M 2,34 C 2,12 30,12 30,34"
+          fill="none"
+          stroke="#3D8178"
+          strokeWidth="2.8"
+          strokeLinecap="round"
+        />
+      </svg>
+      {/* Wordmark below icon */}
+      <svg
+        viewBox="0 0 120 36"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-label="Lumira"
+        style={{ width: 'clamp(100px, 18vw, 140px)', height: 'auto' }}
+      >
+        <text x="0" y="28" fontFamily="'Plus Jakarta Sans', -apple-system, sans-serif" fontSize="30" fontWeight="700" fill="#1A1A2E" letterSpacing="-0.8">Lumira</text>
+      </svg>
+    </div>
   )
 }
 
@@ -348,7 +355,7 @@ export default function LandingPage() {
               </p>
             </div>
 
-            {/* Legal footer */}
+            {/* Medical disclaimer */}
             <div style={{ marginTop: 40, paddingTop: 20, borderTop: `1px solid ${SAND_100}` }}>
               <p style={{ fontSize: 11, color: SAND_300, textAlign: 'center', margin: 0, lineHeight: 1.8 }}>
                 Lumira is an AI companion — not a doctor, midwife, or mental health professional. It does not diagnose or detect medical conditions. Always consult your healthcare provider for medical concerns.{' '}
@@ -363,6 +370,42 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
+
+        {/* ── FOOTER ── */}
+        <footer style={{ borderTop: `1px solid ${SAND_100}`, background: 'white', padding: '28px 0 32px' }}>
+          <div className="lp-container">
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
+
+              {/* Brand */}
+              <p style={{ fontSize: 14, fontWeight: 700, color: SLATE, margin: 0, letterSpacing: '-0.2px' }}>Lumira</p>
+
+              {/* Nav links */}
+              <nav aria-label="Footer navigation" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px 20px' }}>
+                {[
+                  { label: 'Terms of Service', href: '/legal/terms' },
+                  { label: 'Privacy Policy',   href: '/legal/privacy' },
+                  { label: 'Cookie Policy',    href: '/legal/cookies' },
+                  { label: 'Contact',          href: 'mailto:hello@hellolumira.app' },
+                ].map(({ label, href }) => (
+                  <a
+                    key={href}
+                    href={href}
+                    style={{ fontSize: 13, color: SAND_500, textDecoration: 'none' }}
+                    onMouseEnter={e => (e.currentTarget.style.color = SAGE_500)}
+                    onMouseLeave={e => (e.currentTarget.style.color = SAND_500)}
+                  >
+                    {label}
+                  </a>
+                ))}
+              </nav>
+
+              {/* Copyright */}
+              <p style={{ fontSize: 12, color: SAND_300, margin: 0, textAlign: 'center' }}>
+                &copy; {new Date().getFullYear()} Lumira. All rights reserved.
+              </p>
+            </div>
+          </div>
+        </footer>
 
       </div>
     </>

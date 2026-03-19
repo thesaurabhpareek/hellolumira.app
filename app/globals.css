@@ -85,7 +85,8 @@
     -webkit-tap-highlight-color: transparent;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
+    /* overflow: clip instead of overflow-x: hidden — avoids iOS Safari vertical scroll bug */
+    overflow: clip;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
   }
@@ -98,7 +99,7 @@
     line-height: 1.6;
     min-height: 100dvh;
     overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
   }
 
   /* Ensure all interactive elements meet 48px minimum tap target on touch devices */
