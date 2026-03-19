@@ -189,7 +189,7 @@ export default function AISummaryCard({ summary, concernType, babyName }: Props)
           lineHeight: 1.5,
         }}
       >
-        AI-generated guidance · Not a substitute for medical advice
+        Lumira is an AI companion, not a doctor. If something feels urgent, please contact your care team.
       </p>
     </div>
   )
