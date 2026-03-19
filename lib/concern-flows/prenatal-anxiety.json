@@ -1,0 +1,48 @@
+{
+  "id": "prenatal_anxiety",
+  "stage": "pregnancy",
+  "label": "Pregnancy anxiety",
+  "intro": "What you're feeling is real and it matters. Let's slow down and talk through it together.",
+  "questions": [
+    {
+      "id": "q1",
+      "text": "What's weighing on you most?",
+      "inputType": "multi_choice",
+      "options": [
+        { "value": "something_wrong", "label": "Worry something is wrong with the baby" },
+        { "value": "birth_fear", "label": "Fear about labour and birth" },
+        { "value": "parenting", "label": "Fear about being a good parent" },
+        { "value": "relationship", "label": "Relationship or partner worries" },
+        { "value": "work_money", "label": "Work or money pressures" },
+        { "value": "previous_loss", "label": "Previous loss or difficult pregnancy" },
+        { "value": "general", "label": "General anxiety — hard to pin down" }
+      ]
+    },
+    {
+      "id": "q2",
+      "text": "How long have you been feeling this way?",
+      "inputType": "single_choice",
+      "options": [
+        { "value": "today", "label": "Just today" },
+        { "value": "this_week", "label": "This week" },
+        { "value": "weeks", "label": "A few weeks" },
+        { "value": "throughout", "label": "Most of the pregnancy" }
+      ]
+    },
+    {
+      "id": "q3",
+      "text": "How much is this affecting your sleep or daily life?",
+      "inputType": "single_choice",
+      "options": [
+        { "value": "not_much", "label": "Not much — I can still function" },
+        { "value": "somewhat", "label": "Somewhat — it's always in the background" },
+        { "value": "significantly", "label": "Significantly — it's really affecting me" }
+      ]
+    },
+    {
+      "id": "q4",
+      "text": "Is there a specific thing that triggered this, or that keeps coming back?",
+      "inputType": "free_text"
+    }
+  ]
+}

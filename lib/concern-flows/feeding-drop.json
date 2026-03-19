@@ -1,0 +1,59 @@
+{
+  "id": "feeding_drop",
+  "stage": "infant",
+  "label": "Feeding drop",
+  "intro": "A dip in feeding can mean all sorts of things. Let's work through it — I'll give you my honest read.",
+  "questions": [
+    {
+      "id": "q1",
+      "text": "How long has the feeding drop been happening?",
+      "inputType": "single_choice",
+      "options": [
+        { "value": "today_only", "label": "Just today" },
+        { "value": "2_3_days", "label": "2–3 days" },
+        { "value": "4_7_days", "label": "4–7 days" },
+        { "value": "over_a_week", "label": "Over a week" }
+      ]
+    },
+    {
+      "id": "q2",
+      "text": "How is your baby currently fed?",
+      "inputType": "single_choice",
+      "options": [
+        { "value": "breastfed", "label": "Breastfed" },
+        { "value": "formula", "label": "Formula" },
+        { "value": "both", "label": "Both breast and formula" },
+        { "value": "solids_main", "label": "Mainly solids now" }
+      ]
+    },
+    {
+      "id": "q3",
+      "text": "Compared to normal, how much is your baby taking?",
+      "inputType": "single_choice",
+      "options": [
+        { "value": "slightly_less", "label": "Slightly less — maybe 20–30% less" },
+        { "value": "much_less", "label": "Much less — about half the usual" },
+        { "value": "barely_anything", "label": "Barely anything" },
+        { "value": "refusing", "label": "Fully refusing feeds" }
+      ]
+    },
+    {
+      "id": "q4",
+      "text": "Any other signs alongside the feeding drop?",
+      "inputType": "multi_choice",
+      "options": [
+        { "value": "runny_nose", "label": "Runny nose or congestion" },
+        { "value": "fever", "label": "Fever" },
+        { "value": "teething_signs", "label": "Teething signs (drooling, chewing)" },
+        { "value": "fussier", "label": "More fussy than usual" },
+        { "value": "distracted", "label": "Distracted during feeds" },
+        { "value": "nothing_else", "label": "Nothing else — just the feeding" }
+      ]
+    },
+    {
+      "id": "q5",
+      "text": "Have there been any recent changes — new food, routine, environment?",
+      "inputType": "free_text"
+    }
+  ]
+}

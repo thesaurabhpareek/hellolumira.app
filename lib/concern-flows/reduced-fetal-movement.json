@@ -1,0 +1,50 @@
+{
+  "id": "reduced_fetal_movement",
+  "stage": "pregnancy",
+  "label": "Reduced fetal movement",
+  "intro": "I want to take this seriously with you. Let's go through a few questions — this one matters.",
+  "questions": [
+    {
+      "id": "q1",
+      "text": "How many weeks pregnant are you?",
+      "inputType": "single_choice",
+      "options": [
+        { "value": "under_24", "label": "Under 24 weeks" },
+        { "value": "24_to_28", "label": "24–28 weeks" },
+        { "value": "28_to_36", "label": "28–36 weeks" },
+        { "value": "over_36", "label": "Over 36 weeks" }
+      ]
+    },
+    {
+      "id": "q2",
+      "text": "Compared to what's normal for your baby, movement is...",
+      "inputType": "single_choice",
+      "options": [
+        { "value": "slightly_less", "label": "Slightly less than usual" },
+        { "value": "much_less", "label": "Much less than usual" },
+        { "value": "none", "label": "I haven't felt any movement" }
+      ]
+    },
+    {
+      "id": "q3",
+      "text": "When did you last feel your baby move?",
+      "inputType": "single_choice",
+      "options": [
+        { "value": "few_hours", "label": "In the last few hours" },
+        { "value": "this_morning", "label": "This morning" },
+        { "value": "yesterday", "label": "Yesterday" },
+        { "value": "longer", "label": "More than a day ago" }
+      ]
+    },
+    {
+      "id": "q4",
+      "text": "Have you tried a cold drink or lying on your left side to encourage movement?",
+      "inputType": "single_choice",
+      "options": [
+        { "value": "yes_moved", "label": "Yes — and baby moved" },
+        { "value": "yes_no_movement", "label": "Yes — and I didn't feel movement" },
+        { "value": "not_tried", "label": "Not yet" }
+      ]
+    }
+  ]
+}

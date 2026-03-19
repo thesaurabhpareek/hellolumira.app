@@ -1,0 +1,36 @@
+{
+  "id": "birth_preparation",
+  "stage": "pregnancy",
+  "label": "Birth preparation",
+  "intro": "Getting ready is a big deal. Let's figure out where you are and what would help most right now.",
+  "questions": [
+    {
+      "id": "q1",
+      "text": "How far along are you?",
+      "inputType": "single_choice",
+      "options": [
+        { "value": "under_30", "label": "Under 30 weeks — getting ahead of it" },
+        { "value": "30_to_35", "label": "30–35 weeks — starting to feel real" },
+        { "value": "36_plus", "label": "36+ weeks — it's getting close" }
+      ]
+    },
+    {
+      "id": "q2",
+      "text": "What are you focused on or worried about?",
+      "inputType": "multi_choice",
+      "options": [
+        { "value": "hospital_bag", "label": "Packing the hospital bag" },
+        { "value": "birth_plan", "label": "Birth plan / preferences" },
+        { "value": "pain_management", "label": "Pain management options" },
+        { "value": "what_to_expect", "label": "What labour actually feels like" },
+        { "value": "after_birth", "label": "The first days home" },
+        { "value": "partner_role", "label": "Partner's role during labour" }
+      ]
+    },
+    {
+      "id": "q3",
+      "text": "Is there a specific concern or question you'd like to think through?",
+      "inputType": "free_text"
+    }
+  ]
+}

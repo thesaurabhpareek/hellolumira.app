@@ -1,0 +1,49 @@
+{
+  "id": "prenatal_symptoms",
+  "stage": "pregnancy",
+  "label": "Pregnancy symptoms",
+  "intro": "Tell me what's going on. I'll help you figure out what's normal, what to watch, and what's worth a call.",
+  "questions": [
+    {
+      "id": "q1",
+      "text": "Which symptoms are you dealing with?",
+      "inputType": "multi_choice",
+      "options": [
+        { "value": "back_pain", "label": "Back pain" },
+        { "value": "heartburn", "label": "Heartburn / reflux" },
+        { "value": "swelling", "label": "Swelling (hands, feet, face)" },
+        { "value": "headaches", "label": "Headaches" },
+        { "value": "shortness_breath", "label": "Shortness of breath" },
+        { "value": "pelvic_pain", "label": "Pelvic / hip pain" },
+        { "value": "fatigue", "label": "Extreme fatigue" },
+        { "value": "braxton_hicks", "label": "Braxton Hicks contractions" }
+      ]
+    },
+    {
+      "id": "q2",
+      "text": "How long have you had these symptoms?",
+      "inputType": "single_choice",
+      "options": [
+        { "value": "today", "label": "Just today" },
+        { "value": "few_days", "label": "A few days" },
+        { "value": "week_plus", "label": "A week or more" },
+        { "value": "ongoing", "label": "Ongoing throughout pregnancy" }
+      ]
+    },
+    {
+      "id": "q3",
+      "text": "How much is this affecting your daily life?",
+      "inputType": "single_choice",
+      "options": [
+        { "value": "manageable", "label": "Manageable — I'm coping" },
+        { "value": "limiting", "label": "Limiting — it's holding me back" },
+        { "value": "severe", "label": "Severe — I can barely function" }
+      ]
+    },
+    {
+      "id": "q4",
+      "text": "Anything else you want me to know?",
+      "inputType": "free_text"
+    }
+  ]
+}

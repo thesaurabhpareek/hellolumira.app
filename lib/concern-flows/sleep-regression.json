@@ -1,0 +1,46 @@
+{
+  "id": "sleep_regression",
+  "stage": "infant",
+  "label": "Sleep regression",
+  "intro": "Sleep regressions are brutal but they pass. Let's work out what's likely happening and what might help.",
+  "questions": [
+    {
+      "id": "q1",
+      "text": "How was sleep before this started?",
+      "inputType": "single_choice",
+      "options": [
+        { "value": "sleeping_through", "label": "Sleeping through or long stretches" },
+        { "value": "1_2_wakes", "label": "1–2 wakes per night — manageable" },
+        { "value": "already_rough", "label": "Already rough — this is a new level" }
+      ]
+    },
+    {
+      "id": "q2",
+      "text": "When did this start?",
+      "inputType": "single_choice",
+      "options": [
+        { "value": "started_1_week", "label": "About a week ago" },
+        { "value": "started_2_weeks", "label": "About 2 weeks ago" },
+        { "value": "started_longer", "label": "More than 2 weeks ago" },
+        { "value": "cant_pinpoint", "label": "Can't really pinpoint it" }
+      ]
+    },
+    {
+      "id": "q3",
+      "text": "What's the main disruption?",
+      "inputType": "multi_choice",
+      "options": [
+        { "value": "more_night_wakes", "label": "Many more night wakings" },
+        { "value": "hard_to_settle", "label": "Hard to settle at bedtime" },
+        { "value": "early_waking", "label": "Very early morning waking" },
+        { "value": "short_naps", "label": "Short naps or nap refusal" },
+        { "value": "needs_resettling", "label": "Needs resettling between every sleep cycle" }
+      ]
+    },
+    {
+      "id": "q4",
+      "text": "Has your baby been working on any new skills around the same time? (rolling, crawling, pulling to stand, new sounds?)",
+      "inputType": "free_text"
+    }
+  ]
+}

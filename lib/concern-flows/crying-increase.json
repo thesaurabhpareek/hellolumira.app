@@ -1,0 +1,58 @@
+{
+  "id": "crying_increase",
+  "stage": "infant",
+  "label": "Crying increase",
+  "intro": "More crying than usual can be exhausting and worrying. Let's figure out what might be going on.",
+  "questions": [
+    {
+      "id": "q1",
+      "text": "When does the crying tend to happen?",
+      "inputType": "multi_choice",
+      "options": [
+        { "value": "morning", "label": "Morning" },
+        { "value": "afternoon", "label": "Afternoon" },
+        { "value": "evening", "label": "Evening (evening fussies)" },
+        { "value": "night", "label": "Night" },
+        { "value": "all_day", "label": "Throughout the day" },
+        { "value": "unpredictable", "label": "Unpredictable — no pattern" }
+      ]
+    },
+    {
+      "id": "q2",
+      "text": "How long does a typical crying episode last?",
+      "inputType": "single_choice",
+      "options": [
+        { "value": "under_5", "label": "Under 5 minutes" },
+        { "value": "5_to_20", "label": "5–20 minutes" },
+        { "value": "20_to_60", "label": "20–60 minutes" },
+        { "value": "over_hour", "label": "More than an hour" }
+      ]
+    },
+    {
+      "id": "q3",
+      "text": "What tends to help (or what have you tried)?",
+      "inputType": "multi_choice",
+      "options": [
+        { "value": "feeding", "label": "Feeding" },
+        { "value": "holding", "label": "Holding / skin-to-skin" },
+        { "value": "movement", "label": "Movement (rocking, walks)" },
+        { "value": "dummy", "label": "Dummy / pacifier" },
+        { "value": "white_noise", "label": "White noise" },
+        { "value": "nothing", "label": "Nothing seems to help" }
+      ]
+    },
+    {
+      "id": "q4",
+      "text": "Has anything changed recently that might be connected?",
+      "inputType": "multi_choice",
+      "options": [
+        { "value": "illness", "label": "Signs of illness" },
+        { "value": "travel", "label": "Travel or change of environment" },
+        { "value": "routine_change", "label": "Routine change" },
+        { "value": "caregiver_change", "label": "New caregiver" },
+        { "value": "developmental", "label": "New skills emerging (growth spurt, leap)" },
+        { "value": "nothing_obvious", "label": "Nothing obvious" }
+      ]
+    }
+  ]
+}

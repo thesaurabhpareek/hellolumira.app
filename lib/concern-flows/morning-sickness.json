@@ -1,0 +1,61 @@
+{
+  "id": "morning_sickness",
+  "stage": "pregnancy",
+  "label": "Morning sickness",
+  "intro": "Let's understand what you're dealing with. A few quick questions and I'll give you my honest read.",
+  "questions": [
+    {
+      "id": "q1",
+      "text": "How severe has the nausea been?",
+      "inputType": "single_choice",
+      "options": [
+        { "value": "mild", "label": "Mild — uncomfortable but manageable" },
+        { "value": "moderate", "label": "Moderate — affecting my day" },
+        { "value": "severe", "label": "Severe — really hard to function" },
+        { "value": "hyperemesis", "label": "Hyperemesis — vomiting constantly, can't keep anything down" }
+      ]
+    },
+    {
+      "id": "q2",
+      "text": "How long has it been like this?",
+      "inputType": "single_choice",
+      "options": [
+        { "value": "today", "label": "Just today" },
+        { "value": "few_days", "label": "A few days" },
+        { "value": "week_plus", "label": "A week or more" }
+      ]
+    },
+    {
+      "id": "q3",
+      "text": "Are you keeping fluids down?",
+      "inputType": "single_choice",
+      "options": [
+        { "value": "yes_fine", "label": "Yes, fluids are fine" },
+        { "value": "some", "label": "Some — it's touch and go" },
+        { "value": "no", "label": "No — I can't keep anything down" }
+      ]
+    },
+    {
+      "id": "q4",
+      "text": "When is it worst?",
+      "inputType": "multi_choice",
+      "options": [
+        { "value": "morning", "label": "Morning" },
+        { "value": "afternoon", "label": "Afternoon" },
+        { "value": "evening", "label": "Evening" },
+        { "value": "all_day", "label": "All day" }
+      ]
+    },
+    {
+      "id": "q5",
+      "text": "How many weeks pregnant are you?",
+      "inputType": "single_choice",
+      "options": [
+        { "value": "under_8", "label": "Under 8 weeks" },
+        { "value": "8_to_12", "label": "8–12 weeks" },
+        { "value": "12_to_16", "label": "12–16 weeks" },
+        { "value": "over_16", "label": "Over 16 weeks" }
+      ]
+    }
+  ]
+}

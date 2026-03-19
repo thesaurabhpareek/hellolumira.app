@@ -1,0 +1,52 @@
+{
+  "id": "constipation",
+  "stage": "infant",
+  "label": "Constipation",
+  "intro": "Bowel habits in babies can be confusing. Let's figure out what's going on and what to do.",
+  "questions": [
+    {
+      "id": "q1",
+      "text": "When was your baby's last bowel movement?",
+      "inputType": "single_choice",
+      "options": [
+        { "value": "today", "label": "Today" },
+        { "value": "yesterday", "label": "Yesterday" },
+        { "value": "2_3_days", "label": "2–3 days ago" },
+        { "value": "4_plus_days", "label": "4 or more days ago" },
+        { "value": "unsure", "label": "Not sure" }
+      ]
+    },
+    {
+      "id": "q2",
+      "text": "What has it looked like when they do go?",
+      "inputType": "single_choice",
+      "options": [
+        { "value": "normal", "label": "Normal — soft and easy" },
+        { "value": "harder", "label": "Harder and drier than usual" },
+        { "value": "pellets", "label": "Small hard pellets" },
+        { "value": "blood_trace", "label": "Trace of blood noticed" }
+      ]
+    },
+    {
+      "id": "q3",
+      "text": "Is your baby eating solids yet?",
+      "inputType": "single_choice",
+      "options": [
+        { "value": "no_solids", "label": "No — only milk feeds" },
+        { "value": "just_started", "label": "Just started solids (last few weeks)" },
+        { "value": "eating_solids", "label": "Yes — eating solids regularly" }
+      ]
+    },
+    {
+      "id": "q4",
+      "text": "How uncomfortable does your baby seem?",
+      "inputType": "single_choice",
+      "options": [
+        { "value": "no_distress", "label": "No obvious distress" },
+        { "value": "some_straining", "label": "Some straining but okay" },
+        { "value": "crying_straining", "label": "Crying when straining" },
+        { "value": "very_distressed", "label": "Clearly very uncomfortable" }
+      ]
+    }
+  ]
+}
