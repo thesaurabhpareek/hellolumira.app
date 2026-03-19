@@ -95,7 +95,7 @@ export default function WellbeingPrompt({ onDismiss }: Props) {
           className="btn-primary"
           style={{ marginBottom: '8px' }}
         >
-          I&apos;m okay, thanks
+          Keep talking with Lumira
         </button>
 
         <button
@@ -111,7 +111,7 @@ export default function WellbeingPrompt({ onDismiss }: Props) {
             minHeight: '48px',
           }}
         >
-          Continue talking with Lumira
+          I&apos;m okay, thanks
         </button>
       </div>
     </div>
