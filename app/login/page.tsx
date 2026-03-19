@@ -42,7 +42,7 @@ export default function AuthPage() {
         setState('success')
       } catch (err2) {
         setErrorMessage(
-          err2 instanceof Error ? err2.message : 'Could not send magic link. Please check your connection and try again.'
+          err2 instanceof Error ? err2.message : 'We couldn\u2019t send your sign-in link. Please check your connection and try again.'
         )
         setState('error')
       }
@@ -54,7 +54,7 @@ export default function AuthPage() {
       className="flex flex-col items-center justify-center px-6"
       style={{ background: 'var(--color-surface)', minHeight: '100dvh' }}
     >
-      <div className="content-width w-full">
+      <main className="content-width w-full">
         {/* Logo */}
         <div className="text-center mb-8">
           <span
@@ -75,10 +75,10 @@ export default function AuthPage() {
             className="text-h1 mb-2"
             style={{ color: 'var(--color-slate)' }}
           >
-            Welcome to Lumira
+            Let&apos;s get you started
           </h1>
           <p className="text-body-muted mb-6">
-            Enter your email and we&apos;ll send you a magic link.
+            Enter your email and we&apos;ll send a magic link — no password needed.
           </p>
 
           {/* Success state */}
@@ -97,13 +97,13 @@ export default function AuthPage() {
                 gap: '12px',
               }}
             >
-              <span style={{ fontSize: '24px', lineHeight: 1 }}>✓</span>
+              <span aria-hidden="true" style={{ fontSize: '24px', lineHeight: 1 }}>✓</span>
               <div>
                 <p style={{ fontWeight: 600, color: 'var(--color-green)', marginBottom: 4 }}>
                   Check your inbox
                 </p>
                 <p style={{ color: 'var(--color-slate)', fontSize: '14px' }}>
-                  We&apos;ve sent a magic link to <strong>{email}</strong>
+                  We sent a sign-in link to <strong>{email}</strong> — it expires in 24 hours.
                 </p>
               </div>
             </div>
@@ -182,7 +182,6 @@ export default function AuthPage() {
                     fontSize: '16px',
                     color: 'var(--color-slate)',
                     background: 'var(--color-white)',
-                    outline: 'none',
                     transition: 'border-color 0.15s ease',
                   }}
                   onFocus={(e) => {
@@ -202,6 +201,8 @@ export default function AuthPage() {
                 {state === 'loading' ? (
                   <span style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <svg
+                      aria-hidden="true"
+                      focusable="false"
                       width="18"
                       height="18"
                       viewBox="0 0 24 24"
@@ -227,14 +228,14 @@ export default function AuthPage() {
 
         <p
           className="text-center mt-6"
-          style={{ fontSize: '13px', color: 'var(--color-muted)' }}
+          style={{ fontSize: '13px', color: 'var(--color-slate)' }}
         >
           By continuing, you agree to our{' '}
-          <a href="/legal/terms" style={{ color: 'var(--color-primary)', textDecoration: 'underline' }}>Terms of Service</a>
+          <a href="/legal/terms" style={{ color: '#2C6058', textDecoration: 'underline' }}>Terms of Service</a>
           {' '}and{' '}
-          <a href="/legal/privacy" style={{ color: 'var(--color-primary)', textDecoration: 'underline' }}>Privacy Policy</a>.
+          <a href="/legal/privacy" style={{ color: '#2C6058', textDecoration: 'underline' }}>Privacy Policy</a>.
         </p>
-      </div>
+      </main>
     </div>
   )
 }
