@@ -14,7 +14,36 @@ import { createClient } from '@supabase/supabase-js'
 import { NextRequest, NextResponse } from 'next/server'
 import { SECURITY_HEADERS } from '@/lib/utils'
 
+// Simple in-memory rate limiter: 5 requests per IP per 10 minutes
+// Note: per-serverless-instance — good enough to deter casual abuse without Redis
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
+const RATE_LIMIT = 5
+const WINDOW_MS = 10 * 60 * 1000 // 10 minutes
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now()
+  const entry = rateLimitMap.get(ip)
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(ip, { count: 1, resetAt: now + WINDOW_MS })
+    return true
+  }
+  if (entry.count >= RATE_LIMIT) return false
+  entry.count++
+  return true
+}
+
 export async function POST(request: NextRequest) {
+  // Rate limit by IP (x-forwarded-for set by Vercel edge)
+  const ip =
+    request.headers.get('x-forwarded-for')?.split(',')[0].trim() ??
+    request.headers.get('x-real-ip') ??
+    'unknown'
+  if (!checkRateLimit(ip)) {
+    return NextResponse.json(
+      { error: 'Too many requests. Please try again in a few minutes.' },
+      { status: 429, headers: { ...SECURITY_HEADERS, 'Retry-After': '600' } }
+    )
+  }
   try {
     let body: { email?: unknown }
     try {
