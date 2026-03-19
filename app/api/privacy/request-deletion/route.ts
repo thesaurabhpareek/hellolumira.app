@@ -16,6 +16,7 @@ import crypto from 'crypto'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { logAudit } from '@/lib/audit'
+import { SECURITY_HEADERS } from '@/lib/utils'
 
 interface DeletionBody {
   confirmation: string
@@ -29,7 +30,7 @@ export async function POST(request: NextRequest) {
       data: { user },
     } = await supabase.auth.getUser()
     if (!user) {
-      return NextResponse.json({ error: true, message: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: true, message: 'Unauthorized' }, { status: 401, headers: SECURITY_HEADERS })
     }
 
     let body: DeletionBody
@@ -38,7 +39,7 @@ export async function POST(request: NextRequest) {
     } catch {
       return NextResponse.json(
         { error: true, message: 'Invalid JSON body' },
-        { status: 400 }
+        { status: 400, headers: SECURITY_HEADERS }
       )
     }
 
@@ -49,7 +50,7 @@ export async function POST(request: NextRequest) {
           error: true,
           message: 'You must send { confirmation: "DELETE" } to confirm account deletion.',
         },
-        { status: 400 }
+        { status: 400, headers: SECURITY_HEADERS }
       )
     }
 
@@ -76,7 +77,7 @@ export async function POST(request: NextRequest) {
       console.error('[request-deletion] Failed to create deletion request:', insertError?.message)
       return NextResponse.json(
         { error: true, message: 'Failed to create deletion request.' },
-        { status: 500 }
+        { status: 500, headers: SECURITY_HEADERS }
       )
     }
 
@@ -126,12 +127,12 @@ export async function POST(request: NextRequest) {
       response.warning = coParentWarning
     }
 
-    return NextResponse.json(response)
+    return NextResponse.json(response, { headers: SECURITY_HEADERS })
   } catch (err) {
     console.error('[request-deletion] Error:', err)
     return NextResponse.json(
       { error: true, message: 'Something went wrong. Try again.' },
-      { status: 500 }
+      { status: 500, headers: SECURITY_HEADERS }
     )
   }
 }

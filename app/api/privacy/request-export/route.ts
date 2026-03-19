@@ -16,6 +16,7 @@ import crypto from 'crypto'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { logAudit } from '@/lib/audit'
+import { SECURITY_HEADERS } from '@/lib/utils'
 
 export async function POST(request: NextRequest) {
   try {
@@ -25,7 +26,7 @@ export async function POST(request: NextRequest) {
       data: { user },
     } = await supabase.auth.getUser()
     if (!user) {
-      return NextResponse.json({ error: true, message: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: true, message: 'Unauthorized' }, { status: 401, headers: SECURITY_HEADERS })
     }
 
     const serviceClient = await createServiceClient()
@@ -52,7 +53,7 @@ export async function POST(request: NextRequest) {
       console.error('[request-export] Failed to create export request:', insertError?.message)
       return NextResponse.json(
         { error: true, message: 'Failed to create export request.' },
-        { status: 500 }
+        { status: 500, headers: SECURITY_HEADERS }
       )
     }
 
@@ -137,7 +138,7 @@ export async function POST(request: NextRequest) {
       console.error('[request-export] Failed to store export data:', updateError.message)
       return NextResponse.json(
         { error: true, message: 'Failed to assemble export data.' },
-        { status: 500 }
+        { status: 500, headers: SECURITY_HEADERS }
       )
     }
 
@@ -147,12 +148,12 @@ export async function POST(request: NextRequest) {
       download_token: downloadToken,
       expires_at: expiresAt.toISOString(),
       data: exportData,
-    })
+    }, { headers: SECURITY_HEADERS })
   } catch (err) {
     console.error('[request-export] Error:', err)
     return NextResponse.json(
       { error: true, message: 'Something went wrong. Try again.' },
-      { status: 500 }
+      { status: 500, headers: SECURITY_HEADERS }
     )
   }
 }

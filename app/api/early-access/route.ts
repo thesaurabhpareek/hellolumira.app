@@ -12,6 +12,7 @@ export const dynamic = 'force-dynamic'
 
 import { createClient } from '@supabase/supabase-js'
 import { NextRequest, NextResponse } from 'next/server'
+import { SECURITY_HEADERS } from '@/lib/utils'
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,20 +20,20 @@ export async function POST(request: NextRequest) {
     try {
       body = await request.json()
     } catch {
-      return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
+      return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400, headers: SECURITY_HEADERS })
     }
 
     const { email } = body
 
     if (!email || typeof email !== 'string') {
-      return NextResponse.json({ error: 'Please enter a valid email.' }, { status: 400 })
+      return NextResponse.json({ error: 'Please enter a valid email.' }, { status: 400, headers: SECURITY_HEADERS })
     }
 
     // Sanitize and validate email
     const trimmedEmail = email.trim().slice(0, 254)
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(trimmedEmail)) {
-      return NextResponse.json({ error: 'Please enter a valid email.' }, { status: 400 })
+      return NextResponse.json({ error: 'Please enter a valid email.' }, { status: 400, headers: SECURITY_HEADERS })
     }
 
     const supabase = createClient(
@@ -47,14 +48,14 @@ export async function POST(request: NextRequest) {
     if (error) {
       // Duplicate email — treat as success (don't reveal they're already signed up)
       if (error.code === '23505') {
-        return NextResponse.json({ success: true })
+        return NextResponse.json({ success: true }, { headers: SECURITY_HEADERS })
       }
       console.error('[early-access] Insert error:', error)
-      return NextResponse.json({ error: 'Something went wrong. Please try again.' }, { status: 500 })
+      return NextResponse.json({ error: 'Something went wrong. Please try again.' }, { status: 500, headers: SECURITY_HEADERS })
     }
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ success: true }, { headers: SECURITY_HEADERS })
   } catch {
-    return NextResponse.json({ error: 'Something went wrong. Please try again.' }, { status: 500 })
+    return NextResponse.json({ error: 'Something went wrong. Please try again.' }, { status: 500, headers: SECURITY_HEADERS })
   }
 }

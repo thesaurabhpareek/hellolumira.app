@@ -11,6 +11,7 @@ export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { SECURITY_HEADERS } from '@/lib/utils'
 
 export async function GET() {
   try {
@@ -20,7 +21,7 @@ export async function GET() {
       data: { user },
     } = await supabase.auth.getUser()
     if (!user) {
-      return NextResponse.json({ error: true, message: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: true, message: 'Unauthorized' }, { status: 401, headers: SECURITY_HEADERS })
     }
 
     const { data: records, error } = await supabase
@@ -34,16 +35,16 @@ export async function GET() {
       console.error('[consent-history] Failed to fetch consent records:', error.message)
       return NextResponse.json(
         { error: true, message: 'Failed to fetch consent history.' },
-        { status: 500 }
+        { status: 500, headers: SECURITY_HEADERS }
       )
     }
 
-    return NextResponse.json({ records: records ?? [] })
+    return NextResponse.json({ records: records ?? [] }, { headers: SECURITY_HEADERS })
   } catch (err) {
     console.error('[consent-history] Error:', err)
     return NextResponse.json(
       { error: true, message: 'Something went wrong. Try again.' },
-      { status: 500 }
+      { status: 500, headers: SECURITY_HEADERS }
     )
   }
 }

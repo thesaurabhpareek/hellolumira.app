@@ -13,6 +13,7 @@ export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { isValidUUID } from '@/lib/validation'
+import { SECURITY_HEADERS } from '@/lib/utils'
 
 // GET /api/chat/threads?baby_id=xxx
 // Returns list of threads for the authenticated parent + baby
@@ -24,15 +25,15 @@ export async function GET(request: NextRequest) {
       data: { user },
     } = await supabase.auth.getUser()
     if (!user) {
-      return NextResponse.json({ error: true, message: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: true, message: 'Unauthorized' }, { status: 401, headers: SECURITY_HEADERS })
     }
 
     const baby_id = request.nextUrl.searchParams.get('baby_id')
     if (!baby_id) {
-      return NextResponse.json({ error: true, message: 'baby_id required' }, { status: 400 })
+      return NextResponse.json({ error: true, message: 'baby_id required' }, { status: 400, headers: SECURITY_HEADERS })
     }
     if (!isValidUUID(baby_id)) {
-      return NextResponse.json({ error: true, message: 'Invalid baby_id format' }, { status: 400 })
+      return NextResponse.json({ error: true, message: 'Invalid baby_id format' }, { status: 400, headers: SECURITY_HEADERS })
     }
 
     // Verify baby ownership
@@ -43,7 +44,7 @@ export async function GET(request: NextRequest) {
       .eq('profile_id', user.id)
 
     if (!count) {
-      return NextResponse.json({ error: true, message: 'Forbidden' }, { status: 403 })
+      return NextResponse.json({ error: true, message: 'Forbidden' }, { status: 403, headers: SECURITY_HEADERS })
     }
 
     const { data: threads, error } = await supabase
@@ -100,12 +101,12 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    return NextResponse.json({ threads: threadsWithPreview })
+    return NextResponse.json({ threads: threadsWithPreview }, { headers: SECURITY_HEADERS })
   } catch (err) {
     console.error('[chat/threads GET] Error:', err)
     return NextResponse.json(
       { error: true, message: 'Failed to load threads' },
-      { status: 500 }
+      { status: 500, headers: SECURITY_HEADERS }
     )
   }
 }
@@ -120,34 +121,34 @@ export async function POST(request: NextRequest) {
       data: { user },
     } = await supabase.auth.getUser()
     if (!user) {
-      return NextResponse.json({ error: true, message: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: true, message: 'Unauthorized' }, { status: 401, headers: SECURITY_HEADERS })
     }
 
     let body: { baby_id: string; source?: 'checkin' | 'concern' | 'direct'; source_id?: string }
     try {
       body = await request.json()
     } catch {
-      return NextResponse.json({ error: true, message: 'Invalid JSON body' }, { status: 400 })
+      return NextResponse.json({ error: true, message: 'Invalid JSON body' }, { status: 400, headers: SECURITY_HEADERS })
     }
 
     const { baby_id, source } = body
 
     if (!baby_id || typeof baby_id !== 'string') {
-      return NextResponse.json({ error: true, message: 'Missing required field: baby_id' }, { status: 400 })
+      return NextResponse.json({ error: true, message: 'Missing required field: baby_id' }, { status: 400, headers: SECURITY_HEADERS })
     }
     if (!isValidUUID(baby_id)) {
-      return NextResponse.json({ error: true, message: 'Invalid baby_id format' }, { status: 400 })
+      return NextResponse.json({ error: true, message: 'Invalid baby_id format' }, { status: 400, headers: SECURITY_HEADERS })
     }
 
     // Validate source_id format if provided
     if (body.source_id !== undefined && typeof body.source_id === 'string' && body.source_id.length > 0 && !isValidUUID(body.source_id)) {
-      return NextResponse.json({ error: true, message: 'Invalid source_id format' }, { status: 400 })
+      return NextResponse.json({ error: true, message: 'Invalid source_id format' }, { status: 400, headers: SECURITY_HEADERS })
     }
 
     // Validate source if provided
     const VALID_SOURCES = ['checkin', 'concern', 'direct'] as const
     if (source !== undefined && !VALID_SOURCES.includes(source as typeof VALID_SOURCES[number])) {
-      return NextResponse.json({ error: true, message: 'Invalid source value' }, { status: 400 })
+      return NextResponse.json({ error: true, message: 'Invalid source value' }, { status: 400, headers: SECURITY_HEADERS })
     }
 
     // Verify baby ownership
@@ -158,7 +159,7 @@ export async function POST(request: NextRequest) {
       .eq('profile_id', user.id)
 
     if (!count) {
-      return NextResponse.json({ error: true, message: 'Forbidden' }, { status: 403 })
+      return NextResponse.json({ error: true, message: 'Forbidden' }, { status: 403, headers: SECURITY_HEADERS })
     }
 
     const now = new Date().toISOString()
@@ -183,12 +184,12 @@ export async function POST(request: NextRequest) {
 
     if (error) throw error
 
-    return NextResponse.json({ thread_id: thread.id, thread })
+    return NextResponse.json({ thread_id: thread.id, thread }, { headers: SECURITY_HEADERS })
   } catch (err) {
     console.error('[chat/threads POST] Error:', err)
     return NextResponse.json(
       { error: true, message: 'Failed to create thread' },
-      { status: 500 }
+      { status: 500, headers: SECURITY_HEADERS }
     )
   }
 }

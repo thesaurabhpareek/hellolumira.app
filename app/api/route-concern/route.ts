@@ -14,6 +14,7 @@ import { createClient } from '@/lib/supabase/server'
 import { checkRateLimit } from '@/lib/rate-limit'
 import { callClaudeJSON } from '@/lib/claude'
 import { sanitizeForPrompt } from '@/lib/sanitize-prompt'
+import { SECURITY_HEADERS } from '@/lib/utils'
 import type { Stage, ConcernType } from '@/types/app'
 
 const VALID_CONCERN_TYPES: ConcernType[] = [
@@ -48,14 +49,14 @@ export async function POST(request: NextRequest) {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: SECURITY_HEADERS })
     }
 
     let body: RouteConcernRequest
     try {
       body = (await request.json()) as RouteConcernRequest
     } catch {
-      return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
+      return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400, headers: SECURITY_HEADERS })
     }
 
     const { stage } = body
@@ -63,7 +64,7 @@ export async function POST(request: NextRequest) {
     // Validate stage
     const VALID_STAGES: Stage[] = ['pregnancy', 'infant', 'toddler']
     if (!stage || !VALID_STAGES.includes(stage)) {
-      return NextResponse.json({ error: 'Invalid or missing stage' }, { status: 400 })
+      return NextResponse.json({ error: 'Invalid or missing stage' }, { status: 400, headers: SECURITY_HEADERS })
     }
 
     // Sanitize and validate free_text
@@ -77,7 +78,7 @@ export async function POST(request: NextRequest) {
     if (!rateLimit.allowed) {
       return NextResponse.json(
         { error: 'You\'re sending messages too quickly. Please wait a moment and try again.' },
-        { status: 429, headers: { 'Retry-After': String(rateLimit.retryAfter) } }
+        { status: 429, headers: { ...SECURITY_HEADERS, 'Retry-After': String(rateLimit.retryAfter) } }
       )
     }
 
@@ -94,9 +95,9 @@ export async function POST(request: NextRequest) {
       ? result.concern_type
       : 'other'
 
-    return NextResponse.json({ concern_type: concernType })
+    return NextResponse.json({ concern_type: concernType }, { headers: SECURITY_HEADERS })
   } catch (err) {
     console.error('[route-concern] Error:', err)
-    return NextResponse.json({ concern_type: 'other' })
+    return NextResponse.json({ concern_type: 'other' }, { headers: SECURITY_HEADERS })
   }
 }

@@ -15,6 +15,7 @@ import { createClient } from '@/lib/supabase/server'
 import { detectPatterns, checkCooldown } from '@/lib/pattern-rules'
 import { checkRateLimit } from '@/lib/rate-limit'
 import { isValidUUID, verifyBabyOwnership } from '@/lib/validation'
+import { SECURITY_HEADERS } from '@/lib/utils'
 import type { Stage, DailyCheckin } from '@/types/app'
 
 interface DetectPatternsRequest {
@@ -29,27 +30,27 @@ export async function POST(request: NextRequest) {
     try {
       body = (await request.json()) as DetectPatternsRequest
     } catch {
-      return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
+      return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400, headers: SECURITY_HEADERS })
     }
 
     const { baby_id, profile_id, stage } = body
 
     // Validate required fields
     if (!baby_id || typeof baby_id !== 'string') {
-      return NextResponse.json({ error: 'Missing required field: baby_id' }, { status: 400 })
+      return NextResponse.json({ error: 'Missing required field: baby_id' }, { status: 400, headers: SECURITY_HEADERS })
     }
     if (!isValidUUID(baby_id)) {
-      return NextResponse.json({ error: 'Invalid baby_id format' }, { status: 400 })
+      return NextResponse.json({ error: 'Invalid baby_id format' }, { status: 400, headers: SECURITY_HEADERS })
     }
     if (!profile_id || typeof profile_id !== 'string') {
-      return NextResponse.json({ error: 'Missing required field: profile_id' }, { status: 400 })
+      return NextResponse.json({ error: 'Missing required field: profile_id' }, { status: 400, headers: SECURITY_HEADERS })
     }
     if (!isValidUUID(profile_id)) {
-      return NextResponse.json({ error: 'Invalid profile_id format' }, { status: 400 })
+      return NextResponse.json({ error: 'Invalid profile_id format' }, { status: 400, headers: SECURITY_HEADERS })
     }
     const VALID_STAGES: Stage[] = ['pregnancy', 'infant', 'toddler']
     if (!stage || !VALID_STAGES.includes(stage)) {
-      return NextResponse.json({ error: 'Invalid or missing stage' }, { status: 400 })
+      return NextResponse.json({ error: 'Invalid or missing stage' }, { status: 400, headers: SECURITY_HEADERS })
     }
 
     const supabase = await createClient()
@@ -59,13 +60,13 @@ export async function POST(request: NextRequest) {
       data: { user },
     } = await supabase.auth.getUser()
     if (!user || user.id !== profile_id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: SECURITY_HEADERS })
     }
 
     // Verify user is a member of this baby profile (IDOR prevention)
     const isMember = await verifyBabyOwnership(supabase, user.id, baby_id)
     if (!isMember) {
-      return NextResponse.json({ error: 'Access denied' }, { status: 403 })
+      return NextResponse.json({ error: 'Access denied' }, { status: 403, headers: SECURITY_HEADERS })
     }
 
     // Rate limiting — max 20 requests per minute per user
@@ -73,7 +74,7 @@ export async function POST(request: NextRequest) {
     if (!rateLimit.allowed) {
       return NextResponse.json(
         { error: 'You\'re sending messages too quickly. Please wait a moment and try again.' },
-        { status: 429, headers: { 'Retry-After': String(rateLimit.retryAfter) } }
+        { status: 429, headers: { ...SECURITY_HEADERS, 'Retry-After': String(rateLimit.retryAfter) } }
       )
     }
 
@@ -162,10 +163,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       patterns_detected: detectedTypes,
       patterns_skipped: skippedTypes,
-    })
+    }, { headers: SECURITY_HEADERS })
   } catch (err) {
     // Silent fail — always return 200
     console.error('[detect-patterns] Error (silent):', err)
-    return NextResponse.json({ patterns_detected: [], patterns_skipped: [] })
+    return NextResponse.json({ patterns_detected: [], patterns_skipped: [] }, { headers: SECURITY_HEADERS })
   }
 }

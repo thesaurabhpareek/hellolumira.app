@@ -12,6 +12,7 @@ export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { SECURITY_HEADERS } from '@/lib/utils'
 import { sendEmail } from '@/lib/resend'
 import { dailyCheckinEmail } from '@/lib/email-templates'
 
@@ -24,7 +25,7 @@ export async function GET(request: NextRequest) {
     const cronSecret = process.env.CRON_SECRET
     if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
       console.error('[cron/daily-comms] Unauthorized: invalid or missing CRON_SECRET')
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: SECURITY_HEADERS })
     }
 
     // Use service role client (bypasses RLS, no cookies needed)
@@ -44,12 +45,12 @@ export async function GET(request: NextRequest) {
 
     if (prefsError) {
       console.error('[cron/daily-comms] Failed to fetch communication preferences:', prefsError.message)
-      return NextResponse.json({ error: 'Failed to fetch preferences' }, { status: 500 })
+      return NextResponse.json({ error: 'Failed to fetch preferences' }, { status: 500, headers: SECURITY_HEADERS })
     }
 
     if (!prefs || prefs.length === 0) {
       console.log('[cron/daily-comms] No eligible profiles found')
-      return NextResponse.json({ success: true, emails_sent: 0, errors: 0 })
+      return NextResponse.json({ success: true, emails_sent: 0, errors: 0 }, { headers: SECURITY_HEADERS })
     }
 
     const eligibleProfileIds: string[] = prefs.map((p) => p.profile_id)
@@ -67,7 +68,7 @@ export async function GET(request: NextRequest) {
 
     if (needsEmailProfileIds.length === 0) {
       console.log('[cron/daily-comms] All eligible profiles have already checked in today')
-      return NextResponse.json({ success: true, emails_sent: 0, errors: 0 })
+      return NextResponse.json({ success: true, emails_sent: 0, errors: 0 }, { headers: SECURITY_HEADERS })
     }
 
     // Fetch profiles with their auth emails
@@ -77,7 +78,7 @@ export async function GET(request: NextRequest) {
       .in('id', needsEmailProfileIds)
 
     if (!profiles || profiles.length === 0) {
-      return NextResponse.json({ success: true, emails_sent: 0, errors: 0 })
+      return NextResponse.json({ success: true, emails_sent: 0, errors: 0 }, { headers: SECURITY_HEADERS })
     }
 
     // Get auth emails for these specific profiles (paginate to handle all users)
@@ -187,9 +188,9 @@ export async function GET(request: NextRequest) {
       success: true,
       emails_sent: emailsSent,
       errors,
-    })
+    }, { headers: SECURITY_HEADERS })
   } catch (err) {
     console.error('[cron/daily-comms] Fatal error:', err)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500, headers: SECURITY_HEADERS })
   }
 }

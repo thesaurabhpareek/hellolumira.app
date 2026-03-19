@@ -12,6 +12,7 @@ export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { SECURITY_HEADERS } from '@/lib/utils'
 import { MASTER_SYSTEM_PROMPT, callClaudeJSON } from '@/lib/claude'
 import { getBabyAgeInfo } from '@/lib/baby-age'
 import { sanitizeForPrompt } from '@/lib/sanitize-prompt'
@@ -33,7 +34,7 @@ export async function GET(request: NextRequest) {
     const cronSecret = process.env.CRON_SECRET
     if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
       console.error('[cron/weekly-summary] Unauthorized: invalid or missing CRON_SECRET')
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: SECURITY_HEADERS })
     }
 
     // Use service role client (bypasses RLS, no cookies needed)
@@ -49,12 +50,12 @@ export async function GET(request: NextRequest) {
 
     if (babiesError) {
       console.error('[cron/weekly-summary] Failed to fetch baby profiles:', babiesError.message)
-      return NextResponse.json({ error: 'Failed to fetch baby profiles' }, { status: 500 })
+      return NextResponse.json({ error: 'Failed to fetch baby profiles' }, { status: 500, headers: SECURITY_HEADERS })
     }
 
     if (!babies || babies.length === 0) {
       console.log('[cron/weekly-summary] No baby profiles found')
-      return NextResponse.json({ success: true, summaries_generated: 0 })
+      return NextResponse.json({ success: true, summaries_generated: 0 }, { headers: SECURITY_HEADERS })
     }
 
     // Calculate current ISO week number and year
@@ -191,10 +192,10 @@ export async function GET(request: NextRequest) {
       success: true,
       summaries_generated: summariesGenerated,
       errors,
-    })
+    }, { headers: SECURITY_HEADERS })
   } catch (err) {
     console.error('[cron/weekly-summary] Fatal error:', err)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500, headers: SECURITY_HEADERS })
   }
 }
 

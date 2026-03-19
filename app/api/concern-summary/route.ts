@@ -18,6 +18,7 @@ import { getBabyAgeInfo } from '@/lib/baby-age'
 import { checkRateLimit } from '@/lib/rate-limit'
 import { isValidUUID, isValidEnum, validateArray, verifyBabyOwnership } from '@/lib/validation'
 import { sanitizeForPrompt } from '@/lib/sanitize-prompt'
+import { SECURITY_HEADERS } from '@/lib/utils'
 import type { Stage, AISummary, ConcernAnswer, BabyProfile } from '@/types/app'
 
 const CONCERN_SUMMARY_PROMPT = `You are generating a structured concern summary for a parent. Be honest, warm, and specific. Never alarming, but never dismissive.
@@ -46,7 +47,7 @@ export async function POST(request: NextRequest) {
     } catch {
       return NextResponse.json(
         { error: true, message: 'Invalid JSON body' },
-        { status: 400 }
+        { status: 400, headers: SECURITY_HEADERS }
       )
     }
 
@@ -54,31 +55,31 @@ export async function POST(request: NextRequest) {
 
     // Validate required fields
     if (!baby_id || typeof baby_id !== 'string') {
-      return NextResponse.json({ error: true, message: 'Missing required field: baby_id' }, { status: 400 })
+      return NextResponse.json({ error: true, message: 'Missing required field: baby_id' }, { status: 400, headers: SECURITY_HEADERS })
     }
     if (!isValidUUID(baby_id)) {
-      return NextResponse.json({ error: true, message: 'Invalid baby_id format' }, { status: 400 })
+      return NextResponse.json({ error: true, message: 'Invalid baby_id format' }, { status: 400, headers: SECURITY_HEADERS })
     }
     if (!profile_id || typeof profile_id !== 'string') {
-      return NextResponse.json({ error: true, message: 'Missing required field: profile_id' }, { status: 400 })
+      return NextResponse.json({ error: true, message: 'Missing required field: profile_id' }, { status: 400, headers: SECURITY_HEADERS })
     }
     if (!isValidUUID(profile_id)) {
-      return NextResponse.json({ error: true, message: 'Invalid profile_id format' }, { status: 400 })
+      return NextResponse.json({ error: true, message: 'Invalid profile_id format' }, { status: 400, headers: SECURITY_HEADERS })
     }
     const VALID_STAGES = ['pregnancy', 'infant', 'toddler'] as const
     if (!isValidEnum(stage, VALID_STAGES)) {
-      return NextResponse.json({ error: true, message: 'Invalid or missing stage' }, { status: 400 })
+      return NextResponse.json({ error: true, message: 'Invalid or missing stage' }, { status: 400, headers: SECURITY_HEADERS })
     }
     if (!concern_type || typeof concern_type !== 'string') {
-      return NextResponse.json({ error: true, message: 'Missing required field: concern_type' }, { status: 400 })
+      return NextResponse.json({ error: true, message: 'Missing required field: concern_type' }, { status: 400, headers: SECURITY_HEADERS })
     }
     // Sanitize concern_type length
     if (concern_type.length > 100) {
-      return NextResponse.json({ error: true, message: 'concern_type exceeds maximum length' }, { status: 400 })
+      return NextResponse.json({ error: true, message: 'concern_type exceeds maximum length' }, { status: 400, headers: SECURITY_HEADERS })
     }
     const answersError = validateArray(answers, 'answers', { maxLength: 50, required: true })
     if (answersError) {
-      return NextResponse.json({ error: true, message: answersError }, { status: 400 })
+      return NextResponse.json({ error: true, message: answersError }, { status: 400, headers: SECURITY_HEADERS })
     }
 
     const supabase = await createClient()
@@ -88,13 +89,13 @@ export async function POST(request: NextRequest) {
       data: { user },
     } = await supabase.auth.getUser()
     if (!user || user.id !== profile_id) {
-      return NextResponse.json({ error: true, message: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: true, message: 'Unauthorized' }, { status: 401, headers: SECURITY_HEADERS })
     }
 
     // Verify user is a member of this baby profile (IDOR prevention)
     const isMember = await verifyBabyOwnership(supabase, user.id, baby_id)
     if (!isMember) {
-      return NextResponse.json({ error: true, message: 'Access denied' }, { status: 403 })
+      return NextResponse.json({ error: true, message: 'Access denied' }, { status: 403, headers: SECURITY_HEADERS })
     }
 
     // Rate limiting — max 20 requests per minute per user
@@ -102,7 +103,7 @@ export async function POST(request: NextRequest) {
     if (!rateLimit.allowed) {
       return NextResponse.json(
         { error: true, message: 'You\'re sending messages too quickly. Please wait a moment and try again.' },
-        { status: 429, headers: { 'Retry-After': String(rateLimit.retryAfter) } }
+        { status: 429, headers: { ...SECURITY_HEADERS, 'Retry-After': String(rateLimit.retryAfter) } }
       )
     }
 
@@ -113,7 +114,7 @@ export async function POST(request: NextRequest) {
     ])
 
     if (!babyData || !profileData) {
-      return NextResponse.json({ error: true }, { status: 404 })
+      return NextResponse.json({ error: true }, { status: 404, headers: SECURITY_HEADERS })
     }
 
     const baby = babyData as BabyProfile
@@ -177,12 +178,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       session_id: session.id,
       ai_summary: aiSummary,
-    })
+    }, { headers: SECURITY_HEADERS })
   } catch (err) {
     console.error('[concern-summary] Error:', err)
     return NextResponse.json(
       { error: true, message: 'Failed to generate summary. Please try again.' },
-      { status: 500 }
+      { status: 500, headers: SECURITY_HEADERS }
     )
   }
 }

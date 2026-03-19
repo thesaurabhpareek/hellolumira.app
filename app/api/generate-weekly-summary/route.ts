@@ -16,6 +16,7 @@ import { getBabyAgeInfo } from '@/lib/baby-age'
 import { checkRateLimit } from '@/lib/rate-limit'
 import { isValidUUID, verifyBabyOwnership } from '@/lib/validation'
 import { sanitizeForPrompt } from '@/lib/sanitize-prompt'
+import { SECURITY_HEADERS } from '@/lib/utils'
 import type { BabyProfile, DailyCheckin } from '@/types/app'
 
 const WEEKLY_SUMMARY_PROMPT = `You generate a concise weekly summary for a parent's journal. Warm, observational, supportive. Respond ONLY with valid JSON (no markdown fences):
@@ -39,23 +40,23 @@ export async function POST(request: NextRequest) {
     try {
       body = (await request.json()) as WeeklySummaryRequest
     } catch {
-      return NextResponse.json({ error: true, message: 'Invalid JSON body' }, { status: 400 })
+      return NextResponse.json({ error: true, message: 'Invalid JSON body' }, { status: 400, headers: SECURITY_HEADERS })
     }
 
     const { baby_id, week_number, year } = body
 
     // Validate required fields
     if (!baby_id || typeof baby_id !== 'string') {
-      return NextResponse.json({ error: true, message: 'Missing required field: baby_id' }, { status: 400 })
+      return NextResponse.json({ error: true, message: 'Missing required field: baby_id' }, { status: 400, headers: SECURITY_HEADERS })
     }
     if (!isValidUUID(baby_id)) {
-      return NextResponse.json({ error: true, message: 'Invalid baby_id format' }, { status: 400 })
+      return NextResponse.json({ error: true, message: 'Invalid baby_id format' }, { status: 400, headers: SECURITY_HEADERS })
     }
     if (typeof week_number !== 'number' || week_number < 1 || week_number > 53 || !Number.isInteger(week_number)) {
-      return NextResponse.json({ error: true, message: 'week_number must be an integer between 1 and 53' }, { status: 400 })
+      return NextResponse.json({ error: true, message: 'week_number must be an integer between 1 and 53' }, { status: 400, headers: SECURITY_HEADERS })
     }
     if (typeof year !== 'number' || year < 2020 || year > 2100 || !Number.isInteger(year)) {
-      return NextResponse.json({ error: true, message: 'year must be a valid integer' }, { status: 400 })
+      return NextResponse.json({ error: true, message: 'year must be a valid integer' }, { status: 400, headers: SECURITY_HEADERS })
     }
 
     const supabase = await createClient()
@@ -64,13 +65,13 @@ export async function POST(request: NextRequest) {
       data: { user },
     } = await supabase.auth.getUser()
     if (!user) {
-      return NextResponse.json({ error: true, message: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: true, message: 'Unauthorized' }, { status: 401, headers: SECURITY_HEADERS })
     }
 
     // Verify user is a member of this baby profile (IDOR prevention)
     const isMember = await verifyBabyOwnership(supabase, user.id, baby_id)
     if (!isMember) {
-      return NextResponse.json({ error: true, message: 'Access denied' }, { status: 403 })
+      return NextResponse.json({ error: true, message: 'Access denied' }, { status: 403, headers: SECURITY_HEADERS })
     }
 
     // Rate limiting — max 20 requests per minute per user
@@ -78,7 +79,7 @@ export async function POST(request: NextRequest) {
     if (!rateLimit.allowed) {
       return NextResponse.json(
         { error: true, message: 'You\'re sending messages too quickly. Please wait a moment and try again.' },
-        { status: 429, headers: { 'Retry-After': String(rateLimit.retryAfter) } }
+        { status: 429, headers: { ...SECURITY_HEADERS, 'Retry-After': String(rateLimit.retryAfter) } }
       )
     }
 
@@ -99,7 +100,7 @@ export async function POST(request: NextRequest) {
     const profileData = profileResult.data
 
     if (!babyData || !profileData) {
-      return NextResponse.json({ error: true, message: 'Baby or profile not found' }, { status: 404 })
+      return NextResponse.json({ error: true, message: 'Baby or profile not found' }, { status: 404, headers: SECURITY_HEADERS })
     }
 
     const baby = babyData as BabyProfile
@@ -174,10 +175,10 @@ export async function POST(request: NextRequest) {
 
     if (insertError) throw insertError
 
-    return NextResponse.json({ success: true, summary })
+    return NextResponse.json({ success: true, summary }, { headers: SECURITY_HEADERS })
   } catch (err) {
     console.error('[generate-weekly-summary] Error:', err)
-    return NextResponse.json({ error: true }, { status: 500 })
+    return NextResponse.json({ error: true }, { status: 500, headers: SECURITY_HEADERS })
   }
 }
 

@@ -13,6 +13,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { recordConsent } from '@/lib/consent'
 import { logAudit } from '@/lib/audit'
+import { SECURITY_HEADERS } from '@/lib/utils'
 import type { ConsentType as AppConsentType } from '@/lib/consent'
 
 interface PreferencesBody {
@@ -32,7 +33,7 @@ export async function PUT(request: NextRequest) {
       data: { user },
     } = await supabase.auth.getUser()
     if (!user) {
-      return NextResponse.json({ error: true, message: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: true, message: 'Unauthorized' }, { status: 401, headers: SECURITY_HEADERS })
     }
 
     let body: PreferencesBody
@@ -41,7 +42,7 @@ export async function PUT(request: NextRequest) {
     } catch {
       return NextResponse.json(
         { error: true, message: 'Invalid JSON body' },
-        { status: 400 }
+        { status: 400, headers: SECURITY_HEADERS }
       )
     }
 
@@ -52,7 +53,7 @@ export async function PUT(request: NextRequest) {
     ) {
       return NextResponse.json(
         { error: true, message: 'data_retention_months must be 12, 24, or 36.' },
-        { status: 400 }
+        { status: 400, headers: SECURITY_HEADERS }
       )
     }
 
@@ -62,7 +63,7 @@ export async function PUT(request: NextRequest) {
     ) {
       return NextResponse.json(
         { error: true, message: 'analytics_enabled must be a boolean.' },
-        { status: 400 }
+        { status: 400, headers: SECURITY_HEADERS }
       )
     }
 
@@ -72,7 +73,7 @@ export async function PUT(request: NextRequest) {
     ) {
       return NextResponse.json(
         { error: true, message: 'ai_processing_enabled must be a boolean.' },
-        { status: 400 }
+        { status: 400, headers: SECURITY_HEADERS }
       )
     }
 
@@ -82,7 +83,7 @@ export async function PUT(request: NextRequest) {
     ) {
       return NextResponse.json(
         { error: true, message: 'product_improvement_enabled must be a boolean.' },
-        { status: 400 }
+        { status: 400, headers: SECURITY_HEADERS }
       )
     }
 
@@ -125,7 +126,7 @@ export async function PUT(request: NextRequest) {
         console.error('[privacy/preferences] Failed to update preferences:', error.message)
         return NextResponse.json(
           { error: true, message: 'Failed to update preferences.' },
-          { status: 500 }
+          { status: 500, headers: SECURITY_HEADERS }
         )
       }
       preferences = data
@@ -140,7 +141,7 @@ export async function PUT(request: NextRequest) {
         console.error('[privacy/preferences] Failed to create preferences:', error.message)
         return NextResponse.json(
           { error: true, message: 'Failed to create preferences.' },
-          { status: 500 }
+          { status: 500, headers: SECURITY_HEADERS }
         )
       }
       preferences = data
@@ -202,12 +203,12 @@ export async function PUT(request: NextRequest) {
       console.error('[privacy/preferences] Consent/audit error (non-fatal):', auditErr)
     }
 
-    return NextResponse.json({ success: true, preferences })
+    return NextResponse.json({ success: true, preferences }, { headers: SECURITY_HEADERS })
   } catch (err) {
     console.error('[privacy/preferences] Error:', err)
     return NextResponse.json(
       { error: true, message: 'Something went wrong. Try again.' },
-      { status: 500 }
+      { status: 500, headers: SECURITY_HEADERS }
     )
   }
 }

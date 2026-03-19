@@ -3,6 +3,7 @@
 
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { SECURITY_HEADERS } from '@/lib/utils'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -34,6 +35,6 @@ export async function GET() {
       },
       responseTimeMs: Date.now() - start,
     },
-    { status: healthy ? 200 : 503 }
+    { status: healthy ? 200 : 503, headers: SECURITY_HEADERS }
   )
 }

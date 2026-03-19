@@ -13,6 +13,7 @@ export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { SECURITY_HEADERS } from '@/lib/utils'
 
 export async function GET(request: NextRequest) {
   try {
@@ -21,7 +22,7 @@ export async function GET(request: NextRequest) {
     const cronSecret = process.env.CRON_SECRET
     if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
       console.error('[cron/concern-followup] Unauthorized: invalid or missing CRON_SECRET')
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: SECURITY_HEADERS })
     }
 
     // Use service role client (bypasses RLS, no cookies needed)
@@ -41,12 +42,12 @@ export async function GET(request: NextRequest) {
 
     if (fetchError) {
       console.error('[cron/concern-followup] Failed to fetch overdue sessions:', fetchError.message)
-      return NextResponse.json({ error: 'Failed to fetch overdue sessions' }, { status: 500 })
+      return NextResponse.json({ error: 'Failed to fetch overdue sessions' }, { status: 500, headers: SECURITY_HEADERS })
     }
 
     if (!overdueSessions || overdueSessions.length === 0) {
       console.log('[cron/concern-followup] No overdue follow-ups found')
-      return NextResponse.json({ success: true, notifications_created: 0 })
+      return NextResponse.json({ success: true, notifications_created: 0 }, { headers: SECURITY_HEADERS })
     }
 
     let notificationsCreated = 0
@@ -113,9 +114,9 @@ export async function GET(request: NextRequest) {
       success: true,
       notifications_created: notificationsCreated,
       errors,
-    })
+    }, { headers: SECURITY_HEADERS })
   } catch (err) {
     console.error('[cron/concern-followup] Fatal error:', err)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500, headers: SECURITY_HEADERS })
   }
 }

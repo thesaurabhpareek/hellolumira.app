@@ -12,6 +12,7 @@ export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { SECURITY_HEADERS } from '@/lib/utils'
 
 export async function GET(
   _request: NextRequest,
@@ -23,7 +24,7 @@ export async function GET(
     if (!token || typeof token !== 'string' || token.length < 16) {
       return NextResponse.json(
         { error: true, message: 'Invalid or missing token.' },
-        { status: 400 }
+        { status: 400, headers: SECURITY_HEADERS }
       )
     }
 
@@ -43,7 +44,7 @@ export async function GET(
     if (fetchError || !exportRequest) {
       return NextResponse.json(
         { error: true, message: 'Export not found.' },
-        { status: 404 }
+        { status: 404, headers: SECURITY_HEADERS }
       )
     }
 
@@ -51,7 +52,7 @@ export async function GET(
     if (exportRequest.status !== 'ready') {
       return NextResponse.json(
         { error: true, message: 'Export is not ready for download.' },
-        { status: 404 }
+        { status: 404, headers: SECURITY_HEADERS }
       )
     }
 
@@ -59,7 +60,7 @@ export async function GET(
     if (exportRequest.expires_at && new Date(exportRequest.expires_at) < new Date()) {
       return NextResponse.json(
         { error: true, message: 'This export link has expired. Please request a new export.' },
-        { status: 410 }
+        { status: 410, headers: SECURITY_HEADERS }
       )
     }
 
@@ -68,7 +69,7 @@ export async function GET(
     if (!exportData) {
       return NextResponse.json(
         { error: true, message: 'Export data is unavailable.' },
-        { status: 404 }
+        { status: 404, headers: SECURITY_HEADERS }
       )
     }
 
@@ -81,6 +82,7 @@ export async function GET(
     return new NextResponse(JSON.stringify(exportData, null, 2), {
       status: 200,
       headers: {
+        ...SECURITY_HEADERS,
         'Content-Type': 'application/json',
         'Content-Disposition': `attachment; filename="lumira-data-export-${exportRequest.id}.json"`,
       },
@@ -89,7 +91,7 @@ export async function GET(
     console.error('[export/[token]] Error:', err)
     return NextResponse.json(
       { error: true, message: 'Something went wrong. Try again.' },
-      { status: 500 }
+      { status: 500, headers: SECURITY_HEADERS }
     )
   }
 }

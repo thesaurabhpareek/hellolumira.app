@@ -13,6 +13,7 @@ export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { SECURITY_HEADERS } from '@/lib/utils'
 
 interface VerifyDeletionBody {
   token: string
@@ -26,14 +27,14 @@ export async function POST(request: NextRequest) {
     } catch {
       return NextResponse.json(
         { error: true, message: 'Invalid JSON body' },
-        { status: 400 }
+        { status: 400, headers: SECURITY_HEADERS }
       )
     }
 
     if (!body.token || typeof body.token !== 'string' || body.token.length < 16) {
       return NextResponse.json(
         { error: true, message: 'Invalid or missing verification token.' },
-        { status: 400 }
+        { status: 400, headers: SECURITY_HEADERS }
       )
     }
 
@@ -53,7 +54,7 @@ export async function POST(request: NextRequest) {
     if (fetchError || !deletionRequest) {
       return NextResponse.json(
         { error: true, message: 'Deletion request not found.' },
-        { status: 404 }
+        { status: 404, headers: SECURITY_HEADERS }
       )
     }
 
@@ -64,7 +65,7 @@ export async function POST(request: NextRequest) {
           error: true,
           message: `Deletion request has already been ${deletionRequest.status}.`,
         },
-        { status: 400 }
+        { status: 400, headers: SECURITY_HEADERS }
       )
     }
 
@@ -253,12 +254,12 @@ export async function POST(request: NextRequest) {
       message: 'Your account and all associated data have been permanently deleted.',
       request_id: deletionRequest.id,
       status: 'completed',
-    })
+    }, { headers: SECURITY_HEADERS })
   } catch (err) {
     console.error('[verify-deletion] Error:', err)
     return NextResponse.json(
       { error: true, message: 'Something went wrong. Try again.' },
-      { status: 500 }
+      { status: 500, headers: SECURITY_HEADERS }
     )
   }
 }

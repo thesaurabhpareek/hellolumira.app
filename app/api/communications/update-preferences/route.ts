@@ -14,6 +14,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { recordConsent } from '@/lib/consent'
 import { logAudit } from '@/lib/audit'
+import { SECURITY_HEADERS } from '@/lib/utils'
 import type { ConsentType as AppConsentType } from '@/lib/consent'
 
 /** Boolean fields on communication_preferences that map to consent records. */
@@ -49,7 +50,7 @@ export async function POST(request: NextRequest) {
       data: { user },
     } = await supabase.auth.getUser()
     if (!user) {
-      return NextResponse.json({ error: true, message: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: true, message: 'Unauthorized' }, { status: 401, headers: SECURITY_HEADERS })
     }
 
     let body: Record<string, unknown>
@@ -58,14 +59,14 @@ export async function POST(request: NextRequest) {
     } catch {
       return NextResponse.json(
         { error: true, message: 'Invalid JSON body' },
-        { status: 400 }
+        { status: 400, headers: SECURITY_HEADERS }
       )
     }
 
     if (!body || typeof body !== 'object') {
       return NextResponse.json(
         { error: true, message: 'Request body must be a JSON object' },
-        { status: 400 }
+        { status: 400, headers: SECURITY_HEADERS }
       )
     }
 
@@ -83,14 +84,14 @@ export async function POST(request: NextRequest) {
       if (!ALLOWED_FIELDS.includes(key)) {
         return NextResponse.json(
           { error: true, message: `Unknown field: ${key}` },
-          { status: 400 }
+          { status: 400, headers: SECURITY_HEADERS }
         )
       }
       // Type-check boolean fields
       if (BOOLEAN_FIELDS.includes(key) && typeof body[key] !== 'boolean') {
         return NextResponse.json(
           { error: true, message: `${key} must be a boolean` },
-          { status: 400 }
+          { status: 400, headers: SECURITY_HEADERS }
         )
       }
       // Type-check and range-check number fields
@@ -98,20 +99,20 @@ export async function POST(request: NextRequest) {
         if (typeof body[key] !== 'number' || !Number.isInteger(body[key])) {
           return NextResponse.json(
             { error: true, message: `${key} must be an integer` },
-            { status: 400 }
+            { status: 400, headers: SECURITY_HEADERS }
           )
         }
         const num = body[key] as number
         if (key === 'checkin_hour' && (num < 0 || num > 23)) {
           return NextResponse.json(
             { error: true, message: 'checkin_hour must be between 0 and 23' },
-            { status: 400 }
+            { status: 400, headers: SECURITY_HEADERS }
           )
         }
         if ((key === 'quiet_hours_start' || key === 'quiet_hours_end') && (num < 0 || num > 23)) {
           return NextResponse.json(
             { error: true, message: `${key} must be between 0 and 23` },
-            { status: 400 }
+            { status: 400, headers: SECURITY_HEADERS }
           )
         }
       }
@@ -120,7 +121,7 @@ export async function POST(request: NextRequest) {
         if (typeof body[key] !== 'string') {
           return NextResponse.json(
             { error: true, message: `${key} must be a string` },
-            { status: 400 }
+            { status: 400, headers: SECURITY_HEADERS }
           )
         }
         const strVal = (body[key] as string).trim().slice(0, 100)
@@ -132,7 +133,7 @@ export async function POST(request: NextRequest) {
     if (Object.keys(updatePayload).length <= 1) {
       return NextResponse.json(
         { error: true, message: 'No valid fields provided.' },
-        { status: 400 }
+        { status: 400, headers: SECURITY_HEADERS }
       )
     }
 
@@ -164,7 +165,7 @@ export async function POST(request: NextRequest) {
         console.error('[comms/update-preferences] Failed to update:', error.message)
         return NextResponse.json(
           { error: true, message: 'Failed to update communication preferences.' },
-          { status: 500 }
+          { status: 500, headers: SECURITY_HEADERS }
         )
       }
     } else {
@@ -176,7 +177,7 @@ export async function POST(request: NextRequest) {
         console.error('[comms/update-preferences] Failed to create:', error.message)
         return NextResponse.json(
           { error: true, message: 'Failed to create communication preferences.' },
-          { status: 500 }
+          { status: 500, headers: SECURITY_HEADERS }
         )
       }
     }
@@ -214,12 +215,12 @@ export async function POST(request: NextRequest) {
       console.error('[comms/update-preferences] Consent/audit error (non-fatal):', auditErr)
     }
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ success: true }, { headers: SECURITY_HEADERS })
   } catch (err) {
     console.error('[comms/update-preferences] Error:', err)
     return NextResponse.json(
       { error: true, message: 'Something went wrong. Try again.' },
-      { status: 500 }
+      { status: 500, headers: SECURITY_HEADERS }
     )
   }
 }
