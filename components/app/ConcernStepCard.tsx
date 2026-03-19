@@ -173,7 +173,7 @@ export default function ConcernStepCard({ question, answer, onChange }: Props) {
         <textarea
           value={typeof answer === 'string' ? answer : ''}
           onChange={(e) => onChange(e.target.value)}
-          placeholder="Type your answer here..."
+          placeholder="Share whatever feels relevant..."
           rows={4}
           style={{
             width: '100%',
