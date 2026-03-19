@@ -83,7 +83,10 @@ export type ConcernType =
 export type ConcernQuestion = {
   id: string
   text: string
+  /** @deprecated Use input_type. Kept for backward compatibility. */
   inputType: 'single_choice' | 'multi_choice' | 'scale' | 'free_text'
+  /** snake_case canonical name */
+  input_type: 'single_choice' | 'multi_choice' | 'scale' | 'free_text'
   options?: { value: string; label: string }[]
   scale_min_label?: string
   scale_max_label?: string
@@ -197,7 +200,7 @@ export type ConsentRecord = {
   capture_method: 'onboarding_explicit' | 'settings_explicit' | 'settings_toggle' | 'api'
   user_agent?: string | null
   document_version: string
-  ip_address: string | null
+  ip_hash: string | null
   page_url: string
   created_at: string
 }

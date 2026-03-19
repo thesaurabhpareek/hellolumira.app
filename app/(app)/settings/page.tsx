@@ -179,6 +179,7 @@ export default async function SettingsPage() {
                     fontSize: '13px',
                     fontWeight: 600,
                     cursor: 'pointer',
+                    minHeight: '48px',
                   }}
                 >
                   Remove

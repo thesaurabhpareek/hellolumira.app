@@ -1,0 +1,28 @@
+# .vercelignore — exclude files from Vercel deployments
+
+# Scripts and tooling
+scripts/
+*.py
+*.sh
+
+# Tests
+__tests__/
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# Local environment files
+.env.local
+.env*.local
+
+# Editor / OS artifacts
+.DS_Store
+.idea/
+.vscode/
+
+# Git history
+.git/
+
+# Dev docs (not needed at runtime)
+CLAUDE.md

@@ -181,7 +181,7 @@ export default function ConcernStepCard({ question, answer, onChange }: Props) {
             padding: '12px 16px',
             borderRadius: 'var(--radius-md)',
             border: '1.5px solid var(--color-border)',
-            fontSize: '15px',
+            fontSize: '16px',
             lineHeight: 1.6,
             resize: 'vertical',
             color: 'var(--color-slate)',

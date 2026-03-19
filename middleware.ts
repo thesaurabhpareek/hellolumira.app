@@ -36,7 +36,12 @@ export async function middleware(request: NextRequest) {
   if (isPublicRoute) {
     // Still need to handle logged-in user redirects from /login below
     if (pathname !== '/login') {
-      return NextResponse.next()
+      const response = NextResponse.next({ request })
+      response.headers.set('X-Content-Type-Options', 'nosniff')
+      response.headers.set('X-Frame-Options', 'DENY')
+      response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+      response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()')
+      return response
     }
   }
 
@@ -49,7 +54,12 @@ export async function middleware(request: NextRequest) {
     if (!isPublic) {
       return NextResponse.redirect(new URL('/login', request.url))
     }
-    return NextResponse.next()
+    const response = NextResponse.next({ request })
+    response.headers.set('X-Content-Type-Options', 'nosniff')
+    response.headers.set('X-Frame-Options', 'DENY')
+    response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+    response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()')
+    return response
   }
 
   let supabaseResponse = NextResponse.next({ request })

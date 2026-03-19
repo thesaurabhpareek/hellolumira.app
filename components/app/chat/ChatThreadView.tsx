@@ -298,6 +298,7 @@ export default function ChatThreadView({
           )}
 
           {/* Message bubbles */}
+          <div role="log" aria-label="Chat messages" aria-live="polite">
           {messages.map((msg, i) => {
             if (msg.role === 'assistant') {
               return (
@@ -370,6 +371,8 @@ export default function ChatThreadView({
               </div>
             )
           })}
+
+          </div>
 
           {/* Typing indicator */}
           {loading && <LumiraTyping />}

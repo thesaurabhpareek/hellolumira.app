@@ -11,6 +11,7 @@ export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { SECURITY_HEADERS } from '@/lib/utils'
 import { isValidUUID } from '@/lib/validation'
 
 interface MarkReadBody {
@@ -26,20 +27,20 @@ export async function POST(request: NextRequest) {
     } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: SECURITY_HEADERS })
     }
 
     let body: MarkReadBody
     try {
       body = (await request.json()) as MarkReadBody
     } catch {
-      return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
+      return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400, headers: SECURITY_HEADERS })
     }
 
     const { notification_ids } = body
 
     if (!Array.isArray(notification_ids) || notification_ids.length === 0) {
-      return NextResponse.json({ error: 'notification_ids required' }, { status: 400 })
+      return NextResponse.json({ error: 'notification_ids required' }, { status: 400, headers: SECURITY_HEADERS })
     }
 
     // Filter to only valid UUID IDs and cap at 50
@@ -48,7 +49,7 @@ export async function POST(request: NextRequest) {
       .slice(0, 50)
 
     if (ids.length === 0) {
-      return NextResponse.json({ error: 'No valid notification_ids provided' }, { status: 400 })
+      return NextResponse.json({ error: 'No valid notification_ids provided' }, { status: 400, headers: SECURITY_HEADERS })
     }
 
     const { error } = await supabase
@@ -59,12 +60,12 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       console.error('[POST /api/notifications/mark-read] Error:', error.message)
-      return NextResponse.json({ error: 'Failed to mark as read' }, { status: 500 })
+      return NextResponse.json({ error: 'Failed to mark as read' }, { status: 500, headers: SECURITY_HEADERS })
     }
 
     return NextResponse.json({ success: true })
   } catch (err) {
     console.error('[POST /api/notifications/mark-read] Unexpected error:', err)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500, headers: SECURITY_HEADERS })
   }
 }

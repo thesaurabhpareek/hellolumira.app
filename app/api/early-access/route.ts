@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
       if (error.code === '23505') {
         return NextResponse.json({ success: true })
       }
-      console.error('Early access insert error:', error)
+      console.error('[early-access] Insert error:', error)
       return NextResponse.json({ error: 'Something went wrong. Please try again.' }, { status: 500 })
     }
 

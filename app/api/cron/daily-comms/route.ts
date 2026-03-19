@@ -1,11 +1,10 @@
 /**
  * @module CronDailyComms
- * @description GET /api/cron/daily-comms — Vercel cron job that runs every hour.
- *   For each user whose preferred check-in hour matches the current UTC hour
- *   (adjusted for their timezone), sends a daily check-in email if they have not
- *   already checked in today. Validates CRON_SECRET from the Authorization header.
+ * @description GET /api/cron/daily-comms — Vercel cron job that runs once daily at 12:00 UTC.
+ *   Sends a daily check-in email to all users who have email notifications enabled and
+ *   have not already checked in today. Validates CRON_SECRET from the Authorization header.
  *   Uses the service role Supabase client (bypasses RLS).
- * @version 1.0.0
+ * @version 1.1.0
  * @since March 2026
  */
 
@@ -34,13 +33,12 @@ export async function GET(request: NextRequest) {
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     )
 
-    const currentUtcHour = new Date().getUTCHours()
     const today = new Date().toISOString().split('T')[0]
 
     // Get all communication preferences where daily checkin email is enabled
     const { data: prefs, error: prefsError } = await supabase
       .from('communication_preferences')
-      .select('profile_id, checkin_hour, timezone')
+      .select('profile_id')
       .eq('email_enabled', true)
       .eq('email_daily_checkin', true)
 
@@ -54,41 +52,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ success: true, emails_sent: 0, errors: 0 })
     }
 
-    // Filter profiles whose preferred checkin hour maps to the current UTC hour
-    const eligibleProfileIds: string[] = []
-    for (const pref of prefs) {
-      const localHour = pref.checkin_hour ?? 8 // default to 8am local
-      const tz = pref.timezone || 'UTC'
-
-      // Convert the user's preferred local hour to UTC
-      // Create a date at the preferred local hour in their timezone, then get UTC hour
-      let utcHourForUser: number
-      try {
-        const refDate = new Date()
-        // Use Intl to figure out the current offset for this timezone
-        const formatter = new Intl.DateTimeFormat('en-US', {
-          timeZone: tz,
-          hour: 'numeric',
-          hour12: false,
-        })
-        const localNowHour = parseInt(formatter.format(refDate), 10)
-        const offset = localNowHour - refDate.getUTCHours()
-        // Preferred UTC hour = preferred local hour - offset
-        utcHourForUser = ((localHour - offset) % 24 + 24) % 24
-      } catch {
-        // Fallback: treat checkin_hour as UTC
-        utcHourForUser = localHour
-      }
-
-      if (utcHourForUser === currentUtcHour) {
-        eligibleProfileIds.push(pref.profile_id)
-      }
-    }
-
-    if (eligibleProfileIds.length === 0) {
-      console.log(`[cron/daily-comms] No profiles match UTC hour ${currentUtcHour}`)
-      return NextResponse.json({ success: true, emails_sent: 0, errors: 0 })
-    }
+    const eligibleProfileIds: string[] = prefs.map((p) => p.profile_id)
 
     // Fetch profiles that have NOT checked in today
     // First get today's checkins to exclude those profiles
@@ -116,12 +80,29 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ success: true, emails_sent: 0, errors: 0 })
     }
 
-    // Get auth emails for these profiles
-    const { data: authUsers } = await supabase.auth.admin.listUsers()
+    // Get auth emails for these specific profiles (paginate to handle all users)
     const emailMap = new Map<string, string>()
-    if (authUsers?.users) {
+    const profileIdSet = new Set(needsEmailProfileIds)
+    let page = 1
+    const perPage = 1000
+    let hasMore = true
+    while (hasMore) {
+      const { data: authUsers } = await supabase.auth.admin.listUsers({ page, perPage })
+      if (!authUsers?.users || authUsers.users.length === 0) {
+        hasMore = false
+        break
+      }
       for (const u of authUsers.users) {
-        if (u.email) emailMap.set(u.id, u.email)
+        if (u.email && profileIdSet.has(u.id)) {
+          emailMap.set(u.id, u.email)
+        }
+      }
+      // Stop early if we've found all needed emails
+      if (emailMap.size >= profileIdSet.size) break
+      if (authUsers.users.length < perPage) {
+        hasMore = false
+      } else {
+        page++
       }
     }
 

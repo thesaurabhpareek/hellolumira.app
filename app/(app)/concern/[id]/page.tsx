@@ -245,6 +245,7 @@ export default function ConcernFlowPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
             <button
               onClick={handleBack}
+              aria-label="Go back"
               style={{
                 background: 'none',
                 border: 'none',
@@ -253,6 +254,7 @@ export default function ConcernFlowPage() {
                 fontSize: '24px',
                 padding: '4px 8px',
                 minHeight: '48px',
+                minWidth: '48px',
                 display: 'flex',
                 alignItems: 'center',
               }}
@@ -264,6 +266,11 @@ export default function ConcernFlowPage() {
                 {flow.label} · Step {currentStep + 1} of {totalSteps}
               </p>
               <div
+                role="progressbar"
+                aria-valuenow={currentStep + 1}
+                aria-valuemin={1}
+                aria-valuemax={totalSteps}
+                aria-label={`Step ${currentStep + 1} of ${totalSteps}`}
                 style={{
                   height: '4px',
                   background: 'var(--color-border)',

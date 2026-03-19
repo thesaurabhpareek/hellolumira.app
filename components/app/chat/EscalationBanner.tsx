@@ -22,6 +22,7 @@ export default function EscalationBanner({ level }: Props) {
 
   return (
     <div
+      role="alert"
       style={{
         marginBottom: '16px',
         padding: '12px 16px',

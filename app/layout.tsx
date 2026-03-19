@@ -1,7 +1,16 @@
 // app/layout.tsx — Root layout for hellolumira.app
-// v1.1 — Added full OG/PWA metadata, viewport export, favicon config
+// v1.2 — next/font/google replaces inline fontFamily (self-hosted, no render-block)
 import type { Metadata, Viewport } from 'next'
+import { Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700', '800'],
+  style: ['normal', 'italic'],
+  display: 'swap',
+  variable: '--font-plus-jakarta-sans',
+})
 
 export const metadata: Metadata = {
   title: 'Lumira — Your AI parenting companion',
@@ -14,7 +23,7 @@ export const metadata: Metadata = {
     siteName: 'Lumira',
     images: [
       {
-        url: '/og-image.png',
+        url: 'https://hellolumira.app/og-image.png',
         width: 1200,
         height: 630,
         alt: 'Lumira — Your AI parenting companion',
@@ -27,7 +36,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Lumira — Your AI parenting companion',
     description: 'A calm guide beside you, from the moment you find out.',
-    images: ['/og-image.png'],
+    images: ['https://hellolumira.app/og-image.png'],
   },
   appleWebApp: {
     capable: true,
@@ -52,8 +61,8 @@ export const viewport: Viewport = {
   themeColor: '#3D8178',
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+  // maximumScale and userScalable intentionally omitted — WCAG 1.4.4 requires
+  // users to be able to resize text up to 200%. Pinch-to-zoom must remain enabled.
   viewportFit: 'cover',
 }
 
@@ -63,8 +72,29 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body style={{ fontFamily: "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>
+    <html lang="en" className={plusJakartaSans.variable}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'WebApplication',
+              name: 'Lumira',
+              url: 'https://hellolumira.app',
+              description: 'An AI parenting companion from pregnancy through your baby\'s first year.',
+              applicationCategory: 'HealthApplication',
+              operatingSystem: 'Web',
+              offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+              audience: {
+                '@type': 'Audience',
+                audienceType: 'Expecting and new parents',
+              },
+            })
+          }}
+        />
+      </head>
+      <body>
         {children}
       </body>
     </html>

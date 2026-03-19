@@ -11,6 +11,7 @@ export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { SECURITY_HEADERS } from '@/lib/utils'
 import type { Notification } from '@/types/app'
 
 export async function GET(request: NextRequest) {
@@ -22,7 +23,7 @@ export async function GET(request: NextRequest) {
     } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: SECURITY_HEADERS })
     }
 
     const { searchParams } = new URL(request.url)
@@ -32,7 +33,7 @@ export async function GET(request: NextRequest) {
 
     // Validate cursor is a valid ISO date if provided
     if (before && isNaN(new Date(before).getTime())) {
-      return NextResponse.json({ error: 'Invalid cursor format' }, { status: 400 })
+      return NextResponse.json({ error: 'Invalid cursor format' }, { status: 400, headers: SECURITY_HEADERS })
     }
 
     let query = supabase
@@ -53,7 +54,7 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       console.error('[GET /api/notifications] Error:', error.message)
-      return NextResponse.json({ error: 'Failed to fetch notifications' }, { status: 500 })
+      return NextResponse.json({ error: 'Failed to fetch notifications' }, { status: 500, headers: SECURITY_HEADERS })
     }
 
     const notifications = (data || []) as Notification[]
@@ -78,6 +79,6 @@ export async function GET(request: NextRequest) {
     })
   } catch (err) {
     console.error('[GET /api/notifications] Unexpected error:', err)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500, headers: SECURITY_HEADERS })
   }
 }

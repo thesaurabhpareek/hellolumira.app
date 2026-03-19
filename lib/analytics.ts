@@ -45,6 +45,7 @@ export type AnalyticsEvent =
   | 'landing_page_viewed' | 'landing_cta_tapped' | 'waitlist_submitted'
 
 let sessionId: string | null = null
+let identifiedProfileId: string | null = null
 
 function getSessionId(): string {
   if (!sessionId) {
@@ -59,13 +60,14 @@ export function trackEvent(event: AnalyticsEvent, properties?: EventProperties):
   const payload = {
     event,
     properties: properties || {},
+    profile_id: identifiedProfileId,
     session_id: getSessionId(),
     timestamp: new Date().toISOString(),
     url: typeof window !== 'undefined' ? window.location.pathname : '',
   }
 
   if (process.env.NODE_ENV === 'development') {
-    console.log('[Analytics]', event, properties || '')
+    console.log('[analytics]', event, properties || '')
     return
   }
 
@@ -86,7 +88,8 @@ export function trackEvent(event: AnalyticsEvent, properties?: EventProperties):
 }
 
 export function identifyUser(profileId: string): void {
+  identifiedProfileId = profileId
   if (process.env.NODE_ENV === 'development') {
-    console.log('[Analytics] Identify:', profileId)
+    console.log('[analytics] identify:', profileId)
   }
 }

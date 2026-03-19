@@ -110,6 +110,7 @@ export default function ChatLanding({ profile: _profile, baby, threads }: Props)
             <button
               onClick={() => createNewThread()}
               disabled={isCreating}
+              aria-label="Start new conversation"
               style={{
                 width: '48px',
                 height: '48px',

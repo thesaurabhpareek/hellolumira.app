@@ -84,6 +84,8 @@ export default function AuthPage() {
           {/* Success state */}
           {state === 'success' && (
             <div
+              role="status"
+              aria-live="polite"
               className="animate-fade-in"
               style={{
                 background: 'var(--color-green-light)',
@@ -110,6 +112,7 @@ export default function AuthPage() {
           {/* Error state */}
           {state === 'error' && (
             <div
+              role="alert"
               className="animate-fade-in"
               style={{
                 background: 'var(--color-red-light)',
@@ -209,7 +212,7 @@ export default function AuthPage() {
                         animation: 'spin 0.8s linear infinite',
                       }}
                     >
-                      <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
+                      {/* spin keyframe defined in globals.css */}
                       <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
                     </svg>
                     Sending...

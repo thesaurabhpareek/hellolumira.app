@@ -203,8 +203,8 @@ export default function OnboardingPage() {
       void supabase.from('audit_log').insert({
         event_type: 'account_created',
         profile_id: userId,
-        metadata: { method: 'onboarding' },
-        ip_hash: null,
+        event_data: { method: 'onboarding' },
+        ip_address_hash: null,
         user_agent: navigator.userAgent || null,
         created_at: new Date().toISOString(),
       })
@@ -275,7 +275,9 @@ export default function OnboardingPage() {
               </div>
             ) : (
               <div className="mb-4">
+                <label htmlFor="partner-email" className="sr-only">Partner email address</label>
                 <input
+                  id="partner-email"
                   type="email"
                   inputMode="email"
                   autoComplete="email"
@@ -343,7 +345,9 @@ export default function OnboardingPage() {
         {/* Step 1 */}
         {step === 1 && (
           <OnboardingStep step={1} total={3} title="What should we call you?">
+            <label htmlFor="first-name" className="sr-only">First name</label>
             <input
+              id="first-name"
               type="text"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
@@ -432,6 +436,7 @@ export default function OnboardingPage() {
             {mode === 'pregnancy' && (
               <div className="animate-fade-in" style={{ marginBottom: '20px' }}>
                 <label
+                  htmlFor="due-date"
                   style={{
                     display: 'block',
                     fontSize: '14px',
@@ -443,6 +448,7 @@ export default function OnboardingPage() {
                   When is your due date?
                 </label>
                 <input
+                  id="due-date"
                   type="date"
                   value={dueDate}
                   min={today}
@@ -465,6 +471,7 @@ export default function OnboardingPage() {
             {mode === 'born' && (
               <div className="animate-fade-in" style={{ marginBottom: '20px' }}>
                 <label
+                  htmlFor="baby-name-born"
                   style={{
                     display: 'block',
                     fontSize: '14px',
@@ -476,6 +483,7 @@ export default function OnboardingPage() {
                   Baby&apos;s name (optional)
                 </label>
                 <input
+                  id="baby-name-born"
                   type="text"
                   value={babyName}
                   onChange={(e) => setBabyName(e.target.value)}
@@ -493,6 +501,7 @@ export default function OnboardingPage() {
                   }}
                 />
                 <label
+                  htmlFor="date-of-birth"
                   style={{
                     display: 'block',
                     fontSize: '14px',
@@ -504,6 +513,7 @@ export default function OnboardingPage() {
                   Date of birth
                 </label>
                 <input
+                  id="date-of-birth"
                   type="date"
                   value={dateOfBirth}
                   max={today}
@@ -557,6 +567,7 @@ export default function OnboardingPage() {
             {mode === 'pregnancy' && (
               <div style={{ marginBottom: '20px' }}>
                 <label
+                  htmlFor="baby-name-preg"
                   style={{
                     display: 'block',
                     fontSize: '14px',
@@ -568,6 +579,7 @@ export default function OnboardingPage() {
                   Have a name in mind for baby? (optional)
                 </label>
                 <input
+                  id="baby-name-preg"
                   type="text"
                   value={babyName}
                   onChange={(e) => setBabyName(e.target.value)}
@@ -619,6 +631,7 @@ export default function OnboardingPage() {
             {/* Optional concern */}
             <div style={{ marginBottom: '24px' }}>
               <label
+                htmlFor="initial-concern"
                 style={{
                   display: 'block',
                   fontSize: '14px',
@@ -630,6 +643,7 @@ export default function OnboardingPage() {
                 Anything specific on your mind? (optional)
               </label>
               <textarea
+                id="initial-concern"
                 value={initialConcern}
                 onChange={(e) => setInitialConcern(e.target.value)}
                 placeholder="Whatever's on your mind — no pressure"

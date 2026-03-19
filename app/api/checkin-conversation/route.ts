@@ -19,6 +19,7 @@ import { inferEmotionalSignal } from '@/lib/emotional-signals'
 import { checkRateLimit } from '@/lib/rate-limit'
 import { isValidUUID, validateArray, verifyBabyOwnership } from '@/lib/validation'
 import { sanitizeForPrompt } from '@/lib/sanitize-prompt'
+import { SECURITY_HEADERS } from '@/lib/utils'
 import type { Stage, ConversationMessage, EmotionalSignal, BabyProfile } from '@/types/app'
 
 const CHECKIN_SYSTEM_PROMPT = `You are conducting a warm, brief daily check-in. Ask ONE question at a time. Keep messages short (1-3 sentences). Be genuinely curious.
@@ -56,35 +57,35 @@ export async function POST(request: NextRequest) {
     try {
       body = (await request.json()) as CheckinRequest
     } catch {
-      return NextResponse.json({ error: true, message: 'Invalid JSON body' }, { status: 400 })
+      return NextResponse.json({ error: true, message: 'Invalid JSON body' }, { status: 400, headers: SECURITY_HEADERS })
     }
 
     // Validate required fields
     if (!body.baby_id || typeof body.baby_id !== 'string') {
-      return NextResponse.json({ error: true, message: 'Missing required field: baby_id' }, { status: 400 })
+      return NextResponse.json({ error: true, message: 'Missing required field: baby_id' }, { status: 400, headers: SECURITY_HEADERS })
     }
     if (!isValidUUID(body.baby_id)) {
-      return NextResponse.json({ error: true, message: 'Invalid baby_id format' }, { status: 400 })
+      return NextResponse.json({ error: true, message: 'Invalid baby_id format' }, { status: 400, headers: SECURITY_HEADERS })
     }
     if (!body.profile_id || typeof body.profile_id !== 'string') {
-      return NextResponse.json({ error: true, message: 'Missing required field: profile_id' }, { status: 400 })
+      return NextResponse.json({ error: true, message: 'Missing required field: profile_id' }, { status: 400, headers: SECURITY_HEADERS })
     }
     if (!isValidUUID(body.profile_id)) {
-      return NextResponse.json({ error: true, message: 'Invalid profile_id format' }, { status: 400 })
+      return NextResponse.json({ error: true, message: 'Invalid profile_id format' }, { status: 400, headers: SECURITY_HEADERS })
     }
     const VALID_STAGES: Stage[] = ['pregnancy', 'infant', 'toddler']
     if (!body.stage || !VALID_STAGES.includes(body.stage)) {
-      return NextResponse.json({ error: true, message: 'Invalid or missing stage' }, { status: 400 })
+      return NextResponse.json({ error: true, message: 'Invalid or missing stage' }, { status: 400, headers: SECURITY_HEADERS })
     }
     if (typeof body.is_opening !== 'boolean') {
-      return NextResponse.json({ error: true, message: 'is_opening must be a boolean' }, { status: 400 })
+      return NextResponse.json({ error: true, message: 'is_opening must be a boolean' }, { status: 400, headers: SECURITY_HEADERS })
     }
     if (!body.is_opening && (!body.message || typeof body.message !== 'string')) {
-      return NextResponse.json({ error: true, message: 'Missing required field: message' }, { status: 400 })
+      return NextResponse.json({ error: true, message: 'Missing required field: message' }, { status: 400, headers: SECURITY_HEADERS })
     }
     const convArrayError = validateArray(body.conversation_so_far, 'conversation_so_far', { maxLength: 100 })
     if (convArrayError) {
-      return NextResponse.json({ error: true, message: convArrayError }, { status: 400 })
+      return NextResponse.json({ error: true, message: convArrayError }, { status: 400, headers: SECURITY_HEADERS })
     }
 
     const { baby_id, profile_id, stage, is_opening, conversation_so_far } = body
@@ -98,13 +99,13 @@ export async function POST(request: NextRequest) {
       data: { user },
     } = await supabase.auth.getUser()
     if (!user || user.id !== profile_id) {
-      return NextResponse.json({ error: true, message: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: true, message: 'Unauthorized' }, { status: 401, headers: SECURITY_HEADERS })
     }
 
     // Verify user is a member of this baby profile (IDOR prevention)
     const isMember = await verifyBabyOwnership(supabase, user.id, baby_id)
     if (!isMember) {
-      return NextResponse.json({ error: true, message: 'Access denied' }, { status: 403 })
+      return NextResponse.json({ error: true, message: 'Access denied' }, { status: 403, headers: SECURITY_HEADERS })
     }
 
     // Fetch baby and profile in parallel with specific columns
@@ -116,7 +117,7 @@ export async function POST(request: NextRequest) {
     if (!babyData || !profileData) {
       return NextResponse.json(
         { error: true, message: 'Lumira is taking a moment. Try again.' },
-        { status: 404 }
+        { status: 404, headers: SECURITY_HEADERS }
       )
     }
 
@@ -161,7 +162,7 @@ export async function POST(request: NextRequest) {
     if (!rateLimit.allowed) {
       return NextResponse.json(
         { error: true, message: 'You\'re sending messages too quickly. Please wait a moment and try again.' },
-        { status: 429, headers: { 'Retry-After': String(rateLimit.retryAfter) } }
+        { status: 429, headers: { ...SECURITY_HEADERS, 'Retry-After': String(rateLimit.retryAfter) } }
       )
     }
 
@@ -265,12 +266,12 @@ export async function POST(request: NextRequest) {
       emotional_signal: finalSignal,
       checkin_complete: response.checkin_complete || false,
       conversation_log: newMessages,
-    })
+    }, { headers: SECURITY_HEADERS })
   } catch (err) {
     console.error('[checkin-conversation] Error:', err)
     return NextResponse.json(
       { error: true, message: 'Lumira is taking a moment. Try again.' },
-      { status: 500 }
+      { status: 500, headers: SECURITY_HEADERS }
     )
   }
 }

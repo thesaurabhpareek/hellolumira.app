@@ -810,13 +810,13 @@ describe('Consent record creation', () => {
       action: 'granted' as const,
       capture_method: 'onboarding_explicit' as const,
       document_version: '2026-03-01',
-      ip_address: null,
+      ip_hash: null,
       page_url: '/onboarding',
     }
     expect(row.action).toBe('granted')
     expect(row.capture_method).toBe('onboarding_explicit')
     expect(row.page_url).toBe('/onboarding')
-    expect(row.ip_address).toBeNull()
+    expect(row.ip_hash).toBeNull()
   })
 
   it('consent insert failure throws blocking error', () => {

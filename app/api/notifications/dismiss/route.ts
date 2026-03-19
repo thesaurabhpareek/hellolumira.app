@@ -10,6 +10,7 @@ export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { SECURITY_HEADERS } from '@/lib/utils'
 import { isValidUUID } from '@/lib/validation'
 
 interface DismissBody {
@@ -25,23 +26,23 @@ export async function POST(request: NextRequest) {
     } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: SECURITY_HEADERS })
     }
 
     let body: DismissBody
     try {
       body = (await request.json()) as DismissBody
     } catch {
-      return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
+      return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400, headers: SECURITY_HEADERS })
     }
 
     const { notification_id } = body
 
     if (!notification_id || typeof notification_id !== 'string') {
-      return NextResponse.json({ error: 'notification_id required' }, { status: 400 })
+      return NextResponse.json({ error: 'notification_id required' }, { status: 400, headers: SECURITY_HEADERS })
     }
     if (!isValidUUID(notification_id)) {
-      return NextResponse.json({ error: 'Invalid notification_id format' }, { status: 400 })
+      return NextResponse.json({ error: 'Invalid notification_id format' }, { status: 400, headers: SECURITY_HEADERS })
     }
 
     const { error } = await supabase
@@ -52,12 +53,12 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       console.error('[POST /api/notifications/dismiss] Error:', error.message)
-      return NextResponse.json({ error: 'Failed to dismiss' }, { status: 500 })
+      return NextResponse.json({ error: 'Failed to dismiss' }, { status: 500, headers: SECURITY_HEADERS })
     }
 
     return NextResponse.json({ success: true })
   } catch (err) {
     console.error('[POST /api/notifications/dismiss] Unexpected error:', err)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500, headers: SECURITY_HEADERS })
   }
 }

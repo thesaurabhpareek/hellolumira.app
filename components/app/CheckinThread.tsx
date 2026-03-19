@@ -406,6 +406,7 @@ export default function CheckinThread({ profile, baby, existingCheckin, prefill 
           </div>
 
           {/* Message bubbles */}
+          <div role="log" aria-label="Check-in conversation" aria-live="polite">
           {messages.map((msg, i) => {
             if (msg.role === 'lumira') {
               const lumiraMsg = msg as LumiraMessage
@@ -489,6 +490,8 @@ export default function CheckinThread({ profile, baby, existingCheckin, prefill 
               </div>
             )
           })}
+
+          </div>
 
           {/* Typing indicator */}
           {isLoading && <LumiraTyping />}

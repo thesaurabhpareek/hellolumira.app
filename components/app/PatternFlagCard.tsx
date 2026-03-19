@@ -57,8 +57,8 @@ export default function PatternFlagCard({ type, message, onDismiss }: Props) {
           color: 'var(--color-muted)',
           fontSize: '18px',
           padding: '4px 8px',
-          minHeight: '32px',
-          minWidth: '32px',
+          minHeight: '48px',
+          minWidth: '48px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -104,7 +104,7 @@ export default function PatternFlagCard({ type, message, onDismiss }: Props) {
               fontSize: '14px',
               fontWeight: 600,
               textDecoration: 'none',
-              minHeight: '40px',
+              minHeight: '48px',
             }}
           >
             Let&apos;s talk about it →

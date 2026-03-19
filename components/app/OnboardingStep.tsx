@@ -20,6 +20,11 @@ export default function OnboardingStep({ step, total, title, subtitle, children 
     <div className="animate-fade-in">
       {/* Progress dots */}
       <div
+        role="progressbar"
+        aria-valuenow={step}
+        aria-valuemin={1}
+        aria-valuemax={total}
+        aria-label={`Step ${step} of ${total}`}
         style={{
           display: 'flex',
           justifyContent: 'center',

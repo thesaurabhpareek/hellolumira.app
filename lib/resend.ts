@@ -112,7 +112,7 @@ export async function sendEmail(
   try {
     const client = getClient()
     if (!client) {
-      console.warn('[resend] Email not sent — Resend client unavailable:', { to, subject })
+      console.warn('[resend] Email not sent — Resend client unavailable:', { subject })
       return { success: false, error: 'Resend client is not available. Is the package installed and RESEND_API_KEY set?' }
     }
 
@@ -141,14 +141,16 @@ export async function sendEmail(
     })
 
     if (error) {
-      console.error('[resend] Send failed:', error.message, { to, subject })
+      // P0 fix: never log recipient email (PII) in production
+      console.error('[resend] Send failed:', error.message, { subject })
       return { success: false, error: error.message }
     }
 
     return { success: true, messageId: data?.id }
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error'
-    console.error('[resend] Unexpected error:', message, { to, subject })
+    // P0 fix: never log recipient email (PII) in production
+    console.error('[resend] Unexpected error:', message, { subject })
     return { success: false, error: message }
   }
 }

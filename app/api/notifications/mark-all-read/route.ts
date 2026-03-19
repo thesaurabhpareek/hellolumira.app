@@ -11,6 +11,7 @@ export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { SECURITY_HEADERS } from '@/lib/utils'
 
 export async function POST() {
   try {
@@ -21,7 +22,7 @@ export async function POST() {
     } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: SECURITY_HEADERS })
     }
 
     // Count and update in parallel — count is for the response, update is the mutation
@@ -42,12 +43,12 @@ export async function POST() {
 
     if (error) {
       console.error('[POST /api/notifications/mark-all-read] Error:', error.message)
-      return NextResponse.json({ error: 'Failed to mark all as read' }, { status: 500 })
+      return NextResponse.json({ error: 'Failed to mark all as read' }, { status: 500, headers: SECURITY_HEADERS })
     }
 
     return NextResponse.json({ count_marked: count ?? 0 })
   } catch (err) {
     console.error('[POST /api/notifications/mark-all-read] Unexpected error:', err)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500, headers: SECURITY_HEADERS })
   }
 }

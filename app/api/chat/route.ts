@@ -148,7 +148,7 @@ export async function POST(request: NextRequest) {
     if (!babyData || !profileData) {
       return NextResponse.json(
         { error: true, message: 'Lumira is taking a moment. Try again.' },
-        { status: 404 }
+        { status: 404, headers: SECURITY_HEADERS }
       )
     }
 
@@ -199,6 +199,10 @@ export async function POST(request: NextRequest) {
         escalation: {
           level: 'emergency' as EscalationLevel,
           category: redFlagResult.category,
+          // snake_case canonical names
+          immediate_action: redFlagResult.immediate_action,
+          action_url: redFlagResult.action_url,
+          // deprecated camelCase aliases — remove after clients migrate
           immediateAction: redFlagResult.immediateAction,
           actionUrl: redFlagResult.actionUrl,
         },
@@ -412,6 +416,10 @@ export async function POST(request: NextRequest) {
         ? {
             level: redFlagResult.level as EscalationLevel,
             category: redFlagResult.category,
+            // snake_case canonical names
+            immediate_action: redFlagResult.immediate_action,
+            action_url: redFlagResult.action_url,
+            // deprecated camelCase aliases — remove after clients migrate
             immediateAction: redFlagResult.immediateAction,
             actionUrl: redFlagResult.actionUrl,
           }

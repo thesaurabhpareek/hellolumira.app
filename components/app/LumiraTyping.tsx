@@ -9,6 +9,9 @@
 export default function LumiraTyping() {
   return (
     <div
+      role="status"
+      aria-live="polite"
+      aria-label="Lumira is typing"
       style={{
         display: 'flex',
         alignItems: 'flex-end',

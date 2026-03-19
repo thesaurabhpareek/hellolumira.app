@@ -51,9 +51,18 @@ export type RedFlagResult = {
   level: EscalationLevel
   category: RedFlagCategory | null
   pattern: string | null
+  /** @deprecated Use immediate_action. Kept for backward compatibility. */
   immediateAction: string | null
+  /** snake_case canonical name */
+  immediate_action: string | null
+  /** @deprecated Use pre_authored_message. Kept for backward compatibility. */
   preAuthoredMessage: string | null
+  /** snake_case canonical name */
+  pre_authored_message: string | null
+  /** @deprecated Use action_url. Kept for backward compatibility. */
   actionUrl: string | null
+  /** snake_case canonical name */
+  action_url: string | null
   severity: 'emergency' | 'urgent' | 'same_day' | null
 }
 

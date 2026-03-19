@@ -148,9 +148,9 @@ export async function GET(request: NextRequest) {
         const checkinSummary = checkins
           .map((c) => {
             if (baby.stage === 'pregnancy') {
-              return `${c.checkin_date}: nausea=${c.nausea_level || 'n/a'}, energy=${c.energy_level || 'n/a'}, emotional=${c.emotional_signal || 'n/a'}`
+              return `${c.checkin_date}: nausea=${sanitizeForPrompt(String(c.nausea_level || 'n/a'))}, energy=${sanitizeForPrompt(String(c.energy_level || 'n/a'))}, emotional=${sanitizeForPrompt(String(c.emotional_signal || 'n/a'))}`
             }
-            return `${c.checkin_date}: sleep=${c.sleep_quality || 'n/a'}, feeding=${c.feeding || 'n/a'}, mood=${c.mood || 'n/a'}, emotional=${c.emotional_signal || 'n/a'}`
+            return `${c.checkin_date}: sleep=${sanitizeForPrompt(String(c.sleep_quality || 'n/a'))}, feeding=${sanitizeForPrompt(String(c.feeding || 'n/a'))}, mood=${sanitizeForPrompt(String(c.mood || 'n/a'))}, emotional=${sanitizeForPrompt(String(c.emotional_signal || 'n/a'))}`
           })
           .join('\n')
 

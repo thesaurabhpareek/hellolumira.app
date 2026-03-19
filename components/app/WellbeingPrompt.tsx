@@ -15,6 +15,9 @@ interface Props {
 export default function WellbeingPrompt({ onDismiss }: Props) {
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Wellbeing check-in"
       style={{
         position: 'fixed',
         inset: 0,
@@ -105,7 +108,7 @@ export default function WellbeingPrompt({ onDismiss }: Props) {
             cursor: 'pointer',
             color: 'var(--color-muted)',
             fontSize: '14px',
-            minHeight: '44px',
+            minHeight: '48px',
           }}
         >
           Continue talking with Lumira

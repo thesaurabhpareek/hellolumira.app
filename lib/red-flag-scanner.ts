@@ -11,8 +11,30 @@
 
 import type { RedFlagResult, RedFlagCategory } from '@/types/chat'
 
+/**
+ * Helper to build a RedFlagResult with both camelCase (deprecated) and
+ * snake_case (canonical) property names for backward compatibility.
+ */
+function makeResult(fields: {
+  level: RedFlagResult['level']
+  category: RedFlagResult['category']
+  pattern: RedFlagResult['pattern']
+  immediateAction: string | null
+  preAuthoredMessage: string | null
+  actionUrl: string | null
+  severity: RedFlagResult['severity']
+}): RedFlagResult {
+  return {
+    ...fields,
+    // snake_case canonical names
+    immediate_action: fields.immediateAction,
+    pre_authored_message: fields.preAuthoredMessage,
+    action_url: fields.actionUrl,
+  }
+}
+
 /** Default "no red flag detected" result, reused to avoid object duplication. */
-const NO_FLAG_RESULT: RedFlagResult = Object.freeze({
+const NO_FLAG_RESULT: RedFlagResult = Object.freeze(makeResult({
   level: 'none',
   category: null,
   pattern: null,
@@ -20,7 +42,7 @@ const NO_FLAG_RESULT: RedFlagResult = Object.freeze({
   preAuthoredMessage: null,
   actionUrl: null,
   severity: null,
-}) as RedFlagResult
+})) as RedFlagResult
 
 // ── Emergency patterns (CALL 911 / 999 / 112) ──────────────────────────────
 // Patterns are plain lowercase strings matched via String.includes() on the
@@ -349,7 +371,7 @@ function checkFeverEscalation(
   if (!hasFever) return null
 
   if (babyAgeWeeks < 12) {
-    return {
+    return makeResult({
       level: 'urgent',
       category: 'high_fever_newborn',
       pattern: 'fever_under_3_months',
@@ -357,10 +379,10 @@ function checkFeverEscalation(
       preAuthoredMessage: CATEGORY_PATTERNS.high_fever_newborn.preAuthoredMessage,
       actionUrl: 'tel:911',
       severity: 'urgent',
-    }
+    })
   }
   if (babyAgeWeeks >= 12 && babyAgeWeeks < 24) {
-    return {
+    return makeResult({
       level: 'call_doctor',
       category: null,
       pattern: 'fever_3_to_6_months',
@@ -368,7 +390,7 @@ function checkFeverEscalation(
       preAuthoredMessage: null,
       actionUrl: null,
       severity: null,
-    }
+    })
   }
   return null
 }
@@ -412,7 +434,7 @@ export function scanForRedFlags(
 
     for (const pattern of config.patterns) {
       if (lower.includes(pattern)) {
-        return {
+        return makeResult({
           level: 'emergency',
           category: cat,
           pattern,
@@ -422,7 +444,7 @@ export function scanForRedFlags(
           preAuthoredMessage: config.preAuthoredMessage,
           actionUrl: config.actionUrl,
           severity: config.severity,
-        }
+        })
       }
     }
   }
@@ -434,7 +456,7 @@ export function scanForRedFlags(
   // 3. Urgent patterns (not full emergency, but need same-day care)
   for (const pattern of URGENT_PATTERNS) {
     if (lower.includes(pattern)) {
-      return {
+      return makeResult({
         level: 'urgent',
         category: null,
         pattern,
@@ -442,7 +464,7 @@ export function scanForRedFlags(
         preAuthoredMessage: null,
         actionUrl: null,
         severity: null,
-      }
+      })
     }
   }
 
@@ -450,7 +472,7 @@ export function scanForRedFlags(
   if (feverResult?.level === 'call_doctor') return feverResult
   for (const pattern of CALL_DOCTOR_PATTERNS) {
     if (lower.includes(pattern)) {
-      return {
+      return makeResult({
         level: 'call_doctor',
         category: null,
         pattern,
@@ -458,7 +480,7 @@ export function scanForRedFlags(
         preAuthoredMessage: null,
         actionUrl: null,
         severity: null,
-      }
+      })
     }
   }
 

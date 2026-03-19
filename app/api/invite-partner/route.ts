@@ -13,6 +13,7 @@ export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { randomUUID } from 'crypto'
+import { SECURITY_HEADERS } from '@/lib/utils'
 import { isValidUUID, isValidEmail, verifyBabyOwnership } from '@/lib/validation'
 
 interface InvitePartnerRequest {
@@ -26,23 +27,23 @@ export async function POST(request: NextRequest) {
     try {
       body = (await request.json()) as InvitePartnerRequest
     } catch {
-      return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
+      return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400, headers: SECURITY_HEADERS })
     }
 
     const { baby_id, email } = body
 
     if (!baby_id || typeof baby_id !== 'string') {
-      return NextResponse.json({ error: 'Missing required field: baby_id' }, { status: 400 })
+      return NextResponse.json({ error: 'Missing required field: baby_id' }, { status: 400, headers: SECURITY_HEADERS })
     }
     if (!isValidUUID(baby_id)) {
-      return NextResponse.json({ error: 'Invalid baby_id format' }, { status: 400 })
+      return NextResponse.json({ error: 'Invalid baby_id format' }, { status: 400, headers: SECURITY_HEADERS })
     }
     if (!email || typeof email !== 'string') {
-      return NextResponse.json({ error: 'Missing required field: email' }, { status: 400 })
+      return NextResponse.json({ error: 'Missing required field: email' }, { status: 400, headers: SECURITY_HEADERS })
     }
     const trimmedEmail = email.trim().slice(0, 254)
     if (!isValidEmail(trimmedEmail)) {
-      return NextResponse.json({ error: 'Please enter a valid email address' }, { status: 400 })
+      return NextResponse.json({ error: 'Please enter a valid email address' }, { status: 400, headers: SECURITY_HEADERS })
     }
 
     const supabase = await createClient()
@@ -53,13 +54,13 @@ export async function POST(request: NextRequest) {
       data: { user },
     } = await supabase.auth.getUser()
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: SECURITY_HEADERS })
     }
 
     // Verify user is a member of this baby profile (IDOR prevention)
     const isMember = await verifyBabyOwnership(supabase, user.id, baby_id)
     if (!isMember) {
-      return NextResponse.json({ error: 'Access denied' }, { status: 403 })
+      return NextResponse.json({ error: 'Access denied' }, { status: 403, headers: SECURITY_HEADERS })
     }
 
     // Generate a unique token
@@ -77,7 +78,7 @@ export async function POST(request: NextRequest) {
 
     if (insertError) {
       console.error('[invite-partner] DB insert error:', insertError.message)
-      return NextResponse.json({ error: 'Failed to create invite' }, { status: 500 })
+      return NextResponse.json({ error: 'Failed to create invite' }, { status: 500, headers: SECURITY_HEADERS })
     }
 
     // Send magic link / invite email via Supabase Admin
@@ -101,6 +102,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true, invite_url: inviteUrl })
   } catch (err) {
     console.error('[invite-partner] Error:', err)
-    return NextResponse.json({ error: 'Failed to create invite' }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to create invite' }, { status: 500, headers: SECURITY_HEADERS })
   }
 }
