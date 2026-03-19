@@ -452,7 +452,7 @@ export default function TermsOfServicePage() {
           <ul>
             <li>Provide at least thirty (30) days&apos; prior notice via the email address associated with your account.</li>
             <li>Update the &ldquo;Effective date&rdquo; and &ldquo;Version&rdquo; at the top of this page.</li>
-            <li>May require you to re-consent during your next login if the changes are significant.</li>
+            <li>May ask you to re-confirm your consent at your next login if the changes are significant.</li>
           </ul>
           <p>
             Your continued use of the Service after the effective date of the updated Terms constitutes your acceptance of
