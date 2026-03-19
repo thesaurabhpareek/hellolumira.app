@@ -69,6 +69,20 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Enforce 72-hour token expiry (uses existing created_at — no schema migration needed)
+    const TOKEN_TTL_MS = 72 * 60 * 60 * 1000
+    const createdAt = new Date(deletionRequest.created_at).getTime()
+    if (Date.now() - createdAt > TOKEN_TTL_MS) {
+      await supabase
+        .from('data_deletion_requests')
+        .update({ status: 'expired' })
+        .eq('id', deletionRequest.id)
+      return NextResponse.json(
+        { error: true, message: 'This deletion link has expired. Please submit a new deletion request from your account settings.' },
+        { status: 410, headers: SECURITY_HEADERS }
+      )
+    }
+
     const profileId = deletionRequest.profile_id
 
     // Execute cascading deletion in order (respecting foreign key constraints)
