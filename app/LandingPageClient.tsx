@@ -16,6 +16,7 @@ const SAND_300 = '#B0ADA6'
 const SLATE    = '#2D3748'
 
 type Stage = 'pregnancy' | 'infant'
+type PainPoint = { quote: string; answer: string; featured?: boolean }
 
 const COPY: Record<Stage, { headline: string; sub: string }> = {
   pregnancy: {
@@ -28,7 +29,7 @@ const COPY: Record<Stage, { headline: string; sub: string }> = {
   },
 }
 
-const PAIN_POINTS = [
+const PAIN_POINTS: PainPoint[] = [
   {
     quote: 'Something feels off and I can\u2019t explain it.',
     answer: 'Lumira gives you space to talk it through \u2014 calmly and without judgment.',
@@ -40,6 +41,11 @@ const PAIN_POINTS = [
   {
     quote: 'Everyone\u2019s asking about the baby. Nobody\u2019s asking about me.',
     answer: 'Lumira makes space for how you\u2019re doing, too. Every single day.',
+  },
+  {
+    quote: 'My family says one thing. My doctor says another. I love them both.',
+    answer: 'Lumira is culturally aware \u2014 helping you honour your roots while staying grounded in current evidence. No judgment on either side.',
+    featured: true,
   },
 ]
 
@@ -123,15 +129,19 @@ export default function LandingPage() {
           box-sizing: border-box;
         }
 
-        /* Pain points grid: 1-col mobile, 3-col desktop */
+        /* Pain points grid: 1-col mobile, 2x2 desktop */
         .lp-pain-grid {
           display: grid;
           grid-template-columns: 1fr;
           gap: 12px;
         }
+        /* Featured 4th card — full-width on mobile */
+        .lp-pain-featured {
+          border-left: 3px solid #C4844E !important;
+        }
         @media (min-width: 768px) {
           .lp-pain-grid {
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 16px;
           }
           .lp-container {
@@ -245,8 +255,19 @@ export default function LandingPage() {
               {PAIN_POINTS.map((point, i) => (
                 <div
                   key={i}
-                  style={{ background: 'white', border: `1px solid ${SAND_100}`, borderRadius: 14, padding: '20px 20px 18px' }}
+                  className={point.featured ? 'lp-pain-featured' : undefined}
+                  style={{
+                    background: point.featured ? '#FDF6F0' : 'white',
+                    border: `1px solid ${SAND_100}`,
+                    borderRadius: 14,
+                    padding: '20px 20px 18px',
+                  }}
                 >
+                  {point.featured && (
+                    <p style={{ fontSize: 11, fontWeight: 700, color: '#C4844E', margin: '0 0 10px', letterSpacing: '0.6px', textTransform: 'uppercase' }}>
+                      Culturally aware
+                    </p>
+                  )}
                   <p style={{ fontSize: 16, fontWeight: 600, color: SLATE, margin: '0 0 8px', lineHeight: 1.4, fontStyle: 'italic' }}>
                     &ldquo;{point.quote}&rdquo;
                   </p>
@@ -298,6 +319,9 @@ export default function LandingPage() {
             </div>
 
             <div className="lp-hero-content" style={{ maxWidth: 400, margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+              <p style={{ fontSize: 14, color: SAND_500, margin: 0, textAlign: 'center' }}>
+                Ready to try it?
+              </p>
               <a
                 href={buildAuthUrl()}
                 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: 52, background: SAGE_500, color: 'white', fontSize: 16, fontWeight: 600, borderRadius: 12, textDecoration: 'none', transition: 'background 0.15s ease, transform 0.1s ease', fontFamily: 'inherit' }}
@@ -308,8 +332,8 @@ export default function LandingPage() {
               >
                 Start for free — no download needed
               </a>
-              <p style={{ fontSize: 13, color: SAND_500, margin: 0, textAlign: 'center' }}>
-                Opens right in your browser. Ready in under two minutes.
+              <p style={{ fontSize: 13, color: SAND_300, margin: 0, textAlign: 'center' }}>
+                Or <a href="mailto:hello@hellolumira.app" style={{ color: SAGE_500, textDecoration: 'none' }}>send us a message</a> — we read every one.
               </p>
             </div>
 
