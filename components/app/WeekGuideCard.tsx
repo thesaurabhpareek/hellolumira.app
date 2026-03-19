@@ -43,9 +43,13 @@ export default function WeekGuideCard({ stage, week_or_month, babyName }: Props)
 
     const attempt = async () => {
       const res = await fetch(
-        `/api/weekly-guide?stage=${stage}&week_or_month=${week_or_month}`
+        `/api/weekly-guide?stage=${stage}&week_or_month=${week_or_month}`,
+        { credentials: 'same-origin' }
       )
-      if (!res.ok) throw new Error('Failed to load guide')
+      if (!res.ok) {
+        const text = await res.text().catch(() => '')
+        throw new Error(`Failed to load guide (${res.status}): ${text.substring(0, 100)}`)
+      }
       const data = await res.json()
       if (data.error) throw new Error(data.fallback_message || 'Guide unavailable')
       return data.guide as WeeklyGuideContent

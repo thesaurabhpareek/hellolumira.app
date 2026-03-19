@@ -111,8 +111,8 @@ export async function logAudit(
     const { error } = await supabase.from('audit_log').insert({
       event_type: eventType,
       profile_id: profileId,
-      metadata: safeMetadata,
-      ip_hash: ipHash,
+      event_data: safeMetadata,
+      ip_address_hash: ipHash,
       user_agent: userAgent,
       created_at: new Date().toISOString(),
     })

@@ -109,9 +109,26 @@ export async function callClaudeJSON<T>(
   maxTokens = 1000
 ): Promise<T> {
   const text = await callClaude(systemPrompt, userMessage, maxTokens)
-  // Strip markdown code fences if present
-  const cleaned = text.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '').trim()
-  return JSON.parse(cleaned) as T
+  // Strip markdown code fences if present — handle leading/trailing whitespace,
+  // varied fence styles (```json, ``` json, ```JSON, etc.)
+  const cleaned = text
+    .trim()
+    .replace(/^```\s*(?:json|JSON)?\s*\n?/, '')
+    .replace(/\n?\s*```\s*$/, '')
+    .trim()
+
+  try {
+    return JSON.parse(cleaned) as T
+  } catch (parseError) {
+    // Last resort: try to extract the first JSON object from the response
+    const jsonMatch = text.match(/\{[\s\S]*\}/)
+    if (jsonMatch) {
+      return JSON.parse(jsonMatch[0]) as T
+    }
+    throw new Error(
+      `Failed to parse Claude JSON response: ${(parseError as Error).message}. Raw text: ${text.substring(0, 200)}`
+    )
+  }
 }
 
 export default anthropic

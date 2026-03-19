@@ -30,10 +30,11 @@ const PROTECTED_PREFIXES = ['/home', '/checkin', '/concern', '/history', '/journ
  */
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
+  const isApiRoute = pathname.startsWith('/api/')
 
   // Public routes — no auth required
   const isPublicRoute = pathname === '/' || PUBLIC_PREFIXES.some((p) => p !== '/' && pathname.startsWith(p))
-  if (isPublicRoute) {
+  if (isPublicRoute && !isApiRoute) {
     // Still need to handle logged-in user redirects from /login below
     if (pathname !== '/login') {
       const response = NextResponse.next({ request })
@@ -52,6 +53,9 @@ export async function middleware(request: NextRequest) {
     const publicPaths = ['/', '/login', '/onboarding', '/terms', '/privacy', '/legal']
     const isPublic = publicPaths.some((p) => pathname === p || pathname.startsWith(p + '/'))
     if (!isPublic) {
+      if (isApiRoute) {
+        return NextResponse.json({ error: 'Service unavailable' }, { status: 503 })
+      }
       return NextResponse.redirect(new URL('/login', request.url))
     }
     const response = NextResponse.next({ request })
@@ -79,9 +83,20 @@ export async function middleware(request: NextRequest) {
     },
   })
 
+  // Always call getUser() — this triggers token refresh via setAll() when
+  // the access token is expired but the refresh token is still valid.
+  // Without this running for /api/ routes, client-side fetches fail with
+  // 401 after the access token expires (~1 hour).
   const {
     data: { user },
   } = await supabase.auth.getUser()
+
+  // For API routes: only refresh the token (above), never redirect.
+  // The API route handlers do their own auth checks and return JSON errors.
+  if (isApiRoute) {
+    supabaseResponse.headers.set('X-Content-Type-Options', 'nosniff')
+    return supabaseResponse
+  }
 
   // Protected routes — redirect to /login if not logged in
   const isProtected = PROTECTED_PREFIXES.some((p) => pathname.startsWith(p))
@@ -115,6 +130,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|api/|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }

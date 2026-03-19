@@ -158,8 +158,8 @@ export function getWeeklyGuideKey(baby: BabyProfile): { stage: Stage; week_or_mo
   if (info.stage === 'pregnancy' && info.pregnancy_week)
     return { stage: 'pregnancy', week_or_month: info.pregnancy_week }
   if (info.stage === 'infant' && info.age_in_weeks !== undefined)
-    return { stage: 'infant', week_or_month: info.age_in_weeks }
+    return { stage: 'infant', week_or_month: Math.max(1, info.age_in_weeks) }
   if (info.stage === 'toddler' && info.age_in_months !== undefined)
-    return { stage: 'toddler', week_or_month: info.age_in_months }
-  return { stage: 'pregnancy', week_or_month: 0 }
+    return { stage: 'toddler', week_or_month: Math.max(1, info.age_in_months) }
+  return { stage: 'pregnancy', week_or_month: 1 }
 }

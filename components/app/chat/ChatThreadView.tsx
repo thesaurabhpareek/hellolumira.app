@@ -130,8 +130,14 @@ export default function ChatThreadView({
 
     const onResize = () => {
       if (!inputBarRef.current) return
-      const offsetBottom = window.innerHeight - vv.height - vv.offsetTop
-      inputBarRef.current.style.bottom = `${Math.max(0, offsetBottom)}px`
+      const keyboardOffset = window.innerHeight - vv.height - vv.offsetTop
+      if (keyboardOffset > 0) {
+        // Keyboard is open — position just above it (nav bar is hidden behind keyboard)
+        inputBarRef.current.style.bottom = `${keyboardOffset}px`
+      } else {
+        // Keyboard closed — position above the bottom nav bar
+        inputBarRef.current.style.bottom = ''
+      }
       scrollToBottom()
     }
 
@@ -215,7 +221,7 @@ export default function ChatThreadView({
           overscrollBehavior: 'contain',
           WebkitOverflowScrolling: 'touch',
           padding: '16px',
-          paddingBottom: '140px',
+          paddingBottom: 'calc(140px + 56px + max(0px, env(safe-area-inset-bottom)))',
         }}
       >
         <div className="content-width mx-auto">
@@ -386,13 +392,13 @@ export default function ChatThreadView({
         ref={inputBarRef}
         style={{
           position: 'fixed',
-          bottom: 0,
+          bottom: 'calc(56px + max(0px, env(safe-area-inset-bottom)))',
           left: 0,
           right: 0,
           background: 'var(--color-white)',
           borderTop: '1px solid var(--color-border)',
           padding: '12px 16px',
-          paddingBottom: 'max(12px, env(safe-area-inset-bottom))',
+          paddingBottom: '12px',
           zIndex: 50,
           transition: 'bottom 0.1s ease',
         }}

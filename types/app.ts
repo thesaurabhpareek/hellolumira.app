@@ -200,7 +200,7 @@ export type ConsentRecord = {
   capture_method: 'onboarding_explicit' | 'settings_explicit' | 'settings_toggle' | 'api'
   user_agent?: string | null
   document_version: string
-  ip_hash: string | null
+  ip_address: string | null
   page_url: string
   created_at: string
 }

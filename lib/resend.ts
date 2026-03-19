@@ -66,7 +66,7 @@ function getClient() {
 // Constants
 // ---------------------------------------------------------------------------
 
-const FROM_ADDRESS = 'Lumira <hello@hellolumira.app>'
+const FROM_ADDRESS = 'HelloLumira <hello@hellolumira.app>'
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://hellolumira.app'
 
 // ---------------------------------------------------------------------------

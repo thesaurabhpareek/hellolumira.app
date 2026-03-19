@@ -217,18 +217,27 @@ export function emailWrapper(
   <!-- Email wrapper table -->
   <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color:${COLORS.sand0};">
     <tr>
-      <td align="center" style="padding:24px 16px;">
+      <td align="center" style="padding:32px 16px;">
 
         <!-- Container -->
         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" class="email-container" style="max-width:600px;width:100%;margin:0 auto;">
 
-          <!-- Header -->
+          <!-- Logo Header -->
           <tr>
-            <td style="padding:24px 0 20px 0;text-align:center;">
+            <td style="padding:32px 0 24px 0;text-align:center;">
               <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
                 <tr>
-                  <td style="font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;font-size:28px;font-weight:700;color:${COLORS.sage500};letter-spacing:-0.5px;">
-                    \u{1F319}&nbsp;Lumira
+                  <td align="center">
+                    <!-- Lumira Logo: Womb arch + amber dot -->
+                    <svg viewBox="0 0 32 36" xmlns="http://www.w3.org/2000/svg" width="52" height="58" style="display:block;margin:0 auto 8px auto;">
+                      <circle cx="16" cy="6" r="5.5" fill="${COLORS.terra400}"/>
+                      <path d="M 2,34 C 2,12 30,12 30,34" fill="none" stroke="${COLORS.sage500}" stroke-width="2.8" stroke-linecap="round"/>
+                    </svg>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;font-size:28px;font-weight:700;color:#1A1A2E;letter-spacing:-0.7px;text-align:center;">
+                    HelloLumira
                   </td>
                 </tr>
               </table>
@@ -237,47 +246,55 @@ export function emailWrapper(
 
           <!-- Body card -->
           <tr>
-            <td style="background:${COLORS.white};border-radius:16px;padding:40px 36px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+            <td style="background:${COLORS.white};border-radius:16px;padding:44px 40px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
               ${content}
+            </td>
+          </tr>
+
+          <!-- Tagline -->
+          <tr>
+            <td style="padding:24px 20px 8px 20px;text-align:center;">
+              <p style="margin:0;font-size:15px;font-weight:500;color:${COLORS.sage500};font-style:italic;font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;">
+                You&rsquo;ve got this. And Lumira&rsquo;s got you. \u{1F331}
+              </p>
             </td>
           </tr>
 
           <!-- Footer -->
           <tr>
-            <td style="padding:32px 20px 16px 20px;">
+            <td style="padding:20px 20px 16px 20px;">
               <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-                <!-- Divider -->
                 <tr>
-                  <td style="border-top:1px solid ${COLORS.border};padding-top:24px;">
+                  <td style="border-top:1px solid ${COLORS.border};padding-top:20px;">
 
-                    <!-- Company name -->
+                    <!-- Brand -->
                     <p style="margin:0 0 8px 0;font-size:14px;font-weight:600;color:${COLORS.sage500};text-align:center;font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;">
                       Lumira &mdash; Your parenting companion
                     </p>
 
                     <!-- Legal links -->
-                    <p style="margin:0 0 12px 0;font-size:12px;color:${COLORS.muted};text-align:center;line-height:1.8;font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;">
-                      <a href="${LINKS.website}" style="color:${COLORS.muted};text-decoration:underline;">Website</a>
+                    <p style="margin:0 0 12px 0;font-size:12px;color:${COLORS.mutedLight};text-align:center;line-height:1.8;font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;">
+                      <a href="${LINKS.website}" style="color:${COLORS.mutedLight};text-decoration:underline;">Website</a>
                       &nbsp;&middot;&nbsp;
-                      <a href="${LINKS.terms}" style="color:${COLORS.muted};text-decoration:underline;">Terms &amp; Conditions</a>
+                      <a href="${LINKS.terms}" style="color:${COLORS.mutedLight};text-decoration:underline;">Terms &amp; Conditions</a>
                       &nbsp;&middot;&nbsp;
-                      <a href="${LINKS.privacy}" style="color:${COLORS.muted};text-decoration:underline;">Privacy Policy</a>
+                      <a href="${LINKS.privacy}" style="color:${COLORS.mutedLight};text-decoration:underline;">Privacy Policy</a>
                       &nbsp;&middot;&nbsp;
-                      <a href="${LINKS.unsubscribe}" style="color:${COLORS.muted};text-decoration:underline;">Unsubscribe</a>
+                      <a href="${LINKS.unsubscribe}" style="color:${COLORS.mutedLight};text-decoration:underline;">Unsubscribe</a>
                     </p>
 
-                    <!-- Address (CAN-SPAM) -->
-                    <p style="margin:0 0 8px 0;font-size:11px;color:${COLORS.mutedLight};text-align:center;font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;">
-                      Lumira Inc.
+                    <!-- Medical disclaimer -->
+                    <p style="margin:0 0 12px 0;font-size:11px;color:#B0B0AC;text-align:center;line-height:1.5;font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;">
+                      Lumira provides informational support only and is not a substitute for professional medical advice.
                     </p>
 
                     <!-- Sent-to disclosure -->
-                    <p style="margin:0 0 8px 0;font-size:11px;color:${COLORS.mutedLight};text-align:center;font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;">
-                      This email was sent to ${recipientEmail}. If you didn&rsquo;t create a Lumira account, please ignore this email.
+                    <p style="margin:0 0 8px 0;font-size:11px;color:#B0B0AC;text-align:center;font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;">
+                      This email was sent to ${recipientEmail}. If you didn&rsquo;t create a HelloLumira account, please ignore this email.
                     </p>
 
                     <!-- Copyright -->
-                    <p style="margin:0;font-size:11px;color:${COLORS.mutedLight};text-align:center;font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;">
+                    <p style="margin:0;font-size:11px;color:#B0B0AC;text-align:center;font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;">
                       &copy; 2026 Lumira Inc. All rights reserved.
                     </p>
 

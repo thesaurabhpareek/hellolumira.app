@@ -187,6 +187,20 @@ export default function OnboardingPage() {
         // sessionStorage may not be available
       }
 
+      // Create welcome notifications based on baby's age/stage (non-blocking)
+      void fetch('/api/notifications/onboarding', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          baby_id: newBabyId,
+          mode,
+          due_date: mode === 'pregnancy' ? dueDate : null,
+          date_of_birth: mode === 'born' ? dateOfBirth : null,
+        }),
+      }).catch(() => {
+        // Non-critical — user can still proceed without welcome notifications
+      })
+
       // Store initial concern if provided (non-blocking)
       if (initialConcern.trim()) {
         void supabase.from('concern_sessions').insert({
