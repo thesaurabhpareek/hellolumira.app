@@ -86,7 +86,7 @@ export default function ConsentCheckbox({ checked, onChange, error }: ConsentChe
         >
           I agree to the{' '}
           <a
-            href="/terms"
+            href="/legal/terms"
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
@@ -101,7 +101,7 @@ export default function ConsentCheckbox({ checked, onChange, error }: ConsentChe
           </a>{' '}
           and{' '}
           <a
-            href="/privacy"
+            href="/legal/privacy"
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
