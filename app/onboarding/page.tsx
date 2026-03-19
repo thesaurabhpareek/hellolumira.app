@@ -75,7 +75,7 @@ export default function OnboardingPage() {
 
     // Validate consent
     if (!consentChecked) {
-      setConsentError('Please agree to continue')
+      setConsentError('Please accept the Terms and Privacy Policy to continue')
       return
     }
     setConsentError('')
@@ -252,10 +252,10 @@ export default function OnboardingPage() {
               <span style={{ fontSize: '40px' }}>💌</span>
             </div>
             <h2 className="text-h1 mb-2 text-center" style={{ color: 'var(--color-slate)' }}>
-              Invite your partner?
+              Bring your partner along
             </h2>
             <p className="text-body-muted text-center mb-6">
-              They&apos;ll get their own view and can log check-ins too.
+              Parenting is a team effort. Your partner gets their own view and can log check-ins too.
             </p>
 
             {inviteSent ? (
@@ -402,10 +402,10 @@ export default function OnboardingPage() {
               >
                 <div style={{ fontSize: '28px', marginBottom: '8px' }}>🤰</div>
                 <div style={{ fontWeight: 700, fontSize: '17px', color: 'var(--color-slate)', marginBottom: 4 }}>
-                  I&apos;m pregnant
+                  We&apos;re expecting
                 </div>
                 <div style={{ fontSize: '14px', color: 'var(--color-muted)' }}>
-                  Track your pregnancy week by week
+                  Week-by-week guidance through pregnancy
                 </div>
               </button>
 
@@ -424,10 +424,10 @@ export default function OnboardingPage() {
               >
                 <div style={{ fontSize: '28px', marginBottom: '8px' }}>👶</div>
                 <div style={{ fontWeight: 700, fontSize: '17px', color: 'var(--color-slate)', marginBottom: 4 }}>
-                  My baby is already here
+                  Our baby is here
                 </div>
                 <div style={{ fontSize: '14px', color: 'var(--color-muted)' }}>
-                  Get support from day one
+                  Guidance for every week of their first year
                 </div>
               </button>
             </div>
