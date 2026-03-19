@@ -13,19 +13,20 @@ const SAND_0   = '#FAFAF8'
 const SAND_100 = '#E8E6E1'
 const SAND_500 = '#706D67'
 const SAND_300 = '#B0ADA6'
+const SAND_400 = '#857F78'  // WCAG AA compliant on #FAFAF8 (~4.7:1)
 const SLATE    = '#2D3748'
 
 type Stage = 'pregnancy' | 'infant'
-type PainPoint = { quote: string; answer: string; featured?: boolean }
+type PainPoint = { quote: string; answer: string }
 
 const COPY: Record<Stage, { headline: string; sub: string }> = {
   pregnancy: {
     headline: 'You shouldn\u2019t have to figure this out alone.',
-    sub: 'Week-by-week guidance on your body and your baby \u2014 from someone who notices what you\u2019re afraid to ask about, and never makes you feel behind.',
+    sub: 'Week-by-week guidance on your pregnancy and your baby \u2014 from someone who notices what you\u2019re afraid to ask about, and never makes you feel behind.',
   },
   infant: {
-    headline: 'Every stage brings new questions. You don\u2019t have to answer them alone.',
-    sub: 'Age-matched guidance for every week of your little one\u2019s first years \u2014 sleep, feeding, development milestones, and the questions you didn\u2019t even know to ask.',
+    headline: 'New baby, new questions \u2014 every single week. You don\u2019t have to figure them out alone.',
+    sub: 'Age-matched guidance for every week of your little one\u2019s first year \u2014 sleep, feeding, development milestones, and the questions you didn\u2019t even know to ask.',
   },
 }
 
@@ -45,7 +46,6 @@ const PAIN_POINTS: PainPoint[] = [
   {
     quote: 'My family says one thing. My doctor says another. I love them both.',
     answer: 'Lumira is culturally aware \u2014 helping you honour your roots while staying grounded in current evidence. No judgment on either side.',
-    featured: true,
   },
 ]
 
@@ -97,74 +97,34 @@ export default function LandingPage() {
     if (s) params.set('utm_source', s)
     if (m) params.set('utm_medium', m)
     if (c) params.set('utm_campaign', c)
+    params.set('mode', 'signup')
     const qs = params.toString()
-    return qs ? `/login?${qs}` : '/login'
+    return `/login?${qs}`
   }, [searchParams])
 
   const copy = COPY[stage]
 
   return (
     <>
-      <style jsx global>{`
-        html { scroll-behavior: smooth; }
-        body { background: ${SAND_0} !important; }
-
-        @keyframes fade-up {
-          from { opacity: 0; transform: translateY(16px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        .lp-fade { animation: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
-        .lp-d1 { animation-delay: 0.05s; }
-        .lp-d2 { animation-delay: 0.15s; }
-        .lp-d3 { animation-delay: 0.25s; }
-        .lp-d4 { animation-delay: 0.35s; }
-        .lp-d5 { animation-delay: 0.45s; }
-
-        /* Responsive container */
-        .lp-container {
-          max-width: 520px;
-          width: 100%;
-          margin: 0 auto;
-          padding: 0 24px;
-          box-sizing: border-box;
-        }
-
-        /* Pain points grid: 1-col mobile, 2x2 desktop */
-        .lp-pain-grid {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 12px;
-        }
-        /* Featured 4th card — full-width on mobile */
-        .lp-pain-featured {
-          border-left: 3px solid #C4844E !important;
-        }
-        @media (min-width: 768px) {
-          .lp-pain-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-          }
-          .lp-container {
-            max-width: 840px;
-          }
-          .lp-hero-content {
-            max-width: 560px;
-            margin: 0 auto;
-          }
-        }
-
-        /* Section divider */
-        .lp-divider {
-          height: 1px;
-          background: ${SAND_100};
-          margin: 0 24px;
-        }
-      `}</style>
-
-      <div style={{ background: SAND_0, fontFamily: "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>
+      <a
+        href="#main-content"
+        style={{
+          position: 'absolute',
+          left: '-9999px',
+          top: 'auto',
+          width: '1px',
+          height: '1px',
+          overflow: 'hidden',
+        }}
+        onFocus={e => { e.currentTarget.style.cssText = 'position:static;width:auto;height:auto;overflow:visible;padding:8px 16px;background:#3D8178;color:white;z-index:9999;border-radius:4px;' }}
+        onBlur={e => { e.currentTarget.style.cssText = 'position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;' }}
+      >
+        Skip to main content
+      </a>
+      <div style={{ background: SAND_0 }}>
 
         {/* ── HERO ── */}
-        <section style={{ padding: '52px 0 48px' }}>
+        <section id="main-content" style={{ padding: '52px 0 48px' }}>
           <div className="lp-container">
             <div className="lp-hero-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24 }}>
 
@@ -180,8 +140,8 @@ export default function LandingPage() {
                 style={{ display: 'flex', gap: 6, padding: 4, borderRadius: 28, background: 'white', border: `1px solid ${SAND_100}` }}
               >
                 {([
-                  { key: 'pregnancy' as Stage, label: "I'm expecting" },
-                  { key: 'infant'    as Stage, label: 'My baby is here' },
+                  { key: 'pregnancy' as Stage, label: "We're expecting" },
+                  { key: 'infant'    as Stage, label: 'Our baby is here' },
                 ]).map(({ key, label }) => (
                   <button
                     key={key}
@@ -236,12 +196,9 @@ export default function LandingPage() {
                 >
                   Start for free — no download needed
                 </a>
-                <p style={{ fontSize: 13, color: SAND_300, margin: 0 }}>Opens right in your browser. Ready in under two minutes.</p>
+                <p style={{ fontSize: 13, color: SAND_400, margin: 0 }}>Opens right in your browser. Ready in under two minutes.</p>
+                <p style={{ fontSize: 12, color: SAND_400, margin: 0 }}>Free to start &middot; No credit card required</p>
               </div>
-
-              <p style={{ fontSize: 12, color: SAND_300, textAlign: 'center', margin: 0, lineHeight: 1.6 }}>
-                Lumira is an AI companion, not a doctor or midwife. It does not diagnose or detect medical conditions. Always consult your healthcare provider for medical concerns. In an emergency call 911 (US) or 999 (UK).
-              </p>
             </div>
           </div>
         </section>
@@ -253,21 +210,7 @@ export default function LandingPage() {
           <div className="lp-container">
             <div className="lp-pain-grid">
               {PAIN_POINTS.map((point, i) => (
-                <div
-                  key={i}
-                  className={point.featured ? 'lp-pain-featured' : undefined}
-                  style={{
-                    background: point.featured ? '#FDF6F0' : 'white',
-                    border: `1px solid ${SAND_100}`,
-                    borderRadius: 14,
-                    padding: '20px 20px 18px',
-                  }}
-                >
-                  {point.featured && (
-                    <p style={{ fontSize: 11, fontWeight: 700, color: '#C4844E', margin: '0 0 10px', letterSpacing: '0.6px', textTransform: 'uppercase' }}>
-                      Culturally aware
-                    </p>
-                  )}
+                <div key={i} className="lp-pain-card">
                   <p style={{ fontSize: 16, fontWeight: 600, color: SLATE, margin: '0 0 8px', lineHeight: 1.4, fontStyle: 'italic' }}>
                     &ldquo;{point.quote}&rdquo;
                   </p>
@@ -286,12 +229,12 @@ export default function LandingPage() {
         <section style={{ padding: '48px 0' }}>
           <div className="lp-container">
             <h2 style={{ fontSize: 18, fontWeight: 700, color: SLATE, textAlign: 'center', margin: '0 0 28px', letterSpacing: '-0.2px' }}>
-              How it works
+              Here&apos;s what it actually looks like
             </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
               {HOW_IT_WORKS.map((step, i) => (
                 <div key={i} style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-                  <div style={{ width: 28, height: 28, minWidth: 28, borderRadius: '50%', background: SAGE_50, color: SAGE_500, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, marginTop: 1 }}>
+                  <div style={{ width: 28, height: 28, minWidth: 28, borderRadius: '50%', background: '#FDF0E6', color: '#C4844E', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, marginTop: 1 }}>
                     {step.num}
                   </div>
                   <p style={{ fontSize: 15, color: SLATE, lineHeight: 1.6, margin: 0 }}>{step.text}</p>
@@ -310,10 +253,10 @@ export default function LandingPage() {
               <p style={{ fontSize: 18, fontWeight: 600, color: SLATE, margin: '0 0 8px', lineHeight: 1.4 }}>
                 Grounded in trusted guidelines. Delivered like a friend.
               </p>
-              <p style={{ fontSize: 13, color: SAND_300, margin: 0, letterSpacing: '0.4px', fontWeight: 500 }}>
+              <p style={{ fontSize: 13, color: SAND_400, margin: 0, letterSpacing: '0.4px', fontWeight: 500 }}>
                 Content informed by AAP &middot; WHO &middot; NICE &middot; RCOG
               </p>
-              <p style={{ fontSize: 11, color: SAND_300, margin: '6px 0 0', fontStyle: 'italic' }}>
+              <p style={{ fontSize: 11, color: SAND_400, margin: '6px 0 0', fontStyle: 'italic' }}>
                 Not affiliated with or endorsed by these organizations.
               </p>
             </div>
@@ -332,7 +275,10 @@ export default function LandingPage() {
               >
                 Start for free — no download needed
               </a>
-              <p style={{ fontSize: 13, color: SAND_300, margin: 0, textAlign: 'center' }}>
+              <p style={{ fontSize: 12, color: SAND_400, margin: 0, textAlign: 'center' }}>
+                🔒 Your conversations stay private. We never sell your data.
+              </p>
+              <p style={{ fontSize: 13, color: SAND_400, margin: 0, textAlign: 'center' }}>
                 Or <a href="mailto:hello@hellolumira.app" style={{ color: SAGE_500, textDecoration: 'none' }}>send us a message</a> — we read every one.
               </p>
             </div>
