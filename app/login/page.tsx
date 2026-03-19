@@ -195,7 +195,7 @@ export default function AuthPage() {
 
               <button
                 type="submit"
-                disabled={state === 'loading' || !email.trim()}
+                disabled={state === 'loading' || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())}
                 className="btn-primary"
               >
                 {state === 'loading' ? (
