@@ -38,13 +38,13 @@ interface ParentMessage {
 
 type Message = LumiraMessage | ParentMessage
 
-const PREGNANCY_INTRO = `Hi there! I'm Lumira — I'll be your companion through this pregnancy. I'm here to check in daily, answer questions, and flag anything worth keeping an eye on.
+const PREGNANCY_INTRO = `Hi there! I'm Lumira — I'm here to check in with you every day, answer questions, and gently flag anything worth keeping an eye on.
 
-Let's start simple: how are you feeling today? Any nausea, energy shifts, or anything else on your mind?`
+How are you feeling today? Any nausea, energy shifts, or anything else on your mind?`
 
-const INFANT_INTRO = `Hey! I'm Lumira — I'm here to help you navigate life with your little one. I'll check in with you daily, help you spot patterns, and work through any concerns together.
+const INFANT_INTRO = `Hi! I'm Lumira — I'm here to check in with you every day, help you spot patterns, and work through any concerns together.
 
-How did things go last night? How's your baby doing today?`
+How did things go last night? How's your little one doing today?`
 
 export default function CheckinThread({ profile, baby, existingCheckin, prefill }: Props) {
   const router = useRouter()
@@ -139,7 +139,7 @@ export default function CheckinThread({ profile, baby, existingCheckin, prefill 
       } catch {
         const errorMsg: LumiraMessage = {
           role: 'lumira',
-          content: "Lumira is taking a moment. Please try again.",
+          content: "Something went wrong on my end — sorry about that. Feel free to try again.",
           timestamp: new Date().toISOString(),
         }
         setMessages((prev) => [...prev, errorMsg])
