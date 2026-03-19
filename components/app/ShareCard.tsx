@@ -32,7 +32,7 @@ export default function ShareCard() {
           marginBottom: '16px',
         }}
       >
-        Share Lumira with them
+        Pass it on — it&apos;s free to start
       </p>
       <Link
         href="/share"
