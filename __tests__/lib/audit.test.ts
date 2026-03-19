@@ -28,7 +28,7 @@ describe('logAudit', () => {
     const insertArg = mockInsert.mock.calls[0][0]
     expect(insertArg.event_type).toBe('account_created')
     expect(insertArg.profile_id).toBe('profile-1')
-    expect(insertArg.metadata).toEqual({ source: 'test' })
+    expect(insertArg.event_data).toEqual({ source: 'test' })
     expect(insertArg.created_at).toBeTruthy()
   })
 
@@ -60,8 +60,8 @@ describe('logAudit', () => {
     })
     await logAudit('session_created', 'profile-1', {}, fakeRequest)
     const insertArg = mockInsert.mock.calls[0][0]
-    expect(insertArg.ip_hash).toHaveLength(64)
-    expect(insertArg.ip_hash).not.toBe('203.0.113.50')
+    expect(insertArg.ip_address_hash).toHaveLength(64)
+    expect(insertArg.ip_address_hash).not.toBe('203.0.113.50')
     expect(insertArg.user_agent).toBe('TestAgent/1.0')
   })
 
@@ -71,14 +71,14 @@ describe('logAudit', () => {
     })
     await logAudit('session_created', 'profile-1', {}, fakeRequest)
     const insertArg = mockInsert.mock.calls[0][0]
-    expect(insertArg.ip_hash).toHaveLength(64)
+    expect(insertArg.ip_address_hash).toHaveLength(64)
   })
 
   it('stores metadata correctly', async () => {
     const metadata = { key: 'value', nested: { a: 1 } }
     await logAudit('profile_updated', 'profile-1', metadata)
     const insertArg = mockInsert.mock.calls[0][0]
-    expect(insertArg.metadata).toEqual(metadata)
+    expect(insertArg.event_data).toEqual(metadata)
   })
 
   // ── Null / missing inputs ──
@@ -92,7 +92,7 @@ describe('logAudit', () => {
   it('handles missing request (null IP/UA)', async () => {
     await logAudit('account_created', 'profile-1', {})
     const insertArg = mockInsert.mock.calls[0][0]
-    expect(insertArg.ip_hash).toBeNull()
+    expect(insertArg.ip_address_hash).toBeNull()
     expect(insertArg.user_agent).toBeNull()
   })
 
@@ -100,7 +100,7 @@ describe('logAudit', () => {
     const fakeRequest = new Request('https://example.com')
     await logAudit('session_created', 'profile-1', {}, fakeRequest)
     const insertArg = mockInsert.mock.calls[0][0]
-    expect(insertArg.ip_hash).toBeNull()
+    expect(insertArg.ip_address_hash).toBeNull()
   })
 
   it('handles request with no user-agent', async () => {
@@ -125,8 +125,8 @@ describe('logAudit', () => {
     await logAudit('profile_updated', 'profile-1', bigMeta)
     expect(mockInsert).toHaveBeenCalledOnce()
     const insertArg = mockInsert.mock.calls[0][0]
-    expect(insertArg.metadata._truncated).toBe(true)
-    expect(insertArg.metadata._original_size).toBeGreaterThan(10000)
+    expect(insertArg.event_data._truncated).toBe(true)
+    expect(insertArg.event_data._original_size).toBeGreaterThan(10000)
   })
 
   it('handles circular metadata reference gracefully', async () => {
@@ -135,14 +135,14 @@ describe('logAudit', () => {
     await logAudit('account_created', 'profile-1', circular)
     expect(mockInsert).toHaveBeenCalledOnce()
     const insertArg = mockInsert.mock.calls[0][0]
-    expect(insertArg.metadata._error).toBe('metadata not serializable')
+    expect(insertArg.event_data._error).toBe('metadata not serializable')
   })
 
   it('passes through small metadata without truncation', async () => {
     const smallMeta = { key: 'value' }
     await logAudit('profile_updated', 'profile-1', smallMeta)
     const insertArg = mockInsert.mock.calls[0][0]
-    expect(insertArg.metadata).toEqual(smallMeta)
+    expect(insertArg.event_data).toEqual(smallMeta)
   })
 
   // ── Invalid eventType ──

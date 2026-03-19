@@ -810,13 +810,13 @@ describe('Consent record creation', () => {
       action: 'granted' as const,
       capture_method: 'onboarding_explicit' as const,
       document_version: '2026-03-01',
-      ip_hash: null,
+      ip_address: null,
       page_url: '/onboarding',
     }
     expect(row.action).toBe('granted')
     expect(row.capture_method).toBe('onboarding_explicit')
     expect(row.page_url).toBe('/onboarding')
-    expect(row.ip_hash).toBeNull()
+    expect(row.ip_address).toBeNull()
   })
 
   it('consent insert failure throws blocking error', () => {
@@ -906,13 +906,13 @@ describe('Audit log — account creation', () => {
     const auditEntry = {
       event_type: 'account_created',
       profile_id: VALID_UUID,
-      metadata: { method: 'onboarding' },
-      ip_hash: null,
+      event_data: { method: 'onboarding' },
+      ip_address_hash: null,
       user_agent: 'Mozilla/5.0 ...',
       created_at: new Date().toISOString(),
     }
     expect(auditEntry.event_type).toBe('account_created')
-    expect(auditEntry.metadata.method).toBe('onboarding')
+    expect(auditEntry.event_data.method).toBe('onboarding')
   })
 })
 

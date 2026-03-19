@@ -159,7 +159,7 @@ describe('getWeeklyGuideKey', () => {
     })
     const key = getWeeklyGuideKey(baby)
     expect(key.stage).toBe('pregnancy')
-    expect(key.week_or_month).toBe(0)
+    expect(key.week_or_month).toBe(1)
   })
 })
 

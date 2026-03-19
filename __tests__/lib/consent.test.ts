@@ -49,9 +49,9 @@ describe('recordConsent', () => {
       ip_address: '192.168.1.1',
     })
     const insertArg = mockInsert.mock.calls[0][0]
-    expect(insertArg.ip_hash).toBeTruthy()
-    expect(insertArg.ip_hash).not.toBe('192.168.1.1')
-    expect(insertArg.ip_hash).toHaveLength(64)
+    expect(insertArg.ip_address).toBeTruthy()
+    expect(insertArg.ip_address).not.toBe('192.168.1.1')
+    expect(insertArg.ip_address).toHaveLength(64)
   })
 
   it('produces consistent hash for same IP', async () => {
@@ -59,7 +59,7 @@ describe('recordConsent', () => {
       capture_method: 'test',
       ip_address: '10.0.0.1',
     })
-    const hash1 = mockInsert.mock.calls[0][0].ip_hash
+    const hash1 = mockInsert.mock.calls[0][0].ip_address
     vi.clearAllMocks()
     mockInsert.mockResolvedValue({ error: null })
     ;(createServiceClient as ReturnType<typeof vi.fn>).mockResolvedValue(mockClient)
@@ -67,16 +67,16 @@ describe('recordConsent', () => {
       capture_method: 'test',
       ip_address: '10.0.0.1',
     })
-    const hash2 = mockInsert.mock.calls[0][0].ip_hash
+    const hash2 = mockInsert.mock.calls[0][0].ip_address
     expect(hash1).toBe(hash2)
   })
 
-  it('stores null ip_hash when no IP provided', async () => {
+  it('stores null ip_address when no IP provided', async () => {
     await recordConsent(VALID_UUID, 'terms_of_service', 'granted', {
       capture_method: 'settings_toggle',
     })
     const insertArg = mockInsert.mock.calls[0][0]
-    expect(insertArg.ip_hash).toBeNull()
+    expect(insertArg.ip_address).toBeNull()
   })
 
   it('uses "unknown" capture_method when options are undefined', async () => {
@@ -233,8 +233,8 @@ describe('recordConsentBatch', () => {
       ip_address: '10.0.0.1',
     })
     const rows = mockInsert.mock.calls[0][0]
-    expect(rows[0].ip_hash).toBe(rows[1].ip_hash)
-    expect(rows[0].ip_hash).toHaveLength(64)
+    expect(rows[0].ip_address).toBe(rows[1].ip_address)
+    expect(rows[0].ip_address).toHaveLength(64)
   })
 
   it('all rows share the same created_at timestamp', async () => {

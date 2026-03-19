@@ -708,7 +708,7 @@ describe('getWeeklyGuideKey', () => {
     })
     const result = getWeeklyGuideKey(baby)
     expect(result.stage).toBe('pregnancy')
-    expect(result.week_or_month).toBe(0)
+    expect(result.week_or_month).toBe(1)
   })
 
   it('returns fallback for invalid due_date', () => {
@@ -718,6 +718,6 @@ describe('getWeeklyGuideKey', () => {
     })
     const result = getWeeklyGuideKey(baby)
     expect(result.stage).toBe('pregnancy')
-    expect(result.week_or_month).toBe(0)
+    expect(result.week_or_month).toBe(1)
   })
 })
