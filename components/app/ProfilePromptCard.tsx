@@ -57,7 +57,7 @@ export default function ProfilePromptCard({ missingItem }: ProfilePromptCardProp
           paddingRight: '36px',
         }}
       >
-        Complete your profile
+        Help Lumira personalise your experience
       </p>
       <p
         style={{
@@ -67,7 +67,7 @@ export default function ProfilePromptCard({ missingItem }: ProfilePromptCardProp
           marginBottom: '16px',
         }}
       >
-        {missingItem || 'Tell us about your feeding approach'}
+        {missingItem || 'A couple of quick questions about your feeding approach'}
       </p>
       <Link
         href="/profile"
