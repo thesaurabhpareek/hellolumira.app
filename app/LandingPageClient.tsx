@@ -281,15 +281,19 @@ export default function LandingPage() {
             <div role="note" aria-label="Medical disclaimer" style={{ marginTop: 40, paddingTop: 20, borderTop: `1px solid ${SAND_100}` }}>
               <p style={{ fontSize: 11, color: SAND_400, textAlign: 'center', margin: 0, lineHeight: 1.8 }}>
                 Lumira is an AI companion — not a doctor, midwife, or mental health professional. It does not diagnose or detect medical conditions. Always consult your healthcare provider for medical concerns.{' '}
-                <strong style={{ fontWeight: 600 }}>In an emergency, call 911 (US) or 999 (UK).</strong>
+                <strong style={{ fontWeight: 600 }}>In an emergency: 911 (US/CA) · 999 (UK) · 112 (EU/IN/most countries) · 000 (AU) · 111 (NZ)</strong>
                 <br />
                 Postpartum mental health support:{' '}
-                <a href="https://www.postpartum.net" target="_blank" rel="noopener noreferrer" style={{ color: SAGE_600, textDecoration: 'underline' }}>
+                <a href="https://www.postpartum.net/get-help/international-postpartum-support-resources/" target="_blank" rel="noopener noreferrer" style={{ color: SAGE_600, textDecoration: 'underline' }}>
                   Postpartum Support International
                 </a>{' '}
                 ·{' '}
                 <a href="tel:+18009444773" style={{ color: SAGE_600, textDecoration: 'underline' }}>
                   1-800-944-4773
+                </a>{' '}
+                (US) ·{' '}
+                <a href="https://www.postpartum.net/get-help/international-postpartum-support-resources/" target="_blank" rel="noopener noreferrer" style={{ color: SAGE_600, textDecoration: 'underline' }}>
+                  international resources
                 </a>
               </p>
             </div>
@@ -309,10 +313,11 @@ export default function LandingPage() {
               {/* Nav links */}
               <nav aria-label="Footer navigation" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px 20px' }}>
                 {[
-                  { label: 'Terms of Service', href: '/legal/terms' },
-                  { label: 'Privacy Policy',   href: '/legal/privacy' },
-                  { label: 'Cookie Policy',    href: '/legal/cookies' },
-                  { label: 'Contact',          href: 'mailto:hello@hellolumira.app' },
+                  { label: 'Terms of Service',       href: '/legal/terms' },
+                  { label: 'Privacy Policy',         href: '/legal/privacy' },
+                  { label: 'Cookie Policy',          href: '/legal/cookies' },
+                  { label: 'Your Privacy Rights',    href: '/legal/privacy#your-rights' },
+                  { label: 'Contact',                href: 'mailto:hello@hellolumira.app' },
                 ].map(({ label, href }) => (
                   <a
                     key={href}
