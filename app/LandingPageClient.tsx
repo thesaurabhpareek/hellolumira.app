@@ -6,14 +6,14 @@ import { useState, useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
 
 // ── Design tokens ──
-const SAGE_500 = '#3D8178'
+const SAGE_500 = '#3D8178'  // button fills — ok with white text
+const SAGE_600 = '#2C6058'  // link text — ~5.6:1 on FAFAF8 and white — passes WCAG AA
 const SAGE_700 = '#1F4F49'
 const SAGE_50  = '#EDF4F2'
 const SAND_0   = '#FAFAF8'
 const SAND_100 = '#E8E6E1'
-const SAND_500 = '#706D67'
-const SAND_300 = '#B0ADA6'
 const SAND_400 = '#857F78'  // WCAG AA compliant on #FAFAF8 (~4.7:1)
+const SAND_500 = '#706D67'  // WCAG AA compliant on white footer background (~5.2:1)
 const SLATE    = '#2D3748'
 
 type Stage = 'pregnancy' | 'infant'
@@ -45,7 +45,7 @@ const PAIN_POINTS: PainPoint[] = [
   },
   {
     quote: 'My family says one thing. My doctor says another. I love them both.',
-    answer: 'Lumira is culturally aware \u2014 helping you honour your roots while staying grounded in current evidence. No judgment on either side.',
+    answer: 'Lumira is culturally aware \u2014 helping you honor your roots while staying grounded in current evidence. No judgment on either side.',
   },
 ]
 
@@ -71,11 +71,10 @@ function LumiraLogo() {
       </svg>
       {/* Wordmark — plain text so it centres naturally */}
       <span
-        aria-label="Lumira"
         style={{
           fontSize: 'clamp(30px, 6vw, 42px)',
           fontWeight: 700,
-          color: '#1A1A2E',
+          color: SLATE,
           letterSpacing: '-1px',
           lineHeight: 1,
           fontFamily: "'Plus Jakarta Sans', -apple-system, sans-serif",
@@ -106,25 +105,14 @@ export default function LandingPage() {
 
   return (
     <>
-      <a
-        href="#main-content"
-        style={{
-          position: 'absolute',
-          left: '-9999px',
-          top: 'auto',
-          width: '1px',
-          height: '1px',
-          overflow: 'hidden',
-        }}
-        onFocus={e => { e.currentTarget.style.cssText = 'position:static;width:auto;height:auto;overflow:visible;padding:8px 16px;background:#3D8178;color:white;z-index:9999;border-radius:4px;' }}
-        onBlur={e => { e.currentTarget.style.cssText = 'position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;' }}
-      >
+      <a href="#main-content" className="skip-link">
         Skip to main content
       </a>
       <div style={{ background: SAND_0 }}>
 
         {/* ── HERO ── */}
-        <section id="main-content" style={{ padding: '52px 0 48px' }}>
+        <main id="main-content">
+        <section style={{ padding: '52px 0 48px' }}>
           <div className="lp-container">
             <div className="lp-hero-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24 }}>
 
@@ -153,7 +141,7 @@ export default function LandingPage() {
                       borderRadius: 24,
                       border: 'none',
                       background: stage === key ? SAGE_50 : 'transparent',
-                      color: stage === key ? SAGE_500 : SAND_500,
+                      color: stage === key ? SAGE_700 : SAND_400,
                       fontWeight: stage === key ? 600 : 500,
                       fontSize: 14,
                       cursor: 'pointer',
@@ -168,9 +156,11 @@ export default function LandingPage() {
                 ))}
               </div>
 
-              {/* Headline */}
+              {/* Headline — aria-live announces stage changes to screen readers */}
               <h1
                 className="lp-fade lp-d3"
+                aria-live="polite"
+                aria-atomic="true"
                 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: 700, lineHeight: 1.25, color: SLATE, textAlign: 'center', margin: 0, letterSpacing: '-0.5px' }}
               >
                 {copy.headline}
@@ -179,7 +169,7 @@ export default function LandingPage() {
               {/* Subtitle */}
               <p
                 className="lp-fade lp-d4"
-                style={{ fontSize: 16, lineHeight: 1.65, color: SAND_500, textAlign: 'center', margin: 0 }}
+                style={{ fontSize: 16, lineHeight: 1.65, color: SAND_400, textAlign: 'center', margin: 0 }}
               >
                 {copy.sub}
               </p>
@@ -206,15 +196,18 @@ export default function LandingPage() {
         <div className="lp-divider" />
 
         {/* ── PAIN POINTS ── */}
-        <section style={{ padding: '48px 0' }}>
+        <section aria-labelledby="pain-points-heading" style={{ padding: '48px 0' }}>
           <div className="lp-container">
+            <h2 id="pain-points-heading" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap' }}>
+              Common worries we help with
+            </h2>
             <div className="lp-pain-grid">
               {PAIN_POINTS.map((point, i) => (
                 <div key={i} className="lp-pain-card">
                   <p style={{ fontSize: 16, fontWeight: 600, color: SLATE, margin: '0 0 8px', lineHeight: 1.4, fontStyle: 'italic' }}>
                     &ldquo;{point.quote}&rdquo;
                   </p>
-                  <p style={{ fontSize: 14, color: SAND_500, margin: 0, lineHeight: 1.5 }}>
+                  <p style={{ fontSize: 14, color: SAND_400, margin: 0, lineHeight: 1.5 }}>
                     {point.answer}
                   </p>
                 </div>
@@ -231,16 +224,16 @@ export default function LandingPage() {
             <h2 style={{ fontSize: 18, fontWeight: 700, color: SLATE, textAlign: 'center', margin: '0 0 28px', letterSpacing: '-0.2px' }}>
               Here&apos;s what it actually looks like
             </h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+            <ol style={{ display: 'flex', flexDirection: 'column', gap: 20, listStyle: 'none', padding: 0, margin: 0 }}>
               {HOW_IT_WORKS.map((step, i) => (
-                <div key={i} style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-                  <div style={{ width: 28, height: 28, minWidth: 28, borderRadius: '50%', background: '#FDF0E6', color: '#C4844E', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, marginTop: 1 }}>
+                <li key={i} style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+                  <div aria-hidden="true" style={{ width: 28, height: 28, minWidth: 28, borderRadius: '50%', background: '#FDF0E6', color: '#C4844E', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, marginTop: 1 }}>
                     {step.num}
                   </div>
                   <p style={{ fontSize: 15, color: SLATE, lineHeight: 1.6, margin: 0 }}>{step.text}</p>
-                </div>
+                </li>
               ))}
-            </div>
+            </ol>
           </div>
         </section>
 
@@ -262,7 +255,7 @@ export default function LandingPage() {
             </div>
 
             <div className="lp-hero-content" style={{ maxWidth: 400, margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
-              <p style={{ fontSize: 14, color: SAND_500, margin: 0, textAlign: 'center' }}>
+              <p style={{ fontSize: 14, color: SAND_400, margin: 0, textAlign: 'center' }}>
                 Ready to try it?
               </p>
               <a
@@ -276,28 +269,33 @@ export default function LandingPage() {
                 Start for free — no download needed
               </a>
               <p style={{ fontSize: 12, color: SAND_400, margin: 0, textAlign: 'center' }}>
-                🔒 Your conversations stay private. We never sell your data.
+                <span aria-hidden="true">🔒</span> Your conversations stay private. We never sell your data.
               </p>
               <p style={{ fontSize: 13, color: SAND_400, margin: 0, textAlign: 'center' }}>
-                Or <a href="mailto:hello@hellolumira.app" style={{ color: SAGE_500, textDecoration: 'none' }}>send us a message</a> — we read every one.
+                Or <a href="mailto:hello@hellolumira.app" style={{ color: SAGE_600, textDecoration: 'underline' }}>send us a message</a> — we read every one.
               </p>
             </div>
 
             {/* Medical disclaimer */}
-            <div style={{ marginTop: 40, paddingTop: 20, borderTop: `1px solid ${SAND_100}` }}>
-              <p style={{ fontSize: 11, color: SAND_300, textAlign: 'center', margin: 0, lineHeight: 1.8 }}>
+            <div role="note" aria-label="Medical disclaimer" style={{ marginTop: 40, paddingTop: 20, borderTop: `1px solid ${SAND_100}` }}>
+              <p style={{ fontSize: 11, color: SAND_400, textAlign: 'center', margin: 0, lineHeight: 1.8 }}>
                 Lumira is an AI companion — not a doctor, midwife, or mental health professional. It does not diagnose or detect medical conditions. Always consult your healthcare provider for medical concerns.{' '}
                 <strong style={{ fontWeight: 600 }}>In an emergency, call 911 (US) or 999 (UK).</strong>
                 <br />
                 Postpartum mental health support:{' '}
-                <a href="https://www.postpartum.net" target="_blank" rel="noopener noreferrer" style={{ color: SAGE_500, textDecoration: 'none' }}>
+                <a href="https://www.postpartum.net" target="_blank" rel="noopener noreferrer" style={{ color: SAGE_600, textDecoration: 'underline' }}>
                   Postpartum Support International
                 </a>{' '}
-                · 1-800-944-4773
+                ·{' '}
+                <a href="tel:+18009444773" style={{ color: SAGE_600, textDecoration: 'underline' }}>
+                  1-800-944-4773
+                </a>
               </p>
             </div>
           </div>
         </section>
+
+        </main>
 
         {/* ── FOOTER ── */}
         <footer style={{ borderTop: `1px solid ${SAND_100}`, background: 'white', padding: '28px 0 32px' }}>
@@ -318,8 +316,8 @@ export default function LandingPage() {
                   <a
                     key={href}
                     href={href}
-                    style={{ fontSize: 13, color: SAND_500, textDecoration: 'none' }}
-                    onMouseEnter={e => (e.currentTarget.style.color = SAGE_500)}
+                    style={{ fontSize: 13, color: SAND_500, textDecoration: 'underline', textUnderlineOffset: '3px' }}
+                    onMouseEnter={e => (e.currentTarget.style.color = SAGE_600)}
                     onMouseLeave={e => (e.currentTarget.style.color = SAND_500)}
                   >
                     {label}
@@ -327,8 +325,8 @@ export default function LandingPage() {
                 ))}
               </nav>
 
-              {/* Copyright */}
-              <p style={{ fontSize: 12, color: SAND_300, margin: 0, textAlign: 'center' }}>
+              {/* Copyright — SAND_500 (#706D67) gives ~4.6:1 on white footer, passing AA at 12px */}
+              <p style={{ fontSize: 12, color: SAND_500, margin: 0, textAlign: 'center' }}>
                 &copy; {new Date().getFullYear()} Lumira. All rights reserved.
               </p>
             </div>

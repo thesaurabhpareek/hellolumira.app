@@ -348,6 +348,33 @@
 /* ── Landing page styles (moved from <style jsx global> in LandingPageClient.tsx) ── */
 html { scroll-behavior: smooth; }
 
+/* Skip-to-content link for keyboard/screen-reader users */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+/* :focus covers assistive technology that does not set :focus-visible */
+.skip-link:focus,
+.skip-link:focus-visible {
+  position: static;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  padding: 8px 16px;
+  background: var(--color-primary);
+  color: #fff;
+  z-index: 9999;
+  border-radius: 4px;
+  font-weight: 600;
+  text-decoration: none;
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
 @keyframes lp-fade-up {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -374,18 +401,12 @@ html { scroll-behavior: smooth; }
   gap: 12px;
 }
 
-/* All cards same base style — hover reveals a subtle shade shift */
+/* Pain point cards — static, not interactive */
 .lp-pain-card {
   background: white;
   border: 1px solid #E8E6E1;
   border-radius: 14px;
   padding: 20px 20px 18px;
-  transition: background 0.18s ease, border-color 0.18s ease;
-  cursor: default;
-}
-.lp-pain-card:hover {
-  background: #F5F2EE;
-  border-color: #C9C5BE;
 }
 
 .lp-divider {
@@ -410,4 +431,12 @@ html { scroll-behavior: smooth; }
 
 @media (prefers-reduced-motion: reduce) {
   .lp-fade { animation: none; opacity: 1; }
+  .animate-fade-in { animation: none; opacity: 1; }
+  .shimmer { animation: none; background: #e8edf2; }
+  .typing-dot { animation: none; opacity: 1; transform: none; }
+  /* Catch inline animation: spin on the login spinner SVG */
+  svg[aria-hidden="true"] { animation: none !important; }
+  /* Catch scroll-behavior for users who prefer reduced motion */
+  html { scroll-behavior: auto; }
 }
+
