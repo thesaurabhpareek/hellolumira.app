@@ -30,8 +30,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: true }, { status: 200, headers: SECURITY_HEADERS })
     }
 
-    // Log a truncated, safe summary to Vercel function logs for v1 observability
-    const logStr = JSON.stringify(body).slice(0, 2000)
+    // Log a truncated, safe summary to Vercel function logs for v1 observability.
+    // Strip profile_id before logging to avoid PII in log storage.
+    const { profile_id: _pid, ...bodyWithoutPii } = (body as Record<string, unknown>)
+    const logStr = JSON.stringify(bodyWithoutPii).slice(0, 2000)
     console.log('[analytics]', logStr)
 
     return NextResponse.json({ ok: true }, { status: 200, headers: SECURITY_HEADERS })
