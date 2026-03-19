@@ -345,7 +345,7 @@ export function NotificationPanel({
                 fontSize: '14px',
               }}
             >
-              Could not load notifications. Pull down to retry.
+              Couldn&apos;t load notifications right now. Try closing and reopening.
             </div>
           )}
 
