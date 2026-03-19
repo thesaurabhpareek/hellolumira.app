@@ -178,6 +178,7 @@ export default function LandingPage() {
               <div className="lp-fade lp-d5" style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
                 <a
                   href={buildAuthUrl()}
+                  className="lp-cta-btn"
                   style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: 52, background: SAGE_500, color: 'white', fontSize: 16, fontWeight: 600, borderRadius: 12, textDecoration: 'none', transition: 'background 0.15s ease, transform 0.1s ease', fontFamily: 'inherit' }}
                   onMouseEnter={e => (e.currentTarget.style.background = SAGE_700)}
                   onMouseLeave={e => (e.currentTarget.style.background = SAGE_500)}
@@ -207,7 +208,7 @@ export default function LandingPage() {
                   <p style={{ fontSize: 16, fontWeight: 600, color: SLATE, margin: '0 0 8px', lineHeight: 1.4, fontStyle: 'italic' }}>
                     &ldquo;{point.quote}&rdquo;
                   </p>
-                  <p style={{ fontSize: 14, color: SAND_400, margin: 0, lineHeight: 1.5 }}>
+                  <p style={{ fontSize: 14, color: SAND_500, margin: 0, lineHeight: 1.5 }}>
                     {point.answer}
                   </p>
                 </div>

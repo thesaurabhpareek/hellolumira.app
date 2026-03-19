@@ -409,6 +409,13 @@ html { scroll-behavior: smooth; }
   padding: 20px 20px 18px;
 }
 
+/* CTA button — white focus ring ensures keyboard visibility on teal background */
+.lp-cta-btn:focus-visible {
+  outline: 3px solid white;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 5px #3D8178; /* outer ring for non-white bg contexts */
+}
+
 .lp-divider {
   height: 1px;
   background: #E8E6E1;
