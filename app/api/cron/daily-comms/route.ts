@@ -140,11 +140,13 @@ export async function GET(request: NextRequest) {
 
         // Generate email content from premium template (includes full legal compliance)
         const prefillUrl = `${APP_URL}/checkin`
+        const sendHour = new Date().getUTCHours()
         const { subject, html } = dailyCheckinEmail(
           profile.first_name,
           babyName,
           email,
-          prefillUrl
+          prefillUrl,
+          sendHour
         )
 
         // Send email (skipFooter: true because premium templates include full footer)

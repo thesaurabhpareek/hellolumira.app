@@ -8,9 +8,10 @@
  */
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { getBabyAgeInfo } from '@/lib/baby-age'
+import { getGreeting } from '@/lib/greeting'
 import SuggestedPromptsRow from './SuggestedPromptsRow'
 import type { Profile, BabyProfile } from '@/types/app'
 import type { ChatThread } from '@/types/chat'
@@ -26,10 +27,17 @@ interface Props {
   threads: ThreadWithPreview[]
 }
 
-export default function ChatLanding({ profile: _profile, baby, threads }: Props) {
+export default function ChatLanding({ profile, baby, threads }: Props) {
   const router = useRouter()
   const [isCreating, setIsCreating] = useState(false)
+  const [greeting, setGreeting] = useState<string>(`Hello, ${profile.first_name}`)
   const ageInfo = getBabyAgeInfo(baby)
+
+  // Resolve local-time greeting on mount
+  useEffect(() => {
+    const localHour = new Date().getHours()
+    setGreeting(getGreeting(localHour, profile.first_name))
+  }, [profile.first_name])
 
   const createNewThread = async (initialMessage?: string) => {
     if (isCreating) return
@@ -99,10 +107,12 @@ export default function ChatLanding({ profile: _profile, baby, threads }: Props)
               className="text-h2"
               style={{ color: 'var(--color-slate)' }}
             >
-              Chat with Lumira
+              {greeting}
             </h1>
             <p style={{ fontSize: '13px', color: 'var(--color-muted)', marginTop: '2px' }}>
-              Ask anything about {baby.stage === 'pregnancy' ? 'your pregnancy' : (baby.name || 'your baby')}
+              {baby.stage === 'pregnancy'
+                ? 'What\'s on your mind today?'
+                : `How can I help with ${baby.name || 'your little one'} today?`}
             </p>
           </div>
 
@@ -172,12 +182,12 @@ export default function ChatLanding({ profile: _profile, baby, threads }: Props)
                 className="text-h3"
                 style={{ color: 'var(--color-slate)', marginBottom: '8px' }}
               >
-                Ask Lumira anything
+                I&apos;m here for you, {profile.first_name}
               </h2>
               <p style={{ fontSize: '14px', color: 'var(--color-muted)', lineHeight: 1.6 }}>
                 {baby.stage === 'pregnancy'
-                  ? 'Questions about your pregnancy, symptoms, what to expect, or anything on your mind.'
-                  : `Questions about ${baby.name || 'your baby'}, sleep, feeding, development, or anything on your mind.`}
+                  ? 'Ask me anything about your pregnancy — symptoms, what to expect, or just what\'s on your mind.'
+                  : `Ask me anything about ${baby.name || 'your baby'} — sleep, feeding, development, or whatever you\'re thinking about.`}
               </p>
             </div>
 

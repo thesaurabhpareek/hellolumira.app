@@ -8,6 +8,7 @@ import PatternFlagCard from '@/components/app/PatternFlagCard'
 import PregnancyProgressBadge from '@/components/app/PregnancyProgressBadge'
 import ProfilePromptCard from '@/components/app/ProfilePromptCard'
 import ShareCard from '@/components/app/ShareCard'
+import GreetingHeader from '@/components/app/GreetingHeader'
 import type { Profile, BabyProfile, DailyCheckin, PatternType, Stage } from '@/types/app'
 
 export default async function HomePage() {
@@ -102,13 +103,8 @@ export default async function HomePage() {
       }}
     >
       <div className="content-width mx-auto px-4 pt-6">
-        {/* Greeting + age subtitle */}
-        <h1
-          className="text-h2"
-          style={{ color: 'var(--color-slate)', marginBottom: '4px' }}
-        >
-          Good {getTimeGreeting()}, {profile.first_name}
-        </h1>
+        {/* Greeting + age subtitle — client component reads user's local time */}
+        <GreetingHeader firstName={profile.first_name} />
         <p
           style={{
             fontSize: '15px',
@@ -409,15 +405,6 @@ function QuickAction({
       </span>
     </Link>
   )
-}
-
-/* ── Helper: Time-of-day greeting ── */
-function getTimeGreeting(): string {
-  const h = new Date().getHours()
-  if (h >= 5 && h < 12) return 'morning'
-  if (h >= 12 && h < 17) return 'afternoon'
-  if (h >= 17 && h < 21) return 'evening'
-  return 'night'
 }
 
 /* ── Helper: Age subtitle under greeting ── */

@@ -21,6 +21,12 @@
  */
 
 // ---------------------------------------------------------------------------
+// Imports
+// ---------------------------------------------------------------------------
+
+import { getEmailTimeWord } from './greeting'
+
+// ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
 
@@ -73,8 +79,8 @@ export const SUBJECT_LINES = {
     '{{firstName}}, your first insights are almost ready',
   ],
   dailyCheckin: [
-    'Good morning, {{firstName}} \u{1F319} How did last night go?',
-    '\u2615 60 seconds for today\u2019s check-in',
+    'Good {{timeOfDay}}, {{firstName}} \u{1F319} How did last night go?',
+    '\u2615 60 seconds for today\u2019s check-in, {{firstName}}',
     'Quick check-in for {{babyName}} \u2014 takes under a minute',
   ],
   patternAlert: [
@@ -237,7 +243,7 @@ export function emailWrapper(
                 </tr>
                 <tr>
                   <td style="font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;font-size:28px;font-weight:700;color:#1A1A2E;letter-spacing:-0.7px;text-align:center;">
-                    HelloLumira
+                    Lumira
                   </td>
                 </tr>
               </table>
@@ -290,7 +296,7 @@ export function emailWrapper(
 
                     <!-- Sent-to disclosure -->
                     <p style="margin:0 0 8px 0;font-size:11px;color:#B0B0AC;text-align:center;font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;">
-                      This email was sent to ${recipientEmail}. If you didn&rsquo;t create a HelloLumira account, please ignore this email.
+                      This email was sent to ${recipientEmail}. If you didn&rsquo;t create a Lumira account, please ignore this email.
                     </p>
 
                     <!-- Copyright -->
@@ -500,20 +506,27 @@ export function dailyCheckinEmail(
   firstName: string,
   babyName: string,
   email: string,
-  prefillUrl?: string
+  prefillUrl?: string,
+  /** UTC send hour (0–23). Used to pick a contextual greeting. Defaults to 8 (morning). */
+  sendHour: number = 8
 ): EmailTemplate {
   const safeName = escapeHtml(firstName)
   const safeBaby = escapeHtml(babyName || 'your little one')
   const preheader = `60 seconds to log ${safeBaby}\u2019s day \u2014 you\u2019ve got this`
 
+  const timeOfDay = getEmailTimeWord(sendHour)
   const subject = SUBJECT_LINES.dailyCheckin[0]
     .replace('{{firstName}}', firstName)
+    .replace('{{timeOfDay}}', timeOfDay)
 
   const checkinUrl = prefillUrl || LINKS.checkin
 
+  // Greeting emoji — vary by time of day
+  const greetingEmoji = timeOfDay === 'morning' ? '\u{1F31E}' : timeOfDay === 'afternoon' ? '\u2600\uFE0F' : '\u{1F319}'
+
   const content = `
     <h1 style="margin:0 0 16px 0;font-size:24px;font-weight:700;color:${COLORS.slate};font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;line-height:1.3;">
-      Good morning, ${safeName} \u{1F319}
+      Good ${timeOfDay}, ${safeName} ${greetingEmoji}
     </h1>
 
     <p style="margin:0 0 20px 0;font-size:16px;line-height:1.6;color:${COLORS.slate};">
