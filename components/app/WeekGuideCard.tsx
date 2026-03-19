@@ -105,10 +105,10 @@ export default function WeekGuideCard({ stage, week_or_month, babyName }: Props)
         style={{ textAlign: 'center' }}
       >
         <p style={{ color: 'var(--color-muted)', marginBottom: '16px' }}>
-          {error || 'Guide temporarily unavailable'}
+          {error || "Your guide isn\u2019t loading right now \u2014 tap to try again"}
         </p>
         <button onClick={fetchGuide} className="btn-primary">
-          Retry
+          Try again
         </button>
       </div>
     )
@@ -310,7 +310,7 @@ export default function WeekGuideCard({ stage, week_or_month, babyName }: Props)
           lineHeight: 1.5,
         }}
       >
-        Content informed by AAP, WHO, NICE guidelines · Not medical advice
+        Grounded in AAP, WHO &amp; NICE guidelines · Always check with your care team for personal medical questions
       </p>
     </div>
   )
