@@ -253,7 +253,13 @@ export async function POST(request: NextRequest) {
     const fullSystemPrompt = `${masterPrompt}\n\n---\n\nCONTEXT:\n${contextBlock}\n\nConcern category: ${concernCategory}\nEscalation level from scanner: ${redFlagResult.level}${escalationGuidance}${distressGuidance}\n\n---\n\n${CHAT_SYSTEM_ADDON}`
 
     // 9. Build messages array for multi-turn conversation
-    const safeHistory = Array.isArray(conversation_history) ? conversation_history : []
+    // Filter to only allow 'user' and 'assistant' roles to prevent prompt injection
+    // via maliciously crafted role values (e.g. 'system').
+    const safeHistory = Array.isArray(conversation_history)
+      ? conversation_history.filter(
+          (m) => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string'
+        )
+      : []
     const historyForClaude = safeHistory.length > 0
       ? safeHistory
           .map(m => `${m.role === 'user' ? profile.first_name : 'Lumira'}: ${sanitizeForPrompt(String(m.content || ''))}`)
