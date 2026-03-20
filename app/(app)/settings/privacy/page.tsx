@@ -363,13 +363,13 @@ export default function PrivacySettingsPage() {
           </button>
           <div className="lumira-card" style={{ borderRadius: '14px', textAlign: 'center', padding: '40px 20px' }}>
             <p style={{ color: 'var(--color-slate)', fontWeight: 600, marginBottom: '8px' }}>
-              Something went wrong
+              Hmm, that didn&apos;t work
             </p>
             <p style={{ color: 'var(--color-muted)', fontSize: '14px', marginBottom: '16px' }}>
-              We couldn&apos;t load your privacy settings. Please try again.
+              We couldn&apos;t load your privacy settings. Let&apos;s try again.
             </p>
             <button className="btn-primary" style={{ maxWidth: '200px', margin: '0 auto' }} onClick={loadData}>
-              Retry
+              Try again
             </button>
           </div>
         </div>
@@ -392,15 +392,14 @@ export default function PrivacySettingsPage() {
           style={{
             background: 'none',
             border: 'none',
-            color: 'var(--color-primary)',
-            fontSize: '15px',
+            color: '#3D8178',
+            fontSize: '14px',
             fontWeight: 600,
             cursor: 'pointer',
-            padding: 0,
-            marginBottom: '8px',
+            padding: '16px 0',
             display: 'flex',
             alignItems: 'center',
-            gap: '6px',
+            gap: '4px',
           }}
         >
           &larr; Settings

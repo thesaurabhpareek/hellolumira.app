@@ -6,6 +6,8 @@
  * @since March 2026
  */
 
+import { LumiraAvatar } from './LumiraAvatar'
+
 export default function LumiraTyping() {
   return (
     <div
@@ -19,20 +21,9 @@ export default function LumiraTyping() {
         marginBottom: '8px',
       }}
     >
-      {/* Lumira avatar dot */}
-      <div
-        style={{
-          width: '28px',
-          height: '28px',
-          borderRadius: '50%',
-          background: 'var(--color-primary)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexShrink: 0,
-        }}
-      >
-        <span style={{ color: 'white', fontSize: '11px', fontWeight: 700 }}>L</span>
+      {/* Lumira avatar */}
+      <div style={{ flexShrink: 0 }}>
+        <LumiraAvatar size={28} />
       </div>
 
       {/* Typing bubble */}

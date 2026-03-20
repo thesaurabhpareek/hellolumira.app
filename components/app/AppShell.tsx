@@ -9,7 +9,13 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, MessageCircle, Leaf, BookOpen, User } from 'lucide-react'
+import {
+  HomeIcon, HomeIconFilled,
+  ChatIcon, ChatIconFilled,
+  HeartIcon, HeartIconFilled,
+  BookIcon, BookIconFilled,
+  UserIcon, UserIconFilled,
+} from '@/components/icons'
 import { NotificationBell } from './NotificationBell'
 import type { Profile, BabyProfile } from '@/types/app'
 
@@ -22,19 +28,20 @@ interface Props {
 interface TabItem {
   label: string
   href: string
-  icon: typeof Home
+  icon: (props: { size?: number; color?: string }) => React.ReactNode
+  iconFilled: (props: { size?: number; color?: string }) => React.ReactNode
 }
 
 const tabs: TabItem[] = [
-  { label: 'Home', href: '/home', icon: Home },
-  { label: 'Chat', href: '/chat', icon: MessageCircle },
-  { label: 'Tribes', href: '/tribes', icon: Leaf },
-  { label: 'Content', href: '/content', icon: BookOpen },
-  { label: 'Profile', href: '/profile', icon: User },
+  { label: 'Home', href: '/home', icon: HomeIcon, iconFilled: HomeIconFilled },
+  { label: 'Talk', href: '/chat', icon: ChatIcon, iconFilled: ChatIconFilled },
+  { label: 'How are you?', href: '/checkin', icon: HeartIcon, iconFilled: HeartIconFilled },
+  { label: 'Read', href: '/content', icon: BookIcon, iconFilled: BookIconFilled },
+  { label: 'Me', href: '/profile', icon: UserIcon, iconFilled: UserIconFilled },
 ]
 
 const SAGE_500 = '#3D8178'
-const SAND_500 = '#706D67'
+const _SAND_500 = '#706D67'
 const SAND_100 = '#E8E6E1'
 
 export default function AppShell({
@@ -49,6 +56,7 @@ export default function AppShell({
 
   function isTabActive(href: string): boolean {
     if (href === '/home') return pathname === '/home'
+    if (href === '/checkin') return pathname.startsWith('/checkin')
     return pathname.startsWith(href)
   }
 
@@ -152,8 +160,8 @@ export default function AppShell({
         >
           {tabs.map((tab) => {
             const active = isTabActive(tab.href)
-            const color = active ? SAGE_500 : SAND_500
-            const IconComponent = tab.icon
+            const color = active ? SAGE_500 : '#9CA3AF'
+            const IconComponent = active ? tab.iconFilled : tab.icon
 
             return (
               <Link
@@ -178,15 +186,19 @@ export default function AppShell({
               >
                 <IconComponent
                   size={22}
-                  strokeWidth={active ? 2.5 : 2}
                   color={color}
                 />
                 <span
                   style={{
-                    fontSize: '11px',
-                    fontWeight: 600,
-                    lineHeight: 1,
+                    fontSize: '10px',
+                    fontWeight: active ? 700 : 600,
+                    lineHeight: 1.1,
                     color,
+                    textAlign: 'center',
+                    maxWidth: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
                   }}
                 >
                   {tab.label}

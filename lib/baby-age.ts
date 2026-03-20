@@ -18,9 +18,12 @@ const GESTATION_DAYS = 280
 /**
  * Calculates comprehensive age information from a baby profile.
  *
- * For pregnancy: derives pregnancy week (clamped 1-45), trimester, and days until due.
- * For postnatal: derives age in weeks and months (clamped 0-36 months).
- * Handles invalid dates, future DOBs, and missing data gracefully.
+ * Age display follows how parents naturally think:
+ * - Pregnancy: "Week X" with trimester label (e.g. "First trimester (Week 8)")
+ * - 0-3 months: weeks (e.g. "6 weeks old")
+ * - 3-12 months: months with optional weeks (e.g. "5 months old")
+ * - 12-24 months: months or years+months (e.g. "14 months old")
+ * - 24+ months: years or years+months (e.g. "2 years and 3 months")
  *
  * @param baby - The baby profile containing stage, due_date, and date_of_birth.
  * @returns Structured age info including display string and numeric values.
@@ -43,12 +46,13 @@ export function getBabyAgeInfo(baby: BabyProfile): BabyAgeInfo {
     // Clamp pregnancy_week to 1-45 range
     const pregnancyWeek = Math.min(45, Math.max(1, Math.floor(daysPregnant / 7)))
     const trimester: 1 | 2 | 3 = pregnancyWeek <= 12 ? 1 : pregnancyWeek <= 27 ? 2 : 3
+    const trimesterLabel = trimester === 1 ? 'First' : trimester === 2 ? 'Second' : 'Third'
     return {
       stage: 'pregnancy',
       pregnancy_week: pregnancyWeek,
       trimester,
       days_until_due: Math.max(0, daysUntilDue),
-      age_display_string: `Week ${pregnancyWeek} · Trimester ${trimester}`,
+      age_display_string: `${trimesterLabel} trimester (Week ${pregnancyWeek})`,
     }
   }
   if (baby.date_of_birth) {
@@ -74,25 +78,61 @@ export function getBabyAgeInfo(baby: BabyProfile): BabyAgeInfo {
     const rawAgeInMonths =
       (today.getFullYear() - dob.getFullYear()) * 12 +
       (today.getMonth() - dob.getMonth())
+    // Adjust if the day-of-month hasn't been reached yet this month
+    const adjustedMonths = today.getDate() < dob.getDate() ? rawAgeInMonths - 1 : rawAgeInMonths
     // Clamp age_in_months to 0-36 range for infant/toddler
-    const ageInMonths = Math.max(0, Math.min(36, rawAgeInMonths))
-    // Calculate remaining weeks since the start of the current month-age
-    // (months are not exactly 4 weeks, so use calendar math for accuracy)
-    const monthAgeStart = new Date(dob.getFullYear(), dob.getMonth() + ageInMonths, dob.getDate())
-    const daysSinceMonthAge = Math.floor((today.getTime() - monthAgeStart.getTime()) / MS_PER_DAY)
-    const remainingWeeks = Math.max(0, Math.floor(daysSinceMonthAge / 7))
+    const ageInMonths = Math.max(0, Math.min(36, adjustedMonths))
+
     const name = baby.name || 'Baby'
+    const displayString = formatAgeDisplay(name, ageInWeeks, ageInMonths)
+
     return {
       stage: baby.stage,
       age_in_weeks: ageInWeeks,
       age_in_months: ageInMonths,
-      age_display_string:
-        remainingWeeks > 0
-          ? `${name} · ${ageInWeeks} weeks · ${ageInMonths} months ${remainingWeeks} weeks`
-          : `${name} · ${ageInWeeks} weeks · ${ageInMonths} months`,
+      age_display_string: displayString,
     }
   }
   return { stage: 'pregnancy', age_display_string: 'Pregnancy' }
+}
+
+/**
+ * Formats the age display string based on how parents naturally think about age.
+ *
+ * - 0-12 weeks (0-3 months): "X weeks old"
+ * - 3-12 months: "X months old"
+ * - 12-24 months: "X months old" or "1 year and Y months"
+ * - 24+ months: "X years" or "X years and Y months"
+ */
+function formatAgeDisplay(name: string, ageInWeeks: number, ageInMonths: number): string {
+  // Newborn / early infant: show weeks (0-12 weeks = roughly 0-3 months)
+  if (ageInMonths < 3) {
+    if (ageInWeeks === 0) return `${name} · Newborn`
+    return `${name} · ${ageInWeeks} ${ageInWeeks === 1 ? 'week' : 'weeks'} old`
+  }
+
+  // Infant 3-12 months: show months
+  if (ageInMonths < 12) {
+    return `${name} · ${ageInMonths} ${ageInMonths === 1 ? 'month' : 'months'} old`
+  }
+
+  // 12-24 months: show "X year and Y months" or just "1 year old"
+  if (ageInMonths < 24) {
+    const years = Math.floor(ageInMonths / 12)
+    const remainingMonths = ageInMonths % 12
+    if (remainingMonths === 0) {
+      return `${name} · ${years} year old`
+    }
+    return `${name} · ${years} year and ${remainingMonths} ${remainingMonths === 1 ? 'month' : 'months'}`
+  }
+
+  // 24+ months: show years or years and months
+  const years = Math.floor(ageInMonths / 12)
+  const remainingMonths = ageInMonths % 12
+  if (remainingMonths === 0) {
+    return `${name} · ${years} years`
+  }
+  return `${name} · ${years} years and ${remainingMonths} ${remainingMonths === 1 ? 'month' : 'months'}`
 }
 
 /**

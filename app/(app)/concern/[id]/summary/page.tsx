@@ -68,6 +68,23 @@ export default async function ConcernSummaryPage({ params, searchParams }: Props
       }}
     >
       <div className="content-width mx-auto px-4 pt-6">
+        {/* Back button */}
+        <Link
+          href="/home"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '4px',
+            color: '#3D8178',
+            fontSize: '14px',
+            fontWeight: 600,
+            textDecoration: 'none',
+            padding: '16px 0',
+          }}
+        >
+          &larr; Back
+        </Link>
+
         {/* Header */}
         <div style={{ marginBottom: '24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>

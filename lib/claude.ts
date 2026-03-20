@@ -9,8 +9,12 @@
 
 import Anthropic from '@anthropic-ai/sdk'
 
+if (!process.env.ANTHROPIC_API_KEY) {
+  console.error('[claude] ANTHROPIC_API_KEY environment variable is not set. All AI features will fail.')
+}
+
 const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY!,
+  apiKey: process.env.ANTHROPIC_API_KEY || '',
 })
 
 export const MASTER_SYSTEM_PROMPT = (params: {
@@ -70,6 +74,9 @@ export async function callClaude(
   userMessage: string,
   maxTokens = 800
 ): Promise<string> {
+  if (!process.env.ANTHROPIC_API_KEY) {
+    throw new Error('ANTHROPIC_API_KEY is not configured. Please set this environment variable.')
+  }
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), 30000) // 30s timeout
   try {

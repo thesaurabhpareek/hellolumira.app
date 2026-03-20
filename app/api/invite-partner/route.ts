@@ -15,6 +15,7 @@ import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { randomUUID } from 'crypto'
 import { SECURITY_HEADERS } from '@/lib/utils'
 import { isValidUUID, isValidEmail, verifyBabyOwnership } from '@/lib/validation'
+import { logAudit } from '@/lib/audit'
 
 interface InvitePartnerRequest {
   baby_id: string
@@ -68,12 +69,13 @@ export async function POST(request: NextRequest) {
     const inviteUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://hellolumira.app'}/invite/${token}`
 
     // Insert partner invite record
+    // Column names match the actual DB schema: inviter_profile_id, invite_email, invite_token, accepted
     const { error: insertError } = await serviceClient.from('partner_invites').insert({
       baby_id,
-      invited_by_profile_id: user.id,
-      invited_email: trimmedEmail.toLowerCase(),
-      token,
-      used: false,
+      inviter_profile_id: user.id,
+      invite_email: trimmedEmail.toLowerCase(),
+      invite_token: token,
+      accepted: false,
     })
 
     if (insertError) {
@@ -97,6 +99,9 @@ export async function POST(request: NextRequest) {
     } catch (emailErr) {
       console.warn('[invite-partner] Email error (non-fatal):', emailErr)
     }
+
+    // Audit: log partner invite sent
+    logAudit('partner_invite_sent', user.id, { baby_id, invite_email: trimmedEmail.toLowerCase() }, request).catch(() => {})
 
     // Only return the invite URL (not the raw token) to prevent token leakage
     return NextResponse.json({ success: true, invite_url: inviteUrl })

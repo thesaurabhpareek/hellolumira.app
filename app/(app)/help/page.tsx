@@ -53,16 +53,34 @@ export default function HelpPage() {
       }}
     >
       <div className="content-width mx-auto px-4 pt-6">
+        {/* Back button */}
+        <button
+          onClick={() => window.history.back()}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '4px',
+            color: '#3D8178',
+            fontSize: '14px',
+            fontWeight: 600,
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            padding: '16px 0',
+          }}
+        >
+          &larr; Back
+        </button>
         {/* Header */}
         <h1 className="text-h1" style={{ color: 'var(--color-slate)', marginBottom: '20px' }}>
-          Help &amp; Support
+          Get Help
         </h1>
 
         {/* Search bar */}
         <div style={{ marginBottom: '24px' }}>
           <input
             type="text"
-            placeholder="Search for help..."
+            placeholder="What can we help with?"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             style={{
@@ -125,7 +143,7 @@ export default function HelpPage() {
           {filteredLinks.length === 0 && (
             <div style={{ padding: '24px 16px', textAlign: 'center' }}>
               <p style={{ fontSize: '14px', color: 'var(--color-muted)' }}>
-                No results found for &quot;{search}&quot;
+                Nothing matching &quot;{search}&quot; — try a different word?
               </p>
             </div>
           )}

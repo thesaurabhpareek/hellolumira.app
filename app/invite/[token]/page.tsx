@@ -1,6 +1,8 @@
-// app/invite/[token]/page.tsx — Partner invite
+// app/invite/[token]/page.tsx — Partner invite + share link tracking
 import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
+import { sha256 } from '@/lib/utils'
+import { headers } from 'next/headers'
 import PartnerInviteClient from './PartnerInviteClient'
 
 interface Props {
@@ -11,6 +13,40 @@ export default async function InvitePage({ params }: Props) {
   const { token } = await params
   const supabase = await createClient()
 
+  // Short tokens (8 chars, no dashes) are share/referral links
+  // UUID tokens (36 chars with dashes) are partner invite tokens
+  const isShareToken = token.length === 8 && !token.includes('-')
+
+  if (isShareToken) {
+    // Track the share link click then redirect to login
+    try {
+      const serviceClient = await createServiceClient()
+      const { data: referrer } = await serviceClient
+        .from('profiles')
+        .select('id')
+        .eq('share_token', token)
+        .maybeSingle()
+
+      if (referrer) {
+        const headersList = await headers()
+        const ip = headersList.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
+        const ipHash = await sha256(ip)
+        const userAgent = headersList.get('user-agent')?.slice(0, 500) || null
+
+        await serviceClient.from('share_tracking').insert({
+          referrer_profile_id: referrer.id,
+          share_token: token,
+          ip_hash: ipHash,
+          user_agent: userAgent,
+        })
+      }
+    } catch (err) {
+      console.error('[invite/token] Share tracking error:', err)
+    }
+    redirect('/login')
+  }
+
+  // Partner invite flow (UUID tokens)
   // Validate the invite token
   const { data: invite, error } = await supabase
     .from('partner_invites')

@@ -40,7 +40,7 @@ export default function AppError({
             marginBottom: '0.75rem',
           }}
         >
-          Something went wrong
+          Oops, something didn&apos;t work
         </h2>
         <p
           style={{
@@ -50,8 +50,8 @@ export default function AppError({
             lineHeight: 1.5,
           }}
         >
-          Lumira ran into an unexpected issue. This has been logged and we are
-          looking into it. You can try again or head back to the home screen.
+          That wasn&apos;t supposed to happen — sorry about that. Your data is safe.
+          You can try again or head back home.
         </p>
         <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center' }}>
           <button

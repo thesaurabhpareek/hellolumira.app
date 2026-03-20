@@ -1,18 +1,19 @@
 /**
  * @module NotificationPanel
- * @description Slide-out notification panel displaying today's and earlier
- *   notifications. Supports mark-read, mark-all-read, and dismiss actions
- *   with optimistic UI updates.
- * @version 1.0.0
+ * @description Dropdown notification panel that appears below the bell icon,
+ *   Facebook-style. Displays today's and earlier notifications with mark-read,
+ *   mark-all-read, and dismiss actions. Sized within the page (not full-screen).
+ * @version 2.0.0
  * @since March 2026
  */
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { X } from 'lucide-react'
+import { CloseIcon } from '@/components/icons'
 import type { Notification, NotificationType } from '@/types/app'
 
 const SAGE_500 = '#3D8178'
+const SAND_0 = '#FAFAF8'
 const SAND_500 = '#706D67'
 const SAND_100 = '#E8E6E1'
 const AMBER_400 = '#D69E2E'
@@ -97,9 +98,9 @@ function NotificationRow({
         alignItems: 'flex-start',
         gap: '12px',
         width: '100%',
-        padding: '14px 16px',
+        padding: '12px 16px',
         minHeight: '48px',
-        background: notification.is_read ? '#FFFFFF' : '#F7FAFC',
+        background: notification.is_read ? '#FFFFFF' : SAND_0,
         border: 'none',
         borderLeft: borderColor ? `3px solid ${borderColor}` : '3px solid transparent',
         borderBottom: `1px solid ${SAND_100}`,
@@ -120,7 +121,7 @@ function NotificationRow({
         }}
         aria-hidden="true"
       >
-        {notification.emoji || '🔔'}
+        {notification.emoji || '\uD83D\uDD14'}
       </span>
 
       {/* Content */}
@@ -142,24 +143,49 @@ function NotificationRow({
             fontWeight: 400,
             color: SAND_500,
             lineHeight: 1.4,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
           }}
         >
           {notification.body}
         </div>
       </div>
 
-      {/* Time */}
-      <span
+      {/* Time + unread dot */}
+      <div
         style={{
-          fontSize: '12px',
-          color: SAND_500,
-          whiteSpace: 'nowrap',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-end',
+          gap: '6px',
           flexShrink: 0,
           marginTop: '2px',
         }}
       >
-        {timeAgo(notification.created_at)}
-      </span>
+        <span
+          style={{
+            fontSize: '12px',
+            color: SAND_500,
+            whiteSpace: 'nowrap',
+          }}
+        >
+          {timeAgo(notification.created_at)}
+        </span>
+        {!notification.is_read && (
+          <span
+            style={{
+              width: '8px',
+              height: '8px',
+              borderRadius: '50%',
+              background: SAGE_500,
+              flexShrink: 0,
+            }}
+          />
+        )}
+      </div>
     </button>
   )
 }
@@ -185,14 +211,22 @@ export function NotificationPanel({
     return () => document.removeEventListener('keydown', handleKey)
   }, [onClose])
 
-  // Prevent body scroll when panel is open
+  // Close on click outside
   useEffect(() => {
-    const original = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    return () => {
-      document.body.style.overflow = original
+    const handleClickOutside = (e: MouseEvent) => {
+      if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
+        onClose()
+      }
     }
-  }, [])
+    // Delay listener to avoid catching the opening click
+    const timer = setTimeout(() => {
+      document.addEventListener('mousedown', handleClickOutside)
+    }, 0)
+    return () => {
+      clearTimeout(timer)
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [onClose])
 
   const hasNotifications =
     notifications &&
@@ -200,51 +234,60 @@ export function NotificationPanel({
 
   return (
     <>
-      {/* Backdrop */}
+      {/* Backdrop overlay - transparent on desktop, subtle on mobile */}
       <div
         onClick={onClose}
         style={{
           position: 'fixed',
           inset: 0,
-          background: 'rgba(0, 0, 0, 0.3)',
-          zIndex: 200,
-          animation: 'notif-backdrop-in 0.2s ease',
+          background: 'rgba(0, 0, 0, 0.15)',
+          zIndex: 199,
+          animation: 'notif-backdrop-in 0.15s ease',
         }}
         aria-hidden="true"
       />
 
-      {/* Bottom sheet */}
+      {/* Dropdown panel */}
       <div
         ref={panelRef}
         role="dialog"
         aria-label="Notifications"
         aria-modal="true"
         style={{
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
+          position: 'absolute',
+          top: '100%',
           right: 0,
+          marginTop: '4px',
+          width: 'min(400px, calc(100vw - 24px))',
           maxHeight: '70vh',
-          zIndex: 201,
+          zIndex: 200,
           background: '#FFFFFF',
-          borderTopLeftRadius: '16px',
-          borderTopRightRadius: '16px',
+          borderRadius: '12px',
+          boxShadow: '0 8px 30px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08)',
           display: 'flex',
           flexDirection: 'column',
-          animation: 'notif-slide-up 0.25s ease',
+          animation: 'notif-dropdown-in 0.2s ease',
           fontFamily: "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          overflow: 'hidden',
+          border: `1px solid ${SAND_100}`,
         }}
       >
-        {/* Handle bar */}
+        {/* Arrow / caret pointing up toward the bell */}
         <div
           style={{
-            width: '36px',
-            height: '4px',
-            borderRadius: '2px',
-            background: SAND_100,
-            margin: '8px auto 0',
-            touchAction: 'none',
+            position: 'absolute',
+            top: '-6px',
+            right: '18px',
+            width: '12px',
+            height: '12px',
+            background: '#FFFFFF',
+            border: `1px solid ${SAND_100}`,
+            borderRight: 'none',
+            borderBottom: 'none',
+            transform: 'rotate(45deg)',
+            zIndex: 1,
           }}
+          aria-hidden="true"
         />
 
         {/* Header */}
@@ -253,22 +296,26 @@ export function NotificationPanel({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding: '12px 16px 8px',
+            padding: '14px 16px 10px',
             borderBottom: `1px solid ${SAND_100}`,
+            position: 'relative',
+            zIndex: 2,
+            background: '#FFFFFF',
           }}
         >
           <h2
             style={{
               fontSize: '17px',
-              fontWeight: 600,
+              fontWeight: 700,
               color: '#2D3748',
               margin: 0,
+              letterSpacing: '-0.2px',
             }}
           >
             Notifications
           </h2>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
             {hasNotifications && (
               <button
                 type="button"
@@ -280,15 +327,16 @@ export function NotificationPanel({
                   background: 'transparent',
                   border: 'none',
                   cursor: 'pointer',
-                  padding: '4px 8px',
+                  padding: '6px 10px',
                   borderRadius: '6px',
-                  minHeight: '48px',
+                  minHeight: '32px',
                   display: 'flex',
                   alignItems: 'center',
                   WebkitTapHighlightColor: 'transparent',
+                  transition: 'background 0.15s ease',
                 }}
               >
-                Mark all as read
+                Mark all read
               </button>
             )}
 
@@ -297,21 +345,22 @@ export function NotificationPanel({
               onClick={onClose}
               aria-label="Close notifications"
               style={{
-                width: '48px',
-                height: '48px',
+                width: '32px',
+                height: '32px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                background: 'transparent',
+                background: SAND_0,
                 border: 'none',
                 cursor: 'pointer',
-                borderRadius: '8px',
+                borderRadius: '50%',
                 color: SAND_500,
                 padding: 0,
                 WebkitTapHighlightColor: 'transparent',
+                transition: 'background 0.15s ease',
               }}
             >
-              <X size={20} strokeWidth={2} />
+              <CloseIcon size={16} />
             </button>
           </div>
         </div>
@@ -323,7 +372,6 @@ export function NotificationPanel({
             overflowY: 'auto',
             WebkitOverflowScrolling: 'touch',
             overscrollBehavior: 'contain',
-            paddingBottom: 'max(16px, env(safe-area-inset-bottom))',
           }}
         >
           {loading && (
@@ -352,17 +400,17 @@ export function NotificationPanel({
           {!loading && !error && !hasNotifications && (
             <div
               style={{
-                padding: '60px 16px',
+                padding: '48px 16px',
                 textAlign: 'center',
               }}
             >
-              <div style={{ fontSize: '32px', marginBottom: '12px' }}>
+              <div style={{ fontSize: '28px', marginBottom: '10px' }}>
                 &#x2728;
               </div>
               <div
                 style={{
                   fontSize: '15px',
-                  fontWeight: 500,
+                  fontWeight: 600,
                   color: '#2D3748',
                   marginBottom: '4px',
                 }}
@@ -418,9 +466,15 @@ export function NotificationPanel({
           from { opacity: 0; }
           to { opacity: 1; }
         }
-        @keyframes notif-slide-up {
-          from { transform: translateY(100%); }
-          to { transform: translateY(0); }
+        @keyframes notif-dropdown-in {
+          from {
+            opacity: 0;
+            transform: translateY(-8px) scale(0.97);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
         }
       `}</style>
     </>
@@ -431,12 +485,13 @@ function SectionHeader({ label }: { label: string }) {
   return (
     <div
       style={{
-        padding: '12px 16px 6px',
+        padding: '10px 16px 4px',
         fontSize: '12px',
         fontWeight: 600,
         color: SAND_500,
         textTransform: 'uppercase',
         letterSpacing: '0.5px',
+        background: SAND_0,
       }}
     >
       {label}

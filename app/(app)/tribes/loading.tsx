@@ -35,7 +35,7 @@ export default function TribesLoading() {
             color: '#718096',
           }}
         >
-          Loading Tribes...
+          Just a moment...
         </p>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>

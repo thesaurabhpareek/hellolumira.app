@@ -79,8 +79,23 @@ export default async function HistoryPage() {
       }}
     >
       <div className="content-width mx-auto px-4 pt-6">
+        <a
+          href="/home"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '4px',
+            color: '#3D8178',
+            fontSize: '14px',
+            fontWeight: 600,
+            textDecoration: 'none',
+            padding: '16px 0',
+          }}
+        >
+          &larr; Back
+        </a>
         <h1 className="text-h1 mb-2" style={{ color: 'var(--color-slate)' }}>
-          History
+          My Journey
         </h1>
         <p className="text-body-muted mb-6">
           Your last 30 days at a glance.
@@ -90,7 +105,7 @@ export default async function HistoryPage() {
           <div className="lumira-card" style={{ textAlign: 'center', padding: '40px 20px' }}>
             <p style={{ fontSize: '32px', marginBottom: '12px' }}>📋</p>
             <p style={{ color: 'var(--color-muted)', fontSize: '15px' }}>
-              No history yet. Start by logging a check-in!
+              Nothing here yet — and that&apos;s okay! Your journey starts with your first check-in.
             </p>
           </div>
         ) : (

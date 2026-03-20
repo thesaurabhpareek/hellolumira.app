@@ -1,4 +1,4 @@
-export type Stage = 'pregnancy' | 'infant' | 'toddler'
+export type Stage = 'pregnancy' | 'infant' | 'toddler' | 'postpartum'
 export type EmotionalSignal = 'ok' | 'tired' | 'struggling' | 'distressed'
 
 export type Profile = {
@@ -254,6 +254,68 @@ export type DataDeletionRequest = {
 }
 
 export type TimeOfDay = 'early_morning' | 'late_morning' | 'afternoon' | 'evening' | 'late_night'
+
+// ── Tribes / Community ──────────────────────────────────────────────────────
+
+export type Tribe = {
+  id: string
+  name: string
+  slug: string
+  description: string
+  emoji: string
+  stage_filter: string | null
+  week_min: number | null
+  week_max: number | null
+  month_min: number | null
+  month_max: number | null
+  color: string
+  member_count: number
+  post_count: number
+  is_active: boolean
+  created_at: string
+}
+
+export type AiParentProfile = {
+  id: string
+  display_name: string
+  avatar_emoji: string
+  bio: string
+  stage: 'pregnancy' | 'infant' | 'toddler' | 'mixed'
+  baby_name: string | null
+  baby_age_desc: string | null
+  location: string | null
+  personality: string
+  created_at: string
+}
+
+export type TribePost = {
+  id: string
+  tribe_id: string
+  profile_id: string | null
+  ai_profile_id: string | null
+  title: string | null
+  body: string
+  post_type: 'discussion' | 'question' | 'tip' | 'celebration' | 'vent' | 'poll'
+  emoji_tag: string | null
+  is_pinned: boolean
+  comment_count: number
+  reaction_count: number
+  created_at: string
+  updated_at: string
+}
+
+export type TribeComment = {
+  id: string
+  post_id: string
+  parent_id: string | null
+  profile_id: string | null
+  ai_profile_id: string | null
+  body: string
+  reaction_count: number
+  created_at: string
+}
+
+export type TribeReactionType = '❤️' | '👏' | '🤗' | '😂' | '💪' | '🙏'
 
 export type WeeklySummary = {
   id: string

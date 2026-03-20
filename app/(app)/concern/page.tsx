@@ -61,6 +61,21 @@ export default async function ConcernPage() {
       }}
     >
       <div className="content-width mx-auto px-4 pt-6">
+        <Link
+          href="/home"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '4px',
+            color: '#3D8178',
+            fontSize: '14px',
+            fontWeight: 600,
+            textDecoration: 'none',
+            padding: '16px 0',
+          }}
+        >
+          &larr; Back
+        </Link>
         <h1 className="text-h1 mb-2" style={{ color: 'var(--color-slate)' }}>
           What&apos;s on your mind?
         </h1>

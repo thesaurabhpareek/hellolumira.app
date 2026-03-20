@@ -40,7 +40,7 @@ export default function HomeError({
             marginBottom: '0.75rem',
           }}
         >
-          Home could not load
+          Hmm, that didn&apos;t work
         </h2>
         <p
           style={{
@@ -50,8 +50,7 @@ export default function HomeError({
             lineHeight: 1.5,
           }}
         >
-          Something went wrong loading your home screen. Your data is safe.
-          Please try again.
+          Something went wrong loading your home screen. Your data is safe — let&apos;s try that again.
         </p>
         <button
           onClick={reset}

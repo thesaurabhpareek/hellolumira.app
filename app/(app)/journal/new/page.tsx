@@ -73,15 +73,17 @@ export default function NewJournalEntryPage() {
               background: 'none',
               border: 'none',
               cursor: 'pointer',
-              color: 'var(--color-muted)',
-              fontSize: '24px',
-              padding: '4px 8px',
+              color: '#3D8178',
+              fontSize: '14px',
+              fontWeight: 600,
+              padding: '16px 0',
               minHeight: '48px',
               display: 'flex',
               alignItems: 'center',
+              gap: '4px',
             }}
           >
-            ←
+            &larr; Back
           </button>
           <h1 className="text-h1" style={{ color: 'var(--color-slate)' }}>
             New journal entry

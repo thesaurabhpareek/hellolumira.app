@@ -230,6 +230,7 @@ const QUESTION_POOLS: Record<Stage, DailyQuestion[]> = {
   pregnancy: PREGNANCY_QUESTIONS,
   infant: INFANT_QUESTIONS,
   toddler: TODDLER_QUESTIONS,
+  postpartum: INFANT_QUESTIONS, // Postpartum uses same questions as infant stage
 }
 
 // ---------------------------------------------------------------------------
@@ -429,6 +430,7 @@ const QUIZ_POOLS: Record<Stage, QuizQuestion[]> = {
   pregnancy: PREGNANCY_QUIZZES,
   infant: INFANT_QUIZZES,
   toddler: TODDLER_QUIZZES,
+  postpartum: INFANT_QUIZZES,
 }
 
 // ---------------------------------------------------------------------------

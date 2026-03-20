@@ -84,20 +84,75 @@ export async function POST(request: NextRequest) {
 
     const userMessage = `Stage: ${stage}\nParent's concern: "${free_text}"\n\nClassify this concern.`
 
-    const result = await callClaudeJSON<{ concern_type: string }>(
-      ROUTE_CONCERN_PROMPT,
-      userMessage,
-      100
-    )
+    let concernType: string = 'other'
+    let isFallback = false
 
-    // Validate the returned type
-    const concernType = VALID_CONCERN_TYPES.includes(result.concern_type as ConcernType)
-      ? result.concern_type
-      : 'other'
+    if (!process.env.ANTHROPIC_API_KEY) {
+      // No API key configured — use safe default routing
+      concernType = getStaticRouting(stage, free_text)
+      isFallback = true
+    } else {
+      try {
+        const result = await callClaudeJSON<{ concern_type: string }>(
+          ROUTE_CONCERN_PROMPT,
+          userMessage,
+          100
+        )
 
-    return NextResponse.json({ concern_type: concernType }, { headers: SECURITY_HEADERS })
+        // Validate the returned type
+        concernType = VALID_CONCERN_TYPES.includes(result.concern_type as ConcernType)
+          ? result.concern_type
+          : 'other'
+      } catch (aiErr) {
+        const aiErrMsg = aiErr instanceof Error ? aiErr.message : String(aiErr)
+        console.error('[route-concern] Claude classification failed:', aiErrMsg)
+        concernType = getStaticRouting(stage, free_text)
+        isFallback = true
+      }
+    }
+
+    return NextResponse.json({
+      concern_type: concernType,
+      category: 'general',
+      urgency: 'low',
+      suggested_action: 'monitor',
+      ...(isFallback && { fallback: true }),
+    }, { headers: SECURITY_HEADERS })
   } catch (err) {
-    console.error('[route-concern] Error:', err)
-    return NextResponse.json({ concern_type: 'other' }, { headers: SECURITY_HEADERS })
+    const errMsg = err instanceof Error ? err.message : String(err)
+    console.error('[route-concern] Error:', errMsg)
+    return NextResponse.json({
+      concern_type: 'other',
+      category: 'general',
+      urgency: 'low',
+      suggested_action: 'monitor',
+      fallback: true,
+    }, { headers: SECURITY_HEADERS })
   }
+}
+
+/**
+ * Performs simple keyword-based routing when Claude is unavailable.
+ * Maps common concern keywords to known concern types so the concern
+ * still gets saved with a reasonable classification.
+ */
+function getStaticRouting(stage: Stage, freeText: string): string {
+  const text = freeText.toLowerCase()
+
+  if (stage === 'pregnancy') {
+    if (text.includes('nausea') || text.includes('vomit') || text.includes('morning sick') || text.includes('throwing up')) return 'morning_sickness'
+    if (text.includes('movement') || text.includes('kick') || text.includes('not moving')) return 'reduced_fetal_movement'
+    if (text.includes('anxi') || text.includes('worried') || text.includes('stress') || text.includes('scared')) return 'prenatal_anxiety'
+    if (text.includes('birth') || text.includes('labor') || text.includes('labour') || text.includes('deliver') || text.includes('hospital bag')) return 'birth_preparation'
+    if (text.includes('pain') || text.includes('cramp') || text.includes('bleed') || text.includes('swell') || text.includes('headache')) return 'prenatal_symptoms'
+  } else {
+    if (text.includes('feed') || text.includes('eat') || text.includes('bottle') || text.includes('breast') || text.includes('milk') || text.includes('formula')) return 'feeding_drop'
+    if (text.includes('cry') || text.includes('fuss') || text.includes('colic') || text.includes('scream')) return 'crying_increase'
+    if (text.includes('sleep') || text.includes('wake') || text.includes('nap') || text.includes('night')) return 'sleep_regression'
+    if (text.includes('poop') || text.includes('constipat') || text.includes('bowel') || text.includes('stool') || text.includes('hard stool')) return 'constipation'
+    if (text.includes('fever') || text.includes('temperature') || text.includes('hot') || text.includes('warm')) return 'fever'
+    if (text.includes('teeth') || text.includes('teething') || text.includes('drool') || text.includes('gum')) return 'teething'
+  }
+
+  return 'other'
 }

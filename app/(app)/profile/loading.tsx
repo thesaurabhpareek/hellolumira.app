@@ -35,7 +35,7 @@ export default function ProfileLoading() {
             color: '#718096',
           }}
         >
-          Loading profile...
+          Just a moment...
         </p>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>

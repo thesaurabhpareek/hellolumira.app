@@ -126,7 +126,13 @@ export default function BabyContextCard({ baby, ageInfo }: Props) {
                 <DetailItem label="Name" value={baby.name || 'Baby'} />
                 <DetailItem
                   label="Age"
-                  value={ageInfo.age_in_weeks !== undefined ? `${ageInfo.age_in_weeks} weeks` : '-'}
+                  value={
+                    ageInfo.age_in_months !== undefined && ageInfo.age_in_months < 3
+                      ? `${ageInfo.age_in_weeks ?? 0} weeks`
+                      : ageInfo.age_in_months !== undefined
+                        ? `${ageInfo.age_in_months} months`
+                        : '-'
+                  }
                 />
                 <DetailItem label="Date of birth" value={baby.date_of_birth || 'Not set'} />
                 <DetailItem label="Stage" value={baby.stage} />

@@ -23,7 +23,7 @@ export default function CheckinLoading() {
           }}
         />
         <p style={{ fontSize: '0.9rem', color: '#6B7280' }}>
-          Preparing your check-in...
+          Getting things ready for you...
         </p>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>

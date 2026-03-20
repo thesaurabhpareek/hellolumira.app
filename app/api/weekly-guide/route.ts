@@ -75,15 +75,29 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const supabase = await createServiceClient()
+    // Use service client for cache if available, otherwise anon client
+    let supabase: Awaited<ReturnType<typeof createServiceClient>>
+    try {
+      supabase = process.env.SUPABASE_SERVICE_ROLE_KEY
+        ? await createServiceClient()
+        : anonSupabase
+    } catch {
+      supabase = anonSupabase
+    }
 
     // Check cache first
-    const { data: cached } = await supabase
-      .from('weekly_guides')
-      .select('content')
-      .eq('stage', stage)
-      .eq('week_or_month', week_or_month)
-      .maybeSingle()
+    let cached: { content: WeeklyGuideContent } | null = null
+    try {
+      const { data } = await supabase
+        .from('weekly_guides')
+        .select('content')
+        .eq('stage', stage)
+        .eq('week_or_month', week_or_month)
+        .maybeSingle()
+      cached = data as { content: WeeklyGuideContent } | null
+    } catch (cacheErr) {
+      console.error('[weekly-guide] Cache lookup failed:', cacheErr)
+    }
 
     if (cached?.content) {
       return NextResponse.json({ guide: cached.content, cached: true }, { headers: SECURITY_HEADERS })
@@ -91,6 +105,12 @@ export async function GET(request: NextRequest) {
 
     // Generate with Claude
     let guide: WeeklyGuideContent
+    if (!process.env.ANTHROPIC_API_KEY) {
+      // No API key configured — return static fallback immediately
+      guide = getStaticFallback(stage, week_or_month)
+      return NextResponse.json({ guide, cached: false, fallback: true }, { headers: SECURITY_HEADERS })
+    }
+
     try {
       const systemPrompt = stage === 'pregnancy' ? PREGNANCY_GUIDE_PROMPT : INFANT_GUIDE_PROMPT
 

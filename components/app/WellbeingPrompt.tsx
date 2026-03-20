@@ -8,6 +8,8 @@
  */
 'use client'
 
+import { LumiraAvatar } from './LumiraAvatar'
+
 interface Props {
   onDismiss: () => void
 }
@@ -39,19 +41,8 @@ export default function WellbeingPrompt({ onDismiss }: Props) {
         }}
       >
         {/* Lumira avatar */}
-        <div
-          style={{
-            width: '48px',
-            height: '48px',
-            borderRadius: '50%',
-            background: 'var(--color-primary)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: '16px',
-          }}
-        >
-          <span style={{ color: 'white', fontSize: '18px', fontWeight: 700 }}>L</span>
+        <div style={{ marginBottom: '16px' }}>
+          <LumiraAvatar size={48} />
         </div>
 
         <h2

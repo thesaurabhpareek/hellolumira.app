@@ -35,7 +35,7 @@ export default function AppLoading() {
             color: '#6B7280',
           }}
         >
-          Loading...
+          Just a moment...
         </p>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>

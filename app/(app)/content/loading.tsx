@@ -35,7 +35,7 @@ export default function ContentLoading() {
             color: '#718096',
           }}
         >
-          Loading Content...
+          Just a moment...
         </p>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>

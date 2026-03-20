@@ -40,7 +40,7 @@ export default function HelpError({
             marginBottom: '0.75rem',
           }}
         >
-          Help could not load
+          Hmm, that didn&apos;t work
         </h2>
         <p
           style={{
@@ -50,7 +50,7 @@ export default function HelpError({
             lineHeight: 1.5,
           }}
         >
-          Something went wrong loading the help page. Please try again.
+          We couldn&apos;t load the help page just now. Let&apos;s try again.
         </p>
         <button
           onClick={reset}

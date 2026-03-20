@@ -150,7 +150,23 @@ export async function POST(request: NextRequest) {
 
     const userMessage = `Concern type: ${sanitizeForPrompt(concern_type)}\nStage: ${stage}\n\nParent's answers:\n${answersText}\n\nGenerate a structured concern summary.`
 
-    const aiSummary = await callClaudeJSON<AISummary>(fullSystemPrompt, userMessage, 1200)
+    let aiSummary: AISummary
+    let isFallback = false
+
+    if (!process.env.ANTHROPIC_API_KEY) {
+      // No API key configured — use static fallback
+      aiSummary = getStaticFallbackSummary(stage, concern_type, baby.name ?? undefined)
+      isFallback = true
+    } else {
+      try {
+        aiSummary = await callClaudeJSON<AISummary>(fullSystemPrompt, userMessage, 1200)
+      } catch (aiErr) {
+        const aiErrMsg = aiErr instanceof Error ? aiErr.message : String(aiErr)
+        console.error('[concern-summary] Claude generation failed:', aiErrMsg)
+        aiSummary = getStaticFallbackSummary(stage, concern_type, baby.name ?? undefined)
+        isFallback = true
+      }
+    }
 
     // Calculate follow-up date (today + 2 days)
     const followUpDate = new Date()
@@ -178,12 +194,75 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       session_id: session.id,
       ai_summary: aiSummary,
+      ...(isFallback && { fallback: true }),
     }, { headers: SECURITY_HEADERS })
   } catch (err) {
-    console.error('[concern-summary] Error:', err)
+    const errMsg = err instanceof Error ? err.message : String(err)
+    console.error('[concern-summary] Error:', errMsg)
     return NextResponse.json(
       { error: true, message: 'Failed to generate summary. Please try again.' },
       { status: 500, headers: SECURITY_HEADERS }
     )
+  }
+}
+
+/**
+ * Returns a static, science-backed fallback summary when Claude API is unavailable.
+ * Content follows AAP/WHO guidelines and uses warm, culturally sensitive language.
+ */
+function getStaticFallbackSummary(stage: Stage, concernType: string, babyName?: string): AISummary {
+  const childRef = babyName ?? (stage === 'pregnancy' ? 'your baby' : 'your little one')
+
+  // Stage-specific general guidance aligned with AAP/WHO recommendations
+  const stageGuidance: Record<string, { trySuggestions: string[]; monitorTips: string[] }> = {
+    pregnancy: {
+      trySuggestions: [
+        'Rest when your body asks for it — growing a baby is demanding work',
+        'Stay hydrated with small, frequent sips of water throughout the day',
+        'Jot down your questions so you can discuss them at your next prenatal visit',
+      ],
+      monitorTips: [
+        'Note any changes in how you feel and when they happen',
+        'Track fetal movement patterns if you are in your third trimester',
+      ],
+    },
+    infant: {
+      trySuggestions: [
+        `Watch ${childRef}'s cues — babies often communicate needs before crying`,
+        'Offer comfort through gentle holding, skin-to-skin, or a calm voice',
+        'Keep a brief log of feeding, sleep, and any changes you notice for your next check-up',
+      ],
+      monitorTips: [
+        `Watch for changes in ${childRef}'s feeding, wet diapers, and alertness`,
+        'Note how long the concern persists and whether it worsens, stays the same, or improves',
+      ],
+    },
+    toddler: {
+      trySuggestions: [
+        `Maintain a consistent daily routine — predictability helps ${childRef} feel secure`,
+        'Offer simple choices to support growing independence',
+        'Make a note of what you observe so you can share specifics with your care provider',
+      ],
+      monitorTips: [
+        'Track whether the concern follows a pattern (time of day, after meals, etc.)',
+        `Notice if ${childRef}'s energy, appetite, or mood changes alongside the concern`,
+      ],
+    },
+  }
+
+  const guidance = stageGuidance[stage] ?? stageGuidance.infant
+
+  return {
+    likely_causes: [
+      `There are several common reasons ${stage === 'pregnancy' ? 'this can happen during pregnancy' : 'this occurs at this age'} — most are a normal part of development`,
+      'Our AI analysis is temporarily unavailable, so we cannot provide a personalised assessment right now',
+      'Your care provider can give you the most accurate explanation based on your specific situation',
+    ],
+    try_first: guidance.trySuggestions,
+    monitor: guidance.monitorTips,
+    escalate_when: [
+      'You notice a sudden change that feels different from what you have been seeing',
+      `Trust your instincts — if something feels wrong, contact your ${stage === 'pregnancy' ? 'midwife or OB' : 'paediatrician'} without hesitation`,
+    ],
   }
 }

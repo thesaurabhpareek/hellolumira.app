@@ -102,11 +102,11 @@ const OPENERS: Record<TimePeriod, string[]> = {
   evening: [
     'Good evening,',
     'Bonsoir,',           // French
-    'Buenas noches,',     // Spanish
+    'Buenas tardes,',     // Spanish (tardes = afternoon/evening)
     'Konbanwa,',          // Japanese
     'Good evening,',
     'Shalom,',            // Hebrew
-    'Selamat malam,',     // Malay / Indonesian
+    'Selamat petang,',    // Malay (petang = evening)
     'Good evening,',
     'Shubh sandhyā,',     // Hindi
   ],
@@ -115,12 +115,12 @@ const OPENERS: Record<TimePeriod, string[]> = {
    * Night: gentle — day is winding down.
    */
   night: [
-    'Good night,',
+    'Hey there,',
     'Hey,',
     'Evening,',
     'Almost bedtime,',
     'Winding down,',
-    'Good night,',
+    'Hope today was good,',
   ],
 }
 

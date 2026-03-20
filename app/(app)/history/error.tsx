@@ -40,7 +40,7 @@ export default function HistoryError({
             marginBottom: '0.75rem',
           }}
         >
-          History could not load
+          Hmm, that didn&apos;t work
         </h2>
         <p
           style={{
@@ -50,8 +50,7 @@ export default function HistoryError({
             lineHeight: 1.5,
           }}
         >
-          We could not load your history right now. Your check-ins and
-          conversations are safe.
+          We couldn&apos;t load your journey right now. Your check-ins and conversations are safe — let&apos;s try again.
         </p>
         <button
           onClick={reset}

@@ -11,6 +11,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import LumiraTyping from './LumiraTyping'
+import { LumiraAvatar } from './LumiraAvatar'
 import StructuredFieldChips from './StructuredFieldChips'
 import WellbeingPrompt from './WellbeingPrompt'
 import type { Profile, BabyProfile, DailyCheckin, ConversationMessage, StructuredField, EmotionalSignal } from '@/types/app'
@@ -385,21 +386,22 @@ export default function CheckinThread({ profile, baby, existingCheckin, prefill 
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
-                color: 'var(--color-muted)',
-                fontSize: '22px',
-                padding: '4px',
+                color: '#3D8178',
+                fontSize: '14px',
+                fontWeight: 600,
+                padding: '16px 0',
                 minHeight: '48px',
-                minWidth: '48px',
                 display: 'flex',
                 alignItems: 'center',
+                gap: '4px',
                 touchAction: 'manipulation',
               }}
             >
-              ←
+              &larr; Back
             </button>
             <div>
               <p style={{ fontWeight: 700, color: 'var(--color-slate)', fontSize: '16px' }}>
-                Daily check-in
+                How are you?
               </p>
               <p style={{ fontSize: '13px', color: 'var(--color-muted)' }}>
                 {new Date().toLocaleDateString('en-US', {
@@ -412,7 +414,7 @@ export default function CheckinThread({ profile, baby, existingCheckin, prefill 
           </div>
 
           {/* Message bubbles */}
-          <div role="log" aria-label="Check-in conversation" aria-live="polite">
+          <div role="log" aria-label="Daily check-in conversation" aria-live="polite">
           {messages.map((msg, i) => {
             if (msg.role === 'lumira') {
               const lumiraMsg = msg as LumiraMessage
@@ -420,19 +422,8 @@ export default function CheckinThread({ profile, baby, existingCheckin, prefill 
                 <div key={i} className="animate-fade-in" style={{ marginBottom: '16px' }}>
                   <div style={{ display: 'flex', alignItems: 'flex-end', gap: '8px' }}>
                     {/* Avatar */}
-                    <div
-                      style={{
-                        width: '28px',
-                        height: '28px',
-                        borderRadius: '50%',
-                        background: 'var(--color-primary)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flexShrink: 0,
-                      }}
-                    >
-                      <span style={{ color: 'white', fontSize: '11px', fontWeight: 700 }}>L</span>
+                    <div style={{ flexShrink: 0 }}>
+                      <LumiraAvatar size={28} />
                     </div>
 
                     <div className="bubble-lumira">
@@ -473,7 +464,7 @@ export default function CheckinThread({ profile, baby, existingCheckin, prefill 
                           gap: '4px',
                         }}
                       >
-                        ✓ Check-in logged — you can keep chatting
+                        ✓ All logged — feel free to keep chatting
                       </span>
                     </div>
                   )}

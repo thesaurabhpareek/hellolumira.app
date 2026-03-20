@@ -40,7 +40,7 @@ export default function ProfileError({
             marginBottom: '0.75rem',
           }}
         >
-          Could not load your profile
+          Hmm, that didn&apos;t work
         </h2>
         <p
           style={{
@@ -50,8 +50,7 @@ export default function ProfileError({
             lineHeight: 1.5,
           }}
         >
-          Something went wrong while loading your profile. Your data is
-          safe. Please try again in a moment.
+          We couldn&apos;t load your profile just now. Your data is safe — let&apos;s try again.
         </p>
         <button
           onClick={reset}

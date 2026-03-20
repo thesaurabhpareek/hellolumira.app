@@ -12,6 +12,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { useChatThread } from '@/hooks/useChatThread'
 import LumiraTyping from '@/components/app/LumiraTyping'
+import { LumiraAvatar } from '@/components/app/LumiraAvatar'
 import WellbeingPrompt from '@/components/app/WellbeingPrompt'
 import BabyContextCard from './BabyContextCard'
 import EscalationBanner from './EscalationBanner'
@@ -238,26 +239,27 @@ export default function ChatThreadView({
           >
             <button
               onClick={() => router.push('/chat')}
-              aria-label="Back to chat list"
+              aria-label="Back to conversations"
               style={{
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
-                color: 'var(--color-muted)',
-                fontSize: '22px',
-                padding: '4px',
+                color: '#3D8178',
+                fontSize: '14px',
+                fontWeight: 600,
+                padding: '16px 0',
                 minHeight: '48px',
-                minWidth: '48px',
                 display: 'flex',
                 alignItems: 'center',
+                gap: '4px',
                 touchAction: 'manipulation',
               }}
             >
-              &#8592;
+              &larr; Back
             </button>
             <div style={{ flex: 1 }}>
               <p style={{ fontWeight: 700, color: 'var(--color-slate)', fontSize: '16px' }}>
-                {thread.title || 'Chat with Lumira'}
+                {thread.title || 'Talk to Lumira'}
               </p>
               <p style={{ fontSize: '13px', color: 'var(--color-muted)' }}>
                 {baby.stage === 'pregnancy'
@@ -311,19 +313,8 @@ export default function ChatThreadView({
                 <div key={i} className="animate-fade-in" style={{ marginBottom: '16px' }}>
                   <div style={{ display: 'flex', alignItems: 'flex-end', gap: '8px' }}>
                     {/* Lumira avatar */}
-                    <div
-                      style={{
-                        width: '28px',
-                        height: '28px',
-                        borderRadius: '50%',
-                        background: 'var(--color-primary)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flexShrink: 0,
-                      }}
-                    >
-                      <span style={{ color: 'white', fontSize: '11px', fontWeight: 700 }}>L</span>
+                    <div style={{ flexShrink: 0 }}>
+                      <LumiraAvatar size={28} />
                     </div>
 
                     <div

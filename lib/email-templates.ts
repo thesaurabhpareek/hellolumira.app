@@ -200,7 +200,6 @@ export function emailWrapper(
   <noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
   <![endif]-->
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
     body,table,td,a{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}
     table,td{mso-table-lspace:0;mso-table-rspace:0}
     img{-ms-interpolation-mode:bicubic;border:0;height:auto;line-height:100%;outline:none;text-decoration:none}
@@ -233,17 +232,11 @@ export function emailWrapper(
             <td style="padding:32px 0 24px 0;text-align:center;">
               <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
                 <tr>
-                  <td align="center">
-                    <!-- Lumira Logo: Womb arch + amber dot -->
-                    <svg viewBox="0 0 32 36" xmlns="http://www.w3.org/2000/svg" width="52" height="58" style="display:block;margin:0 auto 8px auto;">
-                      <circle cx="16" cy="6" r="5.5" fill="${COLORS.terra400}"/>
-                      <path d="M 2,34 C 2,12 30,12 30,34" fill="none" stroke="${COLORS.sage500}" stroke-width="2.8" stroke-linecap="round"/>
-                    </svg>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;font-size:28px;font-weight:700;color:#1A1A2E;letter-spacing:-0.7px;text-align:center;">
-                    Lumira
+                  <td align="center" style="padding-bottom:8px;">
+                    <p style="margin:0;font-size:12px;color:${COLORS.terra400};line-height:1;">&#9679;</p>
+                    <p style="margin:4px 0 0 0;font-size:28px;font-weight:700;color:#1A1A2E;letter-spacing:-0.7px;font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;">
+                      Lumira
+                    </p>
                   </td>
                 </tr>
               </table>

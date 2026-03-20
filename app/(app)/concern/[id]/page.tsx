@@ -250,16 +250,17 @@ export default function ConcernFlowPage() {
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
-                color: 'var(--color-muted)',
-                fontSize: '24px',
-                padding: '4px 8px',
+                color: '#3D8178',
+                fontSize: '14px',
+                fontWeight: 600,
+                padding: '16px 0',
                 minHeight: '48px',
-                minWidth: '48px',
                 display: 'flex',
                 alignItems: 'center',
+                gap: '4px',
               }}
             >
-              ←
+              &larr; Back
             </button>
             <div style={{ flex: 1 }}>
               <p style={{ fontSize: '13px', color: 'var(--color-muted)', marginBottom: '4px' }}>

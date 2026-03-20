@@ -40,7 +40,7 @@ export default function SettingsError({
             marginBottom: '0.75rem',
           }}
         >
-          Settings could not load
+          Hmm, that didn&apos;t work
         </h2>
         <p
           style={{
@@ -50,7 +50,7 @@ export default function SettingsError({
             lineHeight: 1.5,
           }}
         >
-          We could not load your settings right now. Please try again.
+          We couldn&apos;t load your settings just now. Let&apos;s try again.
         </p>
         <button
           onClick={reset}

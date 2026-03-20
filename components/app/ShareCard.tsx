@@ -2,6 +2,7 @@
 'use client'
 
 import Link from 'next/link'
+import { ShareIcon } from '@/components/icons'
 
 export default function ShareCard() {
   return (
@@ -51,7 +52,7 @@ export default function ShareCard() {
           transition: 'opacity 0.15s ease',
         }}
       >
-        Share Lumira 💛
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><ShareIcon size={16} color="#FFFFFF" /> Share Lumira</span>
       </Link>
     </div>
   )

@@ -268,7 +268,8 @@ export async function POST(request: NextRequest) {
       conversation_log: newMessages,
     }, { headers: SECURITY_HEADERS })
   } catch (err) {
-    console.error('[checkin-conversation] Error:', err)
+    const errMsg = err instanceof Error ? err.message : String(err)
+    console.error('[checkin-conversation] Error:', errMsg)
     return NextResponse.json(
       { error: true, message: 'Lumira is taking a moment. Try again.' },
       { status: 500, headers: SECURITY_HEADERS }

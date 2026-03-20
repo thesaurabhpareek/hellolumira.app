@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation'
 import { getBabyAgeInfo } from '@/lib/baby-age'
 import { getGreeting } from '@/lib/greeting'
 import SuggestedPromptsRow from './SuggestedPromptsRow'
+import { LumiraAvatar } from '@/components/app/LumiraAvatar'
 import type { Profile, BabyProfile } from '@/types/app'
 import type { ChatThread } from '@/types/chat'
 
@@ -163,19 +164,8 @@ export default function ChatLanding({ profile, baby, threads }: Props) {
               className="lumira-card"
               style={{ marginBottom: '24px', textAlign: 'center', padding: '32px 24px' }}
             >
-              <div
-                style={{
-                  width: '56px',
-                  height: '56px',
-                  borderRadius: '50%',
-                  background: 'var(--color-primary)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto 16px',
-                }}
-              >
-                <span style={{ color: 'white', fontSize: '22px', fontWeight: 700 }}>L</span>
+              <div style={{ margin: '0 auto 16px', width: '56px' }}>
+                <LumiraAvatar size={56} />
               </div>
 
               <h2

@@ -9,6 +9,8 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import type React from 'react'
+import { UserIcon, LeafIcon, BrainIcon, EyeIcon, CheckIcon, ClipboardIcon, AlertIcon } from '@/components/icons'
 import type { Stage, WeeklyGuideContent } from '@/types/app'
 
 interface Props {
@@ -154,7 +156,7 @@ export default function WeekGuideCard({ stage, week_or_month, babyName }: Props)
       {/* Pregnancy-specific sections */}
       {stage === 'pregnancy' && guide.baby_development && (
         <Section
-          emoji="👶"
+          icon={<UserIcon size={16} color="var(--color-slate)" />}
           title="Baby development"
           isOpen={openAccordion === 'baby_dev'}
           onToggle={() => setOpenAccordion(openAccordion === 'baby_dev' ? null : 'baby_dev')}
@@ -168,7 +170,7 @@ export default function WeekGuideCard({ stage, week_or_month, babyName }: Props)
 
       {stage === 'pregnancy' && guide.body_changes && (
         <Section
-          emoji="🌿"
+          icon={<LeafIcon size={16} color="var(--color-slate)" />}
           title="Body changes"
           isOpen={openAccordion === 'body_changes'}
           onToggle={() => setOpenAccordion(openAccordion === 'body_changes' ? null : 'body_changes')}
@@ -189,7 +191,7 @@ export default function WeekGuideCard({ stage, week_or_month, babyName }: Props)
       {/* Infant-specific sections */}
       {stage !== 'pregnancy' && guide.what_is_happening && (
         <Section
-          emoji="🧠"
+          icon={<BrainIcon size={16} color="var(--color-slate)" />}
           title="What's happening"
           isOpen={openAccordion === 'what_happening'}
           onToggle={() => setOpenAccordion(openAccordion === 'what_happening' ? null : 'what_happening')}
@@ -203,7 +205,7 @@ export default function WeekGuideCard({ stage, week_or_month, babyName }: Props)
 
       {stage !== 'pregnancy' && guide.what_you_might_notice && (
         <Section
-          emoji="👀"
+          icon={<EyeIcon size={16} color="var(--color-slate)" />}
           title="What you might notice"
           isOpen={openAccordion === 'notice'}
           onToggle={() => setOpenAccordion(openAccordion === 'notice' ? null : 'notice')}
@@ -223,7 +225,7 @@ export default function WeekGuideCard({ stage, week_or_month, babyName }: Props)
 
       {/* Usually normal — accordion */}
       <Section
-        emoji="✅"
+        icon={<CheckIcon size={16} color="var(--color-slate)" />}
         title="Usually normal"
         isOpen={openAccordion === 'normal'}
         onToggle={() => setOpenAccordion(openAccordion === 'normal' ? null : 'normal')}
@@ -240,42 +242,9 @@ export default function WeekGuideCard({ stage, week_or_month, babyName }: Props)
         </ul>
       </Section>
 
-      {/* Focus this week — checklist style */}
+      {/* Focus this week — interactive checklist */}
       {guide.focus_this_week && guide.focus_this_week.length > 0 && (
-        <div style={{ marginTop: '16px' }}>
-          <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '10px' }}>
-            📋 Focus this week
-          </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {guide.focus_this_week.map((item, i) => (
-              <div
-                key={i}
-                style={{
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  gap: '10px',
-                  padding: '10px 12px',
-                  background: 'var(--color-surface)',
-                  borderRadius: 'var(--radius-md)',
-                }}
-              >
-                <span
-                  style={{
-                    width: '20px',
-                    height: '20px',
-                    borderRadius: '50%',
-                    border: '2px solid var(--color-primary-mid)',
-                    flexShrink: 0,
-                    marginTop: '1px',
-                  }}
-                />
-                <p style={{ fontSize: '14px', lineHeight: 1.6, color: 'var(--color-slate)', margin: 0 }}>
-                  {item}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
+        <FocusThisWeek items={guide.focus_this_week} stage={stage} weekOrMonth={week_or_month} />
       )}
 
       {/* Watch outs — amber card */}
@@ -290,7 +259,7 @@ export default function WeekGuideCard({ stage, week_or_month, babyName }: Props)
           }}
         >
           <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-amber)', marginBottom: '8px' }}>
-            ⚠️ Watch out for
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><AlertIcon size={14} color="var(--color-amber)" /> Watch out for</span>
           </p>
           <ul style={{ margin: 0, paddingLeft: '16px' }}>
             {guide.watch_outs.map((item, i) => (
@@ -320,15 +289,111 @@ export default function WeekGuideCard({ stage, week_or_month, babyName }: Props)
   )
 }
 
+function FocusThisWeek({
+  items,
+  stage,
+  weekOrMonth,
+}: {
+  items: string[]
+  stage: Stage
+  weekOrMonth: number
+}) {
+  const storageKey = `lumira_focus_${stage}_${weekOrMonth}`
+
+  const [checked, setChecked] = useState<Record<number, boolean>>(() => {
+    if (typeof window === 'undefined') return {}
+    try {
+      const stored = localStorage.getItem(storageKey)
+      return stored ? JSON.parse(stored) : {}
+    } catch {
+      return {}
+    }
+  })
+
+  const toggleItem = (index: number) => {
+    setChecked((prev) => {
+      const next = { ...prev, [index]: !prev[index] }
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(next))
+      } catch {
+        // ignore storage errors
+      }
+      return next
+    })
+  }
+
+  return (
+    <div style={{ marginTop: '16px' }}>
+      <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '10px' }}>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><ClipboardIcon size={14} color="var(--color-muted)" /> Focus this week</span>
+      </p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        {items.map((item, i) => (
+          <button
+            key={i}
+            type="button"
+            onClick={() => toggleItem(i)}
+            style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: '10px',
+              padding: '10px 12px',
+              background: checked[i] ? 'var(--color-primary-light)' : 'var(--color-surface)',
+              borderRadius: 'var(--radius-md)',
+              border: 'none',
+              cursor: 'pointer',
+              textAlign: 'left',
+              width: '100%',
+              transition: 'background 0.15s ease',
+            }}
+          >
+            <span
+              style={{
+                width: '20px',
+                height: '20px',
+                borderRadius: '50%',
+                border: checked[i] ? '2px solid #3D8178' : '2px solid var(--color-primary-mid)',
+                background: checked[i] ? '#3D8178' : 'transparent',
+                flexShrink: 0,
+                marginTop: '1px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'all 0.15s ease',
+              }}
+            >
+              {checked[i] && (
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path d="M2.5 6L5 8.5L9.5 3.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              )}
+            </span>
+            <p style={{
+              fontSize: '14px',
+              lineHeight: 1.6,
+              color: checked[i] ? 'var(--color-muted)' : 'var(--color-slate)',
+              margin: 0,
+              textDecoration: checked[i] ? 'line-through' : 'none',
+              transition: 'color 0.15s ease',
+            }}>
+              {item}
+            </p>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 function Section({
-  emoji,
+  icon,
   title,
   isOpen,
   onToggle,
   defaultOpen = false,
   children,
 }: {
-  emoji: string
+  icon: React.ReactNode
   title: string
   isOpen: boolean
   onToggle: () => void
@@ -359,8 +424,8 @@ function Section({
           minHeight: '36px',
         }}
       >
-        <span style={{ fontWeight: 600, fontSize: '14px', color: 'var(--color-slate)' }}>
-          {emoji} {title}
+        <span style={{ fontWeight: 600, fontSize: '14px', color: 'var(--color-slate)', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+          {icon} {title}
         </span>
         <span
           style={{

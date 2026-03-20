@@ -24,6 +24,7 @@ import { checkRateLimit } from '@/lib/rate-limit'
 import { sanitizeInput, SECURITY_HEADERS } from '@/lib/utils'
 import { sanitizeForPrompt } from '@/lib/sanitize-prompt'
 import { isValidUUID, validateArray, verifyBabyOwnership } from '@/lib/validation'
+import { logAudit } from '@/lib/audit'
 import type { BabyProfile, Profile, EmotionalSignal } from '@/types/app'
 import type { EscalationLevel, ConcernCategory } from '@/types/chat'
 
@@ -193,6 +194,15 @@ export async function POST(request: NextRequest) {
           .eq('id', thread_id)
       }
 
+      // Audit: log emergency escalation trigger (GDPR + safety compliance)
+      logAudit('escalation_triggered', user.id, {
+        level: 'emergency',
+        pattern: redFlagResult.pattern,
+        category: redFlagResult.category,
+        baby_id,
+        thread_id: thread_id || null,
+      }, request).catch(() => {})
+
       return NextResponse.json({
         message: redFlagResult.preAuthoredMessage,
         thread_id: thread_id || null,
@@ -281,6 +291,13 @@ export async function POST(request: NextRequest) {
     }
 
     // 10. Call Claude with temperature 0.4 and timeout
+    if (!process.env.ANTHROPIC_API_KEY) {
+      console.error('[chat] ANTHROPIC_API_KEY is not configured')
+      return NextResponse.json(
+        { error: true, message: 'Lumira is temporarily unavailable. Please try again later.' },
+        { status: 503, headers: SECURITY_HEADERS }
+      )
+    }
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), 30000) // 30s timeout
     let response: Awaited<ReturnType<typeof anthropic.messages.create>>
@@ -385,6 +402,24 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // 11b. Audit non-emergency escalations and distress signals
+    if (redFlagResult.level === 'urgent' || redFlagResult.level === 'call_doctor') {
+      logAudit('escalation_triggered', user.id, {
+        level: redFlagResult.level,
+        pattern: redFlagResult.pattern,
+        category: redFlagResult.category,
+        baby_id,
+        thread_id: thread_id || null,
+      }, request).catch(() => {})
+    }
+    if (finalSignal === 'distressed') {
+      logAudit('distressed_signal_detected', user.id, {
+        signal: finalSignal,
+        baby_id,
+        thread_id: thread_id || null,
+      }, request).catch(() => {})
+    }
+
     // 12. Update profile emotional state if changed (non-critical)
     if (finalSignal && finalSignal !== profile.emotional_state_latest) {
       try {
@@ -434,7 +469,8 @@ export async function POST(request: NextRequest) {
       concern_category: concernCategory as ConcernCategory,
     })
   } catch (err) {
-    console.error('[chat] Error:', err)
+    const errMsg = err instanceof Error ? err.message : String(err)
+    console.error('[chat] Error:', errMsg)
     return NextResponse.json(
       { error: true, message: 'Lumira is taking a moment. Try again.' },
       { status: 500, headers: SECURITY_HEADERS }

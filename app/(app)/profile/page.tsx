@@ -1,4 +1,4 @@
-// app/(app)/profile/page.tsx — Enhanced Profile with gamification
+// app/(app)/profile/page.tsx — Enhanced Profile with gamification, seeds, badges, and inline completion
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
@@ -6,8 +6,10 @@ import { getBabyAgeInfo } from '@/lib/baby-age'
 import { BADGES } from '@/lib/badges'
 import SignOutButton from './SignOutButton'
 import DeleteAccountLink from './DeleteAccountLink'
-import ProfileCompletionArc from './ProfileCompletionArc'
+import ProfileCompletionSection from './ProfileCompletionSection'
 import BadgesGrid from './BadgesGrid'
+import AvatarPicker from './AvatarPicker'
+import { ArrowLeftIcon, SeedIcon, ChevronRightIcon, SettingsIcon, ShieldIcon, ShareIcon } from '@/components/icons'
 import type { Profile, BabyProfile } from '@/types/app'
 
 export default async function ProfilePage() {
@@ -19,33 +21,43 @@ export default async function ProfilePage() {
 
   if (!user) redirect('/login')
 
-  // Fetch profile, baby membership, partner count, and checkin count in parallel
-  const [{ data: profileData }, { data: memberData }, { count: partnerCount }, { count: checkinCount }] =
-    await Promise.all([
-      supabase
-        .from('profiles')
-        .select('id, first_name, first_time_parent, partner_invite_email, created_at')
-        .eq('id', user.id)
-        .single(),
-      supabase
-        .from('baby_profile_members')
-        .select('baby_id')
-        .eq('profile_id', user.id)
-        .limit(1)
-        .maybeSingle(),
-      supabase
-        .from('baby_profile_members')
-        .select('*', { count: 'exact', head: true })
-        .neq('profile_id', user.id),
-      supabase
-        .from('daily_checkins')
-        .select('*', { count: 'exact', head: true })
-        .eq('profile_id', user.id),
-    ])
+  // Fetch profile, baby membership, partner count, checkin count, and badges in parallel
+  const [
+    { data: profileData },
+    { data: memberData },
+    { count: partnerCount },
+    { count: checkinCount },
+    { data: earnedBadgeRows },
+  ] = await Promise.all([
+    supabase
+      .from('profiles')
+      .select('id, first_name, first_time_parent, partner_invite_email, avatar_emoji, seeds_balance, current_streak, created_at')
+      .eq('id', user.id)
+      .single(),
+    supabase
+      .from('baby_profile_members')
+      .select('baby_id')
+      .eq('profile_id', user.id)
+      .limit(1)
+      .maybeSingle(),
+    supabase
+      .from('baby_profile_members')
+      .select('*', { count: 'exact', head: true })
+      .neq('profile_id', user.id),
+    supabase
+      .from('daily_checkins')
+      .select('*', { count: 'exact', head: true })
+      .eq('profile_id', user.id),
+    supabase
+      .from('earned_badges')
+      .select('badge_id, awarded_at')
+      .eq('profile_id', user.id)
+      .order('awarded_at', { ascending: false }),
+  ])
 
   if (!profileData) redirect('/onboarding')
 
-  const profile = profileData as Profile
+  const profile = profileData as unknown as Profile
 
   let baby: BabyProfile | null = null
   if (memberData?.baby_id) {
@@ -62,27 +74,52 @@ export default async function ProfilePage() {
   const ageInfo = baby ? getBabyAgeInfo(baby) : null
   const hasPartner = (partnerCount ?? 0) > 0
   const hasCheckin = (checkinCount ?? 0) > 0
+  const seedsBalance = ((profileData as Record<string, unknown>)?.seeds_balance as number) ?? 0
+  const currentStreak = ((profileData as Record<string, unknown>)?.current_streak as number) ?? 0
+  const avatarEmoji = ((profileData as Record<string, unknown>)?.avatar_emoji as string) || '🌿'
 
-  // Profile completeness calculation
-  const completionFactors = {
-    hasName: !!profile.first_name,
-    hasBaby: !!baby,
-    hasCheckin,
-    hasNotifications: false, // placeholder — no notification prefs check yet
-    hasPrivacy: false, // placeholder — no privacy prefs check yet
-  }
-  const completionPct =
-    (completionFactors.hasName ? 20 : 0) +
-    (completionFactors.hasBaby ? 20 : 0) +
-    (completionFactors.hasCheckin ? 20 : 0) +
-    (completionFactors.hasNotifications ? 20 : 0) +
-    (completionFactors.hasPrivacy ? 20 : 0)
+  // Earned badge IDs
+  const earnedIds = (earnedBadgeRows ?? []).map((b: { badge_id: string }) => b.badge_id)
 
-  // Placeholder points (no badge tracking in DB yet)
-  const totalPoints = 0
+  // Profile completeness — only actionable items the user can control
+  const completionItems = [
+    {
+      key: 'first_name',
+      label: 'Name',
+      warmLabel: 'Add your name',
+      done: !!profile.first_name,
+      actionType: 'text' as const,
+      placeholder: 'Your first name',
+    },
+    {
+      key: 'name',
+      label: 'Baby name',
+      warmLabel: "What's baby's name?",
+      done: !!baby?.name,
+      actionType: 'text' as const,
+      placeholder: "Baby's name (or a nickname)",
+    },
+    {
+      key: 'due_date',
+      label: 'Due date',
+      warmLabel: 'When are you due?',
+      done: !!baby?.due_date || !!baby?.date_of_birth,
+      actionType: 'date' as const,
+      placeholder: 'YYYY-MM-DD',
+    },
+    {
+      key: 'hasCheckin',
+      label: 'First check-in',
+      warmLabel: "Let's go!",
+      done: hasCheckin,
+      actionType: 'link' as const,
+      href: '/checkin',
+    },
+  ]
 
-  // First 6 badges as unearned for display
-  const displayBadges = BADGES.slice(0, 6)
+  const completionPct = Math.round(
+    (completionItems.filter((i) => i.done).length / completionItems.length) * 100
+  )
 
   return (
     <div
@@ -93,12 +130,29 @@ export default async function ProfilePage() {
       }}
     >
       <div className="content-width mx-auto px-4 pt-6">
+        {/* Back button */}
+        <Link
+          href="/home"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '4px',
+            color: '#3D8178',
+            fontSize: '14px',
+            fontWeight: 600,
+            textDecoration: 'none',
+            padding: '16px 0',
+          }}
+        >
+          <ArrowLeftIcon size={16} color="#3D8178" /> Back
+        </Link>
+
         {/* Page heading */}
         <h1 className="text-h1 mb-6" style={{ color: 'var(--color-slate)' }}>
-          Profile
+          Me
         </h1>
 
-        {/* Avatar + name card */}
+        {/* Avatar + name card with Seeds pill */}
         <div
           className="lumira-card mb-4"
           style={{ display: 'flex', alignItems: 'center', gap: '16px' }}
@@ -117,9 +171,9 @@ export default async function ProfilePage() {
               flexShrink: 0,
             }}
           >
-            <span style={{ fontSize: '32px' }}>🌿</span>
+            <span style={{ fontSize: '32px' }}>{avatarEmoji}</span>
           </div>
-          <div>
+          <div style={{ flex: 1 }}>
             <p
               style={{
                 fontSize: '20px',
@@ -156,30 +210,101 @@ export default async function ProfilePage() {
               {user.email}
             </p>
           </div>
+
+          {/* Seeds balance pill */}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              padding: '8px 14px',
+              borderRadius: '14px',
+              background: 'var(--color-accent-light)',
+              flexShrink: 0,
+            }}
+          >
+            <SeedIcon size={20} color="var(--color-accent)" />
+            <span
+              style={{
+                fontSize: '16px',
+                fontWeight: 700,
+                color: 'var(--color-accent)',
+              }}
+            >
+              {seedsBalance}
+            </span>
+            <span
+              style={{
+                fontSize: '10px',
+                fontWeight: 600,
+                color: 'var(--color-accent)',
+                opacity: 0.8,
+              }}
+            >
+              Seeds
+            </span>
+          </div>
         </div>
 
-        {/* Points display */}
+        {/* Stats row */}
         <div
           style={{
             display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '12px',
+            gap: '10px',
             marginBottom: '16px',
           }}
         >
-          <span
+          <div
             style={{
-              fontSize: '18px',
-              fontWeight: 700,
-              color: 'var(--color-accent)',
+              flex: 1,
+              padding: '14px',
+              borderRadius: '14px',
+              background: 'var(--color-primary-light)',
+              textAlign: 'center',
             }}
           >
-            ✨ {totalPoints} points
-          </span>
+            <p style={{ fontSize: '22px', fontWeight: 700, color: 'var(--color-primary)' }}>
+              {currentStreak}
+            </p>
+            <p style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-primary)', opacity: 0.8 }}>
+              Day streak
+            </p>
+          </div>
+          <div
+            style={{
+              flex: 1,
+              padding: '14px',
+              borderRadius: '14px',
+              background: 'var(--color-accent-light)',
+              textAlign: 'center',
+            }}
+          >
+            <p style={{ fontSize: '22px', fontWeight: 700, color: 'var(--color-accent)' }}>
+              {earnedIds.length}
+            </p>
+            <p style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-accent)', opacity: 0.8 }}>
+              Badges earned
+            </p>
+          </div>
+          <div
+            style={{
+              flex: 1,
+              padding: '14px',
+              borderRadius: '14px',
+              background: '#FEF3F2',
+              textAlign: 'center',
+            }}
+          >
+            <p style={{ fontSize: '22px', fontWeight: 700, color: '#B91C1C' }}>
+              {checkinCount ?? 0}
+            </p>
+            <p style={{ fontSize: '11px', fontWeight: 600, color: '#B91C1C', opacity: 0.8 }}>
+              Check-ins
+            </p>
+          </div>
         </div>
 
-        {/* Completion arc */}
+        {/* Avatar picker */}
         <div className="lumira-card mb-4">
           <p
             style={{
@@ -191,43 +316,20 @@ export default async function ProfilePage() {
               marginBottom: '16px',
             }}
           >
-            Profile Completeness
+            Choose Your Avatar
           </p>
-          <ProfileCompletionArc percentage={completionPct} />
-          <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: '8px',
-              marginTop: '16px',
-            }}
-          >
-            {[
-              { label: 'Name', done: completionFactors.hasName },
-              { label: 'Baby', done: completionFactors.hasBaby },
-              { label: 'Check-in', done: completionFactors.hasCheckin },
-              { label: 'Notifications', done: completionFactors.hasNotifications },
-              { label: 'Privacy', done: completionFactors.hasPrivacy },
-            ].map((item) => (
-              <span
-                key={item.label}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                  padding: '4px 10px',
-                  borderRadius: '100px',
-                  background: item.done ? 'var(--color-primary-light)' : '#F3F4F6',
-                  color: item.done ? 'var(--color-primary)' : '#9CA3AF',
-                  fontSize: '12px',
-                  fontWeight: 600,
-                }}
-              >
-                {item.done ? '✓' : '○'} {item.label}
-              </span>
-            ))}
-          </div>
+          <AvatarPicker
+            profileId={profile.id}
+            currentEmoji={avatarEmoji}
+          />
         </div>
+
+        {/* Interactive profile completeness with inline actions */}
+        <ProfileCompletionSection
+          items={completionItems}
+          initialPercentage={completionPct}
+          babyId={baby?.id}
+        />
 
         {/* Baby info card */}
         {baby && (
@@ -317,7 +419,7 @@ export default async function ProfilePage() {
           </div>
         )}
 
-        {/* Badges section */}
+        {/* Badges section — categorized with earned state */}
         <div className="lumira-card mb-4">
           <p
             style={{
@@ -329,34 +431,9 @@ export default async function ProfilePage() {
               marginBottom: '16px',
             }}
           >
-            Your Badges
+            Your Badges ({earnedIds.length}/{BADGES.length})
           </p>
-          <BadgesGrid badges={displayBadges} earnedIds={[]} />
-        </div>
-
-        {/* About You section */}
-        <div className="lumira-card mb-4">
-          <p
-            style={{
-              fontSize: '13px',
-              fontWeight: 600,
-              color: 'var(--color-muted)',
-              textTransform: 'uppercase',
-              letterSpacing: '0.5px',
-              marginBottom: '16px',
-            }}
-          >
-            About You
-          </p>
-          <p
-            style={{
-              fontSize: '14px',
-              color: 'var(--color-muted)',
-              lineHeight: 1.6,
-            }}
-          >
-            As you use Lumira, we&apos;ll learn more about your preferences and parenting style. This section will grow with you.
-          </p>
+          <BadgesGrid badges={BADGES} earnedIds={earnedIds} />
         </div>
 
         {/* Partner status */}
@@ -452,18 +529,18 @@ export default async function ProfilePage() {
             Quick links
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            {[
-              { href: '/settings', title: 'Settings', subtitle: 'Account preferences, notifications' },
-              { href: '/settings/privacy', title: 'Privacy & Data', subtitle: 'AI processing, data retention, exports' },
-              { href: '/share', title: 'Share Lumira', subtitle: 'Invite friends and family' },
-            ].map((link, i, arr) => (
+            {([
+              { href: '/settings', title: 'My Settings', subtitle: 'Account preferences, notifications', icon: <SettingsIcon size={20} color="var(--color-muted)" /> },
+              { href: '/settings/privacy', title: 'Privacy & Data', subtitle: 'AI processing, data retention, exports', icon: <ShieldIcon size={20} color="var(--color-muted)" /> },
+              { href: '/share', title: 'Share the Love', subtitle: 'Invite friends and family', icon: <ShareIcon size={20} color="var(--color-muted)" /> },
+            ] as const).map((link, i, arr) => (
               <div key={link.href}>
                 <Link
                   href={link.href}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'space-between',
+                    gap: '12px',
                     padding: '14px 4px',
                     borderRadius: '8px',
                     textDecoration: 'none',
@@ -472,7 +549,8 @@ export default async function ProfilePage() {
                     minHeight: '48px',
                   }}
                 >
-                  <div>
+                  {link.icon}
+                  <div style={{ flex: 1 }}>
                     <p style={{ fontWeight: 600, fontSize: '15px', marginBottom: '2px' }}>
                       {link.title}
                     </p>
@@ -480,9 +558,7 @@ export default async function ProfilePage() {
                       {link.subtitle}
                     </p>
                   </div>
-                  <span style={{ color: 'var(--color-muted)', fontSize: '18px' }}>
-                    &rsaquo;
-                  </span>
+                  <ChevronRightIcon size={18} color="var(--color-muted)" />
                 </Link>
                 {i < arr.length - 1 && (
                   <div

@@ -14,6 +14,8 @@ import ArticleInsightCard from '@/components/app/ArticleInsightCard'
 import TribePeekCard from '@/components/app/TribePeekCard'
 import DailyQuestionCard from '@/components/app/DailyQuestionCard'
 import QuizCard from '@/components/app/QuizCard'
+import UpcomingMilestonesCard from '@/components/app/UpcomingMilestonesCard'
+import { SeedIcon, ClipboardIcon, ChatIcon, EditIcon, QuizIcon, CheckIcon } from '@/components/icons'
 import type { Profile, BabyProfile, DailyCheckin, PatternType, Stage } from '@/types/app'
 import type { TribePostPreview } from '@/components/app/TribePeekCard'
 import type { ArticleInsightProps } from '@/components/app/ArticleInsightCard'
@@ -29,14 +31,14 @@ export default async function HomePage() {
 
   // Fetch profile and baby membership in parallel
   const [{ data: profileData }, { data: memberData }] = await Promise.all([
-    supabase.from('profiles').select('id, first_name, first_time_parent, first_checkin_complete, emotional_state_latest').eq('id', user.id).single(),
+    supabase.from('profiles').select('id, first_name, first_time_parent, first_checkin_complete, emotional_state_latest, seeds_balance, current_streak').eq('id', user.id).single(),
     supabase.from('baby_profile_members').select('baby_id').eq('profile_id', user.id).limit(1).maybeSingle(),
   ])
 
   if (!profileData?.first_name) redirect('/onboarding')
   if (!memberData?.baby_id) redirect('/onboarding')
 
-  const profile = profileData as Profile
+  const profile = profileData as unknown as Profile
 
   // Fetch baby profile with specific columns
   const { data: babyData } = await supabase
@@ -214,8 +216,35 @@ export default async function HomePage() {
     >
       <div className="content-width mx-auto px-4 pt-6">
 
-        {/* ── Greeting ── */}
-        <GreetingHeader firstName={profile.first_name} />
+        {/* ── Greeting + Seeds pill ── */}
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+          <GreetingHeader firstName={profile.first_name} />
+          <Link
+            href="/profile"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+              padding: '6px 12px',
+              borderRadius: '100px',
+              background: 'var(--color-accent-light)',
+              textDecoration: 'none',
+              flexShrink: 0,
+              marginTop: '4px',
+            }}
+          >
+            <SeedIcon size={16} color="var(--color-accent)" />
+            <span
+              style={{
+                fontSize: '13px',
+                fontWeight: 700,
+                color: 'var(--color-accent)',
+              }}
+            >
+              {((profileData as Record<string, unknown>)?.seeds_balance as number) ?? 0}
+            </span>
+          </Link>
+        </div>
         <p
           style={{
             fontSize: '15px',
@@ -308,9 +337,9 @@ export default async function HomePage() {
               gap: '10px',
             }}
           >
-            <span style={{ fontSize: '20px' }}>&#10003;</span>
+            <CheckIcon size={20} color="var(--color-green)" />
             <p style={{ color: 'var(--color-green)', fontWeight: 600, fontSize: '15px' }}>
-              Check-in logged for today
+              You checked in today — nice!
             </p>
           </div>
         )}
@@ -326,29 +355,32 @@ export default async function HomePage() {
         >
           <QuickAction
             href="/checkin"
-            icon={'\uD83D\uDCCB'}
-            label="Daily check-in"
+            icon={<ClipboardIcon size={24} color="var(--color-primary)" />}
+            label="How are you?"
             bgColor="var(--color-primary-light)"
             borderColor="var(--color-primary-mid)"
             textColor="var(--color-primary)"
           />
           <QuickAction
             href="/chat"
-            icon={'\uD83D\uDCAC'}
-            label="Ask Lumira"
+            icon={<ChatIcon size={24} color="var(--color-accent)" />}
+            label="Talk to Lumira"
             bgColor="var(--color-accent-light)"
             borderColor="var(--color-accent)"
             textColor="var(--color-accent)"
           />
           <QuickAction
             href="/concern"
-            icon={'\uD83D\uDCDD'}
+            icon={<EditIcon size={24} color="#B91C1C" />}
             label="Log a concern"
             bgColor="#FEF3F2"
             borderColor="#FECACA"
             textColor="#B91C1C"
           />
         </div>
+
+        {/* ── Upcoming milestones & celebrations ── */}
+        <UpcomingMilestonesCard babyId={baby.id} babyName={baby.name} />
 
         {/* ── Article insight ── */}
         {featuredArticle && <ArticleInsightCard {...featuredArticle} />}
@@ -379,6 +411,31 @@ export default async function HomePage() {
           answerIndex={dailyQuiz.answerIndex}
           explanation={dailyQuiz.explanation}
         />
+
+        {/* ── Full quiz CTA ── */}
+        <Link
+          href="/quiz"
+          style={{
+            display: 'block',
+            textAlign: 'center',
+            padding: '14px 20px',
+            background: 'var(--color-white)',
+            border: '1px solid var(--color-border)',
+            borderRadius: 'var(--radius-lg)',
+            fontSize: '14px',
+            fontWeight: 600,
+            color: 'var(--color-primary)',
+            textDecoration: 'none',
+            marginBottom: '16px',
+            transition: 'all 0.15s ease',
+            minHeight: '48px',
+          }}
+        >
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <QuizIcon size={18} color="var(--color-primary)" />
+            Test yourself &rarr;
+          </span>
+        </Link>
 
         {/* ── Stage tips ── */}
         {tips.length > 0 && (
@@ -448,7 +505,7 @@ export default async function HomePage() {
             className="btn-primary"
             style={{ flex: 1, fontSize: '14px' }}
           >
-            Log today &rarr;
+            Check in &rarr;
           </Link>
           <Link
             href="/concern"
@@ -480,7 +537,7 @@ export default async function HomePage() {
 function QuickAction({
   href, icon, label, bgColor, borderColor, textColor,
 }: {
-  href: string; icon: string; label: string
+  href: string; icon: React.ReactNode; label: string
   bgColor: string; borderColor: string; textColor: string
 }) {
   return (
@@ -500,7 +557,7 @@ function QuickAction({
         transition: 'transform 0.15s ease, box-shadow 0.15s ease',
       }}
     >
-      <span style={{ fontSize: '24px', lineHeight: 1 }}>{icon}</span>
+      <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', lineHeight: 1 }}>{icon}</span>
       <span style={{ fontSize: '12px', fontWeight: 600, color: textColor, textAlign: 'center', lineHeight: 1.3 }}>
         {label}
       </span>
@@ -511,15 +568,35 @@ function QuickAction({
 /* ── Helper: Age subtitle under greeting ── */
 function getAgeSubtitle(baby: BabyProfile, ageInfo: ReturnType<typeof getBabyAgeInfo>): string {
   if (baby.stage === 'pregnancy' && ageInfo.pregnancy_week) {
-    return `Week ${ageInfo.pregnancy_week} of pregnancy`
+    const trimesterLabel = ageInfo.trimester === 1 ? 'First' : ageInfo.trimester === 2 ? 'Second' : 'Third'
+    return `${trimesterLabel} trimester · Week ${ageInfo.pregnancy_week}`
   }
+
   const name = baby.name || 'Baby'
-  if (ageInfo.age_in_weeks !== undefined && ageInfo.age_in_weeks < 12) {
-    return `${name} is ${ageInfo.age_in_weeks} ${ageInfo.age_in_weeks === 1 ? 'week' : 'weeks'} old`
+
+  if (ageInfo.age_in_months !== undefined && ageInfo.age_in_weeks !== undefined) {
+    // 0-3 months: show weeks (parents think in weeks for early infancy)
+    if (ageInfo.age_in_months < 3) {
+      if (ageInfo.age_in_weeks === 0) return `${name} is a newborn`
+      return `${name} is ${ageInfo.age_in_weeks} ${ageInfo.age_in_weeks === 1 ? 'week' : 'weeks'} old`
+    }
+    // 3-12 months: show months
+    if (ageInfo.age_in_months < 12) {
+      return `${name} is ${ageInfo.age_in_months} months old`
+    }
+    // 12-24 months: show years and months
+    if (ageInfo.age_in_months < 24) {
+      const remainingMonths = ageInfo.age_in_months % 12
+      if (remainingMonths === 0) return `${name} is 1 year old`
+      return `${name} is 1 year and ${remainingMonths} ${remainingMonths === 1 ? 'month' : 'months'} old`
+    }
+    // 24+ months: show years
+    const years = Math.floor(ageInfo.age_in_months / 12)
+    const remainingMonths = ageInfo.age_in_months % 12
+    if (remainingMonths === 0) return `${name} is ${years} years old`
+    return `${name} is ${years} years and ${remainingMonths} ${remainingMonths === 1 ? 'month' : 'months'} old`
   }
-  if (ageInfo.age_in_months !== undefined) {
-    return `${name} is ${ageInfo.age_in_months} ${ageInfo.age_in_months === 1 ? 'month' : 'months'} old`
-  }
+
   return ageInfo.age_display_string
 }
 

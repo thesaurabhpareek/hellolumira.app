@@ -7,6 +7,7 @@
  */
 
 import Link from 'next/link'
+import { BookIcon, SeedIcon, HeartIcon, ShieldIcon, LeafIcon, ClockIcon } from '@/components/icons'
 
 const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string }> = {
   nutrition:      { bg: '#FEF9EC', text: '#92400E', border: '#FDE68A' },
@@ -24,12 +25,12 @@ const CATEGORY_LABELS: Record<string, string> = {
   'mental-health':'Mental health',
 }
 
-const CATEGORY_ICONS: Record<string, string> = {
-  nutrition:      '🥗',
-  development:    '🌱',
-  wellness:       '🧘',
-  safety:         '🛡️',
-  'mental-health':'💚',
+const CATEGORY_ICON_COMPONENTS: Record<string, (props: { size?: number; color?: string }) => React.ReactNode> = {
+  nutrition:       LeafIcon,
+  development:     SeedIcon,
+  wellness:        HeartIcon,
+  safety:          ShieldIcon,
+  'mental-health': HeartIcon,
 }
 
 export interface ArticleInsightProps {
@@ -49,7 +50,7 @@ export default function ArticleInsightCard({
 }: ArticleInsightProps) {
   const colors = CATEGORY_COLORS[category] ?? CATEGORY_COLORS.wellness
   const label = CATEGORY_LABELS[category] ?? category
-  const icon = CATEGORY_ICONS[category] ?? '📖'
+  const IconComp = CATEGORY_ICON_COMPONENTS[category] ?? BookIcon
 
   return (
     <div
@@ -72,7 +73,7 @@ export default function ArticleInsightCard({
           marginBottom: '12px',
         }}
       >
-        📖 READ TODAY
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><BookIcon size={14} color="var(--color-muted)" /> READ TODAY</span>
       </p>
 
       {/* Category badge */}
@@ -91,7 +92,7 @@ export default function ArticleInsightCard({
           marginBottom: '10px',
         }}
       >
-        {icon} {label}
+        <IconComp size={14} color={colors.text} /> {label}
       </span>
 
       {/* Title */}
@@ -134,7 +135,7 @@ export default function ArticleInsightCard({
         }}
       >
         <span style={{ fontSize: '12px', color: 'var(--color-muted)' }}>
-          ⏱ {reading_time_minutes} min read
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}><ClockIcon size={13} color="var(--color-muted)" /> {reading_time_minutes} min read</span>
         </span>
         <Link
           href="/content"

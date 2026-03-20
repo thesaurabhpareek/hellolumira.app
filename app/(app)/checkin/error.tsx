@@ -40,7 +40,7 @@ export default function CheckinError({
             marginBottom: '0.75rem',
           }}
         >
-          Check-in could not load
+          Hmm, that didn&apos;t work
         </h2>
         <p
           style={{
@@ -50,8 +50,7 @@ export default function CheckinError({
             lineHeight: 1.5,
           }}
         >
-          We could not prepare your check-in right now. Please try again in a
-          moment.
+          We couldn&apos;t get your check-in ready just now. Your data is safe — let&apos;s try again.
         </p>
         <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center' }}>
           <button

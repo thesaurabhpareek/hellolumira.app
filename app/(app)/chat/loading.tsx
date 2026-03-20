@@ -35,7 +35,7 @@ export default function ChatLoading() {
             color: '#6B7280',
           }}
         >
-          Loading chat...
+          Just a moment...
         </p>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>

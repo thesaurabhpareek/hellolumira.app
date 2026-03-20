@@ -15,6 +15,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { ThoughtIcon } from '@/components/icons'
 
 interface Props {
   question: string
@@ -70,7 +71,7 @@ export default function DailyQuestionCard({ question, chatPrompt, babyId }: Prop
           marginBottom: '12px',
         }}
       >
-        💭 TODAY&apos;S REFLECTION
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><ThoughtIcon size={14} color="var(--color-primary)" /> TODAY&apos;S REFLECTION</span>
       </p>
 
       {/* Question */}

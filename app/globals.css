@@ -216,7 +216,7 @@
     text-decoration: none;
   }
   .btn-primary:hover { opacity: 0.92; }
-  .btn-primary:active { transform: scale(0.98); }
+  .btn-primary:active { transform: scale(0.97); }
   .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
   /* Ghost button */
@@ -292,6 +292,27 @@
   }
   .thread-card:active {
     transform: scale(0.99);
+  }
+
+  /* ── Button press feedback — apply to any interactive element ── */
+  .btn-press {
+    transition: transform 0.1s ease, opacity 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-press:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+
+  /* ── Skeleton loading states (Sand 100/200 palette) ── */
+  .lumira-skeleton {
+    background: linear-gradient(90deg, #F2F0EC 25%, #E8E6E1 50%, #F2F0EC 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite, skeleton-pulse 2s ease-in-out infinite;
+    border-radius: 8px;
+  }
+  @keyframes skeleton-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
   }
 }
 
@@ -445,7 +466,9 @@ html { scroll-behavior: smooth; }
   .lp-fade { animation: none; opacity: 1; }
   .animate-fade-in { animation: none; opacity: 1; }
   .shimmer { animation: none; background: #e8edf2; }
+  .lumira-skeleton { animation: none; background: #F2F0EC; }
   .typing-dot { animation: none; opacity: 1; transform: none; }
+  .btn-press:active:not(:disabled) { transform: none; }
   /* Catch inline animation: spin on the login spinner SVG */
   svg[aria-hidden="true"] { animation: none !important; }
   /* Catch scroll-behavior for users who prefer reduced motion */

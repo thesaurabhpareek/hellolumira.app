@@ -1,14 +1,15 @@
 /**
  * @module NotificationBell
- * @description Animated notification bell icon with unread badge. Opens the
- *   NotificationPanel on click. Badge count polls via useNotifications hook.
- * @version 1.0.0
+ * @description Animated notification bell icon with unread badge. Opens a
+ *   dropdown NotificationPanel anchored below the bell icon (Facebook-style).
+ *   Badge count polls via useNotifications hook.
+ * @version 2.0.0
  * @since March 2026
  */
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { Bell } from 'lucide-react'
+import { BellIcon } from '@/components/icons'
 import { NotificationPanel } from './NotificationPanel'
 import { useNotifications } from '@/hooks/useNotifications'
 
@@ -30,6 +31,7 @@ export function NotificationBell() {
   const [panelOpen, setPanelOpen] = useState(false)
   const [shouldPulse, setShouldPulse] = useState(false)
   const prevCountRef = useRef(0)
+  const bellRef = useRef<HTMLButtonElement>(null)
 
   // Pulse animation when unread count increases
   useEffect(() => {
@@ -61,8 +63,9 @@ export function NotificationBell() {
   const badgeDisplay = unreadCount > 9 ? '9+' : String(unreadCount)
 
   return (
-    <>
+    <div style={{ position: 'relative' }}>
       <button
+        ref={bellRef}
         type="button"
         onClick={handleOpenPanel}
         aria-label={
@@ -86,7 +89,7 @@ export function NotificationBell() {
           WebkitTapHighlightColor: 'transparent',
         }}
       >
-        <Bell size={22} strokeWidth={2} />
+        <BellIcon size={22} />
 
         {unreadCount > 0 && (
           <span
@@ -135,6 +138,6 @@ export function NotificationBell() {
           100% { transform: scale(1); }
         }
       `}</style>
-    </>
+    </div>
   )
 }

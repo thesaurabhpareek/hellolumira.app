@@ -1,8 +1,10 @@
-// app/(app)/settings/page.tsx — Settings
+// app/(app)/settings/page.tsx — Settings with enhanced partner invite
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { getBabyAgeInfo } from '@/lib/baby-age'
 import SignOutButton from './SignOutButton'
+import InvitePartnerForm from './InvitePartnerForm'
+import { ArrowLeftIcon, ChevronRightIcon, ShieldIcon, BellIcon } from '@/components/icons'
 import type { Profile, BabyProfile } from '@/types/app'
 
 export default async function SettingsPage() {
@@ -71,8 +73,23 @@ export default async function SettingsPage() {
       }}
     >
       <div className="content-width mx-auto px-4 pt-6">
+        <a
+          href="/home"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '4px',
+            color: '#3D8178',
+            fontSize: '14px',
+            fontWeight: 600,
+            textDecoration: 'none',
+            padding: '16px 0',
+          }}
+        >
+          <ArrowLeftIcon size={16} color="#3D8178" /> Back
+        </a>
         <h1 className="text-h1 mb-6" style={{ color: 'var(--color-slate)' }}>
-          Settings
+          My Settings
         </h1>
 
         {/* Profile card */}
@@ -193,28 +210,12 @@ export default async function SettingsPage() {
               </p>
               <p style={{ fontSize: '13px', color: 'var(--color-muted)' }}>Waiting for them to accept</p>
             </div>
+          ) : baby ? (
+            <InvitePartnerForm babyId={baby.id} />
           ) : (
-            <div>
-              <p style={{ fontSize: '14px', color: 'var(--color-muted)', marginBottom: '12px' }}>
-                No partner connected yet. Invite another parent to share updates and track together.
-              </p>
-              <a
-                href="/share"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  padding: '10px 20px',
-                  borderRadius: 'var(--radius-md)',
-                  background: 'var(--color-primary)',
-                  color: '#FFFFFF',
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  textDecoration: 'none',
-                }}
-              >
-                Share Lumira with your partner
-              </a>
-            </div>
+            <p style={{ fontSize: '14px', color: 'var(--color-muted)', lineHeight: 1.5 }}>
+              Complete onboarding to invite your partner.
+            </p>
           )}
         </div>
 
@@ -236,13 +237,15 @@ export default async function SettingsPage() {
                 color: 'var(--color-slate)',
                 transition: 'background 0.15s ease',
                 minHeight: '48px',
+                gap: '12px',
               }}
             >
-              <div>
+              <ShieldIcon size={20} color="var(--color-muted)" />
+              <div style={{ flex: 1 }}>
                 <p style={{ fontWeight: 600, fontSize: '15px', marginBottom: '2px' }}>Privacy &amp; Data</p>
                 <p style={{ fontSize: '13px', color: 'var(--color-muted)' }}>AI processing, data retention, exports</p>
               </div>
-              <span style={{ color: 'var(--color-muted)', fontSize: '18px' }}>&rsaquo;</span>
+              <ChevronRightIcon size={18} color="var(--color-muted)" />
             </a>
             <div style={{ height: '1px', background: 'var(--color-border)', margin: '0 4px' }} />
             <a
@@ -257,13 +260,15 @@ export default async function SettingsPage() {
                 color: 'var(--color-slate)',
                 transition: 'background 0.15s ease',
                 minHeight: '48px',
+                gap: '12px',
               }}
             >
-              <div>
+              <BellIcon size={20} color="var(--color-muted)" />
+              <div style={{ flex: 1 }}>
                 <p style={{ fontWeight: 600, fontSize: '15px', marginBottom: '2px' }}>Notifications</p>
                 <p style={{ fontSize: '13px', color: 'var(--color-muted)' }}>Check-in time, email, quiet hours</p>
               </div>
-              <span style={{ color: 'var(--color-muted)', fontSize: '18px' }}>&rsaquo;</span>
+              <ChevronRightIcon size={18} color="var(--color-muted)" />
             </a>
           </div>
         </div>
@@ -291,7 +296,7 @@ export default async function SettingsPage() {
               }}
             >
               <p style={{ fontWeight: 600, fontSize: '15px' }}>Legal</p>
-              <span style={{ color: 'var(--color-muted)', fontSize: '18px' }}>&rsaquo;</span>
+              <ChevronRightIcon size={18} color="var(--color-muted)" />
             </a>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--color-muted)', marginTop: '12px' }}>
