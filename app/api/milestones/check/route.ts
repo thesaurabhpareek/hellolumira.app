@@ -242,6 +242,19 @@ export async function GET(request: NextRequest) {
       }
 
       if (currentValue >= milestone.trigger_value) {
+        // Only celebrate within a +7 day window of the milestone
+        // (e.g., don't celebrate 6-month milestone when baby is 11 months old)
+        const overshoot = currentValue - milestone.trigger_value
+        let overshootDays = 0
+        if (milestone.trigger_unit === 'age_months') {
+          overshootDays = overshoot * 30 // approximate
+        } else if (milestone.trigger_unit === 'age_weeks' || milestone.trigger_unit === 'pregnancy_week') {
+          overshootDays = overshoot * 7
+        }
+
+        // Skip milestones that are more than 7 days past
+        if (overshootDays > 7) continue
+
         // Personalize the description for monthly birthdays and trimester milestones
         let personalizedDesc = milestone.description
         let personalizedTitle = milestone.title

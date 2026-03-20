@@ -11,10 +11,10 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   HomeIcon, HomeIconFilled,
-  ChatIcon, ChatIconFilled,
   HeartIcon, HeartIconFilled,
   BookIcon, BookIconFilled,
   UserIcon, UserIconFilled,
+  TribeIcon,
 } from '@/components/icons'
 import { NotificationBell } from './NotificationBell'
 import type { Profile, BabyProfile } from '@/types/app'
@@ -34,8 +34,8 @@ interface TabItem {
 
 const tabs: TabItem[] = [
   { label: 'Home', href: '/home', icon: HomeIcon, iconFilled: HomeIconFilled },
-  { label: 'Talk', href: '/chat', icon: ChatIcon, iconFilled: ChatIconFilled },
-  { label: 'How are you?', href: '/checkin', icon: HeartIcon, iconFilled: HeartIconFilled },
+  { label: 'Check in', href: '/checkin', icon: HeartIcon, iconFilled: HeartIconFilled },
+  { label: 'Tribes', href: '/tribes', icon: TribeIcon, iconFilled: TribeIcon },
   { label: 'Read', href: '/content', icon: BookIcon, iconFilled: BookIconFilled },
   { label: 'Me', href: '/profile', icon: UserIcon, iconFilled: UserIconFilled },
 ]
@@ -57,6 +57,7 @@ export default function AppShell({
   function isTabActive(href: string): boolean {
     if (href === '/home') return pathname === '/home'
     if (href === '/checkin') return pathname.startsWith('/checkin')
+    if (href === '/tribes') return pathname.startsWith('/tribes')
     return pathname.startsWith(href)
   }
 

@@ -57,13 +57,41 @@ export default function UpcomingMilestonesCard({ babyId, babyName }: Props) {
         setCountdown(data.next_milestone_countdown || null)
 
         // Queue celebrations for newly unlocked milestones
-        // Sort major milestones first for more impactful initial celebration
+        // Only show each celebration max 2 times (tracked in localStorage)
         if (data.newly_unlocked?.length > 0) {
-          const sorted = [...data.newly_unlocked].sort(
-            (a: MilestoneData, b: MilestoneData) => (b.is_major ? 1 : 0) - (a.is_major ? 1 : 0)
+          const CELEBRATION_KEY = 'lumira_celebrated'
+          const celebrated: Record<string, number> = JSON.parse(localStorage.getItem(CELEBRATION_KEY) || '{}')
+
+          // Filter out milestones already shown 2+ times
+          const unseen = data.newly_unlocked.filter(
+            (m: MilestoneData) => (celebrated[m.key] || 0) < 2
           )
-          setCelebrationQueue(sorted)
-          setCelebration(sorted[0])
+
+          if (unseen.length > 0) {
+            // Sort major milestones first
+            const sorted = [...unseen].sort(
+              (a: MilestoneData, b: MilestoneData) => (b.is_major ? 1 : 0) - (a.is_major ? 1 : 0)
+            )
+            // Only show max 2 celebrations per page load
+            const toShow = sorted.slice(0, 2)
+            setCelebrationQueue(toShow)
+            setCelebration(toShow[0])
+
+            // Mark all shown celebrations in localStorage
+            for (const m of toShow) {
+              celebrated[m.key] = (celebrated[m.key] || 0) + 1
+            }
+            localStorage.setItem(CELEBRATION_KEY, JSON.stringify(celebrated))
+
+            // Also save to DB so they don't come back from the API
+            for (const m of data.newly_unlocked) {
+              fetch('/api/milestones/celebrate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ milestone_key: m.key, baby_id: babyId }),
+              }).catch(() => {})
+            }
+          }
         }
       } catch {
         // Silently fail — milestones are enhancement, not critical
@@ -73,6 +101,7 @@ export default function UpcomingMilestonesCard({ babyId, babyName }: Props) {
     }
 
     fetchMilestones()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleDismissCelebration = () => {
