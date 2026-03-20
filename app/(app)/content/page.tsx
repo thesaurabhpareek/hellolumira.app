@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 /* ── Types ─────────────────────────────────────────────────────────────────── */
 
 type Stage = 'pregnancy' | 'infant' | 'toddler' | 'postpartum'
-type Category = 'nutrition' | 'development' | 'wellness' | 'safety' | 'mental-health'
+type Category = 'nutrition' | 'development' | 'wellness' | 'safety' | 'mental-health' | 'feeding' | 'sleep' | 'health' | 'relationships' | 'milestones'
 
 type Article = {
   id: string
@@ -36,11 +36,15 @@ const stages: { key: Stage; label: string; unit: string }[] = [
 
 const categories: { key: Category | 'all'; label: string }[] = [
   { key: 'all', label: 'All' },
-  { key: 'nutrition', label: 'Nutrition' },
-  { key: 'development', label: 'Development' },
-  { key: 'wellness', label: 'Wellness' },
-  { key: 'safety', label: 'Safety' },
-  { key: 'mental-health', label: 'Mental Health' },
+  { key: 'nutrition', label: '🥗 Nutrition' },
+  { key: 'development', label: '📈 Development' },
+  { key: 'wellness', label: '🧘 Wellness' },
+  { key: 'safety', label: '🛡️ Safety' },
+  { key: 'mental-health', label: '🧠 Mental Health' },
+  { key: 'feeding', label: '🍼 Feeding' },
+  { key: 'sleep', label: '😴 Sleep' },
+  { key: 'health', label: '🩺 Health' },
+  { key: 'relationships', label: '💕 Relationships' },
 ]
 
 const categoryColors: Record<string, string> = {
@@ -49,6 +53,11 @@ const categoryColors: Record<string, string> = {
   wellness: '#D97706',
   safety: '#DC2626',
   'mental-health': '#6366F1',
+  feeding: '#E07A5F',
+  sleep: '#4A90D9',
+  health: '#059669',
+  relationships: '#EC4899',
+  milestones: '#F59E0B',
 }
 
 const categoryLabels: Record<string, string> = {
@@ -57,6 +66,23 @@ const categoryLabels: Record<string, string> = {
   wellness: 'Wellness',
   safety: 'Safety',
   'mental-health': 'Mental Health',
+  feeding: 'Feeding',
+  sleep: 'Sleep',
+  health: 'Health',
+  relationships: 'Relationships',
+}
+
+/** Category emoji icons for visual richness */
+const categoryIcons: Record<string, string> = {
+  nutrition: '🥗',
+  development: '📈',
+  wellness: '🧘',
+  safety: '🛡️',
+  'mental-health': '🧠',
+  feeding: '🍼',
+  sleep: '😴',
+  health: '🩺',
+  relationships: '💕',
 }
 
 /* ── Component ─────────────────────────────────────────────────────────────── */
@@ -70,6 +96,22 @@ export default function ContentPage() {
   const [error, setError] = useState<string | null>(null)
 
   const supabase = createClient()
+
+  // Award seeds when an article is expanded/read
+  const handleExpandArticle = useCallback((articleId: string | null) => {
+    setExpandedId(articleId)
+    if (articleId) {
+      // Award seeds for reading article (fire-and-forget)
+      fetch('/api/seeds/award', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason: 'read_article' }),
+      }).catch(() => {})
+
+      // Check and award badges (fire-and-forget)
+      fetch('/api/badges/check', { method: 'POST' }).catch(() => {})
+    }
+  }, [])
 
   const fetchArticles = useCallback(async () => {
     setLoading(true)
@@ -400,7 +442,7 @@ export default function ContentPage() {
                   {/* Card header — always visible */}
                   <button
                     onClick={() =>
-                      setExpandedId(isExpanded ? null : article.id)
+                      handleExpandArticle(isExpanded ? null : article.id)
                     }
                     style={{
                       display: 'block',
@@ -434,6 +476,7 @@ export default function ContentPage() {
                           letterSpacing: '0.3px',
                         }}
                       >
+                        {categoryIcons[article.category] || '📄'}{' '}
                         {categoryLabels[article.category] || article.category}
                       </span>
                       <span

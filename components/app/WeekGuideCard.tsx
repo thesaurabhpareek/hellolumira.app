@@ -300,7 +300,8 @@ function FocusThisWeek({
 }) {
   const storageKey = `lumira_focus_${stage}_${weekOrMonth}`
 
-  const [checked, setChecked] = useState<Record<number, boolean>>(() => {
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [completed, setCompleted] = useState<Record<number, boolean>>(() => {
     if (typeof window === 'undefined') return {}
     try {
       const stored = localStorage.getItem(storageKey)
@@ -309,78 +310,183 @@ function FocusThisWeek({
       return {}
     }
   })
+  const [touchStartX, setTouchStartX] = useState<number | null>(null)
 
-  const toggleItem = (index: number) => {
-    setChecked((prev) => {
-      const next = { ...prev, [index]: !prev[index] }
-      try {
-        localStorage.setItem(storageKey, JSON.stringify(next))
-      } catch {
-        // ignore storage errors
-      }
+  const toggleCurrent = () => {
+    setCompleted((prev) => {
+      const next = { ...prev, [currentIndex]: !prev[currentIndex] }
+      try { localStorage.setItem(storageKey, JSON.stringify(next)) } catch {}
       return next
     })
   }
 
+  const goTo = (i: number) => setCurrentIndex(Math.max(0, Math.min(i, items.length - 1)))
+  const goNext = () => goTo(currentIndex + 1)
+  const goPrev = () => goTo(currentIndex - 1)
+
+  const onTouchStart = (e: React.TouchEvent) => setTouchStartX(e.touches[0].clientX)
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX === null) return
+    const delta = e.changedTouches[0].clientX - touchStartX
+    if (Math.abs(delta) > 48) {
+      if (delta < 0) goNext()
+      else goPrev()
+    }
+    setTouchStartX(null)
+  }
+
+  const item = items[currentIndex]
+  const isDone = !!completed[currentIndex]
+  const doneCount = Object.values(completed).filter(Boolean).length
+
   return (
     <div style={{ marginTop: '16px' }}>
-      <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '10px' }}>
-        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><ClipboardIcon size={14} color="var(--color-muted)" /> Focus this week</span>
-      </p>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        {items.map((item, i) => (
-          <button
-            key={i}
-            type="button"
-            onClick={() => toggleItem(i)}
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+        <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', margin: 0 }}>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+            <ClipboardIcon size={14} color="var(--color-muted)" /> Focus this week
+          </span>
+        </p>
+        <span style={{ fontSize: '12px', fontWeight: 600, color: doneCount === items.length ? '#3D8178' : 'var(--color-muted)' }}>
+          {doneCount}/{items.length} done
+        </span>
+      </div>
+
+      {/* Flashcard */}
+      <div style={{ position: 'relative', touchAction: 'pan-y' }}>
+        <button
+          type="button"
+          onClick={toggleCurrent}
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
+          style={{
+            width: '100%',
+            padding: '24px 20px',
+            background: isDone
+              ? 'linear-gradient(135deg, var(--color-primary-light), #e8f5f3)'
+              : 'var(--color-surface)',
+            borderRadius: '16px',
+            border: isDone ? '1.5px solid #3D8178' : '1.5px solid var(--color-border)',
+            cursor: 'pointer',
+            textAlign: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '14px',
+            transition: 'all 0.2s ease',
+            minHeight: '120px',
+            justifyContent: 'center',
+          }}
+        >
+          {/* Check ring */}
+          <span
             style={{
+              width: '36px',
+              height: '36px',
+              borderRadius: '50%',
+              border: isDone ? '2px solid #3D8178' : '2px solid var(--color-border)',
+              background: isDone ? '#3D8178' : 'transparent',
               display: 'flex',
-              alignItems: 'flex-start',
-              gap: '10px',
-              padding: '10px 12px',
-              background: checked[i] ? 'var(--color-primary-light)' : 'var(--color-surface)',
-              borderRadius: 'var(--radius-md)',
-              border: 'none',
-              cursor: 'pointer',
-              textAlign: 'left',
-              width: '100%',
-              transition: 'background 0.15s ease',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.2s ease',
+              flexShrink: 0,
             }}
           >
-            <span
-              style={{
-                width: '20px',
-                height: '20px',
-                borderRadius: '50%',
-                border: checked[i] ? '2px solid #3D8178' : '2px solid var(--color-primary-mid)',
-                background: checked[i] ? '#3D8178' : 'transparent',
-                flexShrink: 0,
-                marginTop: '1px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                transition: 'all 0.15s ease',
-              }}
-            >
-              {checked[i] && (
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                  <path d="M2.5 6L5 8.5L9.5 3.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              )}
-            </span>
-            <p style={{
-              fontSize: '14px',
-              lineHeight: 1.6,
-              color: checked[i] ? 'var(--color-muted)' : 'var(--color-slate)',
-              margin: 0,
-              textDecoration: checked[i] ? 'line-through' : 'none',
-              transition: 'color 0.15s ease',
-            }}>
-              {item}
-            </p>
-          </button>
-        ))}
+            {isDone ? (
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <path d="M3.5 9L7.5 13L14.5 5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            ) : (
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <path d="M9 4V9M9 12V13" stroke="var(--color-border)" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+            )}
+          </span>
+
+          {/* Focus text */}
+          <p style={{
+            fontSize: '16px',
+            fontWeight: 600,
+            lineHeight: 1.45,
+            color: isDone ? '#3D8178' : 'var(--color-slate)',
+            margin: 0,
+            maxWidth: '280px',
+          }}>
+            {item}
+          </p>
+
+          {/* Hint */}
+          <p style={{ fontSize: '12px', color: 'var(--color-muted)', margin: 0 }}>
+            {isDone ? '✓ Tap to undo' : 'Tap to mark done · swipe to browse'}
+          </p>
+        </button>
+
+        {/* Prev arrow */}
+        {items.length > 1 && currentIndex > 0 && (
+          <button
+            onClick={goPrev}
+            style={{
+              position: 'absolute', left: '-10px', top: '50%',
+              transform: 'translateY(-50%)',
+              width: '30px', height: '30px', borderRadius: '50%',
+              background: 'var(--color-white)',
+              border: '1px solid var(--color-border)',
+              cursor: 'pointer', display: 'flex',
+              alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 1px 6px rgba(0,0,0,0.08)',
+              fontSize: '16px', color: 'var(--color-slate)',
+              padding: 0,
+            }}
+          >‹</button>
+        )}
+
+        {/* Next arrow */}
+        {items.length > 1 && currentIndex < items.length - 1 && (
+          <button
+            onClick={goNext}
+            style={{
+              position: 'absolute', right: '-10px', top: '50%',
+              transform: 'translateY(-50%)',
+              width: '30px', height: '30px', borderRadius: '50%',
+              background: 'var(--color-white)',
+              border: '1px solid var(--color-border)',
+              cursor: 'pointer', display: 'flex',
+              alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 1px 6px rgba(0,0,0,0.08)',
+              fontSize: '16px', color: 'var(--color-slate)',
+              padding: 0,
+            }}
+          >›</button>
+        )}
       </div>
+
+      {/* Progress dots */}
+      {items.length > 1 && (
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '6px', marginTop: '12px' }}>
+          {items.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => goTo(i)}
+              style={{
+                width: i === currentIndex ? '22px' : '7px',
+                height: '7px',
+                borderRadius: '4px',
+                background: i === currentIndex
+                  ? '#3D8178'
+                  : completed[i]
+                  ? '#3D817866'
+                  : 'var(--color-border)',
+                border: 'none',
+                cursor: 'pointer',
+                padding: 0,
+                transition: 'all 0.2s ease',
+              }}
+            />
+          ))}
+        </div>
+      )}
     </div>
   )
 }

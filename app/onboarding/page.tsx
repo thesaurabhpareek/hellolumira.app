@@ -125,15 +125,31 @@ export default function OnboardingPage() {
         babyInsertData.name = babyName.trim() || null
       }
 
+      // Insert baby profile — use two-step insert+select to avoid RLS race
       const { data: babyData, error: babyError } = await supabase
         .from('baby_profiles')
         .insert(babyInsertData)
-        .select()
+        .select('id')
         .single()
 
-      if (babyError) throw babyError
+      let newBabyId: string
 
-      const newBabyId = babyData.id
+      if (babyError || !babyData?.id) {
+        // Fallback: if the chained select fails due to RLS timing, query separately
+        const { data: fallbackBaby, error: fallbackError } = await supabase
+          .from('baby_profiles')
+          .select('id')
+          .eq('created_by_profile_id', userId)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .single()
+        if (fallbackError || !fallbackBaby?.id) {
+          throw new Error('Could not create baby profile. Please try again.')
+        }
+        newBabyId = fallbackBaby.id
+      } else {
+        newBabyId = babyData.id
+      }
       setBabyId(newBabyId)
 
       // Insert baby_profile_members
@@ -143,29 +159,32 @@ export default function OnboardingPage() {
       })
       if (memberError) throw memberError
 
-      // Insert consent records (BLOCKING — consent must be recorded before proceeding)
+      // Record consent via server API (service-role client, bypasses RLS).
+      // Using /api/consent instead of a direct browser-client insert prevents the
+      // session-expiry race condition: the user's JWT may refresh between page load
+      // and form submit, causing auth.uid() to evaluate as null on the client side.
       const consentTypes: ConsentType[] = [
         'terms_of_service',
         'privacy_policy',
         'data_processing',
         'sensitive_data',
       ]
-      const consentRows = consentTypes.map((consentType) => ({
-        profile_id: userId,
-        consent_type: consentType,
-        action: 'granted' as const,
-        capture_method: 'onboarding_explicit' as const,
-        document_version: '2026-03-01',
-        ip_address: null,
-        page_url: '/onboarding',
-      }))
 
-      const { error: consentInsertError } = await supabase
-        .from('consent_records')
-        .insert(consentRows)
+      const consentRes = await fetch('/api/consent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+          consent_types: consentTypes,
+          capture_method: 'onboarding_explicit',
+          document_version: '2026-03-01',
+          page_url: '/onboarding',
+        }),
+      })
 
-      if (consentInsertError) {
-        console.error('[onboarding] Failed to insert consent records:', consentInsertError.message)
+      if (!consentRes.ok) {
+        const consentErr = await consentRes.json().catch(() => ({}))
+        console.error('[onboarding] Failed to record consent:', consentErr.error)
         throw new Error('We could not record your consent. Please try again.')
       }
 
