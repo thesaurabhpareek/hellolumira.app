@@ -10,35 +10,48 @@ export async function GET(request: NextRequest) {
   const code = searchParams.get('code')
   const next = searchParams.get('next') ?? '/home'
 
-  if (code) {
-    try {
-      const supabase = await createClient()
-      const { error } = await supabase.auth.exchangeCodeForSession(code)
-
-      if (!error) {
-        // Check if the user has completed onboarding
-        const {
-          data: { user },
-        } = await supabase.auth.getUser()
-
-        if (user) {
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('first_name')
-            .eq('id', user.id)
-            .single()
-
-          if (!profile?.first_name) {
-            return NextResponse.redirect(`${origin}/onboarding`)
-          }
-        }
-
-        return NextResponse.redirect(`${origin}${next}`)
-      }
-    } catch {
-      // fall through to error redirect
-    }
+  // No code param — could be an implicit-flow hash redirect (older Supabase versions)
+  // or a broken link. Either way, send them back to login.
+  if (!code) {
+    console.error('[auth/callback] No code param in request:', request.url)
+    return NextResponse.redirect(`${origin}/login?error=callback_failed`)
   }
 
-  return NextResponse.redirect(`${origin}/login?error=callback_failed`)
+  try {
+    const supabase = await createClient()
+    const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
+
+    if (exchangeError) {
+      console.error('[auth/callback] exchangeCodeForSession error:', exchangeError.message)
+      return NextResponse.redirect(`${origin}/login?error=callback_failed`)
+    }
+
+    // Session established — check onboarding state
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser()
+
+    if (userError || !user) {
+      console.error('[auth/callback] getUser error after exchange:', userError?.message)
+      return NextResponse.redirect(`${origin}/login?error=callback_failed`)
+    }
+
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('first_name')
+      .eq('id', user.id)
+      .single()
+
+    // No profile → new user → onboarding
+    if (!profile?.first_name) {
+      return NextResponse.redirect(`${origin}/onboarding`)
+    }
+
+    // Existing user → home (or next param if set)
+    return NextResponse.redirect(`${origin}${next}`)
+  } catch (err) {
+    console.error('[auth/callback] Unexpected error:', err)
+    return NextResponse.redirect(`${origin}/login?error=callback_failed`)
+  }
 }

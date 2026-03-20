@@ -189,6 +189,12 @@ export default function LandingPage() {
                 </a>
                 <p style={{ fontSize: 13, color: SAND_400, margin: 0 }}>Opens right in your browser. Ready in under two minutes.</p>
                 <p style={{ fontSize: 12, color: SAND_400, margin: 0 }}>Free to start &middot; No credit card required</p>
+                <p style={{ fontSize: 13, color: SAND_400, margin: '4px 0 0' }}>
+                  Already have an account?{' '}
+                  <a href="/login" style={{ color: SAGE_600, fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: '2px' }}>
+                    Sign in
+                  </a>
+                </p>
               </div>
             </div>
           </div>
@@ -271,6 +277,12 @@ export default function LandingPage() {
               </a>
               <p style={{ fontSize: 12, color: SAND_400, margin: 0, textAlign: 'center' }}>
                 <span aria-hidden="true">🔒</span> Your conversations stay private. We never sell your data.
+              </p>
+              <p style={{ fontSize: 13, color: SAND_400, margin: 0, textAlign: 'center' }}>
+                Already have an account?{' '}
+                <a href="/login" style={{ color: SAGE_600, fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: '2px' }}>
+                  Sign in
+                </a>
               </p>
               <p style={{ fontSize: 13, color: SAND_400, margin: 0, textAlign: 'center' }}>
                 Or <a href="mailto:hello@hellolumira.app" style={{ color: SAGE_600, textDecoration: 'underline' }}>send us a message</a> — we read every one.

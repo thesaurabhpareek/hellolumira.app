@@ -1,53 +1,147 @@
 // app/login/page.tsx — Magic link auth
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
-type AuthState = 'idle' | 'loading' | 'success' | 'error'
+type AuthState = 'idle' | 'loading' | 'success' | 'error' | 'rate_limited'
 
-export default function AuthPage() {
+const RESEND_COOLDOWN_SECONDS = 60
+
+/** Detect if the Supabase error is a rate-limit error */
+function isRateLimitError(msg: string): boolean {
+  const lower = msg.toLowerCase()
+  return (
+    lower.includes('rate') ||
+    lower.includes('too many') ||
+    lower.includes('limit') ||
+    lower.includes('exceeded')
+  )
+}
+
+/** Parse callback errors from the URL query param */
+function callbackErrorMessage(code: string | null): string {
+  if (!code) return ''
+  if (code === 'callback_failed') return 'Your sign-in link expired or was already used. Enter your email below to get a new one.'
+  return 'Something went wrong with your sign-in link. Please request a new one.'
+}
+
+function LoginForm() {
+  const searchParams = useSearchParams()
+  const callbackError = callbackErrorMessage(searchParams.get('error'))
+
   const [email, setEmail] = useState('')
-  const [state, setState] = useState<AuthState>('idle')
-  const [errorMessage, setErrorMessage] = useState('')
+  const [state, setState] = useState<AuthState>(callbackError ? 'error' : 'idle')
+  const [errorMessage, setErrorMessage] = useState(callbackError)
+  const [cooldown, setCooldown] = useState(0)
+  const cooldownRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  // Countdown timer for resend cooldown
+  useEffect(() => {
+    if (cooldown <= 0) {
+      if (cooldownRef.current) clearInterval(cooldownRef.current)
+      return
+    }
+    cooldownRef.current = setInterval(() => {
+      setCooldown((s) => {
+        if (s <= 1) {
+          if (cooldownRef.current) clearInterval(cooldownRef.current)
+          return 0
+        }
+        return s - 1
+      })
+    }, 1000)
+    return () => {
+      if (cooldownRef.current) clearInterval(cooldownRef.current)
+    }
+  }, [cooldown])
+
+  const startCooldown = () => {
+    if (cooldownRef.current) clearInterval(cooldownRef.current)
+    setCooldown(RESEND_COOLDOWN_SECONDS)
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!email.trim()) return
+    if (!email.trim() || cooldown > 0) return
 
     setState('loading')
     setErrorMessage('')
 
     const supabase = createClient()
 
-    const attempt = async (): Promise<boolean> => {
+    try {
       const { error } = await supabase.auth.signInWithOtp({
         email: email.trim(),
         options: {
           emailRedirectTo: `${window.location.origin}/login/callback`,
         },
       })
-      if (error) throw error
-      return true
-    }
 
-    try {
-      await attempt()
+      if (error) {
+        // Don't retry rate limit errors — it just makes things worse
+        if (isRateLimitError(error.message)) {
+          setErrorMessage(
+            "You've requested several links recently. Please wait a minute before trying again, or check your spam folder \u2014 the link may already be on its way."
+          )
+          setState('rate_limited')
+          startCooldown()
+        } else {
+          throw error
+        }
+        return
+      }
+
       setState('success')
-    } catch {
-      // Auto-retry once
+      startCooldown()
+    } catch (err) {
+      // One retry for transient network errors (not rate limits)
       try {
-        await new Promise((r) => setTimeout(r, 1000))
-        await attempt()
+        await new Promise((r) => setTimeout(r, 1200))
+        const supabase2 = createClient()
+        const { error: err2 } = await supabase2.auth.signInWithOtp({
+          email: email.trim(),
+          options: {
+            emailRedirectTo: `${window.location.origin}/login/callback`,
+          },
+        })
+        if (err2) throw err2
         setState('success')
-      } catch (err2) {
-        setErrorMessage(
-          err2 instanceof Error ? err2.message : 'We couldn\u2019t send your sign-in link. Please check your connection and try again.'
-        )
-        setState('error')
+        startCooldown()
+      } catch {
+        const raw = err instanceof Error ? err.message : ''
+        if (isRateLimitError(raw)) {
+          setErrorMessage(
+            "You've requested several links recently. Please wait a minute before trying again, or check your spam folder \u2014 the link may already be on its way."
+          )
+          setState('rate_limited')
+          startCooldown()
+        } else {
+          setErrorMessage(
+            'We couldn\u2019t send your sign-in link. Please check your connection and try again.'
+          )
+          setState('error')
+        }
       }
     }
   }
+
+  const handleTryAgain = () => {
+    setErrorMessage('')
+    setState('idle')
+  }
+
+  const handleResend = () => {
+    setCooldown(0)
+    setErrorMessage('')
+    setState('idle')
+  }
+
+  const isSubmitDisabled =
+    state === 'loading' ||
+    cooldown > 0 ||
+    !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())
 
   return (
     <div
@@ -95,21 +189,86 @@ export default function AuthPage() {
                 display: 'flex',
                 alignItems: 'flex-start',
                 gap: '12px',
+                marginBottom: '16px',
               }}
             >
               <span aria-hidden="true" style={{ fontSize: '24px', lineHeight: 1 }}>✓</span>
-              <div>
+              <div style={{ flex: 1 }}>
                 <p style={{ fontWeight: 600, color: 'var(--color-green)', marginBottom: 4 }}>
                   Check your inbox
                 </p>
-                <p style={{ color: 'var(--color-slate)', fontSize: '14px' }}>
-                  We sent a sign-in link to <strong>{email}</strong> — it expires in 24 hours.
+                <p style={{ color: 'var(--color-slate)', fontSize: '14px', marginBottom: 12 }}>
+                  We sent a sign-in link to <strong>{email}</strong>. It expires in 24 hours — also check your spam folder.
                 </p>
+                {cooldown > 0 ? (
+                  <p style={{ fontSize: '13px', color: 'var(--color-muted)' }}>
+                    Didn&apos;t get it? You can resend in {cooldown}s.
+                  </p>
+                ) : (
+                  <button
+                    onClick={handleResend}
+                    style={{
+                      fontSize: '13px',
+                      color: 'var(--color-primary)',
+                      fontWeight: 600,
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      padding: '8px 0',
+                      minHeight: '44px',
+                      textDecoration: 'underline',
+                    }}
+                  >
+                    Didn&apos;t get it? Resend link
+                  </button>
+                )}
               </div>
             </div>
           )}
 
-          {/* Error state */}
+          {/* Rate limited state */}
+          {state === 'rate_limited' && (
+            <div
+              role="alert"
+              className="animate-fade-in"
+              style={{
+                background: '#FFFBEB',
+                border: '1px solid #FCD34D',
+                borderRadius: 'var(--radius-md)',
+                padding: '16px',
+                marginBottom: '16px',
+              }}
+            >
+              <p style={{ fontSize: '14px', color: '#92400E', marginBottom: 8 }}>
+                {errorMessage}
+              </p>
+              {cooldown > 0 && (
+                <p style={{ fontSize: '13px', color: '#B45309', fontWeight: 600 }}>
+                  Try again in {cooldown}s
+                </p>
+              )}
+              {cooldown === 0 && (
+                <button
+                  onClick={handleTryAgain}
+                  style={{
+                    color: '#92400E',
+                    fontWeight: 600,
+                    fontSize: '14px',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    padding: '8px 0',
+                    minHeight: '44px',
+                    textDecoration: 'underline',
+                  }}
+                >
+                  Try again
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* Generic error state */}
           {state === 'error' && (
             <div
               role="alert"
@@ -126,7 +285,7 @@ export default function AuthPage() {
                 {errorMessage}
               </p>
               <button
-                onClick={() => setState('idle')}
+                onClick={handleTryAgain}
                 style={{
                   color: 'var(--color-red)',
                   fontWeight: 600,
@@ -145,9 +304,9 @@ export default function AuthPage() {
             </div>
           )}
 
-          {/* Form */}
-          {state !== 'success' && (
-            <form onSubmit={handleSubmit}>
+          {/* Form — shown in idle/loading/error states (not when rate limited and on cooldown) */}
+          {state !== 'success' && !(state === 'rate_limited' && cooldown > 0) && (
+            <form id="login-form" onSubmit={handleSubmit}>
               <div className="mb-4">
                 <label
                   htmlFor="email"
@@ -195,8 +354,12 @@ export default function AuthPage() {
 
               <button
                 type="submit"
-                disabled={state === 'loading' || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())}
+                disabled={isSubmitDisabled}
                 className="btn-primary"
+                style={{
+                  opacity: isSubmitDisabled ? 0.6 : 1,
+                  cursor: isSubmitDisabled ? 'not-allowed' : 'pointer',
+                }}
               >
                 {state === 'loading' ? (
                   <span style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -209,15 +372,14 @@ export default function AuthPage() {
                       fill="none"
                       stroke="currentColor"
                       strokeWidth="2.5"
-                      style={{
-                        animation: 'spin 0.8s linear infinite',
-                      }}
+                      style={{ animation: 'spin 0.8s linear infinite' }}
                     >
-                      {/* spin keyframe defined in globals.css */}
                       <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
                     </svg>
                     Sending...
                   </span>
+                ) : cooldown > 0 ? (
+                  `Resend in ${cooldown}s`
                 ) : (
                   'Send magic link'
                 )}
@@ -237,5 +399,13 @@ export default function AuthPage() {
         </p>
       </main>
     </div>
+  )
+}
+
+export default function AuthPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   )
 }
