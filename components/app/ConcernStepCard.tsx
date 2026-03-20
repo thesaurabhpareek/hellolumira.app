@@ -42,34 +42,24 @@ export default function ConcernStepCard({ question, answer, onChange }: Props) {
   return (
     <div className="lumira-card">
       {/* Question text */}
-      <h2
-        className="text-h3 mb-6"
-        style={{ color: 'var(--color-slate)', lineHeight: 1.4 }}
-      >
+      <h2 className="text-h3 mb-6 text-foreground leading-[1.4]">
         {question.text}
       </h2>
 
       {/* Single choice */}
       {question.inputType === 'single_choice' && question.options && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <div className="flex flex-col gap-[10px]">
           {question.options.map((opt) => (
             <button
               key={opt.value}
               onClick={() => handleSingleChoice(opt.value)}
+              className="rounded-md text-left cursor-pointer text-[15px] min-h-[52px] flex items-center transition-all duration-150 ease-out"
               style={{
                 padding: '14px 20px',
-                borderRadius: 'var(--radius-md)',
                 border: `2px solid ${answer === opt.value ? 'var(--color-primary)' : 'var(--color-border)'}`,
                 background: answer === opt.value ? 'var(--color-primary-light)' : 'var(--color-white)',
-                textAlign: 'left',
-                cursor: 'pointer',
-                fontSize: '15px',
                 fontWeight: answer === opt.value ? 600 : 400,
                 color: answer === opt.value ? 'var(--color-primary)' : 'var(--color-slate)',
-                minHeight: '52px',
-                display: 'flex',
-                alignItems: 'center',
-                transition: 'all 0.15s ease',
               }}
             >
               {opt.label}
@@ -80,13 +70,7 @@ export default function ConcernStepCard({ question, answer, onChange }: Props) {
 
       {/* Multi choice */}
       {question.inputType === 'multi_choice' && question.options && (
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2, 1fr)',
-            gap: '10px',
-          }}
-        >
+        <div className="grid grid-cols-2 gap-[10px]">
           {question.options.map((opt) => {
             const isSelected = Array.isArray(answer) && answer.includes(opt.value)
             return (
@@ -115,26 +99,14 @@ export default function ConcernStepCard({ question, answer, onChange }: Props) {
       {/* Scale / slider */}
       {question.inputType === 'scale' && (
         <div>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              marginBottom: '8px',
-            }}
-          >
-            <span style={{ fontSize: '13px', color: 'var(--color-muted)' }}>
+          <div className="flex justify-between mb-2">
+            <span className="text-[13px] text-muted-foreground">
               {question.scale_min_label || '1'}
             </span>
-            <span
-              style={{
-                fontSize: '24px',
-                fontWeight: 700,
-                color: 'var(--color-primary)',
-              }}
-            >
+            <span className="text-[24px] font-bold text-primary">
               {sliderValue}
             </span>
-            <span style={{ fontSize: '13px', color: 'var(--color-muted)' }}>
+            <span className="text-[13px] text-muted-foreground">
               {question.scale_max_label || '10'}
             </span>
           </div>
@@ -144,24 +116,17 @@ export default function ConcernStepCard({ question, answer, onChange }: Props) {
             max="10"
             value={sliderValue}
             onChange={(e) => handleSlider(parseInt(e.target.value, 10))}
+            className="w-full cursor-pointer"
             style={{
-              width: '100%',
               height: '6px',
               accentColor: 'var(--color-primary)',
-              cursor: 'pointer',
             }}
           />
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              marginTop: '8px',
-            }}
-          >
-            <span style={{ fontSize: '12px', color: 'var(--color-muted)' }}>
+          <div className="flex justify-between mt-2">
+            <span className="text-[12px] text-muted-foreground">
               {question.scale_min_label || 'None'}
             </span>
-            <span style={{ fontSize: '12px', color: 'var(--color-muted)' }}>
+            <span className="text-[12px] text-muted-foreground">
               {question.scale_max_label || 'Severe'}
             </span>
           </div>
@@ -175,18 +140,13 @@ export default function ConcernStepCard({ question, answer, onChange }: Props) {
           onChange={(e) => onChange(e.target.value)}
           placeholder="Share whatever feels relevant..."
           rows={4}
+          className="w-full rounded-md text-base leading-[1.6] text-foreground resize-y outline-none"
           style={{
-            width: '100%',
             minHeight: '100px',
             padding: '12px 16px',
-            borderRadius: 'var(--radius-md)',
             border: '1.5px solid var(--color-border)',
             fontSize: '16px',
-            lineHeight: 1.6,
-            resize: 'vertical',
-            color: 'var(--color-slate)',
             fontFamily: 'inherit',
-            outline: 'none',
           }}
           onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-primary)' }}
           onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--color-border)' }}

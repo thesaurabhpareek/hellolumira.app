@@ -20,6 +20,9 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
         link: "text-primary underline-offset-4 hover:underline",
+        lumira: "bg-primary text-primary-foreground hover:opacity-90 active:scale-[0.97] h-[52px] w-full font-semibold text-[15px] rounded-md px-6 transition-all",
+        'lumira-ghost': "bg-transparent text-muted-foreground border border-border hover:bg-background hover:border-sage-200 hover:text-primary h-[52px] w-full font-semibold text-[15px] rounded-md px-6 transition-all",
+        'lumira-sm': "bg-primary text-primary-foreground hover:opacity-90 h-[42px] font-semibold text-sm rounded-md px-4 transition-all",
       },
       size: {
         default:

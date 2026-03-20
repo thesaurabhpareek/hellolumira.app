@@ -22,17 +22,8 @@ export default function ConsentCheckbox({ checked, onChange, error }: ConsentChe
   }
 
   return (
-    <div style={{ marginBottom: '20px' }}>
-      <label
-        style={{
-          display: 'flex',
-          alignItems: 'flex-start',
-          gap: '12px',
-          cursor: 'pointer',
-          minHeight: '48px',
-          padding: '12px 0',
-        }}
-      >
+    <div className="mb-5">
+      <label className="flex items-start gap-3 cursor-pointer min-h-[48px] py-3">
         {/* Custom checkbox */}
         <div
           role="checkbox"
@@ -40,19 +31,10 @@ export default function ConsentCheckbox({ checked, onChange, error }: ConsentChe
           tabIndex={0}
           onKeyDown={handleKeyDown}
           onClick={() => onChange(!checked)}
+          className="shrink-0 w-6 h-6 mt-[1px] rounded-sm flex items-center justify-center transition-all duration-150 ease-out cursor-pointer"
           style={{
-            flexShrink: 0,
-            width: '24px',
-            height: '24px',
-            marginTop: '1px',
-            borderRadius: 'var(--radius-sm)',
             border: `2px solid ${error ? 'var(--color-red)' : checked ? 'var(--color-primary)' : 'var(--color-border)'}`,
             background: checked ? 'var(--color-primary)' : 'var(--color-white)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            transition: 'all 0.15s ease',
-            cursor: 'pointer',
             touchAction: 'manipulation',
           }}
         >
@@ -77,11 +59,7 @@ export default function ConsentCheckbox({ checked, onChange, error }: ConsentChe
 
         {/* Label text */}
         <span
-          style={{
-            fontSize: '16px',
-            lineHeight: 1.5,
-            color: 'var(--color-slate)',
-          }}
+          className="text-base leading-[1.5] text-foreground"
           onClick={(e) => e.preventDefault()}
         >
           I agree to the{' '}
@@ -90,12 +68,7 @@ export default function ConsentCheckbox({ checked, onChange, error }: ConsentChe
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
-            style={{
-              color: 'var(--color-primary)',
-              textDecoration: 'underline',
-              textUnderlineOffset: '2px',
-              fontWeight: 500,
-            }}
+            className="text-primary underline underline-offset-[2px] font-medium"
           >
             Terms of Service
           </a>{' '}
@@ -105,22 +78,11 @@ export default function ConsentCheckbox({ checked, onChange, error }: ConsentChe
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
-            style={{
-              color: 'var(--color-primary)',
-              textDecoration: 'underline',
-              textUnderlineOffset: '2px',
-              fontWeight: 500,
-            }}
+            className="text-primary underline underline-offset-[2px] font-medium"
           >
             Privacy Policy
           </a>
-          <span
-            style={{
-              color: 'var(--color-red)',
-              marginLeft: '4px',
-              fontWeight: 600,
-            }}
-          >
+          <span className="text-destructive ml-1 font-semibold">
             *
           </span>
         </span>
@@ -128,14 +90,7 @@ export default function ConsentCheckbox({ checked, onChange, error }: ConsentChe
 
       {/* Error message */}
       {error && (
-        <p
-          style={{
-            fontSize: '14px',
-            color: 'var(--color-red)',
-            marginTop: '4px',
-            paddingLeft: '36px',
-          }}
-        >
+        <p className="text-sm text-destructive mt-1 pl-9">
           {error}
         </p>
       )}

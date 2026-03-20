@@ -1,8 +1,8 @@
 /**
  * @module PregnancyProgressBadge
  * @description Visual pregnancy progress indicator showing current week,
- *   trimester, and a progress bar with trimester color coding.
- * @version 1.0.0
+ *   trimester, and a gradient progress bar.
+ * @version 1.1.0 — Migrated inline styles → Tailwind classes
  * @since March 2026
  */
 interface Props {
@@ -31,66 +31,34 @@ export default function PregnancyProgressBadge({ week, trimester, dueDate }: Pro
   const weeksRemaining = Math.max(0, 40 - week)
 
   return (
-    <div
-      style={{
-        background: 'var(--color-white)',
-        border: '1px solid var(--color-border)',
-        borderRadius: 'var(--radius-lg)',
-        padding: '16px 20px',
-        marginBottom: '16px',
-      }}
-    >
+    <div className="bg-white border border-border rounded-lg px-5 py-4 mb-4">
       {/* Header row */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+      <div className="flex items-center justify-between mb-3">
         <div>
-          <p
-            style={{
-              fontWeight: 700,
-              fontSize: '20px',
-              color: 'var(--color-primary)',
-              lineHeight: 1,
-              marginBottom: '4px',
-            }}
-          >
-            Week {week}
-          </p>
-          <p style={{ fontSize: '13px', color: 'var(--color-muted)' }}>
-            {TRIMESTER_LABELS[trimester]}
-          </p>
+          <p className="font-bold text-xl text-primary leading-none mb-1">Week {week}</p>
+          <p className="text-[13px] text-muted-foreground">{TRIMESTER_LABELS[trimester]}</p>
         </div>
-        <div style={{ textAlign: 'right' }}>
-          <p style={{ fontSize: '20px', fontWeight: 700, color: 'var(--color-accent)', lineHeight: 1, marginBottom: '4px' }}>
-            {weeksRemaining}
-          </p>
-          <p style={{ fontSize: '13px', color: 'var(--color-muted)' }}>weeks to go</p>
+        <div className="text-right">
+          <p className="text-xl font-bold text-accent leading-none mb-1">{weeksRemaining}</p>
+          <p className="text-[13px] text-muted-foreground">weeks to go</p>
         </div>
       </div>
 
       {/* Progress bar */}
-      <div
-        style={{
-          height: '6px',
-          background: 'var(--color-border)',
-          borderRadius: '3px',
-          overflow: 'hidden',
-          marginBottom: '8px',
-        }}
-      >
+      <div className="h-1.5 bg-border rounded-full overflow-hidden mb-2">
         <div
+          className="h-full rounded-full transition-[width] duration-500 ease-out"
           style={{
-            height: '100%',
             width: `${progressPercent}%`,
-            background: `linear-gradient(90deg, var(--color-primary), var(--color-accent))`,
-            borderRadius: '3px',
-            transition: 'width 0.5s ease',
+            background: 'linear-gradient(90deg, var(--color-primary), var(--color-accent))',
           }}
         />
       </div>
 
       {/* Due date */}
       {dueDateFormatted && (
-        <p style={{ fontSize: '13px', color: 'var(--color-muted)' }}>
-          Due <strong style={{ color: 'var(--color-slate)' }}>{dueDateFormatted}</strong>
+        <p className="text-[13px] text-muted-foreground">
+          Due <strong className="text-foreground font-semibold">{dueDateFormatted}</strong>
         </p>
       )}
     </div>

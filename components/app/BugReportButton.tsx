@@ -179,22 +179,12 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
       <button
         onClick={() => setIsOpen(true)}
         aria-label="Report a bug"
+        className="fixed right-4 rounded-full bg-foreground border-none cursor-pointer flex items-center justify-center z-40 transition-[transform,box-shadow] duration-200 ease-in-out"
         style={{
-          position: 'fixed',
           bottom: 'calc(70px + max(0px, env(safe-area-inset-bottom)))',
-          right: '16px',
           width: '44px',
           height: '44px',
-          borderRadius: '50%',
-          background: 'var(--color-slate)',
-          border: 'none',
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
           boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
-          zIndex: 40,
-          transition: 'transform 0.2s ease, box-shadow 0.2s ease',
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.transform = 'scale(1.1)'
@@ -215,114 +205,83 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
       {isOpen && (
         <div
           onClick={handleBackdropClick}
+          className="fixed inset-0 z-[200] flex items-end justify-center p-4"
           style={{
-            position: 'fixed',
-            inset: 0,
             background: 'rgba(0,0,0,0.4)',
-            zIndex: 200,
-            display: 'flex',
-            alignItems: 'flex-end',
-            justifyContent: 'center',
-            padding: '16px',
             animation: 'fadeIn 0.2s ease',
           }}
         >
           <div
             ref={modalRef}
+            className="bg-white w-full overflow-y-auto"
             style={{
-              background: 'var(--color-white)',
               borderRadius: '20px 20px 12px 12px',
-              width: '100%',
               maxWidth: '440px',
               maxHeight: '85vh',
-              overflowY: 'auto',
               padding: '24px 20px',
               boxShadow: '0 -4px 30px rgba(0,0,0,0.15)',
               animation: 'slideUp 0.25s ease',
             }}
           >
             {submitted ? (
-              <div style={{ textAlign: 'center', padding: '32px 0' }}>
-                <span style={{ fontSize: '40px' }}>🎉</span>
-                <p style={{ fontWeight: 700, fontSize: '18px', color: 'var(--color-slate)', marginTop: '12px' }}>
+              <div className="text-center py-8">
+                <span className="text-[40px]">🎉</span>
+                <p className="font-bold text-[18px] text-foreground mt-3">
                   Thank you!
                 </p>
-                <p style={{ fontSize: '14px', color: 'var(--color-muted)', marginTop: '6px' }}>
+                <p className="text-sm text-muted-foreground mt-[6px]">
                   We have received your report and will look into it.
                 </p>
               </div>
             ) : (
               <>
                 {/* Header */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+                <div className="flex items-center justify-between mb-5">
                   <div>
-                    <h2 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--color-slate)', margin: 0 }}>
+                    <h2 className="text-[18px] font-bold text-foreground m-0">
                       Report an Issue
                     </h2>
-                    <p style={{ fontSize: '13px', color: 'var(--color-muted)', marginTop: '2px' }}>
+                    <p className="text-[13px] text-muted-foreground mt-0.5">
                       Help us make Lumira better
                     </p>
                   </div>
                   <button
                     onClick={() => setIsOpen(false)}
                     aria-label="Close"
-                    style={{
-                      background: 'var(--color-surface)',
-                      border: 'none',
-                      borderRadius: '50%',
-                      width: '32px',
-                      height: '32px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      cursor: 'pointer',
-                      fontSize: '18px',
-                      color: 'var(--color-muted)',
-                    }}
+                    className="bg-background border-none rounded-full w-8 h-8 flex items-center justify-center cursor-pointer text-[18px] text-muted-foreground"
                   >
                     &times;
                   </button>
                 </div>
 
                 {/* Auto-captured info pill */}
-                <div style={{
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  gap: '6px',
-                  marginBottom: '16px',
-                }}>
+                <div className="flex flex-wrap gap-[6px] mb-4">
                   {userName && (
-                    <span style={{ fontSize: '11px', background: 'var(--color-surface)', padding: '3px 10px', borderRadius: '100px', color: 'var(--color-muted)', fontWeight: 500 }}>
+                    <span className="text-[11px] bg-background px-[10px] py-[3px] rounded-[100px] text-muted-foreground font-medium">
                       {userName}
                     </span>
                   )}
                   {userEmail && (
-                    <span style={{ fontSize: '11px', background: 'var(--color-surface)', padding: '3px 10px', borderRadius: '100px', color: 'var(--color-muted)', fontWeight: 500 }}>
+                    <span className="text-[11px] bg-background px-[10px] py-[3px] rounded-[100px] text-muted-foreground font-medium">
                       {userEmail}
                     </span>
                   )}
-                  <span style={{ fontSize: '11px', background: 'var(--color-surface)', padding: '3px 10px', borderRadius: '100px', color: 'var(--color-muted)', fontWeight: 500 }}>
+                  <span className="text-[11px] bg-background px-[10px] py-[3px] rounded-[100px] text-muted-foreground font-medium">
                     Auto-capturing device info
                   </span>
                 </div>
 
                 {/* Category chips */}
-                <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+                <div className="flex gap-2 mb-4">
                   {CATEGORIES.map((cat) => (
                     <button
                       key={cat.value}
                       onClick={() => setCategory(cat.value)}
+                      className="px-[14px] rounded-[100px] border-none text-[13px] font-semibold cursor-pointer transition-all duration-150 ease-out min-h-[36px]"
                       style={{
                         padding: '6px 14px',
-                        borderRadius: '100px',
-                        border: 'none',
-                        fontSize: '13px',
-                        fontWeight: 600,
-                        cursor: 'pointer',
                         background: category === cat.value ? 'var(--color-primary)' : 'var(--color-surface)',
                         color: category === cat.value ? '#fff' : 'var(--color-muted)',
-                        transition: 'all 0.15s ease',
-                        minHeight: '36px',
                       }}
                     >
                       {cat.emoji} {cat.label}
@@ -337,17 +296,10 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
                   autoFocus
+                  className="w-full rounded-md text-[15px] text-foreground bg-white outline-none mb-3 min-h-[48px]"
                   style={{
-                    width: '100%',
                     padding: '12px 16px',
-                    borderRadius: 'var(--radius-md)',
                     border: '1.5px solid var(--color-border)',
-                    fontSize: '15px',
-                    color: 'var(--color-slate)',
-                    background: 'var(--color-white)',
-                    outline: 'none',
-                    marginBottom: '12px',
-                    minHeight: '48px',
                     fontFamily: 'inherit',
                   }}
                 />
@@ -358,26 +310,18 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   rows={4}
+                  className="w-full rounded-md text-[15px] text-foreground bg-white outline-none resize-y leading-[1.5] mb-4"
                   style={{
-                    width: '100%',
                     padding: '12px 16px',
-                    borderRadius: 'var(--radius-md)',
                     border: '1.5px solid var(--color-border)',
-                    fontSize: '15px',
-                    color: 'var(--color-slate)',
-                    background: 'var(--color-white)',
-                    outline: 'none',
-                    resize: 'vertical',
                     minHeight: '100px',
-                    lineHeight: 1.5,
-                    marginBottom: '16px',
                     fontFamily: 'inherit',
                   }}
                 />
 
                 {/* Error */}
                 {error && (
-                  <p style={{ fontSize: '13px', color: 'var(--color-red)', marginBottom: '12px', fontWeight: 500 }}>
+                  <p className="text-[13px] text-destructive mb-3 font-medium">
                     {error}
                   </p>
                 )}
@@ -386,8 +330,7 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
                 <button
                   onClick={handleSubmit}
                   disabled={isSubmitting || !subject.trim() || !description.trim()}
-                  className="btn-primary"
-                  style={{ width: '100%' }}
+                  className="btn-primary w-full"
                 >
                   {isSubmitting ? 'Submitting...' : 'Submit Report'}
                 </button>

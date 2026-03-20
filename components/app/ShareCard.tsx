@@ -6,53 +6,18 @@ import { ShareIcon } from '@/components/icons'
 
 export default function ShareCard() {
   return (
-    <div
-      style={{
-        background: '#EDF5F4',
-        border: '1px solid #B8D8D3',
-        borderRadius: 'var(--radius-lg)',
-        padding: '20px',
-        marginBottom: '16px',
-      }}
-    >
-      <p
-        style={{
-          fontSize: '16px',
-          fontWeight: 700,
-          color: '#1A1A1A',
-          marginBottom: '6px',
-        }}
-      >
+    <div className="bg-secondary border border-sage-200 rounded-lg p-5 mb-4">
+      <p className="text-[16px] font-bold text-foreground mb-[6px]">
         Know someone expecting or with a baby?
       </p>
-      <p
-        style={{
-          fontSize: '14px',
-          color: '#6B7280',
-          lineHeight: 1.5,
-          marginBottom: '16px',
-        }}
-      >
+      <p className="text-sm text-muted-foreground leading-[1.5] mb-4">
         Pass it on — it&apos;s free to start
       </p>
       <Link
         href="/share"
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '48px',
-          padding: '0 24px',
-          borderRadius: 'var(--radius-md)',
-          background: '#3D8178',
-          color: '#FFFFFF',
-          fontSize: '15px',
-          fontWeight: 600,
-          textDecoration: 'none',
-          transition: 'opacity 0.15s ease',
-        }}
+        className="inline-flex items-center justify-center h-12 px-6 rounded-md bg-primary text-white text-[15px] font-semibold no-underline transition-opacity duration-150 ease-out"
       >
-        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><ShareIcon size={16} color="#FFFFFF" /> Share Lumira</span>
+        <span className="inline-flex items-center gap-[6px]"><ShareIcon size={16} color="#FFFFFF" /> Share Lumira</span>
       </Link>
     </div>
   )

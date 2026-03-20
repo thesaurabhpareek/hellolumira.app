@@ -1,5 +1,5 @@
-// components/app/BadgeCelebration.tsx — Animated badge celebration toast
-// Enhanced with confetti, haptic feedback, and badge bounce animation
+// components/app/BadgeCelebration.tsx — Animated badge celebration overlay
+// v1.1.0 — Migrated inline styles → Tailwind; keyframes moved to globals.css
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
@@ -11,39 +11,24 @@ interface BadgeCelebrationProps {
   onDismiss?: () => void
 }
 
-export default function BadgeCelebration({
-  badgeName,
-  badgeEmoji,
-  onDismiss,
-}: BadgeCelebrationProps) {
+export default function BadgeCelebration({ badgeName, badgeEmoji, onDismiss }: BadgeCelebrationProps) {
   const [isVisible, setIsVisible] = useState(false)
   const overlayRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    // Animate in + haptic
     const showTimer = setTimeout(() => {
       setIsVisible(true)
       triggerHaptic('success')
-
-      // Trigger confetti on the overlay
-      if (overlayRef.current) {
-        triggerConfetti(overlayRef.current, 40)
-      }
-
-      // Second haptic burst for extra delight
+      if (overlayRef.current) triggerConfetti(overlayRef.current, 40)
       setTimeout(() => triggerHaptic('medium'), 300)
     }, 100)
 
-    // Auto dismiss after 4 seconds
     const hideTimer = setTimeout(() => {
       setIsVisible(false)
       setTimeout(() => onDismiss?.(), 300)
     }, 4000)
 
-    return () => {
-      clearTimeout(showTimer)
-      clearTimeout(hideTimer)
-    }
+    return () => { clearTimeout(showTimer); clearTimeout(hideTimer) }
   }, [onDismiss])
 
   return (
@@ -51,123 +36,49 @@ export default function BadgeCelebration({
       {/* Background overlay */}
       <div
         ref={overlayRef}
+        className="fixed inset-0 z-[199] overflow-hidden transition-all duration-300"
         style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
           background: isVisible ? 'rgba(0, 0, 0, 0.35)' : 'transparent',
           backdropFilter: isVisible ? 'blur(4px)' : 'none',
           WebkitBackdropFilter: isVisible ? 'blur(4px)' : 'none',
-          transition: 'all 0.3s ease',
-          zIndex: 199,
           pointerEvents: isVisible ? 'auto' : 'none',
-          overflow: 'hidden',
         }}
-        onClick={() => {
-          setIsVisible(false)
-          setTimeout(() => onDismiss?.(), 300)
-        }}
+        onClick={() => { setIsVisible(false); setTimeout(() => onDismiss?.(), 300) }}
       />
 
       {/* Badge card */}
       <div
+        className="fixed z-[200] bg-white rounded-[20px] px-10 py-8 text-center shadow-[0_20px_60px_rgba(0,0,0,0.2)] max-w-[300px] w-[90%] transition-all duration-300"
         style={{
-          position: 'fixed',
           top: '50%',
           left: '50%',
           transform: `translate(-50%, -50%) scale(${isVisible ? 1 : 0.8})`,
           opacity: isVisible ? 1 : 0,
-          background: 'var(--color-white)',
-          borderRadius: '20px',
-          padding: '32px 40px',
-          textAlign: 'center',
-          zIndex: 200,
           pointerEvents: isVisible ? 'auto' : 'none',
-          boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
-          transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
-          maxWidth: '300px',
-          width: '90%',
+          transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
         }}
       >
-        {/* Glow ring behind emoji */}
-        <div
-          style={{
-            position: 'relative',
-            display: 'inline-block',
-            marginBottom: '16px',
-          }}
-        >
+        {/* Glow ring + emoji */}
+        <div className="relative inline-block mb-4">
           <div
+            className="absolute top-1/2 left-1/2 w-20 h-20 rounded-full"
             style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
               transform: 'translate(-50%, -50%)',
-              width: '80px',
-              height: '80px',
-              borderRadius: '50%',
               background: 'radial-gradient(circle, rgba(61, 129, 120, 0.15) 0%, transparent 70%)',
-              animation: isVisible ? 'badgeGlowPulse 1.5s ease-in-out infinite' : 'none',
+              animation: isVisible ? 'badge-glow-pulse 1.5s ease-in-out infinite' : 'none',
             }}
           />
           <div
-            style={{
-              fontSize: '56px',
-              animation: isVisible ? 'badgeBounceIn 0.6s ease-out' : 'none',
-              position: 'relative',
-            }}
+            className="text-[56px] relative"
+            style={{ animation: isVisible ? 'badge-bounce-in 0.6s ease-out' : 'none' }}
           >
             {badgeEmoji}
           </div>
         </div>
 
-        <p
-          style={{
-            fontSize: '12px',
-            fontWeight: 600,
-            color: 'var(--color-primary)',
-            textTransform: 'uppercase',
-            letterSpacing: '1px',
-            marginBottom: '8px',
-          }}
-        >
-          Badge earned!
-        </p>
-        <p
-          style={{
-            fontSize: '18px',
-            fontWeight: 700,
-            color: 'var(--color-slate)',
-          }}
-        >
-          {badgeName}
-        </p>
-
-        <p
-          style={{
-            fontSize: '12px',
-            color: 'var(--color-muted)',
-            marginTop: '16px',
-            opacity: 0.6,
-          }}
-        >
-          Tap anywhere to dismiss
-        </p>
-
-        <style>{`
-          @keyframes badgeBounceIn {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.2); }
-            70% { transform: scale(0.9); }
-            100% { transform: scale(1); }
-          }
-          @keyframes badgeGlowPulse {
-            0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
-            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
-          }
-        `}</style>
+        <p className="text-xs font-bold text-primary uppercase tracking-[1px] mb-2">Badge earned!</p>
+        <p className="text-lg font-bold text-foreground">{badgeName}</p>
+        <p className="text-xs text-muted-foreground mt-4 opacity-60">Tap anywhere to dismiss</p>
       </div>
     </>
   )

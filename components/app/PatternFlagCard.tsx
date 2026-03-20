@@ -34,78 +34,31 @@ export default function PatternFlagCard({ type, message, onDismiss }: Props) {
 
   return (
     <div
-      className="animate-fade-in"
-      style={{
-        background: 'var(--color-amber-light)',
-        border: '1px solid #F6E05E',
-        borderRadius: 'var(--radius-lg)',
-        padding: '16px 20px',
-        position: 'relative',
-      }}
+      className="animate-fade-in bg-status-amber-light border border-[#F6E05E] rounded-lg relative"
+      style={{ padding: '16px 20px' }}
     >
       {/* Dismiss button */}
       <button
         onClick={onDismiss}
         aria-label="Dismiss"
-        style={{
-          position: 'absolute',
-          top: '12px',
-          right: '12px',
-          background: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          color: 'var(--color-muted)',
-          fontSize: '18px',
-          padding: '4px 8px',
-          minHeight: '48px',
-          minWidth: '48px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderRadius: 'var(--radius-sm)',
-        }}
+        className="absolute top-3 right-3 bg-transparent border-none cursor-pointer text-muted-foreground text-[18px] px-2 py-1 min-h-[48px] min-w-[48px] flex items-center justify-center rounded-sm"
       >
         ×
       </button>
 
       {/* Content */}
-      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', paddingRight: '32px' }}>
-        <span style={{ fontSize: '28px', flexShrink: 0 }}>{icon}</span>
-        <div style={{ flex: 1 }}>
-          <p
-            style={{
-              fontSize: '14px',
-              fontWeight: 600,
-              color: '#744210',
-              marginBottom: '4px',
-            }}
-          >
+      <div className="flex items-start gap-3 pr-8">
+        <span className="text-[28px] shrink-0">{icon}</span>
+        <div className="flex-1">
+          <p className="text-sm font-semibold mb-1" style={{ color: '#744210' }}>
             Lumira noticed something
           </p>
-          <p
-            style={{
-              fontSize: '14px',
-              lineHeight: 1.6,
-              color: '#92400E',
-              marginBottom: '14px',
-            }}
-          >
+          <p className="text-sm leading-[1.6] mb-[14px]" style={{ color: '#92400E' }}>
             {message}
           </p>
           <Link
             href="/checkin"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              padding: '8px 16px',
-              background: 'var(--color-amber)',
-              color: 'white',
-              borderRadius: 'var(--radius-md)',
-              fontSize: '14px',
-              fontWeight: 600,
-              textDecoration: 'none',
-              minHeight: '48px',
-            }}
+            className="inline-flex items-center px-4 py-2 bg-status-amber text-white rounded-md text-sm font-semibold no-underline min-h-[48px]"
           >
             Let&apos;s talk about it →
           </Link>

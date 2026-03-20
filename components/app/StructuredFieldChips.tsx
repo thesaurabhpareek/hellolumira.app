@@ -31,7 +31,7 @@ export default function StructuredFieldChips({ fields, onSelect }: Props) {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <div className="flex flex-col gap-4">
       {fields.map((field) => {
         const selectedValue = selected[field.id]
         const isCollapsed = collapsed[field.id]
@@ -41,20 +41,11 @@ export default function StructuredFieldChips({ fields, onSelect }: Props) {
           return (
             <div
               key={field.id}
-              className="animate-fade-in"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '8px 12px',
-                background: 'var(--color-primary-light)',
-                borderRadius: 'var(--radius-md)',
-                border: '1px solid var(--color-primary-mid)',
-              }}
+              className="animate-fade-in flex items-center gap-2 px-3 py-2 bg-secondary border border-sage-200 rounded-md"
             >
-              <span style={{ color: 'var(--color-primary)', fontSize: '14px' }}>✓</span>
-              <span style={{ fontSize: '13px', color: 'var(--color-muted)' }}>{field.label}:</span>
-              <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-primary)' }}>
+              <span className="text-primary text-sm">✓</span>
+              <span className="text-[13px] text-muted-foreground">{field.label}:</span>
+              <span className="text-sm font-semibold text-primary">
                 {selectedOption.emoji && `${selectedOption.emoji} `}{selectedOption.label}
               </span>
             </div>
@@ -63,24 +54,13 @@ export default function StructuredFieldChips({ fields, onSelect }: Props) {
 
         return (
           <div key={field.id} className="animate-fade-in">
-            <p
-              style={{
-                fontSize: '13px',
-                fontWeight: 600,
-                color: 'var(--color-muted)',
-                marginBottom: '8px',
-                textTransform: 'uppercase',
-                letterSpacing: '0.4px',
-              }}
-            >
+            <p className="text-[13px] font-semibold text-muted-foreground mb-2 uppercase tracking-[0.4px]">
               {field.label}
             </p>
             <div
+              className="flex gap-2 pb-1"
               style={{
-                display: 'flex',
-                gap: '8px',
                 overflowX: 'auto',
-                paddingBottom: '4px',
                 WebkitOverflowScrolling: 'touch',
                 scrollbarWidth: 'none',
               }}
@@ -89,11 +69,10 @@ export default function StructuredFieldChips({ fields, onSelect }: Props) {
                 <button
                   key={option.value}
                   onClick={() => handleSelect(field.id, option.value, option.label)}
-                  className={selectedValue === option.value ? 'chip chip-selected' : 'chip'}
-                  style={{ flexShrink: 0 }}
+                  className={`shrink-0 ${selectedValue === option.value ? 'chip chip-selected' : 'chip'}`}
                 >
                   {option.emoji && (
-                    <span style={{ marginRight: '4px' }}>{option.emoji}</span>
+                    <span className="mr-1">{option.emoji}</span>
                   )}
                   {option.label}
                 </button>

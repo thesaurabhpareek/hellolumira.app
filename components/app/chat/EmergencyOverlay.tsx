@@ -41,16 +41,9 @@ export default function EmergencyOverlay({ message, actionUrl, onAcknowledge }: 
       role="alertdialog"
       aria-modal="true"
       aria-label="Emergency — this needs immediate attention"
+      className="fixed inset-0 z-[300] flex flex-col items-center justify-center p-6"
       style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 300,
         background: 'rgba(114, 28, 28, 0.95)',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '24px',
         paddingTop: 'max(24px, env(safe-area-inset-top))',
         paddingBottom: 'max(24px, env(safe-area-inset-bottom))',
         touchAction: 'none',
@@ -59,16 +52,8 @@ export default function EmergencyOverlay({ message, actionUrl, onAcknowledge }: 
     >
       {/* Warning icon */}
       <div
-        style={{
-          width: '72px',
-          height: '72px',
-          borderRadius: '50%',
-          background: 'rgba(255, 255, 255, 0.15)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginBottom: '20px',
-        }}
+        className="w-[72px] h-[72px] rounded-full flex items-center justify-center mb-5"
+        style={{ background: 'rgba(255, 255, 255, 0.15)' }}
       >
         <svg
           width="36"
@@ -86,51 +71,27 @@ export default function EmergencyOverlay({ message, actionUrl, onAcknowledge }: 
         </svg>
       </div>
 
-      <h2
-        style={{
-          color: 'white',
-          fontSize: '21px',
-          fontWeight: 700,
-          marginBottom: '16px',
-          textAlign: 'center',
-        }}
-      >
+      <h2 className="text-white text-[21px] font-bold mb-4 text-center">
         This needs immediate attention
       </h2>
 
       <p
-        style={{
-          color: 'rgba(255, 255, 255, 0.9)',
-          fontSize: '15px',
-          lineHeight: 1.7,
-          textAlign: 'center',
-          marginBottom: '32px',
-          maxWidth: '340px',
-          whiteSpace: 'pre-wrap',
-        }}
+        className="text-[15px] leading-[1.7] text-center mb-8 whitespace-pre-wrap"
+        style={{ color: 'rgba(255, 255, 255, 0.9)', maxWidth: '340px' }}
       >
         {message}
       </p>
 
-      <div style={{ width: '100%', maxWidth: '340px' }}>
+      <div className="w-full" style={{ maxWidth: '340px' }}>
         {/* Call emergency services button */}
         <a
           ref={callButtonRef}
           href={callUrl}
           aria-label="Call emergency services now"
+          className="flex items-center justify-center w-full h-14 bg-white font-bold text-[17px] no-underline mb-3"
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '100%',
-            height: '56px',
-            background: 'white',
             color: '#7C1F1F',
-            fontWeight: 700,
-            fontSize: '17px',
             borderRadius: '18px',
-            textDecoration: 'none',
-            marginBottom: '12px',
             touchAction: 'manipulation',
           }}
         >
@@ -140,16 +101,11 @@ export default function EmergencyOverlay({ message, actionUrl, onAcknowledge }: 
         {/* Acknowledge button */}
         <button
           onClick={onAcknowledge}
+          className="w-full h-[52px] border-none cursor-pointer font-medium text-[15px]"
           style={{
-            width: '100%',
-            height: '52px',
             background: 'rgba(255, 255, 255, 0.15)',
             color: 'rgba(255, 255, 255, 0.9)',
-            fontWeight: 500,
-            fontSize: '15px',
             borderRadius: '14px',
-            border: 'none',
-            cursor: 'pointer',
             touchAction: 'manipulation',
           }}
         >
@@ -158,12 +114,8 @@ export default function EmergencyOverlay({ message, actionUrl, onAcknowledge }: 
       </div>
 
       <p
-        style={{
-          color: 'rgba(255, 255, 255, 0.5)',
-          fontSize: '12px',
-          marginTop: '24px',
-          textAlign: 'center',
-        }}
+        className="text-[12px] mt-6 text-center"
+        style={{ color: 'rgba(255, 255, 255, 0.5)' }}
       >
         Lumira will be here when you are ready
       </p>

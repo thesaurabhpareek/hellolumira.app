@@ -11,31 +11,19 @@ interface Props {
 
 export default function EscalationCard({ items }: Props) {
   return (
-    <div
-      style={{
-        background: 'var(--color-red-light)',
-        border: '1px solid #FEB2B2',
-        borderRadius: 'var(--radius-lg)',
-        padding: '16px 20px',
-      }}
-    >
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-        <span style={{ fontSize: '18px' }}>⚠️</span>
-        <p style={{ fontWeight: 700, fontSize: '14px', color: 'var(--color-red)' }}>
+    <div className="bg-status-red-light border border-[#FEB2B2] rounded-lg" style={{ padding: '16px 20px' }}>
+      <div className="flex items-center gap-2 mb-3">
+        <span className="text-[18px]">⚠️</span>
+        <p className="font-bold text-sm text-destructive">
           When to call your doctor
         </p>
       </div>
-      <ul style={{ margin: 0, paddingLeft: '16px' }}>
+      <ul className="m-0 pl-4">
         {items.map((item, i) => (
           <li
             key={i}
-            style={{
-              fontSize: '14px',
-              lineHeight: 1.7,
-              color: '#822727',
-              marginBottom: '6px',
-              fontWeight: 500,
-            }}
+            className="text-sm leading-[1.7] font-medium mb-[6px]"
+            style={{ color: '#822727' }}
           >
             {item}
           </li>

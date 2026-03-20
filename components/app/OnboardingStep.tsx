@@ -2,7 +2,7 @@
  * @module OnboardingStep
  * @description Reusable step card for the onboarding wizard. Renders a title,
  *   description, and child content with consistent layout and animation.
- * @version 1.0.0
+ * @version 1.1.0 — Migrated inline styles → Tailwind classes
  * @since March 2026
  */
 'use client'
@@ -25,46 +25,29 @@ export default function OnboardingStep({ step, total, title, subtitle, children 
         aria-valuemin={1}
         aria-valuemax={total}
         aria-label={`Step ${step} of ${total}`}
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          gap: '8px',
-          marginBottom: '32px',
-        }}
+        className="flex justify-center gap-2 mb-8"
       >
         {Array.from({ length: total }).map((_, i) => (
           <div
             key={i}
+            className="h-2 rounded-full transition-all duration-300"
             style={{
               width: i === step - 1 ? '24px' : '8px',
-              height: '8px',
-              borderRadius: '100px',
               background: i < step ? 'var(--color-primary)' : 'var(--color-border)',
-              transition: 'all 0.3s ease',
             }}
           />
         ))}
       </div>
 
       {/* Title */}
-      <h1
-        className="text-h1 mb-2"
-        style={{ color: 'var(--color-slate)' }}
-      >
-        {title}
-      </h1>
+      <h1 className="text-h1 text-foreground mb-2">{title}</h1>
 
       {/* Subtitle */}
-      {subtitle && (
-        <p
-          className="text-body-muted mb-6"
-          style={{ lineHeight: 1.6 }}
-        >
-          {subtitle}
-        </p>
+      {subtitle ? (
+        <p className="text-body-muted leading-relaxed mb-6">{subtitle}</p>
+      ) : (
+        <div className="mb-6" />
       )}
-
-      {!subtitle && <div style={{ marginBottom: '24px' }} />}
 
       {/* Content */}
       <div>{children}</div>

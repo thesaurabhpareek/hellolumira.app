@@ -126,37 +126,18 @@ export default function MilestoneCelebration({
   return (
     <div
       onClick={handleDismiss}
+      className="fixed top-0 left-0 right-0 bottom-0 z-[9999] flex items-center justify-center p-6"
       style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        zIndex: 9999,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
         background: 'rgba(0, 0, 0, 0.5)',
         backdropFilter: 'blur(4px)',
         WebkitBackdropFilter: 'blur(4px)',
         opacity: visible ? 1 : 0,
         pointerEvents: visible ? 'auto' : 'none',
         transition: 'opacity 0.3s ease',
-        padding: '24px',
       }}
     >
       {/* Confetti */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          overflow: 'hidden',
-          pointerEvents: 'none',
-        }}
-      >
+      <div className="absolute top-0 left-0 right-0 bottom-0 overflow-hidden pointer-events-none">
         {confettiPieces.map((i) => {
           const left = Math.random() * 100
           const delay = Math.random() * 0.8
@@ -191,25 +172,20 @@ export default function MilestoneCelebration({
       {/* Celebration card */}
       <div
         onClick={(e) => e.stopPropagation()}
+        className="bg-white text-center relative z-[1] w-full"
         style={{
-          background: 'var(--color-white)',
           borderRadius: '20px',
           padding: '32px 28px',
           maxWidth: '360px',
-          width: '100%',
-          textAlign: 'center',
           boxShadow: '0 20px 60px rgba(0, 0, 0, 0.15)',
           animation: 'milestone-card-enter 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
-          position: 'relative',
-          zIndex: 1,
         }}
       >
         {/* Emoji — bigger for major milestones */}
         <div
+          className="leading-none mb-4"
           style={{
             fontSize: isMajor ? '80px' : '64px',
-            lineHeight: 1,
-            marginBottom: '16px',
             animation: 'milestone-emoji-bounce 0.6s 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
             opacity: 0,
             transform: 'scale(0.5)',
@@ -219,81 +195,43 @@ export default function MilestoneCelebration({
         </div>
 
         {/* Title */}
-        <h2
-          style={{
-            fontSize: '22px',
-            fontWeight: 700,
-            color: 'var(--color-slate)',
-            marginBottom: '8px',
-            lineHeight: 1.3,
-          }}
-        >
+        <h2 className="text-[22px] font-bold text-foreground mb-2 leading-[1.3]">
           {milestone.title}
         </h2>
 
         {/* Description — use celebration_message for extra warmth when available */}
-        <p
-          style={{
-            fontSize: '15px',
-            color: 'var(--color-muted)',
-            lineHeight: 1.6,
-            marginBottom: '24px',
-          }}
-        >
+        <p className="text-[15px] text-muted-foreground leading-[1.6] mb-6">
           {milestone.celebration_message || milestone.description}
         </p>
 
         {/* CTAs */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <div className="flex flex-col gap-[10px]">
           <button
             onClick={handleShareInTribe}
-            style={{
-              width: '100%',
-              padding: '14px 20px',
-              borderRadius: 'var(--radius-md)',
-              border: 'none',
-              background: 'var(--color-primary)',
-              color: '#fff',
-              fontSize: '15px',
-              fontWeight: 600,
-              cursor: 'pointer',
-              minHeight: '48px',
-              transition: 'opacity 0.15s ease',
-            }}
+            className="w-full rounded-md border-none bg-primary text-white text-[15px] font-semibold cursor-pointer min-h-[48px] transition-opacity duration-150 ease-out"
+            style={{ padding: '14px 20px' }}
           >
-            Celebrate with your tribe! {'\uD83C\uDF89'}
+            Celebrate with your tribe! {'🎉'}
           </button>
 
           <button
             onClick={handleSaveToMemories}
             disabled={saving || saved}
+            className="w-full rounded-md text-[15px] font-semibold min-h-[48px] transition-all duration-150 ease-out"
             style={{
-              width: '100%',
               padding: '14px 20px',
-              borderRadius: 'var(--radius-md)',
               border: `1.5px solid ${saved ? '#22C55E' : 'var(--color-border)'}`,
               background: saved ? '#F0FDF4' : 'var(--color-white)',
               color: saved ? '#15803D' : 'var(--color-slate)',
-              fontSize: '15px',
-              fontWeight: 600,
               cursor: saved ? 'default' : 'pointer',
-              minHeight: '48px',
-              transition: 'all 0.15s ease',
             }}
           >
-            {saved ? 'Saved to memories \u2713' : saving ? 'Saving...' : 'Save to memories'}
+            {saved ? 'Saved to memories ✓' : saving ? 'Saving...' : 'Save to memories'}
           </button>
         </div>
 
         {/* Dismiss hint */}
-        <p
-          style={{
-            fontSize: '12px',
-            color: 'var(--color-muted)',
-            marginTop: '16px',
-            opacity: 0.6,
-          }}
-        >
+        <p className="text-[12px] text-muted-foreground mt-4 opacity-60">
           Tap anywhere to dismiss
         </p>
       </div>

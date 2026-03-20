@@ -20,62 +20,34 @@ export default function WellbeingPrompt({ onDismiss }: Props) {
       role="dialog"
       aria-modal="true"
       aria-label="Wellbeing check-in"
+      className="fixed inset-0 z-[200] flex items-end justify-center p-4"
       style={{
-        position: 'fixed',
-        inset: 0,
         background: 'rgba(45, 55, 72, 0.7)',
-        zIndex: 200,
-        display: 'flex',
-        alignItems: 'flex-end',
-        justifyContent: 'center',
-        padding: '16px',
         paddingBottom: 'max(16px, env(safe-area-inset-bottom))',
       }}
     >
       <div
-        className="content-width w-full animate-fade-in"
-        style={{
-          background: 'var(--color-white)',
-          borderRadius: '20px 20px 20px 20px',
-          padding: '28px 24px',
-        }}
+        className="content-width w-full animate-fade-in bg-white rounded-[20px] px-6"
+        style={{ padding: '28px 24px' }}
       >
         {/* Lumira avatar */}
-        <div style={{ marginBottom: '16px' }}>
+        <div className="mb-4">
           <LumiraAvatar size={48} />
         </div>
 
-        <h2
-          className="text-h2 mb-3"
-          style={{ color: 'var(--color-slate)' }}
-        >
+        <h2 className="text-h2 mb-3 text-foreground">
           I hear you
         </h2>
 
-        <p
-          style={{
-            fontSize: '15px',
-            lineHeight: 1.7,
-            color: 'var(--color-slate)',
-            marginBottom: '20px',
-          }}
-        >
+        <p className="text-[15px] leading-[1.7] text-foreground mb-5">
           What you&apos;re going through sounds really hard. You don&apos;t have to navigate this alone — reaching out is one of the bravest things you can do.
         </p>
 
-        <div
-          style={{
-            background: 'var(--color-primary-light)',
-            border: '1px solid var(--color-primary-mid)',
-            borderRadius: 'var(--radius-md)',
-            padding: '14px 16px',
-            marginBottom: '20px',
-          }}
-        >
-          <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-primary)', marginBottom: '4px' }}>
+        <div className="bg-secondary border border-sage-200 rounded-md p-[14px_16px] mb-5">
+          <p className="text-[13px] font-bold text-primary mb-1">
             💙 If you need support right now
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--color-slate)', lineHeight: 1.6 }}>
+          <p className="text-sm text-foreground leading-[1.6]">
             Postpartum Support International: <strong>1-800-944-4773</strong><br />
             Text HOME to <strong>741741</strong> to reach Crisis Text Line
           </p>
@@ -83,24 +55,14 @@ export default function WellbeingPrompt({ onDismiss }: Props) {
 
         <button
           onClick={onDismiss}
-          className="btn-primary"
-          style={{ marginBottom: '8px' }}
+          className="btn-primary mb-2"
         >
           Keep talking with Lumira
         </button>
 
         <button
           onClick={onDismiss}
-          style={{
-            width: '100%',
-            padding: '12px',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            color: 'var(--color-muted)',
-            fontSize: '14px',
-            minHeight: '48px',
-          }}
+          className="w-full p-3 bg-transparent border-none cursor-pointer text-muted-foreground text-sm min-h-[48px]"
         >
           I&apos;m okay, thanks
         </button>

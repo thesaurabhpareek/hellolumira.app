@@ -23,10 +23,9 @@ export default function EscalationBanner({ level }: Props) {
   return (
     <div
       role="alert"
+      className="mb-4 rounded-lg text-sm leading-[1.5]"
       style={{
-        marginBottom: '16px',
         padding: '12px 16px',
-        borderRadius: 'var(--radius-lg)',
         borderLeft: '3px solid',
         borderLeftColor: isUrgent
           ? 'var(--color-red)'
@@ -38,21 +37,17 @@ export default function EscalationBanner({ level }: Props) {
           : isCallDoctor
           ? 'var(--color-amber-light)'
           : 'var(--color-surface)',
-        fontSize: '14px',
-        lineHeight: 1.5,
       }}
     >
       <span
-        style={{
-          fontWeight: 600,
-          color: isUrgent ? 'var(--color-red)' : 'var(--color-amber)',
-        }}
+        className="font-semibold"
+        style={{ color: isUrgent ? 'var(--color-red)' : 'var(--color-amber)' }}
       >
         {isUrgent ? 'Seek care today' : 'Worth calling your pediatrician'}
       </span>
       <span
+        className="ml-2"
         style={{
-          marginLeft: '8px',
           color: isUrgent ? 'var(--color-red)' : 'var(--color-amber)',
           opacity: 0.8,
         }}

@@ -39,50 +39,22 @@ export default function TribePeekCard({ posts }: { posts: TribePostPreview[] }) 
   if (!posts.length) return null
 
   return (
-    <div
-      style={{
-        background: 'var(--color-white)',
-        border: '1px solid var(--color-border)',
-        borderRadius: 'var(--radius-lg)',
-        padding: '20px',
-        marginBottom: '16px',
-      }}
-    >
+    <div className="bg-white border border-border rounded-lg p-5 mb-4">
       {/* Header */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          marginBottom: '16px',
-        }}
-      >
-        <p
-          style={{
-            fontSize: '11px',
-            fontWeight: 700,
-            color: 'var(--color-muted)',
-            textTransform: 'uppercase',
-            letterSpacing: '0.8px',
-          }}
-        >
+      <div className="flex items-center justify-between mb-4">
+        <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-[0.8px]">
           👥 FROM YOUR TRIBE
         </p>
         <Link
           href="/tribe"
-          style={{
-            fontSize: '12px',
-            fontWeight: 600,
-            color: 'var(--color-primary)',
-            textDecoration: 'none',
-          }}
+          className="text-[12px] font-semibold text-primary no-underline"
         >
           See all →
         </Link>
       </div>
 
       {/* Posts */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+      <div className="flex flex-col gap-[14px]">
         {posts.map((post, i) => {
           const preview = post.body.length > 110
             ? post.body.slice(0, 110).trimEnd() + '…'
@@ -91,63 +63,27 @@ export default function TribePeekCard({ posts }: { posts: TribePostPreview[] }) 
           return (
             <div key={post.id}>
               {i > 0 && (
-                <div
-                  style={{
-                    height: '1px',
-                    background: 'var(--color-border)',
-                    marginBottom: '14px',
-                  }}
-                />
+                <div className="h-px bg-border mb-[14px]" />
               )}
               <Link
                 href={`/tribe/${post.tribe_slug}`}
-                style={{ textDecoration: 'none', display: 'block' }}
+                className="no-underline block"
               >
                 {/* Author + tribe */}
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    marginBottom: '6px',
-                  }}
-                >
-                  <span style={{ fontSize: '18px', lineHeight: 1, flexShrink: 0 }}>
+                <div className="flex items-center gap-2 mb-[6px]">
+                  <span className="text-[18px] leading-none shrink-0">
                     {post.author_avatar}
                   </span>
-                  <div style={{ minWidth: 0 }}>
-                    <span
-                      style={{
-                        fontSize: '13px',
-                        fontWeight: 600,
-                        color: 'var(--color-slate)',
-                        marginRight: '6px',
-                      }}
-                    >
+                  <div className="min-w-0">
+                    <span className="text-[13px] font-semibold text-foreground mr-[6px]">
                       {post.author_name}
                     </span>
-                    <span
-                      style={{
-                        fontSize: '12px',
-                        color: 'var(--color-muted)',
-                      }}
-                    >
+                    <span className="text-[12px] text-muted-foreground">
                       in {post.tribe_emoji} {post.tribe_name}
                     </span>
                   </div>
                   {post.post_type !== 'discussion' && (
-                    <span
-                      style={{
-                        marginLeft: 'auto',
-                        fontSize: '11px',
-                        color: 'var(--color-muted)',
-                        flexShrink: 0,
-                        background: 'var(--color-surface)',
-                        padding: '2px 7px',
-                        borderRadius: '8px',
-                        border: '1px solid var(--color-border)',
-                      }}
-                    >
+                    <span className="ml-auto text-[11px] text-muted-foreground shrink-0 bg-background px-[7px] py-[2px] rounded-[8px] border border-border">
                       {POST_TYPE_LABELS[post.post_type] ?? post.post_type}
                     </span>
                   )}
@@ -155,31 +91,21 @@ export default function TribePeekCard({ posts }: { posts: TribePostPreview[] }) 
 
                 {/* Body preview */}
                 <p
-                  style={{
-                    fontSize: '14px',
-                    color: 'var(--color-slate)',
-                    lineHeight: 1.55,
-                    margin: '0 0 8px 26px',
-                  }}
+                  className="text-sm text-foreground leading-[1.55] mb-2"
+                  style={{ margin: '0 0 8px 26px' }}
                 >
                   {post.emoji_tag && (
-                    <span style={{ marginRight: '4px' }}>{post.emoji_tag}</span>
+                    <span className="mr-1">{post.emoji_tag}</span>
                   )}
                   &ldquo;{preview}&rdquo;
                 </p>
 
                 {/* Reactions / comments */}
-                <div
-                  style={{
-                    display: 'flex',
-                    gap: '12px',
-                    marginLeft: '26px',
-                  }}
-                >
-                  <span style={{ fontSize: '12px', color: 'var(--color-muted)' }}>
+                <div className="flex gap-3" style={{ marginLeft: '26px' }}>
+                  <span className="text-[12px] text-muted-foreground">
                     {REACTION_EMOJI} {post.reaction_count}
                   </span>
-                  <span style={{ fontSize: '12px', color: 'var(--color-muted)' }}>
+                  <span className="text-[12px] text-muted-foreground">
                     {COMMENT_EMOJI} {post.comment_count}
                   </span>
                 </div>
@@ -190,31 +116,13 @@ export default function TribePeekCard({ posts }: { posts: TribePostPreview[] }) 
       </div>
 
       {/* Join prompt */}
-      <div
-        style={{
-          marginTop: '16px',
-          paddingTop: '14px',
-          borderTop: '1px solid var(--color-border)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
-      >
-        <p style={{ fontSize: '13px', color: 'var(--color-muted)', margin: 0 }}>
+      <div className="mt-4 pt-[14px] border-t border-border flex items-center justify-between">
+        <p className="text-[13px] text-muted-foreground m-0">
           Join the conversation with other parents
         </p>
         <Link
           href="/tribe"
-          style={{
-            fontSize: '13px',
-            fontWeight: 600,
-            color: 'var(--color-white)',
-            background: 'var(--color-primary)',
-            padding: '6px 14px',
-            borderRadius: 'var(--radius-md)',
-            textDecoration: 'none',
-            whiteSpace: 'nowrap',
-          }}
+          className="text-[13px] font-semibold text-white bg-primary px-[14px] py-[6px] rounded-md no-underline whitespace-nowrap"
         >
           Explore tribes
         </Link>

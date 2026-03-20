@@ -87,39 +87,14 @@ export default function QuizCard({
   }
 
   return (
-    <div
-      style={{
-        background: 'var(--color-white)',
-        border: '1px solid var(--color-border)',
-        borderRadius: 'var(--radius-lg)',
-        padding: '20px',
-        marginBottom: '16px',
-      }}
-    >
+    <div className="bg-white border border-border rounded-lg p-5 mb-4">
       {/* Label */}
-      <p
-        style={{
-          fontSize: '11px',
-          fontWeight: 700,
-          color: 'var(--color-muted)',
-          textTransform: 'uppercase',
-          letterSpacing: '0.8px',
-          marginBottom: '12px',
-        }}
-      >
+      <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-[0.8px] mb-3">
         🧠 QUICK QUIZ
       </p>
 
       {/* Question */}
-      <p
-        style={{
-          fontSize: '15px',
-          fontWeight: 600,
-          color: 'var(--color-slate)',
-          lineHeight: 1.5,
-          marginBottom: '16px',
-        }}
-      >
+      <p className="text-[15px] font-semibold text-foreground leading-[1.5] mb-4">
         {question}
       </p>
 
@@ -133,13 +108,7 @@ export default function QuizCard({
             style={getOptionStyle(i)}
             aria-pressed={selected === i}
           >
-            <span
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-              }}
-            >
+            <span className="inline-flex items-center gap-2">
               {/* Indicator dot / checkmark */}
               <span
                 style={{
@@ -178,47 +147,27 @@ export default function QuizCard({
       {/* Revealed explanation */}
       {revealed && (
         <div
-          className="animate-fade-in"
+          className="animate-fade-in mt-4 rounded-md"
           style={{
-            marginTop: '16px',
             padding: '14px 16px',
             background: isCorrect ? '#F0FDF4' : '#FFF7ED',
             border: `1px solid ${isCorrect ? '#BBF7D0' : '#FED7AA'}`,
-            borderRadius: 'var(--radius-md)',
           }}
         >
           <p
-            style={{
-              fontSize: '13px',
-              fontWeight: 700,
-              color: isCorrect ? '#15803D' : '#9A3412',
-              marginBottom: '6px',
-            }}
+            className="text-[13px] font-bold mb-[6px]"
+            style={{ color: isCorrect ? '#15803D' : '#9A3412' }}
           >
             {isCorrect ? '✓ Correct!' : `✕ Not quite — the answer is: ${options[answerIndex]}`}
           </p>
-          <p
-            style={{
-              fontSize: '13px',
-              color: 'var(--color-slate)',
-              lineHeight: 1.6,
-              margin: 0,
-            }}
-          >
+          <p className="text-[13px] text-foreground leading-[1.6] m-0">
             {explanation}
           </p>
         </div>
       )}
 
       {!revealed && (
-        <p
-          style={{
-            fontSize: '12px',
-            color: 'var(--color-muted)',
-            marginTop: '12px',
-            textAlign: 'center',
-          }}
-        >
+        <p className="text-[12px] text-muted-foreground mt-3 text-center">
           Tap an option to reveal the answer
         </p>
       )}

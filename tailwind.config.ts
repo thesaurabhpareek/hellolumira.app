@@ -1,5 +1,5 @@
 // tailwind.config.ts — Lumira Tailwind configuration
-// v1.1 — Switched shadcn colour wrappers from hsl() to rgb() to match CSS token format
+// v1.2 — Added Lumira design tokens (sage, terra, sand, status)
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -11,6 +11,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // ── shadcn/ui semantic tokens (RGB-triplet CSS vars) ──────────────────
         background: "rgb(var(--background) / <alpha-value>)",
         foreground: "rgb(var(--foreground) / <alpha-value>)",
         card: {
@@ -44,6 +45,32 @@ const config: Config = {
         border: "rgb(var(--border) / <alpha-value>)",
         input:  "rgb(var(--input) / <alpha-value>)",
         ring:   "rgb(var(--ring) / <alpha-value>)",
+
+        // ── Lumira design tokens (hex named aliases) ──────────────────────────
+        // Sage (primary green) — mirrors --color-primary-*
+        sage: {
+          50:  '#EDF4F2',   // --color-primary-light
+          200: '#A8CECA',   // --color-primary-mid
+          500: '#3D8178',   // --color-primary
+          600: '#336B63',
+        },
+        // Terra (accent warm orange) — mirrors --color-accent-*
+        terra: {
+          50:  '#FDF0E6',   // --color-accent-light
+          400: '#C4844E',   // --color-accent
+        },
+        // Sand (neutral base) — mirrors --color-surface
+        sand: {
+          0: '#FAFAF8',
+        },
+        // Status semantic colours
+        'status-amber':       '#D69E2E',
+        'status-amber-light': '#FFFFF0',
+        'status-amber-dark':  '#744210',
+        'status-green':       '#276749',
+        'status-green-light': '#F0FFF4',
+        'status-red-light':   '#FFF5F5',
+        'status-red-dark':    '#822727',
       },
       borderRadius: {
         sm: "var(--radius-sm)",
@@ -56,6 +83,12 @@ const config: Config = {
       },
       maxWidth: {
         content: "480px",
+      },
+      height: {
+        dvh: '100dvh',
+      },
+      minHeight: {
+        dvh: '100dvh',
       },
     },
   },

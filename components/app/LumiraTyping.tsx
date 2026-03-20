@@ -61,38 +61,20 @@ export default function LumiraTyping() {
       role="status"
       aria-live="polite"
       aria-label="Lumira is typing"
-      style={{
-        display: 'flex',
-        alignItems: 'flex-start',
-        gap: '8px',
-        marginBottom: '8px',
-      }}
+      className="flex items-start gap-2 mb-2"
     >
       {/* Lumira avatar */}
-      <div style={{ flexShrink: 0, paddingTop: '2px' }}>
+      <div className="shrink-0 pt-0.5">
         <LumiraAvatar size={28} />
       </div>
 
       {/* Enhanced typing bubble */}
       <div
-        className="bubble-lumira"
-        style={{
-          padding: '14px 18px',
-          minHeight: '64px',
-          maxWidth: '260px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '10px',
-        }}
+        className="bubble-lumira flex flex-col gap-[10px]"
+        style={{ padding: '14px 18px', minHeight: '64px', maxWidth: '260px' }}
       >
         {/* Message with emoji */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-          }}
-        >
+        <div className="flex items-center gap-2">
           <span
             key={messageIndex}
             style={{
@@ -105,39 +87,26 @@ export default function LumiraTyping() {
           </span>
           <span
             key={`text-${messageIndex}`}
-            style={{
-              fontSize: '14px',
-              fontWeight: 500,
-              color: 'var(--color-slate)',
-              animation: 'lumiraTextSlide 0.3s ease',
-            }}
+            className="text-sm font-medium text-foreground"
+            style={{ animation: 'lumiraTextSlide 0.3s ease' }}
           >
             {current.text}
           </span>
         </div>
 
         {/* Mini progress bar */}
-        <div
-          style={{
-            height: '3px',
-            borderRadius: '2px',
-            background: '#E5E7EB',
-            overflow: 'hidden',
-          }}
-        >
+        <div className="h-[3px] rounded-sm bg-[#E5E7EB] overflow-hidden">
           <div
+            className="h-full rounded-sm transition-[width] duration-300 ease-in-out"
             style={{
-              height: '100%',
               width: `${progress}%`,
-              borderRadius: '2px',
               background: 'linear-gradient(90deg, var(--color-primary), #5BA89F)',
-              transition: 'width 0.3s ease',
             }}
           />
         </div>
 
         {/* Dots row with optional seed */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+        <div className="flex items-center gap-[6px]">
           <div className="typing-dot" />
           <div className="typing-dot" />
           <div className="typing-dot" />
@@ -145,11 +114,8 @@ export default function LumiraTyping() {
           {/* Seed bonus hint */}
           {showSeed && (
             <span
+              className="ml-auto text-[11px] font-semibold text-accent"
               style={{
-                marginLeft: 'auto',
-                fontSize: '11px',
-                fontWeight: 600,
-                color: 'var(--color-accent)',
                 opacity: 0.8,
                 animation: 'lumiraSeedBounce 0.5s ease',
               }}

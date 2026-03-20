@@ -29,26 +29,10 @@ export default function JournalEntryCard({ entry }: Props) {
       className="lumira-card"
       style={{ borderLeft: '3px solid var(--color-accent)' }}
     >
-      <p
-        style={{
-          fontSize: '12px',
-          fontWeight: 600,
-          color: 'var(--color-muted)',
-          textTransform: 'uppercase',
-          letterSpacing: '0.4px',
-          marginBottom: '10px',
-        }}
-      >
+      <p className="text-[12px] font-semibold text-muted-foreground uppercase tracking-[0.4px] mb-[10px]">
         {dateLabel}
       </p>
-      <p
-        style={{
-          fontSize: '15px',
-          lineHeight: 1.7,
-          color: 'var(--color-slate)',
-          whiteSpace: 'pre-wrap',
-        }}
-      >
+      <p className="text-[15px] leading-[1.7] text-foreground whitespace-pre-wrap">
         {preview}
       </p>
     </div>

@@ -110,32 +110,21 @@ export default function SuggestedPromptsRow({
   if (layout === 'scroll') {
     return (
       <div
-        className="no-scrollbar"
+        className="no-scrollbar pb-1"
         style={{
           overflowX: 'auto',
-          paddingBottom: '4px',
           WebkitOverflowScrolling: 'touch',
           scrollbarWidth: 'none',
         }}
       >
-        <div style={{ display: 'flex', gap: '8px', width: 'max-content' }}>
+        <div className="flex gap-2" style={{ width: 'max-content' }}>
           {displayPrompts.map((prompt, i) => (
             <button
               key={i}
               onClick={() => onSelect(prompt.message)}
+              className="shrink-0 min-h-[48px] px-4 text-sm font-medium text-primary bg-secondary border border-sage-200 cursor-pointer whitespace-nowrap transition-all duration-150 ease-out"
               style={{
-                flexShrink: 0,
-                minHeight: '48px',
-                padding: '0 16px',
-                fontSize: '14px',
-                fontWeight: 500,
                 borderRadius: '24px',
-                background: 'var(--color-primary-light)',
-                border: '1px solid var(--color-primary-mid)',
-                color: 'var(--color-primary)',
-                cursor: 'pointer',
-                whiteSpace: 'nowrap',
-                transition: 'all 0.15s ease',
                 touchAction: 'manipulation',
                 WebkitTapHighlightColor: 'transparent',
               }}
@@ -150,32 +139,13 @@ export default function SuggestedPromptsRow({
 
   // Grid layout
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        gap: '8px',
-      }}
-    >
+    <div className="grid grid-cols-2 gap-2">
       {displayPrompts.map((prompt, i) => (
         <button
           key={i}
           onClick={() => onSelect(prompt.message)}
+          className="p-[14px_16px] text-sm font-medium leading-[1.4] rounded-lg bg-white border border-border text-foreground cursor-pointer text-left transition-all duration-150 ease-out min-h-[64px] flex items-center"
           style={{
-            padding: '14px 16px',
-            fontSize: '14px',
-            fontWeight: 500,
-            lineHeight: 1.4,
-            borderRadius: 'var(--radius-lg)',
-            background: 'var(--color-white)',
-            border: '1px solid var(--color-border)',
-            color: 'var(--color-slate)',
-            cursor: 'pointer',
-            textAlign: 'left',
-            transition: 'all 0.15s ease',
-            minHeight: '64px',
-            display: 'flex',
-            alignItems: 'center',
             touchAction: 'manipulation',
             WebkitTapHighlightColor: 'transparent',
           }}

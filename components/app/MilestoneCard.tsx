@@ -1,8 +1,8 @@
 /**
  * @module MilestoneCard
  * @description Renders a single developmental milestone with type-specific
- *   emoji, date, and description. Uses a lookup table for milestone type emojis.
- * @version 1.0.0
+ *   emoji, date, and description.
+ * @version 1.1.0 — Migrated inline styles → Tailwind classes
  * @since March 2026
  */
 import type { Milestone, MilestoneType } from '@/types/app'
@@ -55,36 +55,17 @@ export default function MilestoneCard({ milestone }: Props) {
   })
 
   return (
-    <div
-      className="lumira-card"
-      style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}
-    >
-      <div
-        style={{
-          width: '48px',
-          height: '48px',
-          borderRadius: 'var(--radius-md)',
-          background: 'var(--color-primary-light)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '24px',
-          flexShrink: 0,
-        }}
-      >
+    <div className="lumira-card flex items-start gap-4">
+      <div className="w-12 h-12 rounded-md bg-secondary flex items-center justify-center text-2xl shrink-0">
         {emoji}
       </div>
-      <div style={{ flex: 1 }}>
-        <p style={{ fontWeight: 700, fontSize: '16px', color: 'var(--color-slate)', marginBottom: '2px' }}>
-          {label}
-        </p>
-        <p style={{ fontSize: '13px', color: 'var(--color-muted)', marginBottom: milestone.notes ? '8px' : '0' }}>
+      <div className="flex-1">
+        <p className="font-bold text-base text-foreground mb-0.5">{label}</p>
+        <p className={`text-[13px] text-muted-foreground ${milestone.notes ? 'mb-2' : 'mb-0'}`}>
           {dateLabel}
         </p>
         {milestone.notes && (
-          <p style={{ fontSize: '14px', color: 'var(--color-slate)', lineHeight: 1.6 }}>
-            {milestone.notes}
-          </p>
+          <p className="text-sm text-foreground leading-relaxed">{milestone.notes}</p>
         )}
       </div>
     </div>

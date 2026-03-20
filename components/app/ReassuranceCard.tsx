@@ -2,7 +2,7 @@
  * @module ReassuranceCard
  * @description Soft reassurance card displaying a normalising message to
  *   help parents feel confident about common concerns.
- * @version 1.0.0
+ * @version 1.1.0 — Migrated inline styles → Tailwind classes
  * @since March 2026
  */
 interface Props {
@@ -11,40 +11,11 @@ interface Props {
 
 export default function ReassuranceCard({ message }: Props) {
   return (
-    <div
-      style={{
-        background: 'var(--color-green-light)',
-        border: '1px solid #9AE6B4',
-        borderRadius: 'var(--radius-lg)',
-        padding: '16px 20px',
-        display: 'flex',
-        alignItems: 'flex-start',
-        gap: '12px',
-      }}
-    >
-      <div
-        style={{
-          width: '28px',
-          height: '28px',
-          borderRadius: '50%',
-          background: 'var(--color-green)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexShrink: 0,
-        }}
-      >
-        <span style={{ color: 'white', fontSize: '14px', fontWeight: 700 }}>✓</span>
+    <div className="bg-status-green-light border border-[#9AE6B4] rounded-lg px-5 py-4 flex items-start gap-3">
+      <div className="w-7 h-7 rounded-full bg-status-green flex items-center justify-center shrink-0">
+        <span className="text-white text-sm font-bold">✓</span>
       </div>
-      <p
-        style={{
-          fontSize: '14px',
-          lineHeight: 1.7,
-          color: 'var(--color-slate)',
-        }}
-      >
-        {message}
-      </p>
+      <p className="text-sm leading-[1.7] text-foreground">{message}</p>
     </div>
   )
 }

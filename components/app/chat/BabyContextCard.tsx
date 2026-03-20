@@ -19,54 +19,25 @@ export default function BabyContextCard({ baby, ageInfo }: Props) {
   const [isExpanded, setIsExpanded] = useState(false)
 
   return (
-    <div
-      style={{
-        background: 'var(--color-primary-light)',
-        border: '1px solid var(--color-primary-mid)',
-        borderRadius: 'var(--radius-lg)',
-        marginBottom: '16px',
-        overflow: 'hidden',
-      }}
-    >
+    <div className="bg-secondary border border-sage-200 rounded-lg mb-4 overflow-hidden">
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        style={{
-          width: '100%',
-          padding: '12px 16px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          background: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          textAlign: 'left',
-        }}
+        className="w-full px-4 py-3 flex items-center justify-between bg-transparent border-none cursor-pointer text-left"
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div className="flex items-center gap-[10px]">
           {/* Baby icon */}
-          <div
-            style={{
-              width: '32px',
-              height: '32px',
-              borderRadius: '50%',
-              background: 'var(--color-primary)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-            }}
-          >
-            <span style={{ color: 'white', fontSize: '14px' }}>
-              {baby.stage === 'pregnancy' ? '\u2728' : '\uD83D\uDC76'}
+          <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0">
+            <span className="text-white text-sm">
+              {baby.stage === 'pregnancy' ? '✨' : '👶'}
             </span>
           </div>
           <div>
-            <p style={{ fontWeight: 600, fontSize: '14px', color: 'var(--color-slate)' }}>
+            <p className="font-semibold text-sm text-foreground">
               {baby.stage === 'pregnancy'
                 ? `Week ${ageInfo.pregnancy_week || '?'}`
                 : (baby.name || 'Baby')}
             </p>
-            <p style={{ fontSize: '12px', color: 'var(--color-muted)' }}>
+            <p className="text-[12px] text-muted-foreground">
               {ageInfo.age_display_string}
             </p>
           </div>
@@ -94,19 +65,10 @@ export default function BabyContextCard({ baby, ageInfo }: Props) {
       {/* Expanded details */}
       {isExpanded && (
         <div
-          style={{
-            padding: '0 16px 14px',
-            borderTop: '1px solid var(--color-primary-mid)',
-          }}
+          className="px-4 pb-[14px]"
+          style={{ borderTop: '1px solid var(--color-primary-mid)' }}
         >
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: '8px',
-              paddingTop: '12px',
-            }}
-          >
+          <div className="grid grid-cols-2 gap-2 pt-3">
             {baby.stage === 'pregnancy' && (
               <>
                 <DetailItem label="Due date" value={baby.due_date || 'Not set'} />
@@ -148,10 +110,10 @@ export default function BabyContextCard({ baby, ageInfo }: Props) {
 function DetailItem({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <p style={{ fontSize: '11px', color: 'var(--color-muted)', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.3px' }}>
+      <p className="text-[11px] text-muted-foreground font-medium uppercase tracking-[0.3px]">
         {label}
       </p>
-      <p style={{ fontSize: '14px', color: 'var(--color-slate)', fontWeight: 500, marginTop: '2px' }}>
+      <p className="text-sm text-foreground font-medium mt-0.5">
         {value}
       </p>
     </div>

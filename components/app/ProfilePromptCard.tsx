@@ -14,77 +14,25 @@ export default function ProfilePromptCard({ missingItem }: ProfilePromptCardProp
   if (dismissed) return null
 
   return (
-    <div
-      style={{
-        position: 'relative',
-        background: '#FFF7ED',
-        border: '1.5px solid #C4844E',
-        borderRadius: 'var(--radius-lg)',
-        padding: '20px',
-        marginBottom: '16px',
-      }}
-    >
+    <div className="relative bg-terra-50 border-[1.5px] border-accent rounded-lg p-5 mb-4">
       {/* Dismiss button */}
       <button
         onClick={() => setDismissed(true)}
         aria-label="Dismiss"
-        style={{
-          position: 'absolute',
-          top: '12px',
-          right: '12px',
-          width: '48px',
-          height: '48px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          color: '#C4844E',
-          fontSize: '20px',
-          padding: 0,
-        }}
+        className="absolute top-3 right-3 w-12 h-12 flex items-center justify-center bg-transparent border-none cursor-pointer text-accent text-[20px] p-0"
       >
         ✕
       </button>
 
-      <p
-        style={{
-          fontSize: '16px',
-          fontWeight: 700,
-          color: '#1A1A1A',
-          marginBottom: '6px',
-          paddingRight: '36px',
-        }}
-      >
+      <p className="text-[16px] font-bold text-foreground mb-[6px] pr-9">
         Help Lumira personalise your experience
       </p>
-      <p
-        style={{
-          fontSize: '14px',
-          color: '#6B7280',
-          lineHeight: 1.5,
-          marginBottom: '16px',
-        }}
-      >
+      <p className="text-sm text-muted-foreground leading-[1.5] mb-4">
         {missingItem || 'A couple of quick questions about your feeding approach'}
       </p>
       <Link
         href="/profile"
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '48px',
-          padding: '0 24px',
-          borderRadius: 'var(--radius-md)',
-          background: '#C4844E',
-          color: '#FFFFFF',
-          fontSize: '15px',
-          fontWeight: 600,
-          textDecoration: 'none',
-          transition: 'opacity 0.15s ease',
-        }}
+        className="inline-flex items-center justify-center h-12 px-6 rounded-md bg-accent text-white text-[15px] font-semibold no-underline transition-opacity duration-150 ease-out"
       >
         Answer 2 quick questions
       </Link>

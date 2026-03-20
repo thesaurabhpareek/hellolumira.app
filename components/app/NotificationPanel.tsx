@@ -93,58 +93,39 @@ function NotificationRow({
     <button
       type="button"
       onClick={() => onTap(notification.id, notification.action_url)}
+      className="flex items-start gap-3 w-full min-h-[48px] border-none cursor-pointer text-left transition-[background] duration-150 ease-in-out"
       style={{
-        display: 'flex',
-        alignItems: 'flex-start',
-        gap: '12px',
-        width: '100%',
         padding: '12px 16px',
-        minHeight: '48px',
         background: notification.is_read ? '#FFFFFF' : SAND_0,
-        border: 'none',
         borderLeft: borderColor ? `3px solid ${borderColor}` : '3px solid transparent',
         borderBottom: `1px solid ${SAND_100}`,
-        cursor: 'pointer',
-        textAlign: 'left',
         fontFamily: "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         WebkitTapHighlightColor: 'transparent',
-        transition: 'background 0.15s ease',
       }}
     >
       {/* Emoji */}
       <span
-        style={{
-          fontSize: '20px',
-          lineHeight: 1,
-          flexShrink: 0,
-          marginTop: '2px',
-        }}
+        className="text-[20px] leading-none shrink-0 mt-0.5"
         aria-hidden="true"
       >
-        {notification.emoji || '\uD83D\uDD14'}
+        {notification.emoji || '🔔'}
       </span>
 
       {/* Content */}
-      <div style={{ flex: 1, minWidth: 0 }}>
+      <div className="flex-1 min-w-0">
         <div
+          className="text-sm leading-[1.4] mb-0.5"
           style={{
-            fontSize: '14px',
             fontWeight: notification.is_read ? 500 : 600,
             color: '#2D3748',
-            lineHeight: 1.4,
-            marginBottom: '2px',
           }}
         >
           {notification.title}
         </div>
         <div
+          className="text-[13px] font-normal leading-[1.4] overflow-hidden text-ellipsis"
           style={{
-            fontSize: '13px',
-            fontWeight: 400,
             color: SAND_500,
-            lineHeight: 1.4,
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
             display: '-webkit-box',
             WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical',
@@ -155,34 +136,14 @@ function NotificationRow({
       </div>
 
       {/* Time + unread dot */}
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-end',
-          gap: '6px',
-          flexShrink: 0,
-          marginTop: '2px',
-        }}
-      >
-        <span
-          style={{
-            fontSize: '12px',
-            color: SAND_500,
-            whiteSpace: 'nowrap',
-          }}
-        >
+      <div className="flex flex-col items-end gap-[6px] shrink-0 mt-0.5">
+        <span className="text-[12px] whitespace-nowrap" style={{ color: SAND_500 }}>
           {timeAgo(notification.created_at)}
         </span>
         {!notification.is_read && (
           <span
-            style={{
-              width: '8px',
-              height: '8px',
-              borderRadius: '50%',
-              background: SAGE_500,
-              flexShrink: 0,
-            }}
+            className="w-2 h-2 rounded-full shrink-0"
+            style={{ background: SAGE_500 }}
           />
         )}
       </div>
@@ -237,11 +198,9 @@ export function NotificationPanel({
       {/* Backdrop overlay - transparent on desktop, subtle on mobile */}
       <div
         onClick={onClose}
+        className="fixed inset-0 z-[199]"
         style={{
-          position: 'fixed',
-          inset: 0,
           background: 'rgba(0, 0, 0, 0.15)',
-          zIndex: 199,
           animation: 'notif-backdrop-in 0.15s ease',
         }}
         aria-hidden="true"
@@ -253,87 +212,54 @@ export function NotificationPanel({
         role="dialog"
         aria-label="Notifications"
         aria-modal="true"
+        className="absolute top-full right-0 mt-1 z-[200] bg-white flex flex-col overflow-hidden"
         style={{
-          position: 'absolute',
-          top: '100%',
-          right: 0,
-          marginTop: '4px',
           width: 'min(400px, calc(100vw - 24px))',
           maxHeight: '70vh',
-          zIndex: 200,
-          background: '#FFFFFF',
           borderRadius: '12px',
           boxShadow: '0 8px 30px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08)',
-          display: 'flex',
-          flexDirection: 'column',
           animation: 'notif-dropdown-in 0.2s ease',
           fontFamily: "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-          overflow: 'hidden',
           border: `1px solid ${SAND_100}`,
         }}
       >
         {/* Arrow / caret pointing up toward the bell */}
         <div
+          className="absolute right-[18px] w-3 h-3 bg-white z-[1]"
           style={{
-            position: 'absolute',
             top: '-6px',
-            right: '18px',
-            width: '12px',
-            height: '12px',
-            background: '#FFFFFF',
             border: `1px solid ${SAND_100}`,
             borderRight: 'none',
             borderBottom: 'none',
             transform: 'rotate(45deg)',
-            zIndex: 1,
           }}
           aria-hidden="true"
         />
 
         {/* Header */}
         <div
+          className="flex items-center justify-between relative z-[2] bg-white"
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
             padding: '14px 16px 10px',
             borderBottom: `1px solid ${SAND_100}`,
-            position: 'relative',
-            zIndex: 2,
-            background: '#FFFFFF',
           }}
         >
           <h2
-            style={{
-              fontSize: '17px',
-              fontWeight: 700,
-              color: '#2D3748',
-              margin: 0,
-              letterSpacing: '-0.2px',
-            }}
+            className="text-[17px] font-bold m-0"
+            style={{ color: '#2D3748', letterSpacing: '-0.2px' }}
           >
             Notifications
           </h2>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <div className="flex items-center gap-1">
             {hasNotifications && (
               <button
                 type="button"
                 onClick={onMarkAllRead}
+                className="text-[13px] font-medium bg-transparent border-none cursor-pointer px-[10px] py-[6px] rounded-[6px] min-h-[32px] flex items-center transition-[background] duration-150 ease-in-out"
                 style={{
-                  fontSize: '13px',
-                  fontWeight: 500,
                   color: SAGE_500,
-                  background: 'transparent',
-                  border: 'none',
-                  cursor: 'pointer',
-                  padding: '6px 10px',
-                  borderRadius: '6px',
-                  minHeight: '32px',
-                  display: 'flex',
-                  alignItems: 'center',
                   WebkitTapHighlightColor: 'transparent',
-                  transition: 'background 0.15s ease',
                 }}
               >
                 Mark all read
@@ -344,20 +270,11 @@ export function NotificationPanel({
               type="button"
               onClick={onClose}
               aria-label="Close notifications"
+              className="w-8 h-8 flex items-center justify-center border-none cursor-pointer rounded-full p-0 transition-[background] duration-150 ease-in-out"
               style={{
-                width: '32px',
-                height: '32px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
                 background: SAND_0,
-                border: 'none',
-                cursor: 'pointer',
-                borderRadius: '50%',
                 color: SAND_500,
-                padding: 0,
                 WebkitTapHighlightColor: 'transparent',
-                transition: 'background 0.15s ease',
               }}
             >
               <CloseIcon size={16} />
@@ -367,16 +284,15 @@ export function NotificationPanel({
 
         {/* Content */}
         <div
+          className="flex-1 overflow-y-auto"
           style={{
-            flex: 1,
-            overflowY: 'auto',
             WebkitOverflowScrolling: 'touch',
             overscrollBehavior: 'contain',
           }}
         >
           {loading && (
-            <div style={{ padding: '40px 16px', textAlign: 'center' }}>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
+            <div className="py-10 px-4 text-center">
+              <div className="flex justify-center gap-[6px]">
                 <span className="typing-dot" />
                 <span className="typing-dot" />
                 <span className="typing-dot" />
@@ -385,44 +301,20 @@ export function NotificationPanel({
           )}
 
           {error && !loading && (
-            <div
-              style={{
-                padding: '40px 16px',
-                textAlign: 'center',
-                color: SAND_500,
-                fontSize: '14px',
-              }}
-            >
+            <div className="py-10 px-4 text-center text-sm" style={{ color: SAND_500 }}>
               Couldn&apos;t load notifications right now. Try closing and reopening.
             </div>
           )}
 
           {!loading && !error && !hasNotifications && (
-            <div
-              style={{
-                padding: '48px 16px',
-                textAlign: 'center',
-              }}
-            >
-              <div style={{ fontSize: '28px', marginBottom: '10px' }}>
+            <div className="py-12 px-4 text-center">
+              <div className="text-[28px] mb-[10px]">
                 &#x2728;
               </div>
-              <div
-                style={{
-                  fontSize: '15px',
-                  fontWeight: 600,
-                  color: '#2D3748',
-                  marginBottom: '4px',
-                }}
-              >
+              <div className="text-[15px] font-semibold mb-1" style={{ color: '#2D3748' }}>
                 You&apos;re all caught up
               </div>
-              <div
-                style={{
-                  fontSize: '13px',
-                  color: SAND_500,
-                }}
-              >
+              <div className="text-[13px]" style={{ color: SAND_500 }}>
                 No new notifications right now
               </div>
             </div>
@@ -484,13 +376,10 @@ export function NotificationPanel({
 function SectionHeader({ label }: { label: string }) {
   return (
     <div
+      className="text-[12px] font-semibold uppercase tracking-[0.5px]"
       style={{
         padding: '10px 16px 4px',
-        fontSize: '12px',
-        fontWeight: 600,
         color: SAND_500,
-        textTransform: 'uppercase',
-        letterSpacing: '0.5px',
         background: SAND_0,
       }}
     >

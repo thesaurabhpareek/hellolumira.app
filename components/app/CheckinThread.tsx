@@ -203,13 +203,13 @@ export default function CheckinThread({ profile, baby, existingCheckin, prefill 
 
     const PREFILL_LABELS: Record<string, Record<string, string>> = {
       sleep_quality: {
-        poor: 'Got it \u2014 sleep was rough last night',
-        ok: 'Got it \u2014 sleep was okay last night',
-        good: 'Got it \u2014 sleep went well last night',
+        poor: 'Got it — sleep was rough last night',
+        ok: 'Got it — sleep was okay last night',
+        good: 'Got it — sleep went well last night',
       },
     }
 
-    const toastMsg = PREFILL_LABELS[prefill.field]?.[prefill.value] || `Got it \u2014 ${prefill.field}: ${prefill.value}`
+    const toastMsg = PREFILL_LABELS[prefill.field]?.[prefill.value] || `Got it — ${prefill.field}: ${prefill.value}`
     setPrefillToast(toastMsg)
 
     // Auto-dismiss toast after 4 seconds
@@ -333,32 +333,17 @@ export default function CheckinThread({ profile, baby, existingCheckin, prefill 
 
   return (
     <div
-      style={{
-        minHeight: '100dvh',
-        background: 'var(--color-surface)',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
+      className="flex flex-col"
+      style={{ minHeight: '100dvh', background: 'var(--color-surface)' }}
     >
       {/* Prefill toast from email link */}
       {prefillToast && (
         <div
-          className="animate-fade-in"
+          className="animate-fade-in fixed top-4 left-1/2 bg-primary text-white rounded-md text-sm font-semibold z-[100] text-center max-w-[90vw]"
           style={{
-            position: 'fixed',
-            top: '16px',
-            left: '50%',
             transform: 'translateX(-50%)',
-            background: 'var(--color-primary)',
-            color: '#ffffff',
             padding: '10px 20px',
-            borderRadius: 'var(--radius-md)',
-            fontSize: '14px',
-            fontWeight: 600,
-            zIndex: 100,
             boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-            maxWidth: '90vw',
-            textAlign: 'center',
           }}
         >
           {prefillToast}
@@ -372,53 +357,29 @@ export default function CheckinThread({ profile, baby, existingCheckin, prefill 
 
       {/* Messages area */}
       <div
+        className="flex-1 overflow-y-auto overflow-x-hidden p-4"
         style={{
-          flex: 1,
-          overflowY: 'auto',
-          overflowX: 'hidden',
           overscrollBehavior: 'contain',
           WebkitOverflowScrolling: 'touch',
-          padding: '16px',
           paddingBottom: 'calc(120px + 56px + max(0px, env(safe-area-inset-bottom)))',
         }}
       >
         <div className="content-width mx-auto">
           {/* Header */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-              marginBottom: '24px',
-              padding: '12px 0',
-              borderBottom: '1px solid var(--color-border)',
-            }}
-          >
+          <div className="flex items-center gap-3 mb-6 py-3 border-b border-border">
             <button
               onClick={() => router.push('/home')}
               aria-label="Back to home"
-              style={{
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                color: '#3D8178',
-                fontSize: '14px',
-                fontWeight: 600,
-                padding: '16px 0',
-                minHeight: '48px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px',
-                touchAction: 'manipulation',
-              }}
+              className="bg-transparent border-none cursor-pointer text-primary text-sm font-semibold py-4 min-h-[48px] flex items-center gap-1"
+              style={{ touchAction: 'manipulation' }}
             >
               &larr; Back
             </button>
             <div>
-              <p style={{ fontWeight: 700, color: 'var(--color-slate)', fontSize: '16px' }}>
+              <p className="font-bold text-foreground text-base">
                 How are you?
               </p>
-              <p style={{ fontSize: '13px', color: 'var(--color-muted)' }}>
+              <p className="text-[13px] text-muted-foreground">
                 {new Date().toLocaleDateString('en-US', {
                   weekday: 'long',
                   month: 'short',
@@ -434,15 +395,15 @@ export default function CheckinThread({ profile, baby, existingCheckin, prefill 
             if (msg.role === 'lumira') {
               const lumiraMsg = msg as LumiraMessage
               return (
-                <div key={i} className="animate-fade-in" style={{ marginBottom: '16px' }}>
-                  <div style={{ display: 'flex', alignItems: 'flex-end', gap: '8px' }}>
+                <div key={i} className="animate-fade-in mb-4">
+                  <div className="flex items-end gap-2">
                     {/* Avatar */}
-                    <div style={{ flexShrink: 0 }}>
+                    <div className="shrink-0">
                       <LumiraAvatar size={28} />
                     </div>
 
                     <div className="bubble-lumira">
-                      <p style={{ fontSize: '15px', lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>
+                      <p className="text-[15px] leading-[1.6] whitespace-pre-wrap">
                         {lumiraMsg.content}
                       </p>
                     </div>
@@ -450,7 +411,7 @@ export default function CheckinThread({ profile, baby, existingCheckin, prefill 
 
                   {/* Structured fields appear below last Lumira message */}
                   {i === messages.length - 1 && pendingFields && pendingFields.length > 0 && (
-                    <div style={{ marginLeft: '36px', marginTop: '12px' }}>
+                    <div className="ml-9 mt-3">
                       <StructuredFieldChips
                         fields={pendingFields}
                         onSelect={handleFieldSelect}
@@ -460,25 +421,8 @@ export default function CheckinThread({ profile, baby, existingCheckin, prefill 
 
                   {/* Complete indicator */}
                   {lumiraMsg.checkin_complete && i === messages.length - 1 && (
-                    <div
-                      style={{
-                        marginLeft: '36px',
-                        marginTop: '12px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '6px',
-                      }}
-                    >
-                      <span
-                        style={{
-                          fontSize: '12px',
-                          color: 'var(--color-green)',
-                          fontWeight: 600,
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '4px',
-                        }}
-                      >
+                    <div className="ml-9 mt-3 flex items-center gap-[6px]">
+                      <span className="text-[12px] text-status-green font-semibold flex items-center gap-1">
                         ✓ All logged — feel free to keep chatting
                       </span>
                     </div>
@@ -491,11 +435,10 @@ export default function CheckinThread({ profile, baby, existingCheckin, prefill 
             return (
               <div
                 key={i}
-                className="animate-fade-in"
-                style={{ marginBottom: '16px', display: 'flex', justifyContent: 'flex-end' }}
+                className="animate-fade-in mb-4 flex justify-end"
               >
                 <div className="bubble-parent">
-                  <p style={{ fontSize: '15px', lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>
+                  <p className="text-[15px] leading-[1.6] whitespace-pre-wrap">
                     {msg.content}
                   </p>
                 </div>
@@ -515,23 +458,12 @@ export default function CheckinThread({ profile, baby, existingCheckin, prefill 
       {/* Input bar */}
       <div
         ref={inputBarRef}
+        className="fixed left-0 right-0 bg-white border-t border-border px-4 py-3 z-50 transition-[bottom] duration-100 ease-in-out"
         style={{
-          position: 'fixed',
           bottom: 'calc(56px + max(0px, env(safe-area-inset-bottom)))',
-          left: 0,
-          right: 0,
-          background: 'var(--color-white)',
-          borderTop: '1px solid var(--color-border)',
-          padding: '12px 16px',
-          paddingBottom: '12px',
-          zIndex: 50,
-          transition: 'bottom 0.1s ease',
         }}
       >
-        <div
-          className="content-width mx-auto"
-          style={{ display: 'flex', gap: '10px', alignItems: 'flex-end' }}
-        >
+        <div className="content-width mx-auto flex gap-[10px] items-end">
           <textarea
             ref={textareaRef}
             value={inputValue}
@@ -542,21 +474,12 @@ export default function CheckinThread({ profile, baby, existingCheckin, prefill 
             disabled={isLoading}
             enterKeyHint="send"
             autoComplete="off"
+            className="flex-1 rounded-md text-base leading-[1.5] resize-none outline-none min-h-[48px] max-h-[96px] text-foreground transition-[border-color] duration-150 ease-in-out"
             style={{
-              flex: 1,
               padding: '12px 16px',
-              borderRadius: 'var(--radius-md)',
               border: '1.5px solid var(--color-border)',
-              fontSize: '16px',
-              lineHeight: 1.5,
-              resize: 'none',
-              outline: 'none',
-              minHeight: '48px',
-              maxHeight: '96px',
               fontFamily: 'inherit',
-              color: 'var(--color-slate)',
               background: isLoading ? 'var(--color-surface)' : 'var(--color-white)',
-              transition: 'border-color 0.15s ease',
             }}
             onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-primary)' }}
             onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--color-border)' }}
@@ -565,20 +488,12 @@ export default function CheckinThread({ profile, baby, existingCheckin, prefill 
             onClick={handleSend}
             disabled={!inputValue.trim() || isLoading}
             aria-label="Send message"
+            className="w-12 h-12 rounded-md border-none flex items-center justify-center shrink-0 transition-[background] duration-150 ease-in-out"
             style={{
-              width: '48px',
-              height: '48px',
-              borderRadius: 'var(--radius-md)',
               background: !inputValue.trim() || isLoading
                 ? 'var(--color-border)'
                 : 'var(--color-primary)',
-              border: 'none',
               cursor: !inputValue.trim() || isLoading ? 'not-allowed' : 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-              transition: 'background 0.15s ease',
             }}
           >
             <svg

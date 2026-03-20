@@ -1,9 +1,7 @@
 /**
  * @module HistoryCard
  * @description Timeline card showing a day's check-in data and concern sessions.
- *   Renders stage-specific metrics (pregnancy vs infant/toddler) with
- *   emotional signal indicators and concern links.
- * @version 1.0.0
+ * @version 1.1.0 — Migrated inline styles → Tailwind classes
  * @since March 2026
  */
 import Link from 'next/link'
@@ -31,29 +29,24 @@ const CONCERN_LABELS: Record<string, string> = {
   other: 'Concern',
 }
 
+// Emotional signal colours — data-driven, kept as inline style map
 const EMOTIONAL_COLORS: Record<string, { bg: string; text: string }> = {
-  ok: { bg: '#F0FFF4', text: '#276749' },
-  tired: { bg: '#FFFFF0', text: '#744210' },
+  ok:         { bg: '#F0FFF4', text: '#276749' },
+  tired:      { bg: '#FFFFF0', text: '#744210' },
   struggling: { bg: '#FFF5F5', text: '#822727' },
   distressed: { bg: '#FFF5F5', text: '#C53030' },
 }
 
 export default function HistoryCard({ date, stage, checkin, concerns }: Props) {
-  const dateObj = new Date(date + 'T12:00:00')
-  const isToday = date === new Date().toISOString().split('T')[0]
-  const isYesterday =
-    date ===
-    new Date(Date.now() - 86400000).toISOString().split('T')[0]
+  const dateObj    = new Date(date + 'T12:00:00')
+  const isToday    = date === new Date().toISOString().split('T')[0]
+  const isYesterday = date === new Date(Date.now() - 86400000).toISOString().split('T')[0]
 
   const dateLabel = isToday
     ? 'Today'
     : isYesterday
     ? 'Yesterday'
-    : dateObj.toLocaleDateString('en-US', {
-        weekday: 'short',
-        month: 'short',
-        day: 'numeric',
-      })
+    : dateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
 
   const emotionStyle =
     checkin?.emotional_signal && EMOTIONAL_COLORS[checkin.emotional_signal]
@@ -61,81 +54,44 @@ export default function HistoryCard({ date, stage, checkin, concerns }: Props) {
       : null
 
   return (
-    <div
-      className="lumira-card"
-      style={{ padding: '16px 20px' }}
-    >
-      {/* Date */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-        <p
-          style={{
-            fontWeight: 700,
-            fontSize: '15px',
-            color: 'var(--color-slate)',
-          }}
-        >
-          {dateLabel}
-        </p>
+    <div className="lumira-card !p-4">
+      {/* Date row */}
+      <div className="flex items-center justify-between mb-3">
+        <p className="font-bold text-[15px] text-foreground">{dateLabel}</p>
         {isToday && (
-          <span
-            style={{
-              fontSize: '11px',
-              fontWeight: 600,
-              color: 'var(--color-primary)',
-              background: 'var(--color-primary-light)',
-              padding: '2px 8px',
-              borderRadius: '100px',
-            }}
-          >
+          <span className="text-[11px] font-semibold text-primary bg-secondary px-2 py-[2px] rounded-full">
             Today
           </span>
         )}
       </div>
 
-      {/* Checkin chips */}
+      {/* Check-in chips */}
       {checkin && (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: concerns?.length ? '10px' : '0' }}>
-          {/* Stage-specific chips */}
+        <div className={`flex flex-wrap gap-1.5 ${concerns?.length ? 'mb-2.5' : ''}`}>
           {stage === 'pregnancy' ? (
             <>
-              {checkin.nausea_level && (
-                <Chip label={`Nausea: ${checkin.nausea_level}`} />
-              )}
-              {checkin.energy_level && (
-                <Chip label={`Energy: ${checkin.energy_level}`} />
-              )}
+              {checkin.nausea_level  && <Chip label={`Nausea: ${checkin.nausea_level}`} />}
+              {checkin.energy_level  && <Chip label={`Energy: ${checkin.energy_level}`} />}
               {checkin.kept_food_down !== null && (
-                <Chip label={checkin.kept_food_down ? 'Food kept down' : 'Couldn\'t keep food down'} />
+                <Chip label={checkin.kept_food_down ? 'Food kept down' : "Couldn't keep food down"} />
               )}
             </>
           ) : (
             <>
-              {checkin.sleep_quality && (
-                <Chip label={`Sleep: ${checkin.sleep_quality}`} />
-              )}
-              {checkin.feeding && (
-                <Chip label={`Feeding: ${checkin.feeding}`} />
-              )}
-              {checkin.mood && (
-                <Chip label={`Mood: ${checkin.mood}`} />
-              )}
+              {checkin.sleep_quality && <Chip label={`Sleep: ${checkin.sleep_quality}`} />}
+              {checkin.feeding       && <Chip label={`Feeding: ${checkin.feeding}`} />}
+              {checkin.mood          && <Chip label={`Mood: ${checkin.mood}`} />}
               {checkin.night_wakings !== null && checkin.night_wakings !== undefined && (
                 <Chip label={`${checkin.night_wakings} wakings`} />
               )}
             </>
           )}
 
-          {/* Emotional signal */}
+          {/* Emotional signal — data-driven colour */}
           {emotionStyle && checkin.emotional_signal && (
             <span
-              style={{
-                padding: '3px 10px',
-                borderRadius: '100px',
-                fontSize: '12px',
-                fontWeight: 600,
-                background: emotionStyle.bg,
-                color: emotionStyle.text,
-              }}
+              className="px-2.5 py-[3px] rounded-full text-xs font-semibold"
+              style={{ background: emotionStyle.bg, color: emotionStyle.text }}
             >
               {checkin.emotional_signal}
             </span>
@@ -143,32 +99,21 @@ export default function HistoryCard({ date, stage, checkin, concerns }: Props) {
         </div>
       )}
 
-      {/* No checkin */}
+      {/* No check-in */}
       {!checkin && (
-        <p style={{ fontSize: '13px', color: 'var(--color-muted)', marginBottom: concerns?.length ? '10px' : '0' }}>
+        <p className={`text-[13px] text-muted-foreground ${concerns?.length ? 'mb-2.5' : ''}`}>
           No check-in on this day
         </p>
       )}
 
       {/* Concern badges */}
       {concerns && concerns.length > 0 && (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+        <div className="flex flex-wrap gap-1.5">
           {concerns.map((c) => (
             <Link
               key={c.id}
               href={`/concern/${c.concern_type}/summary?session=${c.id}`}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                padding: '3px 10px',
-                borderRadius: '100px',
-                fontSize: '12px',
-                fontWeight: 600,
-                background: 'var(--color-accent-light)',
-                color: 'var(--color-accent)',
-                textDecoration: 'none',
-                border: '1px solid #E8C4A0',
-              }}
+              className="inline-flex items-center px-2.5 py-[3px] rounded-full text-xs font-semibold bg-terra-50 text-accent border border-[#E8C4A0] no-underline"
             >
               {CONCERN_LABELS[c.concern_type] || c.concern_type} →
             </Link>
@@ -181,17 +126,7 @@ export default function HistoryCard({ date, stage, checkin, concerns }: Props) {
 
 function Chip({ label }: { label: string }) {
   return (
-    <span
-      style={{
-        padding: '3px 10px',
-        borderRadius: '100px',
-        fontSize: '12px',
-        fontWeight: 500,
-        background: 'var(--color-surface)',
-        color: 'var(--color-muted)',
-        border: '1px solid var(--color-border)',
-      }}
-    >
+    <span className="px-2.5 py-[3px] rounded-full text-xs font-medium bg-background text-muted-foreground border border-border">
       {label}
     </span>
   )

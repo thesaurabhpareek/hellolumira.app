@@ -1,8 +1,8 @@
 /**
  * @module ArticleInsightCard
  * @description Home feed card that surfaces one article from the content library,
- *   matched to the user's stage and week/month. Server-renderable via props.
- * @version 1.0.0
+ *   matched to the user's stage and week/month.
+ * @version 1.1.0 — Migrated inline styles → Tailwind classes
  * @since March 2026
  */
 
@@ -10,19 +10,19 @@ import Link from 'next/link'
 import { BookIcon, SeedIcon, HeartIcon, ShieldIcon, LeafIcon, ClockIcon } from '@/components/icons'
 
 const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string }> = {
-  nutrition:      { bg: '#FEF9EC', text: '#92400E', border: '#FDE68A' },
-  development:    { bg: '#EEF2FF', text: '#3730A3', border: '#C7D2FE' },
-  wellness:       { bg: '#F0FDF4', text: '#166534', border: '#BBF7D0' },
-  safety:         { bg: '#FFF7ED', text: '#9A3412', border: '#FDBA74' },
-  'mental-health':{ bg: '#FDF4FF', text: '#6B21A8', border: '#E9D5FF' },
+  nutrition:       { bg: '#FEF9EC', text: '#92400E', border: '#FDE68A' },
+  development:     { bg: '#EEF2FF', text: '#3730A3', border: '#C7D2FE' },
+  wellness:        { bg: '#F0FDF4', text: '#166534', border: '#BBF7D0' },
+  safety:          { bg: '#FFF7ED', text: '#9A3412', border: '#FDBA74' },
+  'mental-health': { bg: '#FDF4FF', text: '#6B21A8', border: '#E9D5FF' },
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
-  nutrition:      'Nutrition',
-  development:    'Development',
-  wellness:       'Wellness',
-  safety:         'Safety',
-  'mental-health':'Mental health',
+  nutrition:       'Nutrition',
+  development:     'Development',
+  wellness:        'Wellness',
+  safety:          'Safety',
+  'mental-health': 'Mental health',
 }
 
 const CATEGORY_ICON_COMPONENTS: Record<string, (props: { size?: number; color?: string }) => React.ReactNode> = {
@@ -48,78 +48,40 @@ export default function ArticleInsightCard({
   category,
   reading_time_minutes,
 }: ArticleInsightProps) {
-  const colors = CATEGORY_COLORS[category] ?? CATEGORY_COLORS.wellness
-  const label = CATEGORY_LABELS[category] ?? category
+  const colors   = CATEGORY_COLORS[category] ?? CATEGORY_COLORS.wellness
+  const label    = CATEGORY_LABELS[category] ?? category
   const IconComp = CATEGORY_ICON_COMPONENTS[category] ?? BookIcon
 
   return (
-    <div
-      style={{
-        background: 'var(--color-white)',
-        border: '1px solid var(--color-border)',
-        borderRadius: 'var(--radius-lg)',
-        padding: '20px',
-        marginBottom: '16px',
-      }}
-    >
+    <div className="bg-white border border-border rounded-lg p-5 mb-4">
       {/* Section label */}
-      <p
-        style={{
-          fontSize: '11px',
-          fontWeight: 700,
-          color: 'var(--color-muted)',
-          textTransform: 'uppercase',
-          letterSpacing: '0.8px',
-          marginBottom: '12px',
-        }}
-      >
-        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><BookIcon size={14} color="var(--color-muted)" /> READ TODAY</span>
+      <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-[0.8px] mb-3">
+        <span className="inline-flex items-center gap-1">
+          <BookIcon size={14} color="var(--color-muted)" /> READ TODAY
+        </span>
       </p>
 
-      {/* Category badge */}
+      {/* Category badge — uses dynamic data-driven colours; keep inline */}
       <span
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '4px',
-          padding: '3px 10px',
-          borderRadius: '20px',
-          background: colors.bg,
-          border: `1px solid ${colors.border}`,
-          fontSize: '12px',
-          fontWeight: 600,
-          color: colors.text,
-          marginBottom: '10px',
-        }}
+        className="inline-flex items-center gap-1 px-2.5 py-[3px] rounded-[20px] text-xs font-semibold mb-2.5"
+        style={{ background: colors.bg, border: `1px solid ${colors.border}`, color: colors.text }}
       >
         <IconComp size={14} color={colors.text} /> {label}
       </span>
 
       {/* Title */}
-      <p
-        style={{
-          fontSize: '16px',
-          fontWeight: 700,
-          color: 'var(--color-slate)',
-          lineHeight: 1.4,
-          marginBottom: subtitle ? '6px' : '14px',
-        }}
-      >
+      <p className={`text-base font-bold text-foreground leading-[1.4] ${subtitle ? 'mb-1.5' : 'mb-3.5'}`}>
         {title}
       </p>
 
       {/* Subtitle */}
       {subtitle && (
         <p
+          className="text-sm text-muted-foreground leading-[1.5] mb-3.5 overflow-hidden"
           style={{
-            fontSize: '14px',
-            color: 'var(--color-muted)',
-            lineHeight: 1.5,
-            marginBottom: '14px',
             display: '-webkit-box',
             WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical',
-            overflow: 'hidden',
           }}
         >
           {subtitle}
@@ -127,28 +89,13 @@ export default function ArticleInsightCard({
       )}
 
       {/* Footer row */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
-      >
-        <span style={{ fontSize: '12px', color: 'var(--color-muted)' }}>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}><ClockIcon size={13} color="var(--color-muted)" /> {reading_time_minutes} min read</span>
+      <div className="flex items-center justify-between">
+        <span className="text-xs text-muted-foreground">
+          <span className="inline-flex items-center gap-[3px]">
+            <ClockIcon size={13} color="var(--color-muted)" /> {reading_time_minutes} min read
+          </span>
         </span>
-        <Link
-          href="/content"
-          style={{
-            fontSize: '13px',
-            fontWeight: 600,
-            color: 'var(--color-primary)',
-            textDecoration: 'none',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px',
-          }}
-        >
+        <Link href="/content" className="text-[13px] font-semibold text-primary no-underline flex items-center gap-1">
           Read in library →
         </Link>
       </div>
