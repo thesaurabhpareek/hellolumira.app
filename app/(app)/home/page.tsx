@@ -3,13 +3,20 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { getBabyAgeInfo } from '@/lib/baby-age'
+import { getDailyQuestion, getDailyQuiz } from '@/lib/home-feed-data'
 import WeekGuideCard from '@/components/app/WeekGuideCard'
 import PatternFlagCard from '@/components/app/PatternFlagCard'
 import PregnancyProgressBadge from '@/components/app/PregnancyProgressBadge'
 import ProfilePromptCard from '@/components/app/ProfilePromptCard'
 import ShareCard from '@/components/app/ShareCard'
 import GreetingHeader from '@/components/app/GreetingHeader'
+import ArticleInsightCard from '@/components/app/ArticleInsightCard'
+import TribePeekCard from '@/components/app/TribePeekCard'
+import DailyQuestionCard from '@/components/app/DailyQuestionCard'
+import QuizCard from '@/components/app/QuizCard'
 import type { Profile, BabyProfile, DailyCheckin, PatternType, Stage } from '@/types/app'
+import type { TribePostPreview } from '@/components/app/TribePeekCard'
+import type { ArticleInsightProps } from '@/components/app/ArticleInsightCard'
 
 export default async function HomePage() {
   const supabase = await createClient()
@@ -43,18 +50,127 @@ export default async function HomePage() {
   const baby = babyData as BabyProfile
   const ageInfo = getBabyAgeInfo(baby)
 
-  // Fetch today's checkin with only needed columns
+  const guideKey = {
+    stage: baby.stage,
+    week_or_month: Math.max(1,
+      baby.stage === 'pregnancy'
+        ? (ageInfo.pregnancy_week ?? 1)
+        : baby.stage === 'infant'
+        ? (ageInfo.age_in_weeks ?? 1)
+        : (ageInfo.age_in_months ?? 1)),
+  }
+
+  // Fetch checkin, articles, and tribe data in parallel (all depend on baby)
   const today = new Date().toISOString().split('T')[0]
-  const { data: checkinData } = await supabase
-    .from('daily_checkins')
-    .select('id, checkin_date')
-    .eq('baby_id', baby.id)
-    .eq('checkin_date', today)
-    .maybeSingle()
+  const [
+    { data: checkinData },
+    { data: articleRows },
+    { data: tribeRows },
+  ] = await Promise.all([
+    supabase
+      .from('daily_checkins')
+      .select('id, checkin_date')
+      .eq('baby_id', baby.id)
+      .eq('checkin_date', today)
+      .maybeSingle(),
+
+    // Fetch articles matched to user's stage, closest to their week/month
+    supabase
+      .from('content_articles')
+      .select('id, title, subtitle, category, reading_time_minutes, tags, week_or_month')
+      .eq('stage', baby.stage)
+      .order('week_or_month', { ascending: true })
+      .limit(10),
+
+    // Fetch tribes for the user's stage
+    supabase
+      .from('tribes')
+      .select('id, name, emoji, slug')
+      .or(`stage_filter.eq.${baby.stage},stage_filter.eq.any,stage_filter.is.null`)
+      .eq('is_active', true)
+      .limit(5),
+  ])
 
   const todayCheckin = checkinData as DailyCheckin | null
 
-  // Read pending proactive type
+  // Pick the most relevant article (closest week/month, then rotate daily within ties)
+  let featuredArticle: ArticleInsightProps | null = null
+  if (articleRows?.length) {
+    const currentWOM = guideKey.week_or_month
+    // Sort by proximity to current week/month, break ties with index
+    const sorted = [...articleRows].sort((a, b) => {
+      const da = Math.abs((a.week_or_month ?? 0) - currentWOM)
+      const db = Math.abs((b.week_or_month ?? 0) - currentWOM)
+      return da - db
+    })
+    // Take the top-5 closest, rotate among them daily
+    const candidates = sorted.slice(0, 5)
+    const start = new Date(new Date().getFullYear(), 0, 0)
+    const dayOfYear = Math.floor((Date.now() - start.getTime()) / 86_400_000)
+    const picked = candidates[dayOfYear % candidates.length]
+    featuredArticle = {
+      id: picked.id,
+      title: picked.title,
+      subtitle: picked.subtitle ?? null,
+      category: picked.category,
+      reading_time_minutes: picked.reading_time_minutes,
+      tags: picked.tags ?? [],
+    }
+  }
+
+  // Fetch tribe posts for matching tribes
+  let tribePosts: TribePostPreview[] = []
+  if (tribeRows?.length) {
+    const tribeIds = tribeRows.map((t) => t.id)
+    const tribeMap = Object.fromEntries(tribeRows.map((t) => [t.id, t]))
+
+    const { data: postRows } = await supabase
+      .from('tribe_posts')
+      .select('id, tribe_id, body, post_type, emoji_tag, reaction_count, comment_count, ai_profile_id')
+      .in('tribe_id', tribeIds)
+      .order('created_at', { ascending: false })
+      .limit(6)
+
+    if (postRows?.length) {
+      // Fetch AI author names/avatars for all posts in one query
+      const aiProfileIds = postRows
+        .filter((p) => p.ai_profile_id)
+        .map((p) => p.ai_profile_id as string)
+        .filter(Boolean)
+
+      const aiProfileMap: Record<string, { display_name: string; avatar_emoji: string }> = {}
+      if (aiProfileIds.length) {
+        const { data: aiRows } = await supabase
+          .from('ai_parent_profiles')
+          .select('id, display_name, avatar_emoji')
+          .in('id', aiProfileIds)
+
+        for (const row of aiRows ?? []) {
+          aiProfileMap[row.id] = { display_name: row.display_name, avatar_emoji: row.avatar_emoji }
+        }
+      }
+
+      tribePosts = postRows.slice(0, 3).map((post) => {
+        const tribe = tribeMap[post.tribe_id]
+        const ai = post.ai_profile_id ? (aiProfileMap[post.ai_profile_id] ?? null) : null
+        return {
+          id: post.id,
+          body: post.body,
+          post_type: post.post_type,
+          emoji_tag: post.emoji_tag ?? null,
+          reaction_count: post.reaction_count ?? 0,
+          comment_count: post.comment_count ?? 0,
+          tribe_name: tribe?.name ?? 'Community',
+          tribe_emoji: tribe?.emoji ?? '👥',
+          tribe_slug: tribe?.slug ?? 'community',
+          author_name: ai?.display_name ?? 'Community member',
+          author_avatar: ai?.avatar_emoji ?? '👤',
+        }
+      })
+    }
+  }
+
+  // Pending proactive pattern message
   const pendingType = baby.pending_proactive_type as PatternType | null
   let pendingMessage = ''
   if (pendingType) {
@@ -82,15 +198,9 @@ export default async function HomePage() {
       .then(() => {})
   }
 
-  const guideKey = {
-    stage: baby.stage,
-    week_or_month: Math.max(1,
-      baby.stage === 'pregnancy'
-        ? (ageInfo.pregnancy_week ?? 1)
-        : baby.stage === 'infant'
-        ? (ageInfo.age_in_weeks ?? 1)
-        : (ageInfo.age_in_months ?? 1)),
-  }
+  // Daily rotating question + quiz (computed server-side, no extra DB calls)
+  const dailyQuestion = getDailyQuestion(baby.stage as Stage)
+  const dailyQuiz = getDailyQuiz(baby.stage as Stage)
 
   const tips = getStageTips(baby.stage, guideKey.week_or_month, baby.name)
 
@@ -103,7 +213,8 @@ export default async function HomePage() {
       }}
     >
       <div className="content-width mx-auto px-4 pt-6">
-        {/* Greeting + age subtitle — client component reads user's local time */}
+
+        {/* ── Greeting ── */}
         <GreetingHeader firstName={profile.first_name} />
         <p
           style={{
@@ -116,7 +227,7 @@ export default async function HomePage() {
           {getAgeSubtitle(baby, ageInfo)}
         </p>
 
-        {/* Stage badge */}
+        {/* ── Stage badge ── */}
         {baby.stage === 'pregnancy' && ageInfo.pregnancy_week && (
           <PregnancyProgressBadge
             week={ageInfo.pregnancy_week}
@@ -124,7 +235,6 @@ export default async function HomePage() {
             dueDate={baby.due_date ?? ''}
           />
         )}
-
         {baby.stage !== 'pregnancy' && (
           <div
             style={{
@@ -135,30 +245,20 @@ export default async function HomePage() {
               marginBottom: '16px',
             }}
           >
-            <p
-              style={{
-                color: 'var(--color-primary)',
-                fontWeight: 600,
-                fontSize: '15px',
-              }}
-            >
+            <p style={{ color: 'var(--color-primary)', fontWeight: 600, fontSize: '15px' }}>
               {ageInfo.age_display_string}
             </p>
           </div>
         )}
 
-        {/* Pattern flag card */}
+        {/* ── Pattern flag ── */}
         {pendingType && pendingMessage && (
           <div className="mb-4">
-            <PatternFlagCard
-              type={pendingType}
-              message={pendingMessage}
-              onDismiss={() => {}}
-            />
+            <PatternFlagCard type={pendingType} message={pendingMessage} onDismiss={() => {}} />
           </div>
         )}
 
-        {/* First check-in CTA — only shown if user has never completed one */}
+        {/* ── First check-in CTA ── */}
         {!profile.first_checkin_complete && !todayCheckin && (
           <Link
             href="/checkin"
@@ -194,7 +294,7 @@ export default async function HomePage() {
           </Link>
         )}
 
-        {/* Today's check-in status */}
+        {/* ── Today's check-in status ── */}
         {todayCheckin && (
           <div
             style={{
@@ -215,7 +315,7 @@ export default async function HomePage() {
           </div>
         )}
 
-        {/* Quick action cards */}
+        {/* ── Quick action cards ── */}
         <div
           style={{
             display: 'grid',
@@ -250,7 +350,10 @@ export default async function HomePage() {
           />
         </div>
 
-        {/* Weekly guide card */}
+        {/* ── Article insight ── */}
+        {featuredArticle && <ArticleInsightCard {...featuredArticle} />}
+
+        {/* ── Weekly guide card ── */}
         <div className="mb-4">
           <WeekGuideCard
             stage={guideKey.stage}
@@ -259,7 +362,25 @@ export default async function HomePage() {
           />
         </div>
 
-        {/* Stage-appropriate tips */}
+        {/* ── Daily reflection question ── */}
+        <DailyQuestionCard
+          question={dailyQuestion.question}
+          chatPrompt={dailyQuestion.chatPrompt}
+          babyId={baby.id}
+        />
+
+        {/* ── Tribe peek ── */}
+        {tribePosts.length > 0 && <TribePeekCard posts={tribePosts} />}
+
+        {/* ── Quick quiz ── */}
+        <QuizCard
+          question={dailyQuiz.question}
+          options={dailyQuiz.options}
+          answerIndex={dailyQuiz.answerIndex}
+          explanation={dailyQuiz.explanation}
+        />
+
+        {/* ── Stage tips ── */}
         {tips.length > 0 && (
           <div className="lumira-card" style={{ marginBottom: '16px' }}>
             <p
@@ -299,16 +420,16 @@ export default async function HomePage() {
           </div>
         )}
 
-        {/* Profile prompt card — shown when profile incomplete */}
+        {/* ── Profile prompt ── */}
         {!profile.first_time_parent && (
           <ProfilePromptCard missingItem="Tell us a bit more about yourself" />
         )}
 
-        {/* Share card */}
+        {/* ── Share card ── */}
         <ShareCard />
       </div>
 
-      {/* Bottom sticky bar — positioned above AppShell bottom nav */}
+      {/* ── Bottom sticky bar ── */}
       <div
         style={{
           position: 'fixed',
@@ -321,10 +442,7 @@ export default async function HomePage() {
           zIndex: 50,
         }}
       >
-        <div
-          className="content-width mx-auto"
-          style={{ display: 'flex', gap: '12px' }}
-        >
+        <div className="content-width mx-auto" style={{ display: 'flex', gap: '12px' }}>
           <Link
             href="/checkin"
             className="btn-primary"
@@ -358,21 +476,12 @@ export default async function HomePage() {
   )
 }
 
-/* ── Helper: Quick action card (inline server component) ── */
+/* ── Helper: Quick action card ── */
 function QuickAction({
-  href,
-  icon,
-  label,
-  bgColor,
-  borderColor,
-  textColor,
+  href, icon, label, bgColor, borderColor, textColor,
 }: {
-  href: string
-  icon: string
-  label: string
-  bgColor: string
-  borderColor: string
-  textColor: string
+  href: string; icon: string; label: string
+  bgColor: string; borderColor: string; textColor: string
 }) {
   return (
     <Link
@@ -392,15 +501,7 @@ function QuickAction({
       }}
     >
       <span style={{ fontSize: '24px', lineHeight: 1 }}>{icon}</span>
-      <span
-        style={{
-          fontSize: '12px',
-          fontWeight: 600,
-          color: textColor,
-          textAlign: 'center',
-          lineHeight: 1.3,
-        }}
-      >
+      <span style={{ fontSize: '12px', fontWeight: 600, color: textColor, textAlign: 'center', lineHeight: 1.3 }}>
         {label}
       </span>
     </Link>
@@ -408,10 +509,7 @@ function QuickAction({
 }
 
 /* ── Helper: Age subtitle under greeting ── */
-function getAgeSubtitle(
-  baby: BabyProfile,
-  ageInfo: ReturnType<typeof getBabyAgeInfo>,
-): string {
+function getAgeSubtitle(baby: BabyProfile, ageInfo: ReturnType<typeof getBabyAgeInfo>): string {
   if (baby.stage === 'pregnancy' && ageInfo.pregnancy_week) {
     return `Week ${ageInfo.pregnancy_week} of pregnancy`
   }
@@ -426,28 +524,20 @@ function getAgeSubtitle(
 }
 
 /* ── Helper: Stage-appropriate tips ── */
-function getStageTips(
-  stage: Stage,
-  weekOrMonth: number,
-  babyName: string | null,
-): { icon: string; text: string }[] {
+function getStageTips(stage: Stage, weekOrMonth: number, babyName: string | null): { icon: string; text: string }[] {
   const name = babyName || 'baby'
 
   if (stage === 'pregnancy') {
-    if (weekOrMonth <= 12) {
-      return [
-        { icon: '\uD83E\uDD22', text: 'Nausea is common in the first trimester. Small, frequent meals can help.' },
-        { icon: '\uD83D\uDCA7', text: 'Stay hydrated \u2014 aim for 8\u201310 glasses of water a day.' },
-        { icon: '\uD83D\uDE34', text: 'Fatigue is normal right now. Rest when you can, guilt-free.' },
-      ]
-    }
-    if (weekOrMonth <= 27) {
-      return [
-        { icon: '\uD83C\uDFC3', text: 'Gentle exercise like walking or prenatal yoga can ease aches and boost mood.' },
-        { icon: '\uD83D\uDC76', text: `You may start feeling ${name === 'baby' ? 'the baby' : name} kick soon \u2014 such an exciting milestone.` },
-        { icon: '\uD83D\uDCCB', text: 'This is a good time to start thinking about your birth preferences.' },
-      ]
-    }
+    if (weekOrMonth <= 12) return [
+      { icon: '\uD83E\uDD22', text: 'Nausea is common in the first trimester. Small, frequent meals can help.' },
+      { icon: '\uD83D\uDCA7', text: 'Stay hydrated \u2014 aim for 8\u201310 glasses of water a day.' },
+      { icon: '\uD83D\uDE34', text: 'Fatigue is normal right now. Rest when you can, guilt-free.' },
+    ]
+    if (weekOrMonth <= 27) return [
+      { icon: '\uD83C\uDFC3', text: 'Gentle exercise like walking or prenatal yoga can ease aches and boost mood.' },
+      { icon: '\uD83D\uDC76', text: `You may start feeling ${name === 'baby' ? 'the baby' : name} kick soon \u2014 such an exciting milestone.` },
+      { icon: '\uD83D\uDCCB', text: 'This is a good time to start thinking about your birth preferences.' },
+    ]
     return [
       { icon: '\uD83C\uDFE5', text: 'Pack your hospital bag by week 36 \u2014 better early than rushed.' },
       { icon: '\uD83D\uDCA4', text: 'Sleep on your side with a pillow between your knees for comfort.' },
@@ -456,20 +546,16 @@ function getStageTips(
   }
 
   if (stage === 'infant') {
-    if (weekOrMonth <= 4) {
-      return [
-        { icon: '\uD83D\uDECC', text: `${name === 'baby' ? 'Baby' : name} may sleep 14\u201317 hours a day in short bursts \u2014 that\u2019s normal.` },
-        { icon: '\uD83C\uDF7C', text: 'Feed on demand. Look for hunger cues like rooting or lip-smacking.' },
-        { icon: '\uD83E\uDDE1', text: 'Skin-to-skin contact helps regulate temperature and bonding.' },
-      ]
-    }
-    if (weekOrMonth <= 12) {
-      return [
-        { icon: '\uD83D\uDCAA', text: `Tummy time helps ${name === 'baby' ? 'baby' : name} build neck and core strength.` },
-        { icon: '\uD83D\uDE0A', text: 'Social smiles usually appear around 6\u20138 weeks \u2014 keep talking and making faces.' },
-        { icon: '\uD83C\uDF19', text: 'Longer sleep stretches may start soon. A bedtime routine helps.' },
-      ]
-    }
+    if (weekOrMonth <= 4) return [
+      { icon: '\uD83D\uDECC', text: `${name === 'baby' ? 'Baby' : name} may sleep 14\u201317 hours a day in short bursts \u2014 that\u2019s normal.` },
+      { icon: '\uD83C\uDF7C', text: 'Feed on demand. Look for hunger cues like rooting or lip-smacking.' },
+      { icon: '\uD83E\uDDE1', text: 'Skin-to-skin contact helps regulate temperature and bonding.' },
+    ]
+    if (weekOrMonth <= 12) return [
+      { icon: '\uD83D\uDCAA', text: `Tummy time helps ${name === 'baby' ? 'baby' : name} build neck and core strength.` },
+      { icon: '\uD83D\uDE0A', text: 'Social smiles usually appear around 6\u20138 weeks \u2014 keep talking and making faces.' },
+      { icon: '\uD83C\uDF19', text: 'Longer sleep stretches may start soon. A bedtime routine helps.' },
+    ]
     return [
       { icon: '\uD83E\uDD61', text: 'Around 6 months, you can start introducing solid foods alongside milk.' },
       { icon: '\uD83E\uDDD1', text: `${name === 'baby' ? 'Baby' : name} is becoming more curious \u2014 baby-proof any accessible areas.` },
