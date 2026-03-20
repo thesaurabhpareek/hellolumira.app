@@ -13,6 +13,7 @@ export type LegalDocumentSlug =
   | 'community'
   | 'acceptable-use'
   | 'data-practices'
+  | 'cookies'
 
 export type LegalDocumentMeta = {
   slug: LegalDocumentSlug
@@ -31,6 +32,7 @@ export const LEGAL_VERSIONS: Record<LegalDocumentSlug, { version: string; effect
   community: { version: '1.0', effectiveDate: '2026-03-18', lastUpdated: '2026-03-18' },
   'acceptable-use': { version: '1.0', effectiveDate: '2026-03-18', lastUpdated: '2026-03-18' },
   'data-practices': { version: '1.0', effectiveDate: '2026-03-18', lastUpdated: '2026-03-18' },
+  cookies: { version: '1.0', effectiveDate: '2026-03-18', lastUpdated: '2026-03-18' },
 }
 
 export function getLegalDocuments(): LegalDocumentMeta[] {
@@ -74,6 +76,14 @@ export function getLegalDocuments(): LegalDocumentMeta[] {
       description: 'A plain-language guide to how Lumira uses AI, processes your data, and keeps it secure.',
       path: '/legal/data-practices',
       ...LEGAL_VERSIONS['data-practices'],
+    },
+    {
+      slug: 'cookies',
+      title: 'Cookie Policy',
+      shortTitle: 'Cookies',
+      description: 'How Lumira uses cookies. We use only essential session cookies — no tracking, no advertising.',
+      path: '/legal/cookies',
+      ...LEGAL_VERSIONS.cookies,
     },
   ]
 }

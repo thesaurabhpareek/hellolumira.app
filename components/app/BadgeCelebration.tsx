@@ -84,6 +84,7 @@ export default function BadgeCelebration({
           padding: '32px 40px',
           textAlign: 'center',
           zIndex: 200,
+          pointerEvents: isVisible ? 'auto' : 'none',
           boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
           transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
           maxWidth: '300px',

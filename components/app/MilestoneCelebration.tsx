@@ -140,6 +140,7 @@ export default function MilestoneCelebration({
         backdropFilter: 'blur(4px)',
         WebkitBackdropFilter: 'blur(4px)',
         opacity: visible ? 1 : 0,
+        pointerEvents: visible ? 'auto' : 'none',
         transition: 'opacity 0.3s ease',
         padding: '24px',
       }}
