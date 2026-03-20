@@ -15,7 +15,9 @@ import TribePeekCard from '@/components/app/TribePeekCard'
 import DailyQuestionCard from '@/components/app/DailyQuestionCard'
 import QuizCard from '@/components/app/QuizCard'
 import UpcomingMilestonesCard from '@/components/app/UpcomingMilestonesCard'
-import { SeedIcon, ClipboardIcon, ChatIcon, EditIcon, QuizIcon, CheckIcon } from '@/components/icons'
+import SeedsBalancePill from '@/components/app/SeedsBalancePill'
+import BugReportButton from '@/components/app/BugReportButton'
+import { ClipboardIcon, ChatIcon, EditIcon, QuizIcon, CheckIcon } from '@/components/icons'
 import type { Profile, BabyProfile, DailyCheckin, PatternType, Stage } from '@/types/app'
 import type { TribePostPreview } from '@/components/app/TribePeekCard'
 import type { ArticleInsightProps } from '@/components/app/ArticleInsightCard'
@@ -219,31 +221,9 @@ export default async function HomePage() {
         {/* ── Greeting + Seeds pill ── */}
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
           <GreetingHeader firstName={profile.first_name} />
-          <Link
-            href="/profile"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              padding: '6px 12px',
-              borderRadius: '100px',
-              background: 'var(--color-accent-light)',
-              textDecoration: 'none',
-              flexShrink: 0,
-              marginTop: '4px',
-            }}
-          >
-            <SeedIcon size={16} color="var(--color-accent)" />
-            <span
-              style={{
-                fontSize: '13px',
-                fontWeight: 700,
-                color: 'var(--color-accent)',
-              }}
-            >
-              {((profileData as Record<string, unknown>)?.seeds_balance as number) ?? 0}
-            </span>
-          </Link>
+          <div style={{ flexShrink: 0, marginTop: '4px' }}>
+            <SeedsBalancePill balance={profile.seeds_balance ?? 0} />
+          </div>
         </div>
         <p
           style={{
@@ -529,6 +509,9 @@ export default async function HomePage() {
           </Link>
         </div>
       </div>
+
+      {/* Bug report floating button */}
+      <BugReportButton userEmail={user.email} userName={profile.first_name} />
     </div>
   )
 }

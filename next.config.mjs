@@ -23,10 +23,11 @@ const nextConfig = {
             "style-src 'self' 'unsafe-inline'",
             "font-src 'self'",
             "img-src 'self' data: blob: https:",
-            "connect-src 'self' https://*.supabase.co https://api.anthropic.com https://api.resend.com wss://*.supabase.co",
+            "connect-src 'self' https://*.supabase.co https://api.anthropic.com https://api.resend.com wss://*.supabase.co https://accounts.google.com https://www.googleapis.com",
+            "frame-src https://accounts.google.com",
             "frame-ancestors 'none'",
             "base-uri 'self'",
-            "form-action 'self'",
+            "form-action 'self' https://accounts.google.com",
           ].join('; ')
         },
         { key: 'X-Frame-Options', value: 'DENY' },

@@ -11,6 +11,7 @@ export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { SECURITY_HEADERS } from '@/lib/utils'
+import { awardSeeds } from '@/lib/seeds'
 
 export async function POST(request: NextRequest) {
   try {
@@ -90,6 +91,15 @@ export async function POST(request: NextRequest) {
         { status: 500, headers: SECURITY_HEADERS }
       )
     }
+
+    // Award seeds for completing quiz (fire-and-forget)
+    void awardSeeds(user.id, 'complete_quiz').catch(() => {})
+
+    // Check and award badges (fire-and-forget)
+    fetch(new URL('/api/badges/check', request.url).toString(), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Cookie': request.headers.get('cookie') || '' },
+    }).catch(() => {})
 
     // Get updated stats
     const { count: totalAnswered } = await supabase

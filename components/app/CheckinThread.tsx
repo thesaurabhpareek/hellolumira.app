@@ -15,6 +15,7 @@ import { LumiraAvatar } from './LumiraAvatar'
 import StructuredFieldChips from './StructuredFieldChips'
 import WellbeingPrompt from './WellbeingPrompt'
 import type { Profile, BabyProfile, DailyCheckin, ConversationMessage, StructuredField, EmotionalSignal } from '@/types/app'
+import { pickFollowUpQuestion } from '@/lib/checkin-openers'
 
 interface Props {
   profile: Profile
@@ -39,13 +40,17 @@ interface ParentMessage {
 
 type Message = LumiraMessage | ParentMessage
 
-const PREGNANCY_INTRO = `Hi there! I'm Lumira — I'm here to check in with you every day, answer questions, and gently flag anything worth keeping an eye on.
+const PREGNANCY_INTROS = [
+  `Hi there! I'm Lumira — I'm here to check in with you every day, answer questions, and gently flag anything worth keeping an eye on.\n\nHow are you feeling today? Any nausea, energy shifts, or anything else on your mind?`,
+  `Hey! I'm Lumira, your daily parenting companion. I'm here to listen, help you track how things are going, and share anything useful for this stage of pregnancy.\n\nWhat's on your mind today?`,
+  `Welcome! I'm Lumira — think of me as a warm, knowledgeable friend who checks in every day. No judgement, just support.\n\nHow's your body feeling right now? Anything new or different?`,
+]
 
-How are you feeling today? Any nausea, energy shifts, or anything else on your mind?`
-
-const INFANT_INTRO = `Hi! I'm Lumira — I'm here to check in with you every day, help you spot patterns, and work through any concerns together.
-
-How did things go last night? How's your little one doing today?`
+const INFANT_INTROS = [
+  `Hi! I'm Lumira — I'm here to check in with you every day, help you spot patterns, and work through any concerns together.\n\nHow did things go last night? How's your little one doing today?`,
+  `Hey there! I'm Lumira, your daily parenting companion. I'll help you track patterns, answer questions, and flag anything worth knowing.\n\nHow are things going — how's baby doing today?`,
+  `Welcome! I'm Lumira. Every day I'll check in, help you notice patterns, and be here when you need to think something through.\n\nHow are you holding up? Tell me about your last 24 hours.`,
+]
 
 export default function CheckinThread({ profile, baby, existingCheckin, prefill }: Props) {
   const router = useRouter()
@@ -158,22 +163,32 @@ export default function CheckinThread({ profile, baby, existingCheckin, prefill 
     initialized.current = true
 
     if (!profile.first_checkin_complete) {
-      // First ever checkin — show hardcoded intro
-      const introText = baby.stage === 'pregnancy' ? PREGNANCY_INTRO : INFANT_INTRO
+      // First ever checkin — pick from varied intros
+      const intros = baby.stage === 'pregnancy' ? PREGNANCY_INTROS : INFANT_INTROS
+      const introIndex = new Date().getHours() % intros.length
       const introMsg: LumiraMessage = {
         role: 'lumira',
-        content: introText,
+        content: intros[introIndex],
         timestamp: new Date().toISOString(),
       }
       setMessages([introMsg])
     } else if (existingCheckin?.conversation_log && existingCheckin.conversation_log.length > 0) {
-      // Restore existing conversation
+      // Restore existing conversation + add a fresh follow-up question
       const restored: Message[] = existingCheckin.conversation_log.map((m) => ({
         role: m.role,
         content: m.content,
         timestamp: m.timestamp,
       }))
-      setMessages(restored)
+
+      // Pick a personalised follow-up question to keep the conversation going
+      const mappedStage = (baby.stage === 'postpartum' ? 'infant' : baby.stage) as 'pregnancy' | 'infant' | 'toddler'
+      const followUp = pickFollowUpQuestion(mappedStage)
+      const followUpMsg: LumiraMessage = {
+        role: 'lumira',
+        content: `Welcome back! Your check-in is already logged for today.\n\nWhile you are here — ${followUp.charAt(0).toLowerCase() + followUp.slice(1)}`,
+        timestamp: new Date().toISOString(),
+      }
+      setMessages([...restored, followUpMsg])
       setIsComplete(true)
     } else {
       // Get adaptive opener from API

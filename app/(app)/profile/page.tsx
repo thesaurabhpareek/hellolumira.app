@@ -8,7 +8,8 @@ import SignOutButton from './SignOutButton'
 import DeleteAccountLink from './DeleteAccountLink'
 import ProfileCompletionSection from './ProfileCompletionSection'
 import BadgesGrid from './BadgesGrid'
-import AvatarPicker from './AvatarPicker'
+import AvatarPicker, { AvatarCircle } from './AvatarPicker'
+import BadgeChecker from './BadgeChecker'
 import { ArrowLeftIcon, SeedIcon, ChevronRightIcon, SettingsIcon, ShieldIcon, ShareIcon } from '@/components/icons'
 import type { Profile, BabyProfile } from '@/types/app'
 
@@ -21,19 +22,31 @@ export default async function ProfilePage() {
 
   if (!user) redirect('/login')
 
-  // Fetch profile, baby membership, partner count, checkin count, and badges in parallel
+  // Fetch profile separately so we can handle errors gracefully
+  const { data: profileData, error: profileError } = await supabase
+    .from('profiles')
+    .select('id, first_name, first_time_parent, partner_invite_email, avatar_emoji, seeds_balance, current_streak, created_at')
+    .eq('id', user.id)
+    .single()
+
+  // Only redirect to onboarding if profile genuinely doesn't exist
+  if (!profileData) {
+    if (profileError?.code === 'PGRST116') {
+      // No rows found — user hasn't onboarded
+      redirect('/onboarding')
+    }
+    // For other errors, log and show a fallback
+    console.error('[ProfilePage] Profile fetch error:', profileError?.message)
+    redirect('/onboarding')
+  }
+
+  // Fetch remaining data in parallel (non-critical — failures won't block the page)
   const [
-    { data: profileData },
     { data: memberData },
     { count: partnerCount },
     { count: checkinCount },
     { data: earnedBadgeRows },
   ] = await Promise.all([
-    supabase
-      .from('profiles')
-      .select('id, first_name, first_time_parent, partner_invite_email, avatar_emoji, seeds_balance, current_streak, created_at')
-      .eq('id', user.id)
-      .single(),
     supabase
       .from('baby_profile_members')
       .select('baby_id')
@@ -54,8 +67,6 @@ export default async function ProfilePage() {
       .eq('profile_id', user.id)
       .order('awarded_at', { ascending: false }),
   ])
-
-  if (!profileData) redirect('/onboarding')
 
   const profile = profileData as unknown as Profile
 
@@ -129,6 +140,7 @@ export default async function ProfilePage() {
         paddingBottom: '32px',
       }}
     >
+      <BadgeChecker />
       <div className="content-width mx-auto px-4 pt-6">
         {/* Back button */}
         <Link
@@ -157,22 +169,8 @@ export default async function ProfilePage() {
           className="lumira-card mb-4"
           style={{ display: 'flex', alignItems: 'center', gap: '16px' }}
         >
-          {/* Large emoji avatar circle */}
-          <div
-            style={{
-              width: '72px',
-              height: '72px',
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, var(--color-primary-light), var(--color-primary-mid))',
-              border: '2.5px solid var(--color-primary)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-            }}
-          >
-            <span style={{ fontSize: '32px' }}>{avatarEmoji}</span>
-          </div>
+          {/* Avatar circle */}
+          <AvatarCircle avatarId={avatarEmoji} size={72} />
           <div style={{ flex: 1 }}>
             <p
               style={{
@@ -320,7 +318,7 @@ export default async function ProfilePage() {
           </p>
           <AvatarPicker
             profileId={profile.id}
-            currentEmoji={avatarEmoji}
+            currentAvatar={avatarEmoji}
           />
         </div>
 

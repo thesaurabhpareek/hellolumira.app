@@ -41,11 +41,34 @@ function formatCount(n: number): string {
   return n.toString()
 }
 
+const FILTERS = [
+  { id: 'all', label: 'All' },
+  { id: 'my', label: 'My Tribes' },
+  { id: 'pregnancy', label: '🤰 Pregnancy' },
+  { id: 'newborn', label: '👶 Newborn' },
+  { id: 'toddler', label: '🧒 Toddler' },
+  { id: 'support', label: '💚 Support' },
+  { id: 'community', label: '🤝 Community' },
+] as const
+
+// Map tribes to filter categories based on slug keywords
+function getTribeCategory(slug: string): string[] {
+  const cats: string[] = []
+  if (/trimester|pregnan|birth-prep/.test(slug)) cats.push('pregnancy')
+  if (/newborn|infant|0-to-3|3-to-6|6-to-9|9-to-12|feeding|sleep|weaning/.test(slug)) cats.push('newborn')
+  if (/toddler/.test(slug)) cats.push('toddler')
+  if (/anxiety|ppd|support|recovery|nicu|rainbow|postpartum/.test(slug)) cats.push('support')
+  if (/dad|partner|lgbtq|single|multicultural|adoption|working|multiples|pumping|back-to-work/.test(slug)) cats.push('community')
+  return cats.length ? cats : ['community']
+}
+
 export default function TribesPage() {
   const router = useRouter()
   const [tribes, setTribes] = useState<Tribe[]>([])
   const [loading, setLoading] = useState(true)
   const [joiningSlug, setJoiningSlug] = useState<string | null>(null)
+  const [activeFilter, setActiveFilter] = useState<string>('all')
+  const [searchQuery, setSearchQuery] = useState('')
 
   const fetchTribes = useCallback(async () => {
     try {
@@ -91,8 +114,21 @@ export default function TribesPage() {
     }
   }
 
-  const myTribes = tribes.filter(t => t.is_member)
-  const otherTribes = tribes.filter(t => !t.is_member)
+  // Apply filter + search
+  const filteredTribes = tribes.filter(t => {
+    // Search filter
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase()
+      if (!t.name.toLowerCase().includes(q) && !t.description.toLowerCase().includes(q)) return false
+    }
+    // Category filter
+    if (activeFilter === 'all') return true
+    if (activeFilter === 'my') return t.is_member
+    return getTribeCategory(t.slug).includes(activeFilter)
+  })
+
+  const myTribes = filteredTribes.filter(t => t.is_member)
+  const otherTribes = filteredTribes.filter(t => !t.is_member)
 
   if (loading) {
     return (
@@ -117,9 +153,81 @@ export default function TribesPage() {
     <div style={{ minHeight: '100dvh', background: 'var(--color-surface)', paddingBottom: '100px' }}>
       <div className="content-width mx-auto px-4 pt-6">
         <h1 className="text-h1" style={{ color: 'var(--color-slate)', marginBottom: '4px' }}>My Tribes</h1>
-        <p className="text-body" style={{ color: 'var(--color-muted)', marginBottom: '24px', lineHeight: 1.5 }}>
+        <p className="text-body" style={{ color: 'var(--color-muted)', marginBottom: '16px', lineHeight: 1.5 }}>
           Connect with parents in your moment
         </p>
+
+        {/* Search bar */}
+        <div style={{ marginBottom: '12px' }}>
+          <input
+            type="text"
+            placeholder="Search tribes..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '10px 16px',
+              borderRadius: 'var(--radius-md)',
+              border: '1.5px solid var(--color-border)',
+              background: 'var(--color-white)',
+              fontSize: '14px',
+              color: 'var(--color-slate)',
+              outline: 'none',
+              minHeight: '44px',
+              fontFamily: 'inherit',
+            }}
+          />
+        </div>
+
+        {/* Filter pills */}
+        <div
+          style={{
+            display: 'flex',
+            gap: '8px',
+            overflowX: 'auto',
+            paddingBottom: '4px',
+            marginBottom: '20px',
+            WebkitOverflowScrolling: 'touch',
+            msOverflowStyle: 'none',
+            scrollbarWidth: 'none',
+          }}
+        >
+          {FILTERS.map((filter) => (
+            <button
+              key={filter.id}
+              onClick={() => setActiveFilter(filter.id)}
+              style={{
+                padding: '6px 14px',
+                borderRadius: '100px',
+                border: 'none',
+                fontSize: '13px',
+                fontWeight: 600,
+                whiteSpace: 'nowrap',
+                cursor: 'pointer',
+                minHeight: '36px',
+                transition: 'all 0.15s ease',
+                background: activeFilter === filter.id ? 'var(--color-primary)' : 'var(--color-white)',
+                color: activeFilter === filter.id ? '#fff' : 'var(--color-muted)',
+                boxShadow: activeFilter === filter.id ? 'none' : '0 1px 3px rgba(0,0,0,0.06)',
+              }}
+            >
+              {filter.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Empty state */}
+        {filteredTribes.length === 0 && (
+          <div style={{
+            textAlign: 'center',
+            padding: '40px 20px',
+            color: 'var(--color-muted)',
+          }}>
+            <p style={{ fontSize: '32px', marginBottom: '12px' }}>🔍</p>
+            <p style={{ fontSize: '15px', fontWeight: 600, marginBottom: '4px' }}>No tribes found</p>
+            <p style={{ fontSize: '13px' }}>Try a different filter or search term</p>
+          </div>
+        )}
 
         {/* My Tribes */}
         {myTribes.length > 0 && (

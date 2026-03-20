@@ -13,6 +13,7 @@ export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { MASTER_SYSTEM_PROMPT, callClaudeJSON } from '@/lib/claude'
+import { awardSeeds } from '@/lib/seeds'
 import { buildContextBlock } from '@/lib/context-builder'
 import { getBabyAgeInfo } from '@/lib/baby-age'
 import { inferEmotionalSignal } from '@/lib/emotional-signals'
@@ -20,6 +21,8 @@ import { checkRateLimit } from '@/lib/rate-limit'
 import { isValidUUID, validateArray, verifyBabyOwnership } from '@/lib/validation'
 import { sanitizeForPrompt } from '@/lib/sanitize-prompt'
 import { SECURITY_HEADERS } from '@/lib/utils'
+import { pickOpenerAngle } from '@/lib/checkin-openers'
+import { getTimeOfDay } from '@/lib/baby-age'
 import type { Stage, ConversationMessage, EmotionalSignal, BabyProfile } from '@/types/app'
 
 const CHECKIN_SYSTEM_PROMPT = `You are conducting a warm, brief daily check-in. Ask ONE question at a time. Keep messages short (1-3 sentences). Be genuinely curious.
@@ -154,7 +157,12 @@ export async function POST(request: NextRequest) {
         : ''
 
     const userMessage = is_opening
-      ? `Start the daily check-in. Stage: ${stage}. Time of day context included in system prompt.`
+      ? (() => {
+          const tod = getTimeOfDay()
+          const mappedStage = (stage === 'postpartum' ? 'infant' : stage) as 'pregnancy' | 'infant' | 'toddler'
+          const angle = pickOpenerAngle(mappedStage, tod.label)
+          return `Start the daily check-in with ${profileData.first_name}. Stage: ${stage}. Time: ${tod.display}.\n\nConversation angle for this session: ${angle}\n\nDo NOT mention the angle directly — just let it guide your opening question naturally. Be warm and personal.`
+        })()
       : `${historyText}\n${profileData.first_name}: ${message}\n\nRespond as Lumira.`
 
     // Rate limiting — max 20 requests per minute per user
@@ -221,6 +229,25 @@ export async function POST(request: NextRequest) {
     } else {
       await supabase.from('daily_checkins').insert(upsertData)
     }
+
+    // Update checkin streak (fire-and-forget)
+    supabase.rpc('update_checkin_streak', { p_profile_id: profile_id }).then(({ data: newStreak, error: streakErr }) => {
+      if (streakErr) {
+        console.error('[checkin-conversation] Failed to update streak:', streakErr.message)
+      } else {
+        console.log(`[checkin-conversation] Streak updated to ${newStreak} for ${profile_id}`)
+      }
+    })
+
+    // Award seeds directly (no HTTP roundtrip needed)
+    void awardSeeds(profile_id, 'daily_checkin').catch(() => {})
+    void awardSeeds(profile_id, 'daily_streak_bonus').catch(() => {})
+
+    // Check and award badges (fire-and-forget)
+    fetch(new URL('/api/badges/check', request.url).toString(), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Cookie': request.headers.get('cookie') || '' },
+    }).catch(() => {})
 
     // Run non-critical profile updates in parallel
     const profileUpdates: Promise<unknown>[] = []

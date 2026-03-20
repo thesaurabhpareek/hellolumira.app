@@ -9,6 +9,7 @@ export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { SECURITY_HEADERS } from '@/lib/utils'
+import { awardSeeds } from '@/lib/seeds'
 
 export async function GET(
   request: NextRequest,
@@ -136,6 +137,15 @@ export async function POST(
       console.error('[POST /api/tribes/[slug]/posts] Error:', error.message)
       return NextResponse.json({ error: 'Failed to create post' }, { status: 500, headers: SECURITY_HEADERS })
     }
+
+    // Award seeds for posting in tribe (fire-and-forget)
+    void awardSeeds(user.id, 'post_in_tribe').catch(() => {})
+
+    // Check and award badges (fire-and-forget)
+    fetch(new URL('/api/badges/check', request.url).toString(), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Cookie': request.headers.get('cookie') || '' },
+    }).catch(() => {})
 
     return NextResponse.json({ post }, { status: 201, headers: SECURITY_HEADERS })
   } catch (err) {

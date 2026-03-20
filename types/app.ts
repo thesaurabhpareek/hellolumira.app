@@ -9,6 +9,10 @@ export type Profile = {
   emotional_state_latest: EmotionalSignal | null
   emotional_state_updated_at: string | null
   partner_invite_email: string | null
+  seeds_balance: number
+  current_streak: number
+  longest_streak: number
+  last_checkin_date: string | null
   created_at: string
   updated_at: string
 }
