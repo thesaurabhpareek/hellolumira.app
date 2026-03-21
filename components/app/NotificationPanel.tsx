@@ -352,23 +352,6 @@ export function NotificationPanel({
         </div>
       </div>
 
-      {/* Animations */}
-      <style jsx global>{`
-        @keyframes notif-backdrop-in {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        @keyframes notif-dropdown-in {
-          from {
-            opacity: 0;
-            transform: translateY(-8px) scale(0.97);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-          }
-        }
-      `}</style>
     </>
   )
 }

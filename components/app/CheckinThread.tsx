@@ -8,7 +8,7 @@
  */
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import LumiraTyping from './LumiraTyping'
 import { LumiraAvatar } from './LumiraAvatar'
@@ -50,6 +50,12 @@ const INFANT_INTROS = [
   `Hi! I'm Lumira — I'm here to check in with you every day, help you spot patterns, and work through any concerns together.\n\nHow did things go last night? How's your little one doing today?`,
   `Hey there! I'm Lumira, your daily parenting companion. I'll help you track patterns, answer questions, and flag anything worth knowing.\n\nHow are things going — how's baby doing today?`,
   `Welcome! I'm Lumira. Every day I'll check in, help you notice patterns, and be here when you need to think something through.\n\nHow are you holding up? Tell me about your last 24 hours.`,
+]
+
+const TODDLER_INTROS = [
+  `Hi! I'm Lumira — I'm here to check in every day, help you notice what's working, and be here when things get tricky.\n\nHow's your toddler doing today? Anything new or different?`,
+  `Hey there! I'm Lumira, your daily parenting companion. Toddler life is an adventure — I'm here to help you navigate it.\n\nHow are things going? Any wins or challenges today?`,
+  `Welcome! I'm Lumira. Every day I'll check in and help you spot patterns, celebrate milestones, and think through the tough bits.\n\nHow's your little explorer doing today?`,
 ]
 
 export default function CheckinThread({ profile, baby, existingCheckin, prefill }: Props) {
@@ -164,7 +170,7 @@ export default function CheckinThread({ profile, baby, existingCheckin, prefill 
 
     if (!profile.first_checkin_complete) {
       // First ever checkin — pick from varied intros
-      const intros = baby.stage === 'pregnancy' ? PREGNANCY_INTROS : INFANT_INTROS
+      const intros = baby.stage === 'pregnancy' ? PREGNANCY_INTROS : baby.stage === 'toddler' ? TODDLER_INTROS : INFANT_INTROS
       const introIndex = new Date().getHours() % intros.length
       const introMsg: LumiraMessage = {
         role: 'lumira',
@@ -283,34 +289,17 @@ export default function CheckinThread({ profile, baby, existingCheckin, prefill 
   }
 
   const handleFieldSelect = async (fieldId: string, value: string) => {
-    // Update daily checkin with structured field
-    const fieldMap: Record<string, string> = {
-      sleep_quality: 'sleep_quality',
-      feeding: 'feeding',
-      mood: 'mood',
-      diapers: 'diapers',
-      nausea_level: 'nausea_level',
-      energy_level: 'energy_level',
+    // Show the user's selection as a visible message
+    const parentMsg: ParentMessage = {
+      role: 'parent',
+      content: `${fieldId.replace(/_/g, ' ')}: ${value}`,
+      timestamp: new Date().toISOString(),
     }
+    setMessages((prev) => [...prev, parentMsg])
+    setPendingFields(null)
 
-    if (fieldMap[fieldId]) {
-      try {
-        await fetch('/api/checkin-conversation', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            baby_id: baby.id,
-            profile_id: profile.id,
-            stage: baby.stage,
-            message: `${fieldId}: ${value}`,
-            is_opening: false,
-            conversation_so_far: conversationLog,
-          }),
-        })
-      } catch {
-        // Non-fatal
-      }
-    }
+    // Send to API and display Lumira's response
+    await sendToAPI(`${fieldId}: ${value}`, false)
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {

@@ -7,7 +7,7 @@
  */
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 
 interface BugReportButtonProps {
   userEmail?: string
@@ -20,11 +20,13 @@ interface CapturedLog {
   timestamp: string
 }
 
-// Capture recent console logs globally
+// Capture recent console logs globally (guard against duplicate monkey-patching from HMR)
 const recentLogs: CapturedLog[] = []
 const MAX_LOGS = 50
 
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined' && !(window as Record<string, unknown>).__lumira_console_patched) {
+  (window as Record<string, unknown>).__lumira_console_patched = true
+
   const originalConsole = {
     log: console.log,
     warn: console.warn,

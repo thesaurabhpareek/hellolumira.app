@@ -7,6 +7,8 @@
  */
 'use client'
 
+import type React from 'react'
+
 interface Props {
   step: number
   total: number

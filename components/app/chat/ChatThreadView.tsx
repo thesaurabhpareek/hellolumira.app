@@ -8,7 +8,7 @@
  */
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { useChatThread } from '@/hooks/useChatThread'
 import LumiraTyping from '@/components/app/LumiraTyping'

@@ -26,6 +26,20 @@
     --color-green:         #276749;
     --color-green-light:   #F0FFF4;
 
+    /* ── Story design tokens ── */
+    --story-ring-sage:    #3D8178;
+    --story-ring-terra:   #C4844E;
+    --story-ring-viewed:  #A8CECA;
+    --story-bg-overlay:   rgba(0, 0, 0, 0.95);
+    --story-palette-1:    #3D8178;
+    --story-palette-2:    #C4844E;
+    --story-palette-3:    #2D3748;
+    --story-palette-4:    #553C9A;
+    --story-palette-5:    #9B2C2C;
+    --story-palette-6:    #276749;
+    --story-palette-7:    #744210;
+    --story-palette-8:    #1A365D;
+
     /* Radius */
     --radius-sm: 6px;
     --radius-md: 8px;
@@ -52,6 +66,24 @@
     --border:              226 232 240;   /* #E2E8F0 */
     --input:               226 232 240;
     --ring:                61 129 120;
+
+    /* Stories module */
+    --story-ring-sage: #3D8178;
+    --story-ring-terra: #C4844E;
+    --story-ring-viewed: #D0CEC8;
+    --story-bg-overlay: rgba(19, 18, 16, 0.92);
+    --story-progress-bg: rgba(255, 255, 255, 0.25);
+    --story-progress-fill: rgba(255, 255, 255, 0.95);
+
+    /* Composer background palette */
+    --story-palette-1: #3D8178;
+    --story-palette-2: #C4844E;
+    --story-palette-3: #1A1A2E;
+    --story-palette-4: #9A6B10;
+    --story-palette-5: #D4607C;
+    --story-palette-6: #1F4F49;
+    --story-palette-7: #706D67;
+    --story-palette-8: #E8A598;
   }
 
   .dark {
@@ -376,6 +408,22 @@
   }
   .notification-pulse { animation: notification-pulse 0.6s ease-out; }
 
+  /* Notification panel animations */
+  @keyframes notif-backdrop-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes notif-dropdown-in {
+    from {
+      opacity: 0;
+      transform: translateY(-8px) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
   /* Badge celebration animations */
   @keyframes badge-bounce-in {
     0%   { transform: scale(0); }
@@ -493,6 +541,40 @@ html { scroll-behavior: smooth; }
   }
 }
 
+/* ── Story animations ── */
+@keyframes story-viewer-in {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes story-viewer-out {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.92); }
+}
+@keyframes story-ring-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(61, 129, 120, 0.4); }
+  50%      { box-shadow: 0 0 0 4px rgba(61, 129, 120, 0); }
+}
+@keyframes story-reaction-bounce {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.4); }
+  70%  { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+@keyframes story-sheet-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+@keyframes story-progress-fill {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+
+.animate-story-viewer-in  { animation: story-viewer-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.animate-story-viewer-out { animation: story-viewer-out 0.2s ease-out forwards; }
+.animate-story-ring-pulse { animation: story-ring-pulse 2s ease-in-out infinite; }
+.animate-story-reaction-bounce { animation: story-reaction-bounce 0.35s ease-out; }
+.animate-story-sheet-up   { animation: story-sheet-up 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
 @media (prefers-reduced-motion: reduce) {
   .lp-fade { animation: none; opacity: 1; }
   .animate-fade-in { animation: none; opacity: 1; }
@@ -504,6 +586,11 @@ html { scroll-behavior: smooth; }
   .notification-pulse { animation: none; }
   .badge-bounce-in { animation: none; }
   .badge-glow-pulse { animation: none; opacity: 0.5; }
+  .animate-story-viewer-in { animation: none; opacity: 1; }
+  .animate-story-viewer-out { animation: none; opacity: 0; }
+  .animate-story-ring-pulse { animation: none; }
+  .animate-story-reaction-bounce { animation: none; }
+  .animate-story-sheet-up { animation: none; transform: translateY(0); }
   /* Catch inline animation: spin on the login spinner SVG */
   svg[aria-hidden="true"] { animation: none !important; }
   /* Catch scroll-behavior for users who prefer reduced motion */

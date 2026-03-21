@@ -7,6 +7,8 @@
  */
 'use client'
 
+import type React from 'react'
+
 interface ConsentCheckboxProps {
   checked: boolean
   onChange: (checked: boolean) => void

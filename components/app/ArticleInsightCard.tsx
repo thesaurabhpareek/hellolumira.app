@@ -6,6 +6,7 @@
  * @since March 2026
  */
 
+import type React from 'react'
 import Link from 'next/link'
 import { BookIcon, SeedIcon, HeartIcon, ShieldIcon, LeafIcon, ClockIcon } from '@/components/icons'
 

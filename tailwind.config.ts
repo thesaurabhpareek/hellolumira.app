@@ -90,6 +90,30 @@ const config: Config = {
       minHeight: {
         dvh: '100dvh',
       },
+      keyframes: {
+        'story-ring-pulse': {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.75' },
+        },
+        'story-progress': {
+          '0%': { width: '0%' },
+          '100%': { width: '100%' },
+        },
+        'story-viewer-in': {
+          '0%': { transform: 'scale(0.3)', opacity: '0' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+        'story-viewer-out': {
+          '0%': { transform: 'scale(1)', opacity: '1' },
+          '100%': { transform: 'scale(0)', opacity: '0' },
+        },
+      },
+      animation: {
+        'story-ring-pulse': 'story-ring-pulse 2s ease-in-out infinite',
+        'story-progress': 'story-progress linear forwards',
+        'story-viewer-in': 'story-viewer-in 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+        'story-viewer-out': 'story-viewer-out 0.2s ease-in',
+      },
     },
   },
   plugins: [],
