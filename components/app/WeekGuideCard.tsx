@@ -6,15 +6,66 @@
  */
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import type React from 'react'
 import { UserIcon, LeafIcon, BrainIcon, EyeIcon, CheckIcon, ClipboardIcon, AlertIcon } from '@/components/icons'
-import type { Stage, WeeklyGuideContent } from '@/types/app'
+import type { Stage, WeeklyGuideContent, DailyCheckin } from '@/types/app'
 
 interface Props {
   stage: Stage
   week_or_month: number
   babyName?: string
+  recentCheckin?: DailyCheckin | null
+}
+
+/** Returns 3 watch-outs to display this session, rotated daily and personalised by check-in signals. */
+function selectWatchOuts(
+  watchOuts: string[],
+  stage: Stage,
+  week: number,
+  checkin: DailyCheckin | null | undefined,
+  sessionOffset: number,
+): string[] {
+  if (!watchOuts || watchOuts.length === 0) return []
+  if (watchOuts.length <= 3) return watchOuts
+
+  // Build priority signals from most recent check-in
+  const signals: string[] = []
+  if (checkin) {
+    if (checkin.sleep_quality === 'poor') signals.push('sleep')
+    if (checkin.feeding === 'less')       signals.push('feed')
+    if (checkin.mood === 'very_fussy' || checkin.mood === 'fussy') signals.push('cry')
+    if (checkin.emotional_signal === 'struggling' || checkin.emotional_signal === 'distressed') signals.push('mental')
+    if (checkin.nausea_level === 'moderate' || checkin.nausea_level === 'severe') signals.push('nausea')
+    if (checkin.energy_level === 'low') signals.push('energy')
+  }
+
+  // Score each watch-out by relevance to active signals
+  const SIGNAL_KEYWORDS: Record<string, string[]> = {
+    sleep:   ['sleep', 'rouse', 'waking', 'tired', 'exhaustion'],
+    feed:    ['feed', 'feeding', 'intake', 'refusal', 'appetite', 'nursing', 'milk'],
+    cry:     ['crying', 'inconsolable', 'fussy', 'cry', 'soothe'],
+    mental:  ['anxiety', 'mental', 'intrusive', 'mood', 'cope', 'burnout', 'depression', 'caregiver'],
+    nausea:  ['nausea', 'vomiting', 'sickness', 'food down'],
+    energy:  ['fatigue', 'energy', 'exhaustion', 'rest'],
+  }
+
+  const scored = watchOuts.map((w, i) => {
+    const text = w.toLowerCase()
+    let score = 0
+    for (const signal of signals) {
+      const kws = SIGNAL_KEYWORDS[signal] ?? []
+      if (kws.some(kw => text.includes(kw))) score += 10
+    }
+    // Date-based rotation seed (changes daily, deterministic)
+    const dayOfYear = Math.floor(Date.now() / 86400000)
+    const rotationScore = ((dayOfYear + sessionOffset + i * 7 + week * 3) % watchOuts.length)
+    score += rotationScore
+    return { w, score }
+  })
+
+  scored.sort((a, b) => b.score - a.score)
+  return scored.slice(0, 3).map(s => s.w)
 }
 
 function ShimmerLine({ width = '100%', height = 16 }: { width?: string; height?: number }) {
@@ -26,11 +77,12 @@ function ShimmerLine({ width = '100%', height = 16 }: { width?: string; height?:
   )
 }
 
-export default function WeekGuideCard({ stage, week_or_month, babyName }: Props) {
+export default function WeekGuideCard({ stage, week_or_month, babyName, recentCheckin }: Props) {
   const [guide, setGuide] = useState<WeeklyGuideContent | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [openAccordion, setOpenAccordion] = useState<string | null>(null)
+  const [sessionOffset, setSessionOffset] = useState(0)
 
   const fetchGuide = useCallback(async () => {
     setLoading(true)
@@ -194,26 +246,71 @@ export default function WeekGuideCard({ stage, week_or_month, babyName }: Props)
         <FocusThisWeek items={guide.focus_this_week} stage={stage} weekOrMonth={week_or_month} />
       )}
 
-      {/* Watch outs */}
+      {/* Watch outs — rotated & personalised */}
       {guide.watch_outs && guide.watch_outs.length > 0 && (
-        <div className="mt-4 bg-status-amber-light border border-[#F6E05E] rounded-md px-4 py-3.5">
-          <p className="text-[13px] font-bold text-status-amber mb-2">
-            <span className="inline-flex items-center gap-1">
-              <AlertIcon size={14} color="var(--color-amber)" /> Watch out for
-            </span>
-          </p>
-          <ul className="m-0 pl-4">
-            {guide.watch_outs.map((item, i) => (
-              <li key={i} className="text-[13px] leading-[1.7] text-status-amber-dark mb-1">{item}</li>
-            ))}
-          </ul>
-        </div>
+        <WatchOuts
+          watchOuts={guide.watch_outs}
+          stage={stage}
+          week={week_or_month}
+          checkin={recentCheckin}
+          sessionOffset={sessionOffset}
+          onSeeMore={() => setSessionOffset(o => o + 1)}
+        />
       )}
 
       {/* Medical disclaimer */}
       <p className="text-[13px] text-muted-foreground mt-4 leading-[1.5]">
         Grounded in AAP, WHO &amp; NICE guidelines · Always check with your care team for personal medical questions
       </p>
+    </div>
+  )
+}
+
+/* ── WatchOuts ── */
+function WatchOuts({
+  watchOuts, stage, week, checkin, sessionOffset, onSeeMore,
+}: {
+  watchOuts: string[]
+  stage: Stage
+  week: number
+  checkin: DailyCheckin | null | undefined
+  sessionOffset: number
+  onSeeMore: () => void
+}) {
+  const selected = useMemo(
+    () => selectWatchOuts(watchOuts, stage, week, checkin, sessionOffset),
+    [watchOuts, stage, week, checkin, sessionOffset],
+  )
+  const hasMore = watchOuts.length > 3
+
+  return (
+    <div className="mt-4 bg-status-amber-light border border-[#F6E05E] rounded-md px-4 py-3.5">
+      <div className="flex items-center justify-between mb-2">
+        <p className="text-[13px] font-bold text-status-amber m-0">
+          <span className="inline-flex items-center gap-1">
+            <AlertIcon size={14} color="var(--color-amber)" /> Watch out for
+          </span>
+        </p>
+        {hasMore && (
+          <button
+            type="button"
+            onClick={onSeeMore}
+            className="text-[12px] font-semibold text-status-amber underline underline-offset-2 bg-transparent border-none cursor-pointer p-0 opacity-80 hover:opacity-100 transition-opacity"
+          >
+            See different
+          </button>
+        )}
+      </div>
+      <ul className="m-0 pl-4">
+        {selected.map((item, i) => (
+          <li key={`${sessionOffset}-${i}`} className="text-[13px] leading-[1.7] text-status-amber-dark mb-1">{item}</li>
+        ))}
+      </ul>
+      {hasMore && (
+        <p className="text-[11px] text-status-amber opacity-60 mt-2 mb-0">
+          Showing {selected.length} of {watchOuts.length} · tailored to your check-ins
+        </p>
+      )}
     </div>
   )
 }
