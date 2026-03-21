@@ -1,5 +1,12 @@
-export type Stage = 'pregnancy' | 'infant' | 'toddler' | 'postpartum'
+export type Stage = 'planning' | 'pregnancy' | 'infant' | 'toddler' | 'postpartum'
 export type EmotionalSignal = 'ok' | 'tired' | 'struggling' | 'distressed'
+
+export type PlanningSubOption =
+  | 'trying_naturally'
+  | 'ivf_fertility'
+  | 'adopting'
+  | 'surrogacy'
+  | 'exploring'
 
 export type Profile = {
   id: string
@@ -9,6 +16,7 @@ export type Profile = {
   emotional_state_latest: EmotionalSignal | null
   emotional_state_updated_at: string | null
   partner_invite_email: string | null
+  avatar_emoji: string | null
   seeds_balance: number
   current_streak: number
   longest_streak: number
@@ -23,6 +31,8 @@ export type BabyProfile = {
   due_date: string | null
   date_of_birth: string | null
   stage: Stage
+  planning_sub_option: PlanningSubOption | null
+  planning_expected_month: string | null // YYYY-MM format
   pending_proactive_type: PatternType | null
   pending_proactive_set_at: string | null
   created_by_profile_id: string
@@ -284,7 +294,7 @@ export type AiParentProfile = {
   display_name: string
   avatar_emoji: string
   bio: string
-  stage: 'pregnancy' | 'infant' | 'toddler' | 'mixed'
+  stage: 'planning' | 'pregnancy' | 'infant' | 'toddler' | 'mixed'
   baby_name: string | null
   baby_age_desc: string | null
   location: string | null
@@ -356,4 +366,96 @@ export type Notification = {
   priority: NotificationPriority
   expires_at: string | null
   created_at: string
+}
+
+// ─── Stories Module ─────────────────────────────────────────────────────
+export type StoryType = 'text' | 'image' | 'poll' | 'question'
+
+export interface Story {
+  id: string
+  profile_id: string
+  story_type: StoryType
+  text_content: string | null
+  bg_color: string | null
+  image_url: string | null
+  image_caption: string | null
+  poll_question: string | null
+  poll_option_a: string | null
+  poll_option_b: string | null
+  question_prompt: string | null
+  view_count: number
+  reply_count: number
+  reaction_count: number
+  is_hidden: boolean
+  is_archived: boolean
+  repost_of_id: string | null
+  repost_attribution: string | null
+  published_at: string
+  expires_at: string
+  created_at: string
+  // Joined fields (from API)
+  author_display_name?: string
+  author_avatar_url?: string | null
+  author_baby_name?: string | null
+}
+
+export interface StoryView {
+  id: string
+  story_id: string
+  viewer_id: string
+  dwell_ms: number
+  viewed_at: string
+  viewer_display_name?: string
+  viewer_avatar_url?: string | null
+}
+
+export interface StoryReaction {
+  id: string
+  story_id: string
+  reactor_id: string
+  emoji: string
+  created_at: string
+}
+
+export interface StoryReply {
+  id: string
+  story_id: string
+  replier_id: string
+  body: string
+  created_at: string
+  replier_display_name?: string
+  replier_avatar_url?: string | null
+}
+
+export interface StoryPollVote {
+  story_id: string
+  voter_id: string
+  option: 'A' | 'B'
+  voted_at: string
+}
+
+export interface StoryQuestionAnswer {
+  id: string
+  story_id: string
+  answerer_id: string
+  answer_text: string
+  created_at: string
+  answerer_display_name?: string
+}
+
+export interface StoryReport {
+  id: string
+  story_id: string
+  reporter_id: string
+  reason: string
+  detail: string | null
+  created_at: string
+}
+
+export interface StoryStripItem {
+  profile_id: string
+  display_name: string
+  avatar_url: string | null
+  stories: Story[]
+  has_unread: boolean
 }

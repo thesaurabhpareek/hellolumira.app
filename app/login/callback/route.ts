@@ -8,7 +8,9 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
-  const next = searchParams.get('next') ?? '/home'
+  // SECURITY: Validate next param to prevent open redirect attacks
+  const rawNext = searchParams.get('next') ?? '/home'
+  const next = (rawNext.startsWith('/') && !rawNext.startsWith('//')) ? rawNext : '/home'
 
   // No code param — could be an implicit-flow hash redirect (older Supabase versions)
   // or a broken link. Either way, send them back to login.

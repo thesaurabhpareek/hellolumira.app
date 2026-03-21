@@ -1,14 +1,22 @@
-// app/onboarding/page.tsx — 3-step onboarding
+// app/onboarding/page.tsx — 3-step onboarding with planning, pregnancy, and born modes
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import OnboardingStep from '@/components/app/OnboardingStep'
 import ConsentCheckbox from '@/components/app/ConsentCheckbox'
-import type { Stage, ConsentType } from '@/types/app'
+import type { Stage, ConsentType, PlanningSubOption } from '@/types/app'
 
-type ParentingMode = 'pregnancy' | 'born'
+type ParentingMode = 'planning' | 'pregnancy' | 'born'
+
+const PLANNING_OPTIONS: { value: PlanningSubOption; label: string; emoji: string; desc: string }[] = [
+  { value: 'trying_naturally', label: 'Trying to conceive naturally', emoji: '🌱', desc: 'On your own timeline' },
+  { value: 'ivf_fertility', label: 'IVF / fertility treatment', emoji: '🔬', desc: 'Medical support on your journey' },
+  { value: 'adopting', label: 'Adopting a child', emoji: '🤝', desc: 'Building your family through adoption' },
+  { value: 'surrogacy', label: 'Using a surrogate', emoji: '💛', desc: 'Growing your family with help' },
+  { value: 'exploring', label: 'Just exploring / not sure yet', emoji: '🌿', desc: 'No pressure, just learning' },
+]
 
 export default function OnboardingPage() {
   const router = useRouter()
@@ -21,8 +29,13 @@ export default function OnboardingPage() {
   // Step 2
   const [mode, setMode] = useState<ParentingMode | null>(null)
   const [dueDate, setDueDate] = useState('')
+  const [dueDateError, setDueDateError] = useState('')
   const [babyName, setBabyName] = useState('')
   const [dateOfBirth, setDateOfBirth] = useState('')
+
+  // Planning sub-options
+  const [planningSubOption, setPlanningSubOption] = useState<PlanningSubOption | null>(null)
+  const [planningExpectedMonth, setPlanningExpectedMonth] = useState('')
 
   // Step 3
   const [firstTimeParent, setFirstTimeParent] = useState<boolean | null>(null)
@@ -42,10 +55,24 @@ export default function OnboardingPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
 
-  const today = new Date().toISOString().split('T')[0]
-  const maxDueDate = new Date()
-  maxDueDate.setMonth(maxDueDate.getMonth() + 10)
-  const maxDueDateStr = maxDueDate.toISOString().split('T')[0]
+  // Due date limits: today to today + 42 weeks (max human pregnancy)
+  const today = useMemo(() => new Date().toISOString().split('T')[0], [])
+  const maxDueDateStr = useMemo(() => {
+    const maxDate = new Date()
+    maxDate.setDate(maxDate.getDate() + 42 * 7) // 42 weeks = 294 days
+    return maxDate.toISOString().split('T')[0]
+  }, [])
+
+  // Planning expected month: this month to 2 years out
+  const planningMonthMin = useMemo(() => {
+    const d = new Date()
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+  }, [])
+  const planningMonthMax = useMemo(() => {
+    const d = new Date()
+    d.setFullYear(d.getFullYear() + 2)
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+  }, [])
 
   useEffect(() => {
     const supabase = createClient()
@@ -63,11 +90,44 @@ export default function OnboardingPage() {
     setStep(2)
   }
 
+  const validateDueDate = (dateStr: string): string => {
+    if (!dateStr) return ''
+    const selected = new Date(dateStr)
+    const now = new Date()
+    now.setHours(0, 0, 0, 0)
+    if (selected < now) return 'Due date cannot be in the past'
+    const maxDate = new Date()
+    maxDate.setDate(maxDate.getDate() + 42 * 7)
+    if (selected > maxDate) return 'Due date cannot be more than 42 weeks from now'
+    return ''
+  }
+
+  const handleDueDateChange = (value: string) => {
+    setDueDate(value)
+    setDueDateError(validateDueDate(value))
+  }
+
   const handleStep2 = () => {
     if (!mode) return
-    if (mode === 'pregnancy' && !dueDate) return
+    if (mode === 'pregnancy') {
+      if (!dueDate) return
+      const err = validateDueDate(dueDate)
+      if (err) {
+        setDueDateError(err)
+        return
+      }
+    }
     if (mode === 'born' && !dateOfBirth) return
+    if (mode === 'planning' && !planningSubOption) return
     setStep(3)
+  }
+
+  const isStep2Valid = (): boolean => {
+    if (!mode) return false
+    if (mode === 'pregnancy') return !!dueDate && !dueDateError
+    if (mode === 'born') return !!dateOfBirth
+    if (mode === 'planning') return !!planningSubOption
+    return false
   }
 
   const handleComplete = async () => {
@@ -109,7 +169,7 @@ export default function OnboardingPage() {
       }
 
       // Determine stage
-      const stage: Stage = mode === 'pregnancy' ? 'pregnancy' : 'infant'
+      const stage: Stage = mode === 'planning' ? 'planning' : mode === 'pregnancy' ? 'pregnancy' : 'infant'
 
       // Insert baby profile
       const babyInsertData: Record<string, unknown> = {
@@ -120,9 +180,15 @@ export default function OnboardingPage() {
       if (mode === 'pregnancy') {
         babyInsertData.due_date = dueDate
         if (babyName.trim()) babyInsertData.name = babyName.trim()
-      } else {
+      } else if (mode === 'born') {
         babyInsertData.date_of_birth = dateOfBirth
         babyInsertData.name = babyName.trim() || null
+      } else if (mode === 'planning') {
+        babyInsertData.planning_sub_option = planningSubOption
+        if (planningExpectedMonth) {
+          babyInsertData.planning_expected_month = planningExpectedMonth
+        }
+        if (babyName.trim()) babyInsertData.name = babyName.trim()
       }
 
       // Insert baby profile — use two-step insert+select to avoid RLS race
@@ -160,9 +226,6 @@ export default function OnboardingPage() {
       if (memberError) throw memberError
 
       // Record consent via server API (service-role client, bypasses RLS).
-      // Using /api/consent instead of a direct browser-client insert prevents the
-      // session-expiry race condition: the user's JWT may refresh between page load
-      // and form submit, causing auth.uid() to evaluate as null on the client side.
       const consentTypes: ConsentType[] = [
         'terms_of_service',
         'privacy_policy',
@@ -273,6 +336,18 @@ export default function OnboardingPage() {
     router.push('/home')
   }
 
+  // Shared input style
+  const inputStyle = {
+    width: '100%',
+    height: '52px',
+    padding: '0 16px',
+    borderRadius: 'var(--radius-md)',
+    border: '1.5px solid var(--color-border)',
+    fontSize: '16px',
+    color: 'var(--color-slate)',
+    background: 'var(--color-white)',
+  }
+
   if (showInvite) {
     return (
       <div
@@ -303,7 +378,7 @@ export default function OnboardingPage() {
                 }}
               >
                 <p style={{ color: 'var(--color-green)', fontWeight: 600 }}>
-                  ✓ Invite sent to {partnerEmail}
+                  Invite sent to {partnerEmail}
                 </p>
               </div>
             ) : (
@@ -318,12 +393,7 @@ export default function OnboardingPage() {
                   onChange={(e) => setPartnerEmail(e.target.value)}
                   placeholder="partner@example.com"
                   style={{
-                    width: '100%',
-                    height: '52px',
-                    padding: '0 16px',
-                    borderRadius: 'var(--radius-md)',
-                    border: '1.5px solid var(--color-border)',
-                    fontSize: '16px',
+                    ...inputStyle,
                     marginBottom: '12px',
                   }}
                 />
@@ -352,7 +422,7 @@ export default function OnboardingPage() {
                 touchAction: 'manipulation',
               }}
             >
-              {inviteSent ? "Let's go →" : 'Skip for now'}
+              {inviteSent ? "Let's go" : 'Skip for now'}
             </button>
           </div>
         </div>
@@ -390,14 +460,8 @@ export default function OnboardingPage() {
               enterKeyHint="next"
               onKeyDown={(e) => e.key === 'Enter' && handleStep1()}
               style={{
-                width: '100%',
-                height: '52px',
-                padding: '0 16px',
-                borderRadius: 'var(--radius-md)',
-                border: '1.5px solid var(--color-border)',
+                ...inputStyle,
                 fontSize: '18px',
-                color: 'var(--color-slate)',
-                background: 'var(--color-white)',
                 outline: 'none',
                 marginBottom: '20px',
               }}
@@ -420,6 +484,28 @@ export default function OnboardingPage() {
             title="Where are you in your journey?"
           >
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
+              {/* Planning card */}
+              <button
+                onClick={() => { setMode('planning'); setPlanningSubOption(null); setPlanningExpectedMonth('') }}
+                style={{
+                  padding: '20px',
+                  borderRadius: 'var(--radius-lg)',
+                  border: `2px solid ${mode === 'planning' ? 'var(--color-primary)' : 'var(--color-border)'}`,
+                  background: mode === 'planning' ? 'var(--color-primary-light)' : 'var(--color-white)',
+                  textAlign: 'left',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                <div style={{ fontSize: '28px', marginBottom: '8px' }}>🌱</div>
+                <div style={{ fontWeight: 700, fontSize: '17px', color: 'var(--color-slate)', marginBottom: 4 }}>
+                  We&apos;re planning a baby
+                </div>
+                <div style={{ fontSize: '14px', color: 'var(--color-muted)' }}>
+                  Trying to conceive, adopting, surrogacy, or exploring
+                </div>
+              </button>
+
               {/* Pregnancy card */}
               <button
                 onClick={() => setMode('pregnancy')}
@@ -465,7 +551,84 @@ export default function OnboardingPage() {
               </button>
             </div>
 
-            {/* Conditional date fields */}
+            {/* Planning sub-options */}
+            {mode === 'planning' && (
+              <div className="animate-fade-in" style={{ marginBottom: '20px' }}>
+                <p
+                  style={{
+                    fontSize: '14px',
+                    fontWeight: 600,
+                    color: 'var(--color-slate)',
+                    marginBottom: '12px',
+                  }}
+                >
+                  Tell us a bit more about your path
+                </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
+                  {PLANNING_OPTIONS.map((opt) => (
+                    <button
+                      key={opt.value}
+                      onClick={() => setPlanningSubOption(opt.value)}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '12px',
+                        padding: '14px 16px',
+                        borderRadius: 'var(--radius-md)',
+                        border: `1.5px solid ${planningSubOption === opt.value ? 'var(--color-primary)' : 'var(--color-border)'}`,
+                        background: planningSubOption === opt.value ? 'var(--color-primary-light)' : 'var(--color-white)',
+                        textAlign: 'left',
+                        cursor: 'pointer',
+                        transition: 'all 0.15s ease',
+                        minHeight: '48px',
+                      }}
+                    >
+                      <span style={{ fontSize: '22px', flexShrink: 0 }}>{opt.emoji}</span>
+                      <div>
+                        <div style={{ fontWeight: 600, fontSize: '15px', color: 'var(--color-slate)' }}>
+                          {opt.label}
+                        </div>
+                        <div style={{ fontSize: '13px', color: 'var(--color-muted)', marginTop: '2px' }}>
+                          {opt.desc}
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+
+                {/* Expected timeline picker */}
+                {planningSubOption && (
+                  <div className="animate-fade-in">
+                    <label
+                      htmlFor="planning-month"
+                      style={{
+                        display: 'block',
+                        fontSize: '14px',
+                        fontWeight: 600,
+                        color: 'var(--color-slate)',
+                        marginBottom: '8px',
+                      }}
+                    >
+                      When are you hoping to welcome your baby? (optional)
+                    </label>
+                    <p style={{ fontSize: '13px', color: 'var(--color-muted)', marginBottom: '8px' }}>
+                      Just a rough idea is fine. You can always update this later.
+                    </p>
+                    <input
+                      id="planning-month"
+                      type="month"
+                      value={planningExpectedMonth}
+                      min={planningMonthMin}
+                      max={planningMonthMax}
+                      onChange={(e) => setPlanningExpectedMonth(e.target.value)}
+                      style={inputStyle}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Pregnancy date field */}
             {mode === 'pregnancy' && (
               <div className="animate-fade-in" style={{ marginBottom: '20px' }}>
                 <label
@@ -486,21 +649,24 @@ export default function OnboardingPage() {
                   value={dueDate}
                   min={today}
                   max={maxDueDateStr}
-                  onChange={(e) => setDueDate(e.target.value)}
+                  onChange={(e) => handleDueDateChange(e.target.value)}
                   style={{
-                    width: '100%',
-                    height: '52px',
-                    padding: '0 16px',
-                    borderRadius: 'var(--radius-md)',
-                    border: '1.5px solid var(--color-border)',
-                    fontSize: '16px',
-                    color: 'var(--color-slate)',
-                    background: 'var(--color-white)',
+                    ...inputStyle,
+                    borderColor: dueDateError ? 'var(--color-red)' : undefined,
                   }}
                 />
+                {dueDateError && (
+                  <p style={{ color: 'var(--color-red)', fontSize: '13px', marginTop: '6px' }}>
+                    {dueDateError}
+                  </p>
+                )}
+                <p style={{ fontSize: '13px', color: 'var(--color-muted)', marginTop: '6px' }}>
+                  Must be within the next 42 weeks
+                </p>
               </div>
             )}
 
+            {/* Born date fields */}
             {mode === 'born' && (
               <div className="animate-fade-in" style={{ marginBottom: '20px' }}>
                 <label
@@ -522,14 +688,7 @@ export default function OnboardingPage() {
                   onChange={(e) => setBabyName(e.target.value)}
                   placeholder="e.g. Meera"
                   style={{
-                    width: '100%',
-                    height: '52px',
-                    padding: '0 16px',
-                    borderRadius: 'var(--radius-md)',
-                    border: '1.5px solid var(--color-border)',
-                    fontSize: '16px',
-                    color: 'var(--color-slate)',
-                    background: 'var(--color-white)',
+                    ...inputStyle,
                     marginBottom: '12px',
                   }}
                 />
@@ -551,16 +710,7 @@ export default function OnboardingPage() {
                   value={dateOfBirth}
                   max={today}
                   onChange={(e) => setDateOfBirth(e.target.value)}
-                  style={{
-                    width: '100%',
-                    height: '52px',
-                    padding: '0 16px',
-                    borderRadius: 'var(--radius-md)',
-                    border: '1.5px solid var(--color-border)',
-                    fontSize: '16px',
-                    color: 'var(--color-slate)',
-                    background: 'var(--color-white)',
-                  }}
+                  style={inputStyle}
                 />
               </div>
             )}
@@ -575,11 +725,7 @@ export default function OnboardingPage() {
               </button>
               <button
                 onClick={handleStep2}
-                disabled={
-                  !mode ||
-                  (mode === 'pregnancy' && !dueDate) ||
-                  (mode === 'born' && !dateOfBirth)
-                }
+                disabled={!isStep2Valid()}
                 className="btn-primary"
               >
                 Continue
@@ -596,8 +742,8 @@ export default function OnboardingPage() {
             title="Almost there"
             subtitle="Just a couple more things to personalise your experience."
           >
-            {/* Baby name (pregnancy only, if not set) */}
-            {mode === 'pregnancy' && (
+            {/* Baby name (pregnancy or planning, if not set) */}
+            {(mode === 'pregnancy' || mode === 'planning') && (
               <div style={{ marginBottom: '20px' }}>
                 <label
                   htmlFor="baby-name-preg"
@@ -617,16 +763,7 @@ export default function OnboardingPage() {
                   value={babyName}
                   onChange={(e) => setBabyName(e.target.value)}
                   placeholder="Skip if not yet decided"
-                  style={{
-                    width: '100%',
-                    height: '52px',
-                    padding: '0 16px',
-                    borderRadius: 'var(--radius-md)',
-                    border: '1.5px solid var(--color-border)',
-                    fontSize: '16px',
-                    color: 'var(--color-slate)',
-                    background: 'var(--color-white)',
-                  }}
+                  style={inputStyle}
                 />
               </div>
             )}
@@ -649,7 +786,7 @@ export default function OnboardingPage() {
                   className={firstTimeParent === true ? 'chip chip-selected' : 'chip'}
                   style={{ flex: 1 }}
                 >
-                  Yes ✨
+                  Yes
                 </button>
                 <button
                   onClick={() => setFirstTimeParent(false)}
@@ -679,7 +816,11 @@ export default function OnboardingPage() {
                 id="initial-concern"
                 value={initialConcern}
                 onChange={(e) => setInitialConcern(e.target.value)}
-                placeholder="Whatever's on your mind — no pressure"
+                placeholder={
+                  mode === 'planning'
+                    ? "Questions about your journey? We're here for you."
+                    : "Whatever's on your mind \u2014 no pressure"
+                }
                 rows={3}
                 enterKeyHint="done"
                 style={{

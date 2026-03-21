@@ -1,5 +1,6 @@
 // app/layout.tsx — Root layout for hellolumira.app
 // v1.2 — next/font/google replaces inline fontFamily (self-hosted, no render-block)
+import type React from 'react'
 import type { Metadata, Viewport } from 'next'
 import { Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'

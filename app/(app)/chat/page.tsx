@@ -51,12 +51,13 @@ export default async function ChatPage() {
 
   if (threadsList.length > 0) {
     const threadIds = threadsList.map((t) => t.id)
+    // Fetch enough messages to cover all threads (at least 1 per thread + buffer for active threads)
     const { data: recentMessages } = await supabase
       .from('chat_messages')
       .select('thread_id, content, role, created_at')
       .in('thread_id', threadIds)
       .order('created_at', { ascending: false })
-      .limit(threadIds.length * 2)
+      .limit(Math.max(threadIds.length * 3, 150))
 
     if (recentMessages) {
       const latestByThread = new Map<string, { content: string; role: string }>()

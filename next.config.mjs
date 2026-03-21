@@ -3,6 +3,9 @@ const nextConfig = {
   // Enable React strict mode for catching potential issues in development
   reactStrictMode: true,
 
+  // Disable source maps in production to prevent code exposure
+  productionBrowserSourceMaps: false,
+
   // Security headers applied to all routes
   async headers() {
     return [{
@@ -22,7 +25,7 @@ const nextConfig = {
             "script-src 'self' 'unsafe-inline'",
             "style-src 'self' 'unsafe-inline'",
             "font-src 'self'",
-            "img-src 'self' data: blob: https:",
+            "img-src 'self' data: blob: https://*.supabase.co https://hellolumira.app https://lh3.googleusercontent.com",
             "connect-src 'self' https://*.supabase.co https://api.anthropic.com https://api.resend.com wss://*.supabase.co https://accounts.google.com https://www.googleapis.com",
             "frame-src https://accounts.google.com",
             "frame-ancestors 'none'",
@@ -35,6 +38,9 @@ const nextConfig = {
         { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
         { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
         { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
+        { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
+        { key: 'Cross-Origin-Resource-Policy', value: 'same-origin' },
+        { key: 'X-DNS-Prefetch-Control', value: 'off' },
       ]
     }]
   },

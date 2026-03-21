@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import type {
@@ -8,6 +8,7 @@ import type {
   ConsentRecord,
   DataExportRequest,
 } from '@/types/app'
+import IOSToggle from '@/components/ui/ios-toggle'
 
 /* ------------------------------------------------------------------ */
 /*  State types                                                        */
@@ -19,57 +20,6 @@ type DeleteModalState = {
   open: boolean
   confirmText: string
   submitting: boolean
-}
-
-/* ------------------------------------------------------------------ */
-/*  Toggle component                                                   */
-/* ------------------------------------------------------------------ */
-
-function Toggle({
-  checked,
-  onChange,
-  disabled,
-}: {
-  checked: boolean
-  onChange: (v: boolean) => void
-  disabled?: boolean
-}) {
-  return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={checked}
-      disabled={disabled}
-      onClick={() => onChange(!checked)}
-      style={{
-        position: 'relative',
-        width: '52px',
-        height: '30px',
-        minWidth: '52px',
-        borderRadius: '15px',
-        background: checked ? '#3D8178' : '#CBD5E0',
-        border: 'none',
-        cursor: disabled ? 'not-allowed' : 'pointer',
-        transition: 'background 0.2s ease',
-        opacity: disabled ? 0.5 : 1,
-        padding: 0,
-      }}
-    >
-      <span
-        style={{
-          position: 'absolute',
-          top: '3px',
-          left: checked ? '24px' : '3px',
-          width: '24px',
-          height: '24px',
-          borderRadius: '50%',
-          background: 'white',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.15)',
-          transition: 'left 0.2s ease',
-        }}
-      />
-    </button>
-  )
 }
 
 /* ------------------------------------------------------------------ */
@@ -430,7 +380,7 @@ export default function PrivacySettingsPage() {
                   : 'AI responses are turned off. Lumira will track check-ins but won\u2019t generate personalised responses.'}
               </p>
             </div>
-            <Toggle
+            <IOSToggle
               checked={prefs?.ai_processing_enabled ?? true}
               onChange={(v) => updatePref('ai_processing_enabled', v)}
               disabled={saving}
@@ -504,7 +454,7 @@ export default function PrivacySettingsPage() {
                 Help improve Lumira by sharing anonymous usage data. No personal information is included.
               </p>
             </div>
-            <Toggle
+            <IOSToggle
               checked={prefs?.analytics_enabled ?? true}
               onChange={(v) => updatePref('analytics_enabled', v)}
               disabled={saving}

@@ -11,6 +11,7 @@ export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { SECURITY_HEADERS } from '@/lib/utils'
+import { verifyBabyOwnership } from '@/lib/validation'
 
 export async function POST(request: NextRequest) {
   try {
@@ -34,6 +35,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: 'milestone_key and baby_id are required' },
         { status: 400, headers: SECURITY_HEADERS }
+      )
+    }
+
+    // SECURITY: Verify user owns this baby profile (prevents IDOR)
+    const isOwner = await verifyBabyOwnership(supabase, user.id, baby_id)
+    if (!isOwner) {
+      return NextResponse.json(
+        { error: 'Forbidden' },
+        { status: 403, headers: SECURITY_HEADERS }
       )
     }
 

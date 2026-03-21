@@ -1,26 +1,25 @@
 /**
  * @module RateLimit
- * @description In-memory rate limiter using a sliding window approach with
- *   automatic TTL cleanup. Designed for serverless environments where each
- *   instance maintains its own window — sufficient for v1 abuse prevention.
- * @version 1.0.0
+ * @description Dual-layer rate limiter: fast in-memory check (per-instance)
+ *   backed by Supabase RPC for distributed enforcement across all serverless
+ *   instances. Falls back to in-memory only if Supabase call fails.
+ * @version 3.0.0
  * @since March 2026
  */
+
+import { createServiceClient } from '@/lib/supabase/server'
+
+// ─── In-memory layer (fast, per-instance) ───────────────────────────────────
 
 interface RateLimitEntry {
   timestamps: number[]
 }
 
 const store = new Map<string, RateLimitEntry>()
-
-/** Interval for cleaning up expired entries (every 60 seconds). */
 const CLEANUP_INTERVAL_MS = 60_000
+const MAX_STORE_SIZE = 10_000
 let lastCleanup = Date.now()
 
-/**
- * Removes entries whose timestamps have all expired beyond the window.
- * Runs at most once per CLEANUP_INTERVAL_MS to keep overhead minimal.
- */
 function maybeCleanup(windowMs: number): void {
   const now = Date.now()
   if (now - lastCleanup < CLEANUP_INTERVAL_MS) return
@@ -28,52 +27,116 @@ function maybeCleanup(windowMs: number): void {
 
   const cutoff = now - windowMs
   store.forEach((entry, key) => {
-    // Remove entries where all timestamps are older than the window
     if (entry.timestamps.length === 0 || entry.timestamps[entry.timestamps.length - 1] < cutoff) {
       store.delete(key)
     }
   })
+
+  if (store.size > MAX_STORE_SIZE) {
+    const keysToDelete = Array.from(store.keys()).slice(0, Math.floor(MAX_STORE_SIZE / 2))
+    keysToDelete.forEach(k => store.delete(k))
+  }
 }
 
-/**
- * Checks whether a request from the given user is within rate limits.
- *
- * @param userId - Unique identifier for the user (typically auth user ID).
- * @param limit - Maximum number of requests allowed within the window. Defaults to 20.
- * @param windowMs - Time window in milliseconds. Defaults to 60000 (1 minute).
- * @returns An object indicating whether the request is allowed, and if not,
- *   how many seconds until the user can retry.
- */
-export async function checkRateLimit(
-  userId: string,
-  limit: number = 20,
-  windowMs: number = 60_000
-): Promise<{ allowed: boolean; retryAfter?: number }> {
+function checkInMemory(key: string, limit: number, windowMs: number): { allowed: boolean; retryAfter?: number } {
   maybeCleanup(windowMs)
-
   const now = Date.now()
   const cutoff = now - windowMs
-  const key = `rate:${userId}`
+  const storeKey = `rate:${key}`
 
-  let entry = store.get(key)
+  let entry = store.get(storeKey)
   if (!entry) {
     entry = { timestamps: [] }
-    store.set(key, entry)
+    store.set(storeKey, entry)
   }
 
-  // Filter out timestamps outside the current window
   entry.timestamps = entry.timestamps.filter((t) => t > cutoff)
 
   if (entry.timestamps.length >= limit) {
-    // Calculate when the oldest request in the window will expire
     const oldestInWindow = entry.timestamps[0]
     const retryAfterMs = oldestInWindow + windowMs - now
-    const retryAfterSeconds = Math.ceil(retryAfterMs / 1000)
-
-    return { allowed: false, retryAfter: Math.max(retryAfterSeconds, 1) }
+    return { allowed: false, retryAfter: Math.max(Math.ceil(retryAfterMs / 1000), 1) }
   }
 
-  // Allow the request and record the timestamp
   entry.timestamps.push(now)
   return { allowed: true }
+}
+
+// ─── Distributed layer (Supabase RPC) ───────────────────────────────────────
+
+async function checkDistributed(key: string, limit: number, windowSeconds: number): Promise<boolean | null> {
+  try {
+    const supabase = await createServiceClient()
+    const { data, error } = await supabase.rpc('check_rate_limit_distributed', {
+      p_key: key,
+      p_limit: limit,
+      p_window_seconds: windowSeconds,
+    })
+    if (error) {
+      console.warn('[rate-limit] Distributed check failed, falling back to in-memory:', error.message)
+      return null // Fall back to in-memory
+    }
+    return data as boolean
+  } catch {
+    return null // Fall back to in-memory
+  }
+}
+
+// ─── Public API ─────────────────────────────────────────────────────────────
+
+/**
+ * Checks whether a request is within rate limits.
+ * Uses in-memory check first (fast), then distributed check (accurate).
+ * If in-memory says blocked, blocks immediately without hitting DB.
+ * If in-memory says allowed, verifies with distributed check.
+ */
+export async function checkRateLimit(
+  key: string,
+  limit: number = 20,
+  windowMs: number = 60_000
+): Promise<{ allowed: boolean; retryAfter?: number }> {
+  // Fast path: in-memory check first
+  const memResult = checkInMemory(key, limit, windowMs)
+  if (!memResult.allowed) {
+    return memResult // Blocked by local instance — skip DB call
+  }
+
+  // Distributed check for cross-instance accuracy
+  const windowSeconds = Math.ceil(windowMs / 1000)
+  const distributedAllowed = await checkDistributed(key, limit, windowSeconds)
+
+  if (distributedAllowed === null) {
+    return memResult // DB unavailable — trust in-memory
+  }
+
+  if (!distributedAllowed) {
+    return { allowed: false, retryAfter: windowSeconds }
+  }
+
+  return { allowed: true }
+}
+
+/**
+ * Rate limit by IP address. Extracts IP from headers, hashes for privacy.
+ */
+export async function checkIpRateLimit(
+  request: { headers: { get(name: string): string | null } },
+  limit: number = 10,
+  windowMs: number = 60_000
+): Promise<{ allowed: boolean; retryAfter?: number }> {
+  const forwarded = request.headers.get('x-forwarded-for')
+  const ip = forwarded ? forwarded.split(',')[0].trim() : 'unknown'
+  const ipKey = `ip:${simpleHash(ip)}`
+  return checkRateLimit(ipKey, limit, windowMs)
+}
+
+/** Fast non-crypto hash for rate limit keys. */
+function simpleHash(str: string): string {
+  let hash = 0
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i)
+    hash = ((hash << 5) - hash) + char
+    hash |= 0
+  }
+  return hash.toString(36)
 }

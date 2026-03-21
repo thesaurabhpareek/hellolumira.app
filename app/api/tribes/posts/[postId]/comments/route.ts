@@ -30,12 +30,17 @@ export async function POST(
       return NextResponse.json({ error: 'Comment body is required' }, { status: 400, headers: SECURITY_HEADERS })
     }
 
+    // SECURITY: Enforce max length to prevent DB bloat
+    if (commentBody.length > 2000) {
+      return NextResponse.json({ error: 'Comment too long (max 2000 characters)' }, { status: 400, headers: SECURITY_HEADERS })
+    }
+
     const { data: comment, error } = await supabase
       .from('tribe_comments')
       .insert({
         post_id: postId,
         profile_id: user.id,
-        body: commentBody.trim(),
+        body: commentBody.trim().slice(0, 2000),
         parent_id: parent_id || null,
       })
       .select()

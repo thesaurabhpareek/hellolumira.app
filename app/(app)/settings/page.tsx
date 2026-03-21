@@ -1,9 +1,11 @@
 // app/(app)/settings/page.tsx — Settings with enhanced partner invite
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { getBabyAgeInfo } from '@/lib/baby-age'
 import SignOutButton from './SignOutButton'
 import InvitePartnerForm from './InvitePartnerForm'
+import RemovePartnerButton from './RemovePartnerButton'
 import { ArrowLeftIcon, ChevronRightIcon, ShieldIcon, BellIcon } from '@/components/icons'
 import type { Profile, BabyProfile } from '@/types/app'
 
@@ -41,6 +43,7 @@ export default async function SettingsPage() {
 
   // Find connected partner (another member on the same baby profile)
   let connectedPartnerName: string | null = null
+  let connectedPartnerProfileId: string | null = null
   if (baby) {
     const { data: otherMembers } = await supabase
       .from('baby_profile_members')
@@ -51,6 +54,7 @@ export default async function SettingsPage() {
       .maybeSingle()
 
     if (otherMembers?.profile_id) {
+      connectedPartnerProfileId = otherMembers.profile_id
       const { data: partnerProfile } = await supabase
         .from('profiles')
         .select('first_name')
@@ -73,7 +77,7 @@ export default async function SettingsPage() {
       }}
     >
       <div className="content-width mx-auto px-4 pt-6">
-        <a
+        <Link
           href="/home"
           style={{
             display: 'inline-flex',
@@ -87,7 +91,7 @@ export default async function SettingsPage() {
           }}
         >
           <ArrowLeftIcon size={16} color="#3D8178" /> Back
-        </a>
+        </Link>
         <h1 className="text-h1 mb-6" style={{ color: 'var(--color-slate)' }}>
           My Settings
         </h1>
@@ -186,21 +190,9 @@ export default async function SettingsPage() {
                   <p style={{ fontWeight: 600, color: 'var(--color-slate)' }}>{connectedPartnerName}</p>
                   <p style={{ fontSize: '13px', color: 'var(--color-muted)' }}>Connected</p>
                 </div>
-                <button
-                  style={{
-                    padding: '8px 16px',
-                    borderRadius: 'var(--radius-md)',
-                    border: '1.5px solid #FEB2B2',
-                    background: 'var(--color-red-light)',
-                    color: 'var(--color-red)',
-                    fontSize: '13px',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    minHeight: '48px',
-                  }}
-                >
-                  Remove
-                </button>
+                {baby && connectedPartnerProfileId && (
+                  <RemovePartnerButton babyId={baby.id} partnerProfileId={connectedPartnerProfileId} />
+                )}
               </div>
             </div>
           ) : pendingInvite ? (
@@ -225,7 +217,7 @@ export default async function SettingsPage() {
             Preferences
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            <a
+            <Link
               href="/settings/privacy"
               style={{
                 display: 'flex',
@@ -246,9 +238,9 @@ export default async function SettingsPage() {
                 <p style={{ fontSize: '13px', color: 'var(--color-muted)' }}>AI processing, data retention, exports</p>
               </div>
               <ChevronRightIcon size={18} color="var(--color-muted)" />
-            </a>
+            </Link>
             <div style={{ height: '1px', background: 'var(--color-border)', margin: '0 4px' }} />
-            <a
+            <Link
               href="/settings/notifications"
               style={{
                 display: 'flex',
@@ -269,7 +261,7 @@ export default async function SettingsPage() {
                 <p style={{ fontSize: '13px', color: 'var(--color-muted)' }}>Check-in time, email, quiet hours</p>
               </div>
               <ChevronRightIcon size={18} color="var(--color-muted)" />
-            </a>
+            </Link>
           </div>
         </div>
 
@@ -282,7 +274,7 @@ export default async function SettingsPage() {
             Lumira is a calm parenting companion from hellolumira.app. It is not a substitute for obstetric or pediatric medical care. Always consult your healthcare provider for medical concerns.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            <a
+            <Link
               href="/legal"
               style={{
                 display: 'flex',
@@ -297,7 +289,7 @@ export default async function SettingsPage() {
             >
               <p style={{ fontWeight: 600, fontSize: '15px' }}>Legal</p>
               <ChevronRightIcon size={18} color="var(--color-muted)" />
-            </a>
+            </Link>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--color-muted)', marginTop: '12px' }}>
             Version 0.1.0
@@ -309,7 +301,7 @@ export default async function SettingsPage() {
 
         {/* Delete account */}
         <div style={{ textAlign: 'center', marginTop: '16px', paddingBottom: '16px' }}>
-          <a
+          <Link
             href="/settings/privacy"
             style={{
               fontSize: '14px',
@@ -319,7 +311,7 @@ export default async function SettingsPage() {
             }}
           >
             Delete my account
-          </a>
+          </Link>
         </div>
       </div>
     </div>

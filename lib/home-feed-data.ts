@@ -36,6 +36,49 @@ export interface QuizQuestion {
 // ---------------------------------------------------------------------------
 
 /* eslint-disable quotes */
+const PLANNING_QUESTIONS: DailyQuestion[] = [
+  {
+    question: "What's one thing about becoming a parent that excites you most?",
+    chatPrompt: "I'm in the planning stage of parenthood and feeling excited but also nervous. Can we talk about what to expect?",
+  },
+  {
+    question: "Have you thought about what kind of parent you'd like to be?",
+    chatPrompt: "I've been thinking about my parenting values and style. Can we talk about what matters most in raising a child?",
+  },
+  {
+    question: "Is there anything about fertility or conception that you'd like to understand better?",
+    chatPrompt: "I have some questions about fertility and conception. Can you help me understand the basics?",
+  },
+  {
+    question: "What's one thing you're doing now to prepare for parenthood?",
+    chatPrompt: "I want to make sure I'm preparing well for becoming a parent. What should I be thinking about?",
+  },
+  {
+    question: "How are you feeling emotionally about the journey ahead?",
+    chatPrompt: "I'd like to talk about the emotional side of planning for a baby. It's a big life change and I want to process it.",
+  },
+  {
+    question: "Have you thought about the financial side of having a baby?",
+    chatPrompt: "I want to talk about financial planning for a baby. What are the key things I should budget for?",
+  },
+  {
+    question: "What kind of support system do you have around you?",
+    chatPrompt: "I'm thinking about my support network as I plan for a baby. What kind of help will I need?",
+  },
+  {
+    question: "Is there a health check you've been meaning to schedule?",
+    chatPrompt: "I want to make sure my health is in the best shape before trying for a baby. What preconception health checks should I consider?",
+  },
+  {
+    question: "What does your ideal first year as a parent look like?",
+    chatPrompt: "I've been daydreaming about the first year of parenthood. Can you help me set realistic expectations?",
+  },
+  {
+    question: "Are you and your partner on the same page about timing and readiness?",
+    chatPrompt: "I want to talk about how to align with my partner on the decision to have a baby. How do couples navigate this?",
+  },
+]
+
 const PREGNANCY_QUESTIONS: DailyQuestion[] = [
   {
     question: "What's one thing your body did this week that amazed you?",
@@ -227,6 +270,7 @@ const TODDLER_QUESTIONS: DailyQuestion[] = [
 /* eslint-enable quotes */
 
 const QUESTION_POOLS: Record<Stage, DailyQuestion[]> = {
+  planning: PLANNING_QUESTIONS,
   pregnancy: PREGNANCY_QUESTIONS,
   infant: INFANT_QUESTIONS,
   toddler: TODDLER_QUESTIONS,
@@ -236,6 +280,57 @@ const QUESTION_POOLS: Record<Stage, DailyQuestion[]> = {
 // ---------------------------------------------------------------------------
 // Quick-fact quiz questions
 // ---------------------------------------------------------------------------
+
+const PLANNING_QUIZZES: QuizQuestion[] = [
+  {
+    question: "What vitamin is recommended to start taking before conception?",
+    options: ["Vitamin D", "Folic acid", "Vitamin C"],
+    answerIndex: 1,
+    explanation: "Folic acid (400\u2013800mcg daily) is recommended at least 1\u20133 months before conception to reduce the risk of neural tube defects in early pregnancy.",
+  },
+  {
+    question: "What is the average time it takes for a healthy couple to conceive?",
+    options: ["1\u20132 months", "6\u201312 months", "18\u201324 months"],
+    answerIndex: 1,
+    explanation: "For most healthy couples, it takes 6\u201312 months of regular unprotected intercourse to conceive. About 80% of couples conceive within the first year.",
+  },
+  {
+    question: "At what point should you consider seeing a fertility specialist?",
+    options: ["After 3 months", "After 12 months (or 6 months if over 35)", "After 24 months"],
+    answerIndex: 1,
+    explanation: "Doctors generally recommend seeing a specialist after 12 months of trying (or 6 months if you're over 35). Earlier evaluation is fine if you have known risk factors.",
+  },
+  {
+    question: "Which lifestyle change has the most evidence for improving fertility?",
+    options: ["Strict dieting", "Maintaining a healthy weight", "Taking herbal supplements"],
+    answerIndex: 1,
+    explanation: "Maintaining a healthy BMI has strong evidence for improving fertility for both partners. Extreme dieting or being underweight can actually harm fertility.",
+  },
+  {
+    question: "How much does the average family spend in the first year of a baby's life?",
+    options: ["$5,000\u2013$8,000", "$12,000\u2013$15,000", "$20,000\u2013$25,000"],
+    answerIndex: 1,
+    explanation: "According to the USDA, families spend $12,000\u2013$15,000 in the first year on average, including childcare, diapers, formula/food, and medical expenses. Planning ahead helps reduce financial stress.",
+  },
+  {
+    question: "What is the most fertile window in a menstrual cycle?",
+    options: ["Days 1\u20135", "5 days before and the day of ovulation", "Days 20\u201328"],
+    answerIndex: 1,
+    explanation: "The fertile window is the 5 days before ovulation and the day of ovulation itself. Sperm can survive up to 5 days, but the egg only survives 12\u201324 hours after release.",
+  },
+  {
+    question: "Which preconception health check is often overlooked?",
+    options: ["Blood pressure", "Dental check-up", "Eye exam"],
+    answerIndex: 1,
+    explanation: "Dental health is strongly linked to pregnancy outcomes. Gum disease has been associated with preterm birth and low birth weight. A dental check-up before conception is recommended.",
+  },
+  {
+    question: "How long before conception should you stop drinking alcohol for best outcomes?",
+    options: ["1 week", "1 month", "3 months (both partners)"],
+    answerIndex: 2,
+    explanation: "Research suggests both partners should reduce or eliminate alcohol at least 3 months before trying to conceive, as alcohol affects egg and sperm quality over their maturation cycles.",
+  },
+]
 
 const PREGNANCY_QUIZZES: QuizQuestion[] = [
   {
@@ -427,6 +522,7 @@ const TODDLER_QUIZZES: QuizQuestion[] = [
 ]
 
 const QUIZ_POOLS: Record<Stage, QuizQuestion[]> = {
+  planning: PLANNING_QUIZZES,
   pregnancy: PREGNANCY_QUIZZES,
   infant: INFANT_QUIZZES,
   toddler: TODDLER_QUIZZES,

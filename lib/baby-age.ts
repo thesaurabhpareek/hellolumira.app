@@ -34,6 +34,32 @@ export function getBabyAgeInfo(baby: BabyProfile): BabyAgeInfo {
     return { stage: 'pregnancy', age_display_string: 'Pregnancy' }
   }
 
+  // Planning stage — not yet pregnant / adopting / surrogacy
+  if (baby.stage === 'planning') {
+    const subLabels: Record<string, string> = {
+      trying_naturally: 'Trying to conceive',
+      ivf_fertility: 'Fertility treatment',
+      adopting: 'Adoption journey',
+      surrogacy: 'Surrogacy journey',
+      exploring: 'Exploring options',
+    }
+    const subLabel = baby.planning_sub_option
+      ? subLabels[baby.planning_sub_option] || 'Planning'
+      : 'Planning'
+
+    let displayString = subLabel
+    if (baby.planning_expected_month) {
+      const [y, m] = baby.planning_expected_month.split('-').map(Number)
+      const monthName = new Date(y, m - 1).toLocaleString('en-US', { month: 'long', year: 'numeric' })
+      displayString = `${subLabel} · Hoping for ${monthName}`
+    }
+
+    return {
+      stage: 'planning',
+      age_display_string: displayString,
+    }
+  }
+
   const today = new Date()
   if (baby.stage === 'pregnancy' && baby.due_date) {
     const due = new Date(baby.due_date)
@@ -158,6 +184,12 @@ export function getTimeOfDay() {
 export function getCheckinOpener(stage: Stage, babyName: string | null): string {
   const h = new Date().getHours()
   const name = babyName || 'your baby'
+  if (stage === 'planning') {
+    if (h >= 5 && h < 12) return 'Good morning! How are you feeling about your journey today?'
+    if (h >= 12 && h < 17) return 'How are things going this afternoon?'
+    if (h >= 17 && h < 21) return 'How are you feeling this evening?'
+    return "Still up? How are you doing?"
+  }
   if (stage === 'pregnancy') {
     if (h >= 5 && h < 9) return 'How are you feeling this morning?'
     if (h >= 9 && h < 12) return "How's the first half of the day going?"
@@ -195,6 +227,8 @@ export function getCurrentISOWeek(): { week: number; year: number } {
  */
 export function getWeeklyGuideKey(baby: BabyProfile): { stage: Stage; week_or_month: number } {
   const info = getBabyAgeInfo(baby)
+  if (info.stage === 'planning')
+    return { stage: 'planning', week_or_month: 1 }
   if (info.stage === 'pregnancy' && info.pregnancy_week)
     return { stage: 'pregnancy', week_or_month: info.pregnancy_week }
   if (info.stage === 'infant' && info.age_in_weeks !== undefined)

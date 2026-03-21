@@ -441,7 +441,7 @@ export async function POST(request: NextRequest) {
     // 13. Fire and forget pattern detection (non-critical)
     fetch(`${request.nextUrl.origin}/api/detect-patterns`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'Cookie': request.headers.get('cookie') || '' },
       body: JSON.stringify({
         baby_id,
         profile_id,

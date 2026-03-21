@@ -58,7 +58,7 @@ export default function AppShell({ children, profile, baby }: Props) {
   }
 
   return (
-    <div className="min-h-dvh bg-white flex flex-col font-sans">
+    <div className="h-dvh bg-white flex flex-col font-sans overflow-hidden">
 
       {/* ── Header ── */}
       <header className="bg-white border-b border-border sticky top-0 z-[100] safe-top">
@@ -78,10 +78,10 @@ export default function AppShell({ children, profile, baby }: Props) {
 
       {/* ── Main content ── */}
       <main
-        className="flex-1 overflow-y-auto overflow-x-hidden [-webkit-overflow-scrolling:touch]"
+        className="flex-1 flex flex-col overflow-hidden min-h-0"
         style={{ paddingBottom: 'calc(56px + max(0px, env(safe-area-inset-bottom)))' }}
       >
-        <div className="max-w-content mx-auto w-full">
+        <div className="max-w-content mx-auto w-full flex-1 flex flex-col min-h-0 overflow-y-auto overflow-x-hidden [-webkit-overflow-scrolling:touch]">
           {children}
         </div>
       </main>

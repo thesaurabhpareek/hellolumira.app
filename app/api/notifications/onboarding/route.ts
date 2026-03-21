@@ -15,6 +15,7 @@ export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { SECURITY_HEADERS } from '@/lib/utils'
+import { verifyBabyOwnership } from '@/lib/validation'
 
 /** Milliseconds in one day. */
 const MS_PER_DAY = 86_400_000
@@ -239,6 +240,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: 'mode must be "pregnancy" or "born"' },
         { status: 400, headers: SECURITY_HEADERS },
+      )
+    }
+
+    // SECURITY: Verify user owns this baby profile (prevents IDOR)
+    const isOwner = await verifyBabyOwnership(anonClient, user.id, baby_id)
+    if (!isOwner) {
+      return NextResponse.json(
+        { error: 'Forbidden' },
+        { status: 403, headers: SECURITY_HEADERS },
       )
     }
 

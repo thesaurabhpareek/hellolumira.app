@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 
 type Tribe = {
@@ -12,6 +12,7 @@ type Tribe = {
   member_count: number
   post_count: number
   color: string
+  created_at: string
   is_member: boolean
   latest_post: {
     id: string
@@ -42,14 +43,40 @@ function formatCount(n: number): string {
 }
 
 const FILTERS = [
-  { id: 'all', label: 'All' },
+  { id: 'all', label: 'All Tribes' },
   { id: 'my', label: 'My Tribes' },
+  { id: 'discover', label: 'Discover' },
   { id: 'pregnancy', label: '🤰 Pregnancy' },
   { id: 'newborn', label: '👶 Newborn' },
   { id: 'toddler', label: '🧒 Toddler' },
+  { id: 'finance', label: '💰 Finance' },
+  { id: 'preparation', label: '🎒 Preparation' },
   { id: 'support', label: '💚 Support' },
   { id: 'community', label: '🤝 Community' },
 ] as const
+
+const SORT_OPTIONS = [
+  { id: 'most-popular', label: 'Most Popular' },
+  { id: 'newest', label: 'Newest' },
+  { id: 'alphabetical', label: 'A-Z' },
+] as const
+
+type SortOption = typeof SORT_OPTIONS[number]['id']
+
+function sortTribes(tribes: Tribe[], sortBy: SortOption): Tribe[] {
+  return [...tribes].sort((a, b) => {
+    switch (sortBy) {
+      case 'most-popular':
+        return b.member_count - a.member_count
+      case 'newest':
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      case 'alphabetical':
+        return a.name.localeCompare(b.name)
+      default:
+        return 0
+    }
+  })
+}
 
 // Map tribes to filter categories based on slug keywords
 function getTribeCategory(slug: string): string[] {
@@ -57,8 +84,10 @@ function getTribeCategory(slug: string): string[] {
   if (/trimester|pregnan|birth-prep/.test(slug)) cats.push('pregnancy')
   if (/newborn|infant|0-to-3|3-to-6|6-to-9|9-to-12|feeding|sleep|weaning/.test(slug)) cats.push('newborn')
   if (/toddler/.test(slug)) cats.push('toddler')
-  if (/anxiety|ppd|support|recovery|nicu|rainbow|postpartum/.test(slug)) cats.push('support')
-  if (/dad|partner|lgbtq|single|multicultural|adoption|working|multiples|pumping|back-to-work/.test(slug)) cats.push('community')
+  if (/budget|financ|parental-leave/.test(slug)) cats.push('finance')
+  if (/nursery|gear|birth-plan|hospital|baby-names|milestone/.test(slug)) cats.push('preparation')
+  if (/anxiety|ppd|support|recovery|nicu|rainbow|postpartum|self-care/.test(slug)) cats.push('support')
+  if (/dad|partner|lgbtq|single|multicultural|adoption|working|multiples|pumping|back-to-work|returning/.test(slug)) cats.push('community')
   return cats.length ? cats : ['community']
 }
 
@@ -69,6 +98,8 @@ export default function TribesPage() {
   const [joiningSlug, setJoiningSlug] = useState<string | null>(null)
   const [activeFilter, setActiveFilter] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState('')
+  const [sortBy, setSortBy] = useState<SortOption>('most-popular')
+  const [sortOpen, setSortOpen] = useState(false)
 
   const fetchTribes = useCallback(async () => {
     try {
@@ -88,10 +119,14 @@ export default function TribesPage() {
     e.stopPropagation()
     setJoiningSlug(slug)
     try {
-      await fetch(`/api/tribes/${slug}/join`, { method: 'POST' })
-      setTribes(prev => prev.map(t =>
-        t.slug === slug ? { ...t, is_member: true, member_count: t.member_count + 1 } : t
-      ))
+      const res = await fetch(`/api/tribes/${slug}/join`, { method: 'POST' })
+      if (res.ok) {
+        setTribes(prev => prev.map(t =>
+          t.slug === slug ? { ...t, is_member: true, member_count: t.member_count + 1 } : t
+        ))
+      } else {
+        console.error('Failed to join tribe:', res.status)
+      }
     } catch (err) {
       console.error('Failed to join tribe:', err)
     } finally {
@@ -103,10 +138,14 @@ export default function TribesPage() {
     e.stopPropagation()
     setJoiningSlug(slug)
     try {
-      await fetch(`/api/tribes/${slug}/join`, { method: 'DELETE' })
-      setTribes(prev => prev.map(t =>
-        t.slug === slug ? { ...t, is_member: false, member_count: t.member_count - 1 } : t
-      ))
+      const res = await fetch(`/api/tribes/${slug}/join`, { method: 'DELETE' })
+      if (res.ok) {
+        setTribes(prev => prev.map(t =>
+          t.slug === slug ? { ...t, is_member: false, member_count: t.member_count - 1 } : t
+        ))
+      } else {
+        console.error('Failed to leave tribe:', res.status)
+      }
     } catch (err) {
       console.error('Failed to leave tribe:', err)
     } finally {
@@ -124,15 +163,17 @@ export default function TribesPage() {
     // Category filter
     if (activeFilter === 'all') return true
     if (activeFilter === 'my') return t.is_member
+    if (activeFilter === 'discover') return !t.is_member
     return getTribeCategory(t.slug).includes(activeFilter)
   })
 
-  const myTribes = filteredTribes.filter(t => t.is_member)
-  const otherTribes = filteredTribes.filter(t => !t.is_member)
+  const sortedTribes = sortTribes(filteredTribes, sortBy)
+  const myTribes = sortedTribes.filter(t => t.is_member)
+  const otherTribes = sortedTribes.filter(t => !t.is_member)
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100dvh', background: 'var(--color-surface)', paddingBottom: '100px' }}>
+      <div style={{ minHeight: '100%', background: 'var(--color-surface)', paddingBottom: '100px' }}>
         <div className="content-width mx-auto px-4 pt-6">
           <h1 className="text-h1" style={{ color: 'var(--color-slate)', marginBottom: '4px' }}>My Tribes</h1>
           <p className="text-body" style={{ color: 'var(--color-muted)', marginBottom: '24px' }}>Connect with parents in your moment</p>
@@ -150,7 +191,7 @@ export default function TribesPage() {
   }
 
   return (
-    <div style={{ minHeight: '100dvh', background: 'var(--color-surface)', paddingBottom: '100px' }}>
+    <div style={{ minHeight: '100%', background: 'var(--color-surface)', paddingBottom: '100px' }}>
       <div className="content-width mx-auto px-4 pt-6">
         <h1 className="text-h1" style={{ color: 'var(--color-slate)', marginBottom: '4px' }}>My Tribes</h1>
         <p className="text-body" style={{ color: 'var(--color-muted)', marginBottom: '16px', lineHeight: 1.5 }}>
@@ -162,6 +203,7 @@ export default function TribesPage() {
           <input
             type="text"
             placeholder="Search tribes..."
+            aria-label="Search tribes"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             style={{
@@ -179,25 +221,54 @@ export default function TribesPage() {
           />
         </div>
 
-        {/* Filter pills */}
-        <div
-          style={{
-            display: 'flex',
-            gap: '8px',
-            overflowX: 'auto',
-            paddingBottom: '4px',
-            marginBottom: '20px',
-            WebkitOverflowScrolling: 'touch',
-            msOverflowStyle: 'none',
-            scrollbarWidth: 'none',
-          }}
-        >
-          {FILTERS.map((filter) => (
+        {/* Filter pills + Sort */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
+          <div
+            style={{
+              display: 'flex',
+              gap: '8px',
+              overflowX: 'auto',
+              paddingBottom: '4px',
+              flex: 1,
+              WebkitOverflowScrolling: 'touch',
+              msOverflowStyle: 'none',
+              scrollbarWidth: 'none',
+            }}
+          >
+            {FILTERS.map((filter) => (
+              <button
+                key={filter.id}
+                onClick={() => setActiveFilter(filter.id)}
+                style={{
+                  padding: '6px 14px',
+                  borderRadius: '100px',
+                  border: 'none',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  whiteSpace: 'nowrap',
+                  cursor: 'pointer',
+                  minHeight: '36px',
+                  transition: 'all 0.15s ease',
+                  background: activeFilter === filter.id ? 'var(--color-primary)' : 'var(--color-white)',
+                  color: activeFilter === filter.id ? '#fff' : 'var(--color-muted)',
+                  boxShadow: activeFilter === filter.id ? 'none' : '0 1px 3px rgba(0,0,0,0.06)',
+                }}
+              >
+                {filter.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Sort dropdown */}
+          <div style={{ position: 'relative', flexShrink: 0, paddingBottom: '4px' }}>
             <button
-              key={filter.id}
-              onClick={() => setActiveFilter(filter.id)}
+              onClick={() => setSortOpen(!sortOpen)}
+              aria-label="Sort tribes"
               style={{
-                padding: '6px 14px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                padding: '6px 12px',
                 borderRadius: '100px',
                 border: 'none',
                 fontSize: '13px',
@@ -205,15 +276,61 @@ export default function TribesPage() {
                 whiteSpace: 'nowrap',
                 cursor: 'pointer',
                 minHeight: '36px',
+                background: 'var(--color-white)',
+                color: 'var(--color-muted)',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
                 transition: 'all 0.15s ease',
-                background: activeFilter === filter.id ? 'var(--color-primary)' : 'var(--color-white)',
-                color: activeFilter === filter.id ? '#fff' : 'var(--color-muted)',
-                boxShadow: activeFilter === filter.id ? 'none' : '0 1px 3px rgba(0,0,0,0.06)',
               }}
             >
-              {filter.label}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 6h18M6 12h12M9 18h6" />
+              </svg>
+              {SORT_OPTIONS.find(o => o.id === sortBy)?.label}
             </button>
-          ))}
+            {sortOpen && (
+              <>
+                <div
+                  style={{ position: 'fixed', inset: 0, zIndex: 10 }}
+                  onClick={() => setSortOpen(false)}
+                />
+                <div style={{
+                  position: 'absolute',
+                  top: '100%',
+                  right: 0,
+                  marginTop: '4px',
+                  background: 'var(--color-white)',
+                  borderRadius: 'var(--radius-md)',
+                  boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+                  border: '1px solid var(--color-border)',
+                  zIndex: 20,
+                  minWidth: '160px',
+                  overflow: 'hidden',
+                }}>
+                  {SORT_OPTIONS.map(option => (
+                    <button
+                      key={option.id}
+                      onClick={() => { setSortBy(option.id); setSortOpen(false) }}
+                      style={{
+                        display: 'block',
+                        width: '100%',
+                        padding: '10px 16px',
+                        border: 'none',
+                        background: sortBy === option.id ? 'var(--color-surface)' : 'transparent',
+                        color: sortBy === option.id ? 'var(--color-primary)' : 'var(--color-slate)',
+                        fontSize: '13px',
+                        fontWeight: sortBy === option.id ? 600 : 400,
+                        textAlign: 'left',
+                        cursor: 'pointer',
+                        transition: 'background 0.1s ease',
+                      }}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
         </div>
 
         {/* Empty state */}
@@ -314,8 +431,10 @@ function TribeCard({
           <p style={{ fontWeight: 600, fontSize: '15px', color: 'var(--color-slate)' }}>
             {tribe.name}
           </p>
-          <span
+          <button
+            type="button"
             onClick={onJoin}
+            aria-label={isMember ? 'Leave tribe' : 'Join tribe'}
             style={{
               padding: '4px 12px', borderRadius: '100px', fontSize: '12px', fontWeight: 600, flexShrink: 0,
               background: isMember ? 'var(--color-surface)' : 'var(--color-primary-light)',
@@ -324,10 +443,11 @@ function TribeCard({
               opacity: joining ? 0.5 : 1,
               minHeight: '44px', display: 'flex', alignItems: 'center',
               transition: 'all 0.2s ease',
+              cursor: 'pointer',
             }}
           >
             {joining ? '...' : isMember ? 'Joined' : 'Join'}
-          </span>
+          </button>
         </div>
         <p style={{ fontSize: '13px', color: 'var(--color-muted)', lineHeight: 1.4, marginBottom: '6px' }}>
           {tribe.description}

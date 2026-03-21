@@ -34,7 +34,7 @@ export async function buildContextBlock(
   // Parallel fetch all context data
   const [babyRes, membersRes, summaryRes, checkinsRes, concernRes, patternsRes] =
     await Promise.all([
-      supabase.from('baby_profiles').select('id, name, due_date, date_of_birth, stage').eq('id', baby_id).single(),
+      supabase.from('baby_profiles').select('id, name, due_date, date_of_birth, stage, planning_sub_option, planning_expected_month').eq('id', baby_id).single(),
       supabase
         .from('baby_profile_members')
         .select('profile_id, profiles(id, first_name, first_time_parent, emotional_state_latest)')
@@ -88,7 +88,20 @@ export async function buildContextBlock(
 
   const lines: string[] = []
 
-  if (baby.stage === 'pregnancy') {
+  if (baby.stage === 'planning') {
+    const subLabels: Record<string, string> = {
+      trying_naturally: 'trying to conceive naturally',
+      ivf_fertility: 'going through IVF/fertility treatment',
+      adopting: 'in the adoption process',
+      surrogacy: 'using a surrogate',
+      exploring: 'exploring options',
+    }
+    const pathDesc = baby.planning_sub_option ? subLabels[baby.planning_sub_option] || 'planning' : 'planning a baby'
+    lines.push(`Planning stage: ${pathDesc}`)
+    if (baby.planning_expected_month) {
+      lines.push(`Hoping to welcome baby around: ${baby.planning_expected_month}`)
+    }
+  } else if (baby.stage === 'pregnancy') {
     lines.push(`Pregnancy: Week ${info.pregnancy_week || '?'} of 40 (due ${baby.due_date || 'unknown'})`)
   } else {
     const ageDetail = (info.age_in_months ?? 0) < 3

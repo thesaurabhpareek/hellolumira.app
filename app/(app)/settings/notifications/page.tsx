@@ -1,66 +1,16 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import type { CommunicationPreferences } from '@/types/app'
+import IOSToggle from '@/components/ui/ios-toggle'
 
 /* ------------------------------------------------------------------ */
 /*  State types                                                        */
 /* ------------------------------------------------------------------ */
 
 type LoadingState = 'loading' | 'ready' | 'error'
-
-/* ------------------------------------------------------------------ */
-/*  Toggle component                                                   */
-/* ------------------------------------------------------------------ */
-
-function Toggle({
-  checked,
-  onChange,
-  disabled,
-}: {
-  checked: boolean
-  onChange: (v: boolean) => void
-  disabled?: boolean
-}) {
-  return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={checked}
-      disabled={disabled}
-      onClick={() => onChange(!checked)}
-      style={{
-        position: 'relative',
-        width: '52px',
-        height: '30px',
-        minWidth: '52px',
-        borderRadius: '15px',
-        background: checked ? '#3D8178' : '#CBD5E0',
-        border: 'none',
-        cursor: disabled ? 'not-allowed' : 'pointer',
-        transition: 'background 0.2s ease',
-        opacity: disabled ? 0.5 : 1,
-        padding: 0,
-      }}
-    >
-      <span
-        style={{
-          position: 'absolute',
-          top: '3px',
-          left: checked ? '24px' : '3px',
-          width: '24px',
-          height: '24px',
-          borderRadius: '50%',
-          background: 'white',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.15)',
-          transition: 'left 0.2s ease',
-        }}
-      />
-    </button>
-  )
-}
 
 /* ------------------------------------------------------------------ */
 /*  Toggle row component                                               */
@@ -109,7 +59,7 @@ function ToggleRow({
           </p>
         )}
       </div>
-      <Toggle checked={checked} onChange={onChange} disabled={disabled} />
+      <IOSToggle checked={checked} onChange={onChange} disabled={disabled} />
     </div>
   )
 }

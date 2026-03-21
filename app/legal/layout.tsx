@@ -1,4 +1,5 @@
 // app/legal/layout.tsx — Shared layout for all legal pages
+import type React from 'react'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {

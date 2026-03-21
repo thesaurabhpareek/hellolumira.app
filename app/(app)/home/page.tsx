@@ -1,11 +1,12 @@
 // app/(app)/home/page.tsx — Home screen (server component)
+import type React from 'react'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { getBabyAgeInfo } from '@/lib/baby-age'
 import { getDailyQuestion, getDailyQuiz } from '@/lib/home-feed-data'
 import WeekGuideCard from '@/components/app/WeekGuideCard'
-import PatternFlagCard from '@/components/app/PatternFlagCard'
+import DismissiblePatternFlag from '@/components/app/DismissiblePatternFlag'
 import PregnancyProgressBadge from '@/components/app/PregnancyProgressBadge'
 import ProfilePromptCard from '@/components/app/ProfilePromptCard'
 import ShareCard from '@/components/app/ShareCard'
@@ -17,6 +18,8 @@ import QuizCard from '@/components/app/QuizCard'
 import UpcomingMilestonesCard from '@/components/app/UpcomingMilestonesCard'
 import SeedsBalancePill from '@/components/app/SeedsBalancePill'
 import BugReportButton from '@/components/app/BugReportButton'
+import StageHeroCard from '@/components/app/StageHeroCard'
+import StoryStrip from '@/components/app/stories/StoryStrip'
 import { ClipboardIcon, ChatIcon, EditIcon, QuizIcon, CheckIcon } from '@/components/icons'
 import type { Profile, BabyProfile, DailyCheckin, PatternType, Stage } from '@/types/app'
 import type { TribePostPreview } from '@/components/app/TribePeekCard'
@@ -45,7 +48,7 @@ export default async function HomePage() {
   // Fetch baby profile with specific columns
   const { data: babyData } = await supabase
     .from('baby_profiles')
-    .select('id, name, due_date, date_of_birth, stage, pending_proactive_type, pending_proactive_set_at')
+    .select('id, name, due_date, date_of_birth, stage, planning_sub_option, planning_expected_month, pending_proactive_type, pending_proactive_set_at')
     .eq('id', memberData.baby_id)
     .single()
 
@@ -57,7 +60,9 @@ export default async function HomePage() {
   const guideKey = {
     stage: baby.stage,
     week_or_month: Math.max(1,
-      baby.stage === 'pregnancy'
+      baby.stage === 'planning'
+        ? 1
+        : baby.stage === 'pregnancy'
         ? (ageInfo.pregnancy_week ?? 1)
         : baby.stage === 'infant'
         ? (ageInfo.age_in_weeks ?? 1)
@@ -73,16 +78,20 @@ export default async function HomePage() {
   ] = await Promise.all([
     supabase
       .from('daily_checkins')
-      .select('id, checkin_date')
+      .select('id, checkin_date, sleep_quality, feeding, mood, emotional_signal, night_wakings, nausea_level, energy_level')
       .eq('baby_id', baby.id)
-      .eq('checkin_date', today)
-      .maybeSingle(),
+      .gte('checkin_date', new Date(Date.now() - 3 * 86400000).toISOString().split('T')[0])
+      .order('checkin_date', { ascending: false })
+      .limit(3),
 
     // Fetch articles matched to user's stage, closest to their week/month
+    // For planning stage, also fetch pregnancy articles as relevant prep content
     supabase
       .from('content_articles')
-      .select('id, title, subtitle, category, reading_time_minutes, tags, week_or_month')
-      .eq('stage', baby.stage)
+      .select('id, title, subtitle, category, reading_time_minutes, tags, week_or_month, stage, target_stages')
+      .or(baby.stage === 'planning'
+        ? `stage.eq.planning,stage.eq.pregnancy,target_stages.cs.{${baby.stage}}`
+        : `stage.eq.${baby.stage},target_stages.cs.{${baby.stage}}`)
       .order('week_or_month', { ascending: true })
       .limit(10),
 
@@ -95,7 +104,8 @@ export default async function HomePage() {
       .limit(5),
   ])
 
-  const todayCheckin = checkinData as DailyCheckin | null
+  const recentCheckins = (checkinData as DailyCheckin[] | null) ?? []
+  const todayCheckin = recentCheckins.find(c => c.checkin_date === today) ?? null
 
   // Pick the most relevant article (closest week/month, then rotate daily within ties)
   let featuredArticle: ArticleInsightProps | null = null
@@ -193,13 +203,12 @@ export default async function HomePage() {
     pendingMessage = messageMap[pendingType] || 'Something caught my attention — want to chat?'
   }
 
-  // Clear pending proactive type (fire and forget)
+  // Clear pending proactive type (awaited to ensure it completes in server component)
   if (pendingType) {
-    supabase
+    await supabase
       .from('baby_profiles')
       .update({ pending_proactive_type: null, pending_proactive_set_at: null })
       .eq('id', baby.id)
-      .then(() => {})
   }
 
   // Daily rotating question + quiz (computed server-side, no extra DB calls)
@@ -236,6 +245,16 @@ export default async function HomePage() {
           {getAgeSubtitle(baby, ageInfo)}
         </p>
 
+        {/* ── Story strip ── */}
+        <StoryStrip />
+
+        {/* ── Stage hero card — personalised content overview ── */}
+        <StageHeroCard
+          stage={baby.stage}
+          babyName={baby.name}
+          planningSubOption={baby.planning_sub_option}
+        />
+
         {/* ── Stage badge ── */}
         {baby.stage === 'pregnancy' && ageInfo.pregnancy_week && (
           <PregnancyProgressBadge
@@ -244,27 +263,10 @@ export default async function HomePage() {
             dueDate={baby.due_date ?? ''}
           />
         )}
-        {baby.stage !== 'pregnancy' && (
-          <div
-            style={{
-              background: 'var(--color-primary-light)',
-              border: '1px solid var(--color-primary-mid)',
-              borderRadius: 'var(--radius-lg)',
-              padding: '16px 20px',
-              marginBottom: '16px',
-            }}
-          >
-            <p style={{ color: 'var(--color-primary)', fontWeight: 600, fontSize: '15px' }}>
-              {ageInfo.age_display_string}
-            </p>
-          </div>
-        )}
 
         {/* ── Pattern flag ── */}
         {pendingType && pendingMessage && (
-          <div className="mb-4">
-            <PatternFlagCard type={pendingType} message={pendingMessage} onDismiss={() => {}} />
-          </div>
+          <DismissiblePatternFlag type={pendingType} message={pendingMessage} />
         )}
 
         {/* ── First check-in CTA ── */}
@@ -359,20 +361,24 @@ export default async function HomePage() {
           />
         </div>
 
-        {/* ── Upcoming milestones & celebrations ── */}
-        <UpcomingMilestonesCard babyId={baby.id} babyName={baby.name} />
+        {/* ── Upcoming milestones & celebrations (not relevant for planning stage) ── */}
+        {baby.stage !== 'planning' && (
+          <UpcomingMilestonesCard babyId={baby.id} babyName={baby.name} />
+        )}
 
         {/* ── Article insight ── */}
         {featuredArticle && <ArticleInsightCard {...featuredArticle} />}
 
-        {/* ── Weekly guide card ── */}
-        <div className="mb-4">
-          <WeekGuideCard
-            stage={guideKey.stage}
-            week_or_month={guideKey.week_or_month}
-            babyName={baby.name ?? undefined}
-          />
-        </div>
+        {/* ── Weekly guide card (not relevant for planning stage) ── */}
+        {baby.stage !== 'planning' && (
+          <div className="mb-4">
+            <WeekGuideCard
+              stage={guideKey.stage}
+              week_or_month={guideKey.week_or_month}
+              babyName={baby.name ?? undefined}
+            />
+          </div>
+        )}
 
         {/* ── Daily reflection question ── */}
         <DailyQuestionCard
@@ -457,8 +463,8 @@ export default async function HomePage() {
           </div>
         )}
 
-        {/* ── Profile prompt ── */}
-        {!profile.first_time_parent && (
+        {/* ── Profile prompt — show when profile has incomplete fields ── */}
+        {profile.first_time_parent === null && (
           <ProfilePromptCard missingItem="Tell us a bit more about yourself" />
         )}
 
@@ -481,14 +487,14 @@ export default async function HomePage() {
       >
         <div className="content-width mx-auto" style={{ display: 'flex', gap: '12px' }}>
           <Link
-            href="/checkin"
+            href={baby.stage === 'planning' ? '/chat' : '/checkin'}
             className="btn-primary"
             style={{ flex: 1, fontSize: '14px' }}
           >
-            Check in &rarr;
+            {baby.stage === 'planning' ? 'Talk to Lumira \u2192' : 'Check in \u2192'}
           </Link>
           <Link
-            href="/concern"
+            href={baby.stage === 'planning' ? '/content' : '/concern'}
             style={{
               flex: 1,
               height: '52px',
@@ -505,7 +511,7 @@ export default async function HomePage() {
               transition: 'all 0.15s ease',
             }}
           >
-            Something&apos;s on my mind &rarr;
+            {baby.stage === 'planning' ? 'Browse articles \u2192' : 'Something\u2019s on my mind \u2192'}
           </Link>
         </div>
       </div>
@@ -550,6 +556,10 @@ function QuickAction({
 
 /* ── Helper: Age subtitle under greeting ── */
 function getAgeSubtitle(baby: BabyProfile, ageInfo: ReturnType<typeof getBabyAgeInfo>): string {
+  if (baby.stage === 'planning') {
+    return ageInfo.age_display_string
+  }
+
   if (baby.stage === 'pregnancy' && ageInfo.pregnancy_week) {
     const trimesterLabel = ageInfo.trimester === 1 ? 'First' : ageInfo.trimester === 2 ? 'Second' : 'Third'
     return `${trimesterLabel} trimester · Week ${ageInfo.pregnancy_week}`
@@ -586,6 +596,15 @@ function getAgeSubtitle(baby: BabyProfile, ageInfo: ReturnType<typeof getBabyAge
 /* ── Helper: Stage-appropriate tips ── */
 function getStageTips(stage: Stage, weekOrMonth: number, babyName: string | null): { icon: string; text: string }[] {
   const name = babyName || 'baby'
+
+  if (stage === 'planning') {
+    return [
+      { icon: '\uD83D\uDC8A', text: 'Start taking folic acid (400\u2013800mcg daily) at least 1\u20133 months before trying to conceive.' },
+      { icon: '\uD83C\uDFE5', text: 'Schedule a preconception health check with your GP or midwife.' },
+      { icon: '\uD83D\uDCB0', text: 'Start a baby savings fund \u2014 even small contributions add up over time.' },
+      { icon: '\uD83E\uDDE0', text: 'Talk openly with your partner about expectations, fears, and excitement.' },
+    ]
+  }
 
   if (stage === 'pregnancy') {
     if (weekOrMonth <= 12) return [

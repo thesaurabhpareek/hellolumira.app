@@ -1,11 +1,11 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
 /* ── Types ─────────────────────────────────────────────────────────────────── */
 
-type Stage = 'pregnancy' | 'infant' | 'toddler' | 'postpartum'
+type Stage = 'planning' | 'pregnancy' | 'infant' | 'toddler' | 'postpartum'
 type Category = 'nutrition' | 'development' | 'wellness' | 'safety' | 'mental-health' | 'feeding' | 'sleep' | 'health' | 'relationships' | 'milestones'
 
 type Article = {
@@ -21,6 +21,7 @@ type Article = {
   culturally_sensitive: boolean
   reading_time_minutes: number
   tags: string[]
+  target_stages: string[] | null
   created_at: string
   updated_at: string
 }
@@ -28,6 +29,7 @@ type Article = {
 /* ── Constants ─────────────────────────────────────────────────────────────── */
 
 const stages: { key: Stage; label: string; unit: string }[] = [
+  { key: 'planning', label: 'Planning', unit: '' },
   { key: 'pregnancy', label: 'Pregnancy', unit: 'Week' },
   { key: 'postpartum', label: 'Postpartum', unit: 'Week' },
   { key: 'infant', label: 'Infant', unit: 'Week' },
@@ -91,11 +93,42 @@ export default function ContentPage() {
   const [articles, setArticles] = useState<Article[]>([])
   const [loading, setLoading] = useState(true)
   const [activeStage, setActiveStage] = useState<Stage>('pregnancy')
+  const [userStage, setUserStage] = useState<Stage | null>(null)
   const [activeCategory, setActiveCategory] = useState<Category | 'all'>('all')
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
-  const supabase = createClient()
+  const supabase = useMemo(() => createClient(), [])
+
+  // Auto-detect the user's stage and default the tab to it
+  useEffect(() => {
+    async function detectStage() {
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) return
+        const { data: memberData } = await supabase
+          .from('baby_profile_members')
+          .select('baby_id')
+          .eq('profile_id', user.id)
+          .limit(1)
+          .maybeSingle()
+        if (!memberData?.baby_id) return
+        const { data: babyData } = await supabase
+          .from('baby_profiles')
+          .select('stage')
+          .eq('id', memberData.baby_id)
+          .single()
+        if (babyData?.stage) {
+          const detectedStage = babyData.stage as Stage
+          setUserStage(detectedStage)
+          setActiveStage(detectedStage)
+        }
+      } catch {
+        // Silently fail — default stage is fine
+      }
+    }
+    detectStage()
+  }, [supabase])
 
   // Award seeds when an article is expanded/read
   const handleExpandArticle = useCallback((articleId: string | null) => {
@@ -118,10 +151,11 @@ export default function ContentPage() {
     setError(null)
 
     try {
+      // Fetch articles for the active stage, including those with target_stages
       let query = supabase
         .from('content_articles')
         .select('*')
-        .eq('stage', activeStage)
+        .or(`stage.eq.${activeStage},target_stages.cs.{${activeStage}}`)
         .order('week_or_month', { ascending: true })
         .order('created_at', { ascending: false })
 
@@ -136,7 +170,15 @@ export default function ContentPage() {
         setError("We couldn't load articles right now. Please try again.")
         setArticles([])
       } else {
-        setArticles(data || [])
+        // Prioritize: articles whose primary stage matches first,
+        // then articles that match via target_stages
+        const sorted = (data || []).sort((a, b) => {
+          const aIsPrimary = a.stage === activeStage ? 0 : 1
+          const bIsPrimary = b.stage === activeStage ? 0 : 1
+          if (aIsPrimary !== bIsPrimary) return aIsPrimary - bIsPrimary
+          return (a.week_or_month ?? 0) - (b.week_or_month ?? 0)
+        })
+        setArticles(sorted)
       }
     } catch {
       setError("We couldn't load articles right now. Please try again.")
@@ -144,8 +186,7 @@ export default function ContentPage() {
     } finally {
       setLoading(false)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeStage, activeCategory])
+  }, [activeStage, activeCategory, supabase])
 
   useEffect(() => {
     fetchArticles()
@@ -199,7 +240,9 @@ export default function ContentPage() {
             lineHeight: 1.5,
           }}
         >
-          Thoughtful, trusted articles for wherever you are in your journey
+          {userStage
+            ? 'Curated for your stage \u2014 with trusted articles for every part of the journey'
+            : 'Thoughtful, trusted articles for wherever you are in your journey'}
         </p>
 
         {/* ── Stage Tabs ──────────────────────────────────────────────── */}
@@ -232,13 +275,28 @@ export default function ContentPage() {
                     ? 'var(--color-primary)'
                     : 'var(--color-muted)',
                 fontWeight: 600,
-                fontSize: '14px',
+                fontSize: '13px',
                 cursor: 'pointer',
                 minHeight: '48px',
                 transition: 'color 0.15s ease, border-color 0.15s ease',
+                position: 'relative',
               }}
             >
               {stage.label}
+              {userStage === stage.key && (
+                <span
+                  style={{
+                    display: 'block',
+                    fontSize: '9px',
+                    fontWeight: 700,
+                    color: '#87A28F',
+                    letterSpacing: '0.3px',
+                    marginTop: '2px',
+                  }}
+                >
+                  Your stage
+                </span>
+              )}
             </button>
           ))}
         </div>
@@ -424,6 +482,9 @@ export default function ContentPage() {
             {articles.map((article) => {
               const isExpanded = expandedId === article.id
               const color = categoryColors[article.category] || '#3D8178'
+              // Show "For you" if article is cross-stage (matched via target_stages, not primary stage)
+              const isCrossStageMatch = article.stage !== activeStage
+                && article.target_stages?.includes(activeStage)
 
               return (
                 <div
@@ -479,15 +540,17 @@ export default function ContentPage() {
                         {categoryIcons[article.category] || '📄'}{' '}
                         {categoryLabels[article.category] || article.category}
                       </span>
-                      <span
-                        style={{
-                          fontSize: '11px',
-                          color: 'var(--color-muted)',
-                          fontWeight: 500,
-                        }}
-                      >
-                        {stageUnit} {article.week_or_month}
-                      </span>
+                      {stageUnit && (
+                        <span
+                          style={{
+                            fontSize: '11px',
+                            color: 'var(--color-muted)',
+                            fontWeight: 500,
+                          }}
+                        >
+                          {stageUnit} {article.week_or_month}
+                        </span>
+                      )}
                       <span
                         style={{
                           fontSize: '11px',
@@ -508,6 +571,20 @@ export default function ContentPage() {
                           }}
                         >
                           Reviewed
+                        </span>
+                      )}
+                      {isCrossStageMatch && (
+                        <span
+                          style={{
+                            fontSize: '10px',
+                            color: '#87A28F',
+                            fontWeight: 700,
+                            padding: '2px 8px',
+                            borderRadius: '100px',
+                            background: '#87A28F15',
+                          }}
+                        >
+                          For you
                         </span>
                       )}
                     </div>

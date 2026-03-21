@@ -16,9 +16,29 @@ import { callClaudeJSON } from '@/lib/claude'
 import { checkRateLimit } from '@/lib/rate-limit'
 import type { Stage, WeeklyGuideContent } from '@/types/app'
 
-const PREGNANCY_GUIDE_PROMPT = `You write weekly pregnancy guides. Warm, honest, occasionally witty. Respond ONLY with valid JSON (no markdown fences): { "opening": "2 sentences, warm, week-specific", "baby_development": "what's happening with the baby at exactly week N", "body_changes": ["thing parent may feel 1", "...2", "...3"], "whats_usually_normal": ["common worry 1 normalised", "...2"], "focus_this_week": ["actionable 1", "...2", "...3"], "watch_outs": ["specific cue — when to call midwife or OB"] }`
+const PREGNANCY_GUIDE_PROMPT = `You write weekly pregnancy guides. Warm, honest, occasionally witty. Respond ONLY with valid JSON (no markdown fences):
+{
+  "opening": "2 sentences, warm, week-specific",
+  "baby_development": "what's happening with the baby at exactly week N",
+  "body_changes": ["thing parent may feel 1", "...2", "...3"],
+  "whats_usually_normal": ["common worry 1 normalised", "...2"],
+  "focus_this_week": ["actionable 1", "...2", "...3"],
+  "watch_outs": [
+    "EXACTLY 8 distinct, specific, week-appropriate warning signs a pregnant person should watch for and act on — each should be a complete, actionable sentence. Cover a range: physical symptoms (bleeding, severe pain, vision changes, headaches, swelling, reduced fetal movement, fever, signs of preeclampsia, etc.) and emotional/mental health signals (severe anxiety, inability to function, intrusive thoughts). Every item should be specific to this exact week, not generic."
+  ]
+}`
 
-const INFANT_GUIDE_PROMPT = `You write weekly infant development guides. Warm, curious, occasionally witty. Respond ONLY with valid JSON (no markdown fences): { "opening": "2 sentences, warm, 'this week', optionally witty", "what_is_happening": "2-3 sentences developmental context for week N", "what_you_might_notice": ["observable behavior 1","...2","...3","...4"], "whats_usually_normal": ["common worry 1 normalised","...2"], "focus_this_week": ["actionable 1","...2","...3"], "watch_outs": ["calm escalation cue 1","...2 optional"] }`
+const INFANT_GUIDE_PROMPT = `You write weekly infant and toddler development guides. Warm, curious, occasionally witty. Respond ONLY with valid JSON (no markdown fences):
+{
+  "opening": "2 sentences, warm, 'this week', optionally witty",
+  "what_is_happening": "2-3 sentences developmental context for week N",
+  "what_you_might_notice": ["observable behavior 1","...2","...3","...4"],
+  "whats_usually_normal": ["common worry 1 normalised","...2"],
+  "focus_this_week": ["actionable 1","...2","...3"],
+  "watch_outs": [
+    "EXACTLY 8 distinct, specific, age-appropriate warning signs parents should watch for. Cover a range of categories: feeding concerns (significant drop, refusal beyond 24h, unusual patterns), sleep (extreme changes, difficulty rousing), development (regression, loss of previously gained skill), physical health (fever thresholds for this age, rash, breathing changes, fontanelle changes for young infants), emotional/behavioural (inconsolable crying beyond normal, extreme changes in disposition), and caregiver wellbeing (signs of postnatal depression, burnout, intrusive thoughts). Every item should be specific to this exact age/week — not generic."
+  ]
+}`
 
 export async function GET(request: NextRequest) {
   try {
@@ -172,7 +192,14 @@ function getStaticFallback(stage: Stage, weekOrMonth: number): WeeklyGuideConten
         'Note any questions for your next appointment',
       ],
       watch_outs: [
-        'Contact your care team if you experience severe pain, bleeding, or reduced fetal movement',
+        'Contact your midwife or OB immediately if you experience any bleeding or spotting',
+        'Severe or sudden headache, especially with vision changes — call your care team right away',
+        'Reduced or absent fetal movement from week 28+ — do kick counts and contact your provider if concerned',
+        'Any signs of preeclampsia: sudden swelling in hands/face, headache, visual disturbances',
+        'High fever (above 38°C/100.4°F) with or without other symptoms — get assessed promptly',
+        'Burning or pain with urination — UTIs are common and need treatment in pregnancy',
+        'Persistent, severe anxiety or inability to function day-to-day — perinatal mental health support is available',
+        'Contractions or cramping that come in a regular pattern before 37 weeks — contact your care team',
       ],
     }
   }
@@ -196,7 +223,14 @@ function getStaticFallback(stage: Stage, weekOrMonth: number): WeeklyGuideConten
       'Take a moment for yourself when you can',
     ],
     watch_outs: [
-      'Trust your instincts — if something feels off, reach out to your paediatrician',
+      'Significant drop in feeding — less than half of normal intake for more than 24 hours warrants a call to your paediatrician',
+      'High fever: in babies under 3 months, any fever above 38°C/100.4°F is an urgent concern — go to A&E',
+      'Persistent, inconsolable crying lasting more than 3 hours — especially if nothing soothes them',
+      'Loss of a skill your baby had previously — rolling, babbling, tracking — always worth discussing with your GP',
+      'Sunken fontanelle (soft spot) or very dry mouth and no wet nappies in 8+ hours — signs of dehydration',
+      'Any difficulty breathing: fast, noisy, or laboured breathing requires immediate assessment',
+      'Unusual rash, especially with fever — some rashes in babies need urgent attention (do the glass test)',
+      'If you as the caregiver are experiencing intrusive thoughts, feeling disconnected from your baby, or unable to cope — reach out to your GP or Mum\u2019s mental health line. You matter too.',
     ],
   }
 }

@@ -14,6 +14,7 @@ export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { SECURITY_HEADERS } from '@/lib/utils'
+import { checkIpRateLimit } from '@/lib/rate-limit'
 
 interface VerifyDeletionBody {
   token: string
@@ -21,6 +22,15 @@ interface VerifyDeletionBody {
 
 export async function POST(request: NextRequest) {
   try {
+    // SECURITY: Rate limit by IP to prevent token brute-force
+    const { allowed, retryAfter } = await checkIpRateLimit(request, 5, 60_000)
+    if (!allowed) {
+      return NextResponse.json(
+        { error: true, message: 'Too many requests. Please try again later.' },
+        { status: 429, headers: { ...SECURITY_HEADERS, 'Retry-After': String(retryAfter) } }
+      )
+    }
+
     let body: VerifyDeletionBody
     try {
       body = (await request.json()) as VerifyDeletionBody

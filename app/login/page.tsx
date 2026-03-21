@@ -31,6 +31,7 @@ function callbackErrorMessage(code: string | null): string {
 function LoginForm() {
   const searchParams = useSearchParams()
   const callbackError = callbackErrorMessage(searchParams.get('error'))
+  const isSignup = searchParams.get('mode') === 'signup'
 
   const [email, setEmail] = useState('')
   const [state, setState] = useState<AuthState>(callbackError ? 'error' : 'idle')
@@ -144,10 +145,24 @@ function LoginForm() {
     setGoogleState('loading')
     setErrorMessage('')
     const supabase = createClient()
+
+    // Use the canonical production URL so Google's consent screen shows
+    // "hellolumira.app" instead of the Supabase project URL.
+    // In development, fall back to the current origin (localhost).
+    const siteOrigin =
+      process.env.NEXT_PUBLIC_APP_URL && process.env.NEXT_PUBLIC_APP_URL !== 'http://localhost:3000'
+        ? process.env.NEXT_PUBLIC_APP_URL
+        : window.location.origin
+
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/login/callback`,
+        redirectTo: `${siteOrigin}/login/callback`,
+        queryParams: {
+          // Ensure Google always shows the account picker, preventing silent
+          // re-auth through the Supabase intermediary URL.
+          prompt: 'select_account',
+        },
       },
     })
     if (error) {
@@ -188,10 +203,12 @@ function LoginForm() {
             className="text-h1 mb-2"
             style={{ color: 'var(--color-slate)' }}
           >
-            Let&apos;s get you started
+            {isSignup ? 'Create your account' : "Let's get you started"}
           </h1>
           <p className="text-body-muted mb-6">
-            Sign in or create an account to get started.
+            {isSignup
+              ? 'Join Lumira — your AI parenting companion. Free, private, no download needed.'
+              : 'Sign in or create an account to get started.'}
           </p>
 
           {/* Google sign-in button */}

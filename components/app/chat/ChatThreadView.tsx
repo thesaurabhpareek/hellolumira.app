@@ -47,6 +47,7 @@ export default function ChatThreadView({
   )
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
+  const messagesAreaRef = useRef<HTMLDivElement>(null)
   const inputBarRef = useRef<HTMLDivElement>(null)
   const initialized = useRef(false)
 
@@ -77,7 +78,9 @@ export default function ChatThreadView({
   const isNewThread = existingMessages.length === 0
 
   const scrollToBottom = useCallback(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+    if (messagesAreaRef.current) {
+      messagesAreaRef.current.scrollTop = messagesAreaRef.current.scrollHeight
+    }
   }, [])
 
   // Check for initial message from sessionStorage (when created from suggested prompt)
@@ -97,9 +100,9 @@ export default function ChatThreadView({
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Scroll on new messages
+  // Scroll on new messages (slight delay to ensure DOM update)
   useEffect(() => {
-    scrollToBottom()
+    requestAnimationFrame(scrollToBottom)
   }, [messages, scrollToBottom])
 
   // Handle escalation changes
@@ -124,29 +127,24 @@ export default function ChatThreadView({
     }
   }, [emotionalSignal])
 
-  // Handle virtual keyboard on mobile — adjust input bar position
+  // Handle virtual keyboard on mobile — scroll to bottom when keyboard opens
   useEffect(() => {
     const vv = window.visualViewport
     if (!vv) return
 
+    let prevHeight = vv.height
+
     const onResize = () => {
-      if (!inputBarRef.current) return
-      const keyboardOffset = window.innerHeight - vv.height - vv.offsetTop
-      if (keyboardOffset > 0) {
-        // Keyboard is open — position just above it (nav bar is hidden behind keyboard)
-        inputBarRef.current.style.bottom = `${keyboardOffset}px`
-      } else {
-        // Keyboard closed — position above the bottom nav bar
-        inputBarRef.current.style.bottom = ''
+      // Only scroll to bottom when keyboard opens (height decreases)
+      if (vv!.height < prevHeight) {
+        setTimeout(scrollToBottom, 50)
       }
-      scrollToBottom()
+      prevHeight = vv!.height
     }
 
     vv.addEventListener('resize', onResize)
-    vv.addEventListener('scroll', onResize)
     return () => {
       vv.removeEventListener('resize', onResize)
-      vv.removeEventListener('scroll', onResize)
     }
   }, [scrollToBottom])
 
@@ -192,8 +190,8 @@ export default function ChatThreadView({
 
   return (
     <div
-      className="flex flex-col"
-      style={{ minHeight: '100dvh', background: 'var(--color-surface)' }}
+      className="flex flex-col h-full"
+      style={{ background: 'var(--color-surface)' }}
     >
       {/* Emergency overlay */}
       {emergencyMessage && (
@@ -211,11 +209,12 @@ export default function ChatThreadView({
 
       {/* Messages area */}
       <div
+        ref={messagesAreaRef}
         className="flex-1 overflow-y-auto overflow-x-hidden p-4"
         style={{
           overscrollBehavior: 'contain',
           WebkitOverflowScrolling: 'touch',
-          paddingBottom: 'calc(140px + 56px + max(0px, env(safe-area-inset-bottom)))',
+          paddingBottom: '16px',
         }}
       >
         <div className="content-width mx-auto">
@@ -344,13 +343,10 @@ export default function ChatThreadView({
         </div>
       </div>
 
-      {/* Fixed bottom input */}
+      {/* Bottom input — pinned at the bottom of the flex container */}
       <div
         ref={inputBarRef}
-        className="fixed left-0 right-0 bg-white border-t border-border px-4 py-3 z-50 transition-[bottom] duration-100 ease-in-out"
-        style={{
-          bottom: 'calc(56px + max(0px, env(safe-area-inset-bottom)))',
-        }}
+        className="shrink-0 bg-white border-t border-border px-4 py-3 z-50"
       >
         <div className="content-width mx-auto flex gap-[10px] items-end">
           <textarea

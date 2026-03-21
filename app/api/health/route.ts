@@ -9,16 +9,11 @@ export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
-  const start = Date.now()
-
   let dbStatus: 'ok' | 'error' = 'error'
-  let dbLatencyMs: number | null = null
 
   try {
     const supabase = await createClient()
-    const dbStart = Date.now()
     const { error } = await supabase.from('profiles').select('count', { count: 'exact', head: true })
-    dbLatencyMs = Date.now() - dbStart
     if (!error) dbStatus = 'ok'
   } catch {
     // dbStatus remains 'error'
@@ -31,9 +26,8 @@ export async function GET() {
       status: healthy ? 'ok' : 'degraded',
       timestamp: new Date().toISOString(),
       services: {
-        database: { status: dbStatus, latencyMs: dbLatencyMs },
+        database: { status: dbStatus },
       },
-      responseTimeMs: Date.now() - start,
     },
     { status: healthy ? 200 : 503, headers: SECURITY_HEADERS }
   )

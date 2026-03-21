@@ -1,5 +1,5 @@
 /* app/globals.css — Lumira global styles and design tokens */
-/* v1.2 — next/font self-hosted (removed Google Fonts @import), landing page CSS moved here */
+/* v2.0 — Premium design system: Typography, Color, Spacing, Elevation, Motion */
 /* NOTE: Font is now loaded via next/font/google in layout.tsx — no @import needed */
 
 @tailwind base;
@@ -8,7 +8,11 @@
 
 @layer base {
   :root {
-    /* ── Lumira design tokens ── */
+    /* ══════════════════════════════════════════════════════════════════════════
+       LUMIRA DESIGN SYSTEM v2.0 — Premium iOS-caliber tokens
+       ══════════════════════════════════════════════════════════════════════════ */
+
+    /* ── Legacy tokens (preserved for backward compat) ── */
     --color-primary:       #3D8178;   /* Sage 500 */
     --color-primary-light: #EDF4F2;   /* Sage 50 */
     --color-primary-mid:   #A8CECA;   /* Sage 200 */
@@ -26,7 +30,208 @@
     --color-green:         #276749;
     --color-green-light:   #F0FFF4;
 
-    /* ── Story design tokens ── */
+    /* ── Sage (Primary) — 10-shade scale ── */
+    --sage-50:  #EDF4F2;
+    --sage-100: #D4E8E4;
+    --sage-200: #A8CECA;
+    --sage-300: #7BB5AD;
+    --sage-400: #549C92;
+    --sage-500: #3D8178;
+    --sage-600: #336B63;
+    --sage-700: #29554F;
+    --sage-800: #1F403B;
+    --sage-900: #152B28;
+    --sage-950: #0B1614;
+
+    /* ── Terra (Secondary) — 10-shade scale ── */
+    --terra-50:  #FDF0E6;
+    --terra-100: #FAE0CC;
+    --terra-200: #F0C49E;
+    --terra-300: #E2A670;
+    --terra-400: #C4844E;
+    --terra-500: #A86E3C;
+    --terra-600: #8C5A30;
+    --terra-700: #704726;
+    --terra-800: #54351C;
+    --terra-900: #3A2413;
+    --terra-950: #1F130A;
+
+    /* ── Coral Accent — warm CTA & highlight color ── */
+    --coral-50:  #FFF1EE;
+    --coral-100: #FFE0D9;
+    --coral-200: #FFC1B3;
+    --coral-300: #FF9E8A;
+    --coral-400: #F27961;
+    --coral-500: #E5634A;
+    --coral-600: #C94D36;
+    --coral-700: #A63D2B;
+    --coral-800: #843121;
+    --coral-900: #622518;
+    --coral-950: #3D160E;
+
+    /* ── Semantic: Success ── */
+    --success-bg:     #F0FFF4;
+    --success-text:   #276749;
+    --success-border: #C6F6D5;
+    --success-50:  #F0FFF4;
+    --success-100: #C6F6D5;
+    --success-500: #38A169;
+    --success-600: #2F855A;
+    --success-700: #276749;
+
+    /* ── Semantic: Warning ── */
+    --warning-bg:     #FFFFF0;
+    --warning-text:   #744210;
+    --warning-border: #FEFCBF;
+    --warning-50:  #FFFFF0;
+    --warning-100: #FEFCBF;
+    --warning-500: #D69E2E;
+    --warning-600: #B7791F;
+    --warning-700: #744210;
+
+    /* ── Semantic: Error ── */
+    --error-bg:     #FFF5F5;
+    --error-text:   #822727;
+    --error-border: #FED7D7;
+    --error-50:  #FFF5F5;
+    --error-100: #FED7D7;
+    --error-500: #E53E3E;
+    --error-600: #C53030;
+    --error-700: #822727;
+
+    /* ── Semantic: Info ── */
+    --info-bg:     #EBF8FF;
+    --info-text:   #2A4365;
+    --info-border: #BEE3F8;
+    --info-50:  #EBF8FF;
+    --info-100: #BEE3F8;
+    --info-500: #4299E1;
+    --info-600: #3182CE;
+    --info-700: #2A4365;
+
+    /* ── Surface layers (iOS-style layered materials) ── */
+    --surface-background:  #FAFAF8;  /* Page background */
+    --surface-primary:     #FFFFFF;  /* Cards, sheets */
+    --surface-raised:      #FFFFFF;  /* Elevated cards, popovers */
+    --surface-overlay:     rgba(255, 255, 255, 0.92);  /* Overlays, modals */
+    --surface-sunken:      #F5F3EF;  /* Inset areas, input backgrounds */
+
+    /* ── Text hierarchy (iOS-style dynamic text colors) ── */
+    --text-primary:    #2D3748;     /* Main body text */
+    --text-secondary:  #4A5568;     /* Supportive text */
+    --text-tertiary:   #718096;     /* Hints, placeholders */
+    --text-quaternary: #A0AEC0;     /* Disabled, very subtle */
+    --text-inverse:    #FFFFFF;     /* Text on dark backgrounds */
+    --text-link:       #3D8178;     /* Interactive text */
+
+    /* ── Spacing scale (8px grid) ── */
+    --space-0:   0px;
+    --space-px:  1px;
+    --space-0-5: 2px;
+    --space-1:   4px;
+    --space-1-5: 6px;
+    --space-2:   8px;
+    --space-3:   12px;
+    --space-4:   16px;
+    --space-5:   20px;
+    --space-6:   24px;
+    --space-8:   32px;
+    --space-10:  40px;
+    --space-12:  48px;
+    --space-16:  64px;
+    --space-20:  80px;
+    --space-24:  96px;
+
+    /* ── Border Radius ── */
+    --radius-xs:   4px;
+    --radius-sm:   8px;
+    --radius-md:   12px;
+    --radius-lg:   16px;
+    --radius-xl:   24px;
+    --radius-full: 9999px;
+    --radius: 0.5rem;
+
+    /* ── Elevation (shadow system) ── */
+    --shadow-xs:  0 1px 2px rgba(0, 0, 0, 0.04);
+    --shadow-sm:  0 2px 8px rgba(0, 0, 0, 0.06);
+    --shadow-md:  0 4px 16px rgba(0, 0, 0, 0.08);
+    --shadow-lg:  0 8px 32px rgba(0, 0, 0, 0.10);
+    --shadow-xl:  0 16px 48px rgba(0, 0, 0, 0.12);
+    --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.04);
+    /* Colored shadows for primary/accent elements */
+    --shadow-sage:  0 4px 14px rgba(61, 129, 120, 0.20);
+    --shadow-terra: 0 4px 14px rgba(196, 132, 78, 0.20);
+    --shadow-coral: 0 4px 14px rgba(242, 121, 97, 0.20);
+
+    /* ── Motion / Animation tokens ── */
+    --duration-instant: 100ms;
+    --duration-fast:    200ms;
+    --duration-normal:  300ms;
+    --duration-slow:    500ms;
+    --duration-slower:  700ms;
+    --ease-default:     cubic-bezier(0.25, 0.1, 0.25, 1);
+    --ease-spring:      cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-decelerate:  cubic-bezier(0, 0, 0.2, 1);
+    --ease-accelerate:  cubic-bezier(0.4, 0, 1, 1);
+    --ease-ios:         cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* ── Typography tokens ── */
+    --font-display-size:   36px;
+    --font-display-line:   44px;
+    --font-display-track:  -0.02em;
+    --font-display-weight: 700;
+
+    --font-title1-size:    28px;
+    --font-title1-line:    34px;
+    --font-title1-track:   -0.015em;
+    --font-title1-weight:  700;
+
+    --font-title2-size:    22px;
+    --font-title2-line:    28px;
+    --font-title2-track:   -0.01em;
+    --font-title2-weight:  700;
+
+    --font-title3-size:    20px;
+    --font-title3-line:    26px;
+    --font-title3-track:   -0.01em;
+    --font-title3-weight:  600;
+
+    --font-headline-size:   17px;
+    --font-headline-line:   22px;
+    --font-headline-track:  -0.005em;
+    --font-headline-weight: 600;
+
+    --font-body-size:      17px;
+    --font-body-line:      24px;
+    --font-body-track:     -0.005em;
+    --font-body-weight:    400;
+
+    --font-callout-size:   16px;
+    --font-callout-line:   22px;
+    --font-callout-track:  0em;
+    --font-callout-weight: 400;
+
+    --font-subhead-size:   15px;
+    --font-subhead-line:   20px;
+    --font-subhead-track:  0em;
+    --font-subhead-weight: 400;
+
+    --font-footnote-size:  13px;
+    --font-footnote-line:  18px;
+    --font-footnote-track: 0em;
+    --font-footnote-weight: 400;
+
+    --font-caption1-size:  12px;
+    --font-caption1-line:  16px;
+    --font-caption1-track: 0.01em;
+    --font-caption1-weight: 400;
+
+    --font-caption2-size:  11px;
+    --font-caption2-line:  14px;
+    --font-caption2-track: 0.02em;
+    --font-caption2-weight: 400;
+
+    /* ── Legacy story design tokens (preserved) ── */
     --story-ring-sage:    #3D8178;
     --story-ring-terra:   #C4844E;
     --story-ring-viewed:  #A8CECA;
@@ -39,12 +244,6 @@
     --story-palette-6:    #276749;
     --story-palette-7:    #744210;
     --story-palette-8:    #1A365D;
-
-    /* Radius */
-    --radius-sm: 6px;
-    --radius-md: 8px;
-    --radius-lg: 12px;
-    --radius: 0.5rem;
 
     /* ── shadcn/ui variables — RGB triplets ── */
     --background:          250 250 248;   /* Sand 0 #FAFAF8 */
@@ -106,6 +305,43 @@
     --border:              40 38 35;
     --input:               40 38 35;
     --ring:                61 129 120;
+
+    /* ── Dark mode surface layers ── */
+    --surface-background: #131210;
+    --surface-primary:    #1C1A17;
+    --surface-raised:     #242220;
+    --surface-overlay:    rgba(28, 26, 23, 0.92);
+    --surface-sunken:     #0D0C0B;
+
+    /* ── Dark mode text hierarchy ── */
+    --text-primary:    #F0EEEA;
+    --text-secondary:  #C8C4BC;
+    --text-tertiary:   #9C9A94;
+    --text-quaternary: #6B6964;
+    --text-inverse:    #131210;
+    --text-link:       #A8CECA;
+
+    /* ── Dark mode semantic colors ── */
+    --success-bg:     #0F2A1D;
+    --success-text:   #68D391;
+    --success-border: #1A3D2A;
+    --warning-bg:     #2A2008;
+    --warning-text:   #F6E05E;
+    --warning-border: #3D3110;
+    --error-bg:       #2D1515;
+    --error-text:     #FC8181;
+    --error-border:   #3D1F1F;
+    --info-bg:        #0F1D2E;
+    --info-text:      #90CDF4;
+    --info-border:    #1A2E42;
+
+    /* ── Dark mode shadows (softer) ── */
+    --shadow-xs:  0 1px 2px rgba(0, 0, 0, 0.15);
+    --shadow-sm:  0 2px 8px rgba(0, 0, 0, 0.20);
+    --shadow-md:  0 4px 16px rgba(0, 0, 0, 0.25);
+    --shadow-lg:  0 8px 32px rgba(0, 0, 0, 0.30);
+    --shadow-xl:  0 16px 48px rgba(0, 0, 0, 0.35);
+    --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.15);
   }
 
   * {
@@ -162,15 +398,130 @@
 }
 
 @layer components {
-  /* Typography scale */
-  .text-display { font-size: 32px; font-weight: 700; line-height: 1.2; }
-  .text-h1 { font-size: 24px; font-weight: 700; line-height: 1.3; }
-  .text-h2 { font-size: 20px; font-weight: 600; line-height: 1.35; }
-  .text-h3 { font-size: 17px; font-weight: 600; line-height: 1.4; }
-  .text-body { font-size: 15px; font-weight: 400; line-height: 1.6; }
-  .text-body-muted { font-size: 15px; font-weight: 400; color: var(--color-muted); }
-  .text-caption { font-size: 13px; font-weight: 400; line-height: 1.4; }
-  .text-button { font-size: 15px; font-weight: 600; }
+  /* ── iOS-caliber Typography Scale ─────────────────────────────────────── */
+  /* Legacy classes preserved; new classes added below them */
+  .text-display {
+    font-size: var(--font-display-size);
+    font-weight: var(--font-display-weight);
+    line-height: var(--font-display-line);
+    letter-spacing: var(--font-display-track);
+  }
+  .text-h1 {
+    font-size: var(--font-title1-size);
+    font-weight: var(--font-title1-weight);
+    line-height: var(--font-title1-line);
+    letter-spacing: var(--font-title1-track);
+  }
+  .text-h2 {
+    font-size: var(--font-title2-size);
+    font-weight: var(--font-title2-weight);
+    line-height: var(--font-title2-line);
+    letter-spacing: var(--font-title2-track);
+  }
+  .text-h3 {
+    font-size: var(--font-title3-size);
+    font-weight: var(--font-title3-weight);
+    line-height: var(--font-title3-line);
+    letter-spacing: var(--font-title3-track);
+  }
+  .text-body {
+    font-size: var(--font-body-size);
+    font-weight: var(--font-body-weight);
+    line-height: var(--font-body-line);
+    letter-spacing: var(--font-body-track);
+  }
+  .text-body-muted {
+    font-size: var(--font-body-size);
+    font-weight: var(--font-body-weight);
+    line-height: var(--font-body-line);
+    letter-spacing: var(--font-body-track);
+    color: var(--text-tertiary);
+  }
+  .text-caption {
+    font-size: var(--font-footnote-size);
+    font-weight: var(--font-footnote-weight);
+    line-height: var(--font-footnote-line);
+    letter-spacing: var(--font-footnote-track);
+  }
+  .text-button {
+    font-size: var(--font-subhead-size);
+    font-weight: 600;
+    line-height: var(--font-subhead-line);
+  }
+
+  /* New iOS-style type classes */
+  .type-display {
+    font-size: var(--font-display-size);
+    font-weight: var(--font-display-weight);
+    line-height: var(--font-display-line);
+    letter-spacing: var(--font-display-track);
+  }
+  .type-title1 {
+    font-size: var(--font-title1-size);
+    font-weight: var(--font-title1-weight);
+    line-height: var(--font-title1-line);
+    letter-spacing: var(--font-title1-track);
+  }
+  .type-title2 {
+    font-size: var(--font-title2-size);
+    font-weight: var(--font-title2-weight);
+    line-height: var(--font-title2-line);
+    letter-spacing: var(--font-title2-track);
+  }
+  .type-title3 {
+    font-size: var(--font-title3-size);
+    font-weight: var(--font-title3-weight);
+    line-height: var(--font-title3-line);
+    letter-spacing: var(--font-title3-track);
+  }
+  .type-headline {
+    font-size: var(--font-headline-size);
+    font-weight: var(--font-headline-weight);
+    line-height: var(--font-headline-line);
+    letter-spacing: var(--font-headline-track);
+  }
+  .type-body {
+    font-size: var(--font-body-size);
+    font-weight: var(--font-body-weight);
+    line-height: var(--font-body-line);
+    letter-spacing: var(--font-body-track);
+  }
+  .type-callout {
+    font-size: var(--font-callout-size);
+    font-weight: var(--font-callout-weight);
+    line-height: var(--font-callout-line);
+    letter-spacing: var(--font-callout-track);
+  }
+  .type-subhead {
+    font-size: var(--font-subhead-size);
+    font-weight: var(--font-subhead-weight);
+    line-height: var(--font-subhead-line);
+    letter-spacing: var(--font-subhead-track);
+  }
+  .type-footnote {
+    font-size: var(--font-footnote-size);
+    font-weight: var(--font-footnote-weight);
+    line-height: var(--font-footnote-line);
+    letter-spacing: var(--font-footnote-track);
+  }
+  .type-caption1 {
+    font-size: var(--font-caption1-size);
+    font-weight: var(--font-caption1-weight);
+    line-height: var(--font-caption1-line);
+    letter-spacing: var(--font-caption1-track);
+  }
+  .type-caption2 {
+    font-size: var(--font-caption2-size);
+    font-weight: var(--font-caption2-weight);
+    line-height: var(--font-caption2-line);
+    letter-spacing: var(--font-caption2-track);
+  }
+
+  /* Tabular numbers for data displays */
+  .tabular-nums {
+    font-feature-settings: 'tnum' 1, 'kern' 1;
+    font-variant-numeric: tabular-nums;
+  }
 
   /* Max content width */
   .content-width {

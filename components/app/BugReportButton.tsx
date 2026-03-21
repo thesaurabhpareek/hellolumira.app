@@ -24,8 +24,8 @@ interface CapturedLog {
 const recentLogs: CapturedLog[] = []
 const MAX_LOGS = 50
 
-if (typeof window !== 'undefined' && !(window as Record<string, unknown>).__lumira_console_patched) {
-  (window as Record<string, unknown>).__lumira_console_patched = true
+if (typeof window !== 'undefined' && !((window as unknown) as Record<string, unknown>).__lumira_console_patched) {
+  ((window as unknown) as Record<string, unknown>).__lumira_console_patched = true
 
   const originalConsole = {
     log: console.log,

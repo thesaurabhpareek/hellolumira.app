@@ -246,7 +246,7 @@ export default function LandingPage() {
 
         <div className="lp-divider" />
 
-        {/* ── TRUST + CTA ── */}
+        {/* ── TRUST ── */}
         <section style={{ padding: '48px 0 72px' }}>
           <div className="lp-container">
             <div style={{ textAlign: 'center', marginBottom: 32 }}>
@@ -261,31 +261,9 @@ export default function LandingPage() {
               </p>
             </div>
 
-            <div className="lp-hero-content" style={{ maxWidth: 400, margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
-              <p style={{ fontSize: 14, color: SAND_400, margin: 0, textAlign: 'center' }}>
-                Ready to try it?
-              </p>
-              <a
-                href={buildAuthUrl()}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: 52, background: SAGE_500, color: 'white', fontSize: 16, fontWeight: 600, borderRadius: 12, textDecoration: 'none', transition: 'background 0.15s ease, transform 0.1s ease', fontFamily: 'inherit' }}
-                onMouseEnter={e => (e.currentTarget.style.background = SAGE_700)}
-                onMouseLeave={e => (e.currentTarget.style.background = SAGE_500)}
-                onMouseDown={e  => (e.currentTarget.style.transform = 'scale(0.98)')}
-                onMouseUp={e    => (e.currentTarget.style.transform = 'scale(1)')}
-              >
-                Start for free — no download needed
-              </a>
+            <div style={{ maxWidth: 400, margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
               <p style={{ fontSize: 12, color: SAND_400, margin: 0, textAlign: 'center' }}>
                 <span aria-hidden="true">🔒</span> Your conversations stay private. We never sell your data.
-              </p>
-              <p style={{ fontSize: 13, color: SAND_400, margin: 0, textAlign: 'center' }}>
-                Already have an account?{' '}
-                <a href="/login" style={{ color: SAGE_600, fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: '2px' }}>
-                  Sign in
-                </a>
-              </p>
-              <p style={{ fontSize: 13, color: SAND_400, margin: 0, textAlign: 'center' }}>
-                Or <a href="mailto:hello@hellolumira.app" style={{ color: SAGE_600, textDecoration: 'underline' }}>send us a message</a> — we read every one.
               </p>
             </div>
 

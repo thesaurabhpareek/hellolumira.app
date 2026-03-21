@@ -7,7 +7,7 @@
  */
 
 import { NextResponse } from 'next/server'
-import { createServiceClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { SECURITY_HEADERS } from '@/lib/utils'
 
 export const dynamic = 'force-dynamic'
@@ -32,18 +32,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: true }, { status: 200, headers: SECURITY_HEADERS })
     }
 
-    // Extract fields — profile_id is optional (anon events allowed)
+    // Extract fields — profile_id is derived server-side from session (never trust client)
     const {
       event,
       properties,
-      profile_id,
       session_id,
       timestamp,
       url,
     } = body as {
       event?: string
       properties?: Record<string, unknown>
-      profile_id?: string
       session_id?: string
       timestamp?: string
       url?: string
@@ -53,13 +51,23 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: true }, { status: 200, headers: SECURITY_HEADERS })
     }
 
+    // SECURITY: Derive profile_id from session — never trust client-supplied profile_id
+    let serverProfileId: string | null = null
+    try {
+      const authClient = await createClient()
+      const { data: { user } } = await authClient.auth.getUser()
+      if (user) serverProfileId = user.id
+    } catch {
+      // Anonymous event — no profile_id
+    }
+
     // Write to analytics_events table via service client (bypasses RLS)
     // Non-blocking: fire and forget — never let DB errors reach the client
     const supabase = await createServiceClient()
     supabase.from('analytics_events').insert({
       event_name: event,
       event_category: typeof properties?.category === 'string' ? properties.category : null,
-      profile_id: typeof profile_id === 'string' && profile_id.length === 36 ? profile_id : null,
+      profile_id: serverProfileId,
       session_id: typeof session_id === 'string' ? session_id.slice(0, 64) : null,
       properties: properties ?? null,
       page_path: typeof url === 'string' ? new URL(url, 'https://hellolumira.app').pathname.slice(0, 255) : null,

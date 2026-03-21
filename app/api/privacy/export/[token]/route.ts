@@ -13,6 +13,7 @@ export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { SECURITY_HEADERS } from '@/lib/utils'
+import { checkIpRateLimit } from '@/lib/rate-limit'
 
 export async function GET(
   _request: NextRequest,
@@ -20,6 +21,15 @@ export async function GET(
 ) {
   try {
     const { token } = await params
+
+    // SECURITY: Rate limit by IP to prevent token brute-force
+    const { allowed, retryAfter } = await checkIpRateLimit(_request, 10, 60_000)
+    if (!allowed) {
+      return NextResponse.json(
+        { error: true, message: 'Too many requests. Please try again later.' },
+        { status: 429, headers: { ...SECURITY_HEADERS, 'Retry-After': String(retryAfter) } }
+      )
+    }
 
     if (!token || typeof token !== 'string' || token.length < 16) {
       return NextResponse.json(
@@ -34,30 +44,29 @@ export async function GET(
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     )
 
-    // Look up the export request by token
-    const { data: exportRequest, error: fetchError } = await supabase
+    // SECURITY: Atomically claim the export to prevent TOCTOU race condition.
+    // This single UPDATE+SELECT prevents concurrent downloads of the same token.
+    const { data: exportRequest, error: claimError } = await supabase
       .from('data_export_requests')
-      .select('*')
+      .update({ status: 'downloaded' })
       .eq('download_token', token)
+      .eq('status', 'ready')
+      .select('*')
       .single()
 
-    if (fetchError || !exportRequest) {
+    if (claimError || !exportRequest) {
       return NextResponse.json(
-        { error: true, message: 'Export not found.' },
+        { error: true, message: 'Export not found, already downloaded, or not ready.' },
         { status: 404, headers: SECURITY_HEADERS }
       )
     }
 
-    // Check if the export is ready
-    if (exportRequest.status !== 'ready') {
-      return NextResponse.json(
-        { error: true, message: 'Export is not ready for download.' },
-        { status: 404, headers: SECURITY_HEADERS }
-      )
-    }
-
-    // Check if the download link has expired
+    // Check if the download link has expired (revert status if so)
     if (exportRequest.expires_at && new Date(exportRequest.expires_at) < new Date()) {
+      await supabase
+        .from('data_export_requests')
+        .update({ status: 'expired' })
+        .eq('id', exportRequest.id)
       return NextResponse.json(
         { error: true, message: 'This export link has expired. Please request a new export.' },
         { status: 410, headers: SECURITY_HEADERS }
@@ -72,12 +81,6 @@ export async function GET(
         { status: 404, headers: SECURITY_HEADERS }
       )
     }
-
-    // Mark the export as downloaded to prevent token reuse
-    await supabase
-      .from('data_export_requests')
-      .update({ status: 'downloaded' })
-      .eq('id', exportRequest.id)
 
     return new NextResponse(JSON.stringify(exportData, null, 2), {
       status: 200,

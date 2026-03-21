@@ -1,4 +1,5 @@
 // app/(app)/layout.tsx — App shell layout (server component)
+import type React from 'react'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import AppShell from '@/components/app/AppShell'

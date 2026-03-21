@@ -40,23 +40,27 @@ export default async function ProfilePage() {
     redirect('/onboarding')
   }
 
+  // Fetch baby membership first (needed for partner count query)
+  const { data: memberData } = await supabase
+    .from('baby_profile_members')
+    .select('baby_id')
+    .eq('profile_id', user.id)
+    .limit(1)
+    .maybeSingle()
+
   // Fetch remaining data in parallel (non-critical — failures won't block the page)
   const [
-    { data: memberData },
     { count: partnerCount },
     { count: checkinCount },
     { data: earnedBadgeRows },
   ] = await Promise.all([
-    supabase
-      .from('baby_profile_members')
-      .select('baby_id')
-      .eq('profile_id', user.id)
-      .limit(1)
-      .maybeSingle(),
-    supabase
-      .from('baby_profile_members')
-      .select('*', { count: 'exact', head: true })
-      .neq('profile_id', user.id),
+    memberData?.baby_id
+      ? supabase
+          .from('baby_profile_members')
+          .select('*', { count: 'exact', head: true })
+          .eq('baby_id', memberData.baby_id)
+          .neq('profile_id', user.id)
+      : Promise.resolve({ count: 0 } as { count: number }),
     supabase
       .from('daily_checkins')
       .select('*', { count: 'exact', head: true })
@@ -75,7 +79,7 @@ export default async function ProfilePage() {
     const { data: babyData } = await supabase
       .from('baby_profiles')
       .select(
-        'id, name, due_date, date_of_birth, stage, pending_proactive_type, pending_proactive_set_at, created_by_profile_id, created_at'
+        'id, name, due_date, date_of_birth, stage, planning_sub_option, planning_expected_month, pending_proactive_type, pending_proactive_set_at, created_by_profile_id, created_at'
       )
       .eq('id', memberData.baby_id)
       .single()
@@ -85,9 +89,9 @@ export default async function ProfilePage() {
   const ageInfo = baby ? getBabyAgeInfo(baby) : null
   const hasPartner = (partnerCount ?? 0) > 0
   const hasCheckin = (checkinCount ?? 0) > 0
-  const seedsBalance = ((profileData as Record<string, unknown>)?.seeds_balance as number) ?? 0
-  const currentStreak = ((profileData as Record<string, unknown>)?.current_streak as number) ?? 0
-  const avatarEmoji = ((profileData as Record<string, unknown>)?.avatar_emoji as string) || '🌿'
+  const seedsBalance = profile.seeds_balance ?? 0
+  const currentStreak = profile.current_streak ?? 0
+  const avatarEmoji = profile.avatar_emoji || '🌿'
 
   // Earned badge IDs
   const earnedIds = (earnedBadgeRows ?? []).map((b: { badge_id: string }) => b.badge_id)
@@ -342,7 +346,7 @@ export default async function ProfilePage() {
                 marginBottom: '16px',
               }}
             >
-              {baby.name || 'Baby'}
+              {baby.stage === 'planning' ? 'Your Journey' : (baby.name || 'Baby')}
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {/* Stage badge */}
@@ -371,6 +375,53 @@ export default async function ProfilePage() {
                   {ageInfo?.age_display_string || baby.stage}
                 </span>
               </div>
+
+              {/* Planning-specific info */}
+              {baby.stage === 'planning' && baby.planning_sub_option && (
+                <div>
+                  <p
+                    style={{
+                      fontSize: '13px',
+                      color: 'var(--color-muted)',
+                      marginBottom: '2px',
+                    }}
+                  >
+                    Path
+                  </p>
+                  <p style={{ fontWeight: 600, color: 'var(--color-slate)' }}>
+                    {{
+                      trying_naturally: 'Trying to conceive naturally',
+                      ivf_fertility: 'IVF / fertility treatment',
+                      adopting: 'Adoption',
+                      surrogacy: 'Surrogacy',
+                      exploring: 'Exploring options',
+                    }[baby.planning_sub_option] || baby.planning_sub_option}
+                  </p>
+                </div>
+              )}
+
+              {baby.stage === 'planning' && baby.planning_expected_month && (
+                <div>
+                  <p
+                    style={{
+                      fontSize: '13px',
+                      color: 'var(--color-muted)',
+                      marginBottom: '2px',
+                    }}
+                  >
+                    Hoping to welcome baby
+                  </p>
+                  <p style={{ fontWeight: 600, color: 'var(--color-slate)' }}>
+                    {(() => {
+                      const [y, m] = baby.planning_expected_month.split('-').map(Number)
+                      return new Date(y, m - 1).toLocaleDateString('en-US', {
+                        month: 'long',
+                        year: 'numeric',
+                      })
+                    })()}
+                  </p>
+                </div>
+              )}
 
               {baby.due_date && (
                 <div>

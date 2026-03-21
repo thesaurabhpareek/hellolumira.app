@@ -19,6 +19,12 @@ export async function GET(
     const { slug } = await params
     const supabase = await createClient()
 
+    // SECURITY: Verify authentication before serving tribe content
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: SECURITY_HEADERS })
+    }
+
     // Get tribe by slug
     const { data: tribe } = await supabase
       .from('tribes')
@@ -121,13 +127,21 @@ export async function POST(
       return NextResponse.json({ error: 'Post body is required' }, { status: 400, headers: SECURITY_HEADERS })
     }
 
+    // SECURITY: Enforce max length to prevent DB bloat
+    if (postBody.length > 5000) {
+      return NextResponse.json({ error: 'Post body too long (max 5000 characters)' }, { status: 400, headers: SECURITY_HEADERS })
+    }
+    if (title && title.length > 200) {
+      return NextResponse.json({ error: 'Title too long (max 200 characters)' }, { status: 400, headers: SECURITY_HEADERS })
+    }
+
     const { data: post, error } = await supabase
       .from('tribe_posts')
       .insert({
         tribe_id: tribe.id,
         profile_id: user.id,
-        title: title || null,
-        body: postBody.trim(),
+        title: title ? title.slice(0, 200) : null,
+        body: postBody.trim().slice(0, 5000),
         post_type,
       })
       .select()

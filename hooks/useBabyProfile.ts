@@ -59,7 +59,7 @@ export function useBabyProfile(): UseBabyProfileResult {
 
         const { data: babyData, error: babyError } = await supabase
           .from('baby_profiles')
-          .select('id, name, due_date, date_of_birth, stage, pending_proactive_type, pending_proactive_set_at, created_by_profile_id, created_at')
+          .select('id, name, due_date, date_of_birth, stage, planning_sub_option, planning_expected_month, pending_proactive_type, pending_proactive_set_at, created_by_profile_id, created_at')
           .eq('id', memberData.baby_id)
           .single()
 

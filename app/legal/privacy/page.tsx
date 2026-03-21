@@ -486,7 +486,7 @@ export default function PrivacyPolicyPage() {
       </section>
 
       {/* ─── 9. Your Rights ─── */}
-      <section className="legal-section">
+      <section id="your-rights" className="legal-section">
         <h2 className="legal-h2">9. Your Rights</h2>
         <div className="legal-body">
 
