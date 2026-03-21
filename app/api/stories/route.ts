@@ -34,7 +34,7 @@ export async function GET(_request: NextRequest) {
       .from('stories')
       .select(`
         *,
-        profiles!stories_profile_id_fkey(display_name, avatar_url)
+        profiles!stories_profile_id_fkey(display_name, avatar_emoji)
       `)
       .gt('expires_at', now)
       .eq('is_hidden', false)
@@ -51,7 +51,7 @@ export async function GET(_request: NextRequest) {
       .from('stories')
       .select(`
         *,
-        profiles!stories_profile_id_fkey(display_name, avatar_url)
+        profiles!stories_profile_id_fkey(display_name, avatar_emoji)
       `)
       .eq('profile_id', user.id)
       .order('published_at', { ascending: false })
@@ -80,14 +80,14 @@ export async function GET(_request: NextRequest) {
     const groupMap = new Map<string, StoryStripItem>()
 
     for (const story of allStories) {
-      const profile = story.profiles as { display_name: string; avatar_url: string | null } | null
+      const profile = story.profiles as { display_name: string; avatar_emoji: string | null } | null
       const profileId = story.profile_id as string
 
       if (!groupMap.has(profileId)) {
         groupMap.set(profileId, {
           profile_id: profileId,
           display_name: profile?.display_name || 'Unknown',
-          avatar_url: profile?.avatar_url || null,
+          avatar_url: profile?.avatar_emoji || null,
           stories: [],
           has_unread: false,
         })
@@ -230,13 +230,13 @@ export async function POST(request: NextRequest) {
         profile_id: user.id,
         story_type: storyType,
         text_content: textContent,
-        bg_color: bgColor,
+        text_bg_color: bgColor,
         image_url: imageUrl,
         image_caption: imageCaption,
         poll_question: pollQuestion,
         poll_option_a: pollOptionA,
         poll_option_b: pollOptionB,
-        question_prompt: questionPrompt,
+        question_text: questionPrompt,
         expires_at: expiresAt,
         published_at: now.toISOString(),
       })
