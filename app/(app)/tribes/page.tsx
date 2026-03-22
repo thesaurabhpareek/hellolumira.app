@@ -43,14 +43,13 @@ function formatCount(n: number): string {
 }
 
 const FILTERS = [
-  { id: 'all', label: 'All Tribes' },
-  { id: 'my', label: 'My Tribes' },
-  { id: 'discover', label: 'Discover' },
+  { id: 'all', label: 'All' },
+  { id: 'my', label: 'Joined' },
   { id: 'pregnancy', label: '🤰 Pregnancy' },
   { id: 'newborn', label: '👶 Newborn' },
   { id: 'toddler', label: '🧒 Toddler' },
   { id: 'finance', label: '💰 Finance' },
-  { id: 'preparation', label: '🎒 Preparation' },
+  { id: 'preparation', label: '🎒 Prep' },
   { id: 'support', label: '💚 Support' },
   { id: 'community', label: '🤝 Community' },
 ] as const
@@ -173,25 +172,31 @@ export default function TribesPage() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100%', background: 'var(--color-surface)', paddingBottom: '100px' }}>
+      <div style={{ minHeight: '100%', background: 'var(--color-surface)', paddingBottom: '24px' }}>
         <div className="content-width mx-auto px-4 pt-6">
           <h1 className="text-h1" style={{ color: 'var(--color-slate)', marginBottom: '4px' }}>My Tribes</h1>
           <p className="text-body" style={{ color: 'var(--color-muted)', marginBottom: '24px' }}>Connect with parents in your moment</p>
           {[1, 2, 3].map(i => (
             <div key={i} style={{
-              height: '88px', marginBottom: '10px', borderRadius: '14px',
+              display: 'flex', alignItems: 'flex-start', gap: '14px',
+              padding: '14px 16px', marginBottom: '10px', borderRadius: '14px',
               background: 'var(--color-white)', border: '1px solid var(--color-border)',
-              animation: 'pulse 1.5s ease-in-out infinite',
-            }} />
+            }}>
+              <div className="lumira-skeleton" style={{ width: '40px', height: '40px', borderRadius: '10px', flexShrink: 0 }} />
+              <div style={{ flex: 1 }}>
+                <div className="lumira-skeleton" style={{ height: '18px', width: '55%', borderRadius: '6px', marginBottom: '8px' }} />
+                <div className="lumira-skeleton" style={{ height: '14px', width: '85%', borderRadius: '6px', marginBottom: '8px' }} />
+                <div className="lumira-skeleton" style={{ height: '12px', width: '45%', borderRadius: '4px' }} />
+              </div>
+            </div>
           ))}
-          <style>{`@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }`}</style>
         </div>
       </div>
     )
   }
 
   return (
-    <div style={{ minHeight: '100%', background: 'var(--color-surface)', paddingBottom: '100px' }}>
+    <div style={{ minHeight: '100%', background: 'var(--color-surface)', paddingBottom: '24px' }}>
       <div className="content-width mx-auto px-4 pt-6">
         <h1 className="text-h1" style={{ color: 'var(--color-slate)', marginBottom: '4px' }}>My Tribes</h1>
         <p className="text-body" style={{ color: 'var(--color-muted)', marginBottom: '16px', lineHeight: 1.5 }}>
@@ -436,17 +441,26 @@ function TribeCard({
             onClick={onJoin}
             aria-label={isMember ? 'Leave tribe' : 'Join tribe'}
             style={{
-              padding: '4px 12px', borderRadius: '100px', fontSize: '12px', fontWeight: 600, flexShrink: 0,
-              background: isMember ? 'var(--color-surface)' : 'var(--color-primary-light)',
-              color: isMember ? 'var(--color-muted)' : 'var(--color-primary)',
-              border: isMember ? '1px solid var(--color-border)' : 'none',
+              padding: isMember ? '6px 14px' : '6px 18px',
+              borderRadius: '100px',
+              fontSize: '13px',
+              fontWeight: 600,
+              flexShrink: 0,
+              background: isMember ? 'transparent' : 'var(--color-primary)',
+              color: isMember ? 'var(--color-muted)' : '#FFFFFF',
+              border: isMember ? '1.5px solid var(--color-border)' : '1.5px solid var(--color-primary)',
               opacity: joining ? 0.5 : 1,
-              minHeight: '44px', display: 'flex', alignItems: 'center',
+              height: '32px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
               transition: 'all 0.2s ease',
               cursor: 'pointer',
+              letterSpacing: '0.1px',
+              minWidth: isMember ? '72px' : '64px',
             }}
           >
-            {joining ? '...' : isMember ? 'Joined' : 'Join'}
+            {joining ? '...' : isMember ? 'Joined ✓' : 'Join'}
           </button>
         </div>
         <p style={{ fontSize: '13px', color: 'var(--color-muted)', lineHeight: 1.4, marginBottom: '6px' }}>

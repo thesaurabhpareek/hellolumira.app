@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
 
     // Fetch baby and profile in parallel with specific columns
     const [babyResult, profileResult] = await Promise.all([
-      supabase.from('baby_profiles').select('id, name, due_date, date_of_birth, stage, pending_proactive_type, pending_proactive_set_at, created_by_profile_id, created_at').eq('id', baby_id).single(),
+      supabase.from('baby_profiles').select('id, name, due_date, date_of_birth, stage, pending_proactive_type, pending_proactive_set_at, created_by_profile_id, created_at, planning_sub_option, planning_expected_month').eq('id', baby_id).single(),
       supabase.from('profiles').select('id, first_name').eq('id', user.id).single(),
     ])
 

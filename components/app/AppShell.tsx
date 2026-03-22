@@ -1,23 +1,18 @@
 /**
  * @module AppShell
  * @description Root layout shell for the authenticated app experience.
- *   Provides bottom navigation, header, and notification integration.
- * @version 1.1.0 — Migrated inline styles → Tailwind classes
+ *   Provides premium bottom navigation, header, page transitions,
+ *   and notification integration. iOS-caliber native feel.
+ * @version 2.0.0 — Premium navigation, glass morphism, page transitions
  * @since March 2026
  */
 'use client'
 
 import type React from 'react'
-import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import {
-  HomeIcon, HomeIconFilled,
-  HeartIcon, HeartIconFilled,
-  BookIcon, BookIconFilled,
-  UserIcon, UserIconFilled,
-  TribeIcon,
-} from '@/components/icons'
-import { NotificationBell } from './NotificationBell'
+import PremiumBottomNav from './PremiumBottomNav'
+import PremiumHeader from './PremiumHeader'
+import PageTransition from './PageTransition'
 import type { Profile, BabyProfile } from '@/types/app'
 
 interface Props {
@@ -26,98 +21,53 @@ interface Props {
   baby: BabyProfile | null
 }
 
-interface TabItem {
-  label: string
-  href: string
-  icon: (props: { size?: number; color?: string }) => React.ReactNode
-  iconFilled: (props: { size?: number; color?: string }) => React.ReactNode
-}
-
-const tabs: TabItem[] = [
-  { label: 'Home',     href: '/home',    icon: HomeIcon,  iconFilled: HomeIconFilled  },
-  { label: 'Check in', href: '/checkin', icon: HeartIcon, iconFilled: HeartIconFilled },
-  { label: 'Tribes',   href: '/tribes',  icon: TribeIcon, iconFilled: TribeIcon       },
-  { label: 'Read',     href: '/content', icon: BookIcon,  iconFilled: BookIconFilled  },
-  { label: 'Me',       href: '/profile', icon: UserIcon,  iconFilled: UserIconFilled  },
-]
-
-const ACTIVE_COLOR   = '#3D8178'  // sage-500
-const INACTIVE_COLOR = '#9CA3AF'  // gray-400
-
 export default function AppShell({ children, profile, baby }: Props) {
   void baby
   void profile
 
   const pathname = usePathname()
 
-  function isTabActive(href: string): boolean {
-    if (href === '/home') return pathname === '/home'
-    if (href === '/checkin') return pathname.startsWith('/checkin')
-    if (href === '/tribes') return pathname.startsWith('/tribes')
-    return pathname.startsWith(href)
+  // Determine if we're on a sub-page (not a root tab)
+  const rootTabs = ['/home', '/chat', '/tribes', '/content', '/profile']
+  const isRootTab = rootTabs.some(t => pathname === t)
+  const isSubPage = !isRootTab && pathname !== '/'
+
+  // Determine page title for sub-pages
+  const getPageTitle = (): string | undefined => {
+    if (isRootTab) return undefined // Root tabs show wordmark, not title
+    if (pathname.startsWith('/chat/')) return 'Chat'
+    if (pathname.startsWith('/tribes/')) return 'Tribe'
+    if (pathname.startsWith('/content/')) return 'Article'
+    if (pathname.startsWith('/settings')) return 'Settings'
+    if (pathname.startsWith('/concern')) return 'Concern'
+    if (pathname.startsWith('/quiz')) return 'Quiz'
+    return undefined
   }
 
   return (
     <div className="h-dvh bg-white flex flex-col font-sans overflow-hidden">
 
-      {/* ── Header ── */}
-      <header className="bg-white border-b border-border sticky top-0 z-[100] safe-top">
-        <div className="max-w-content mx-auto w-full flex items-center justify-between h-14 px-4">
-          {/* Wordmark */}
-          <Link
-            href="/home"
-            className="text-[22px] font-bold text-primary no-underline tracking-tight [-webkit-tap-highlight-color:transparent]"
-          >
-            Lumira
-          </Link>
+      {/* -- Header -- */}
+      <PremiumHeader
+        title={getPageTitle()}
+        showBack={isSubPage}
+        backLabel="Back"
+      />
 
-          {/* Notification bell */}
-          <NotificationBell />
-        </div>
-      </header>
-
-      {/* ── Main content ── */}
+      {/* -- Main content -- */}
       <main
         className="flex-1 flex flex-col overflow-hidden min-h-0"
         style={{ paddingBottom: 'calc(56px + max(0px, env(safe-area-inset-bottom)))' }}
       >
         <div className="max-w-content mx-auto w-full flex-1 flex flex-col min-h-0 overflow-y-auto overflow-x-hidden [-webkit-overflow-scrolling:touch]">
-          {children}
+          <PageTransition>
+            {children}
+          </PageTransition>
         </div>
       </main>
 
-      {/* ── Bottom Tab Bar ── */}
-      <nav
-        aria-label="Main navigation"
-        className="fixed bottom-0 left-0 right-0 z-[100] bg-white border-t border-border safe-bottom"
-      >
-        <div className="max-w-content mx-auto flex items-stretch justify-around min-h-14">
-          {tabs.map((tab) => {
-            const active = isTabActive(tab.href)
-            const color  = active ? ACTIVE_COLOR : INACTIVE_COLOR
-            const IconComponent = active ? tab.iconFilled : tab.icon
-
-            return (
-              <Link
-                key={tab.href}
-                href={tab.href}
-                aria-current={active ? 'page' : undefined}
-                className="flex flex-col items-center justify-center flex-1 min-h-[56px] min-w-[48px] gap-[2px] no-underline touch-manipulation py-1.5 [-webkit-tap-highlight-color:transparent]"
-                style={{ color }}
-              >
-                <IconComponent size={22} color={color} />
-                <span
-                  className="text-[10px] leading-none text-center max-w-full overflow-hidden text-ellipsis whitespace-nowrap"
-                  style={{ fontWeight: active ? 700 : 600, color }}
-                >
-                  {tab.label}
-                </span>
-              </Link>
-            )
-          })}
-        </div>
-      </nav>
-
+      {/* -- Bottom Tab Bar -- */}
+      <PremiumBottomNav />
     </div>
   )
 }

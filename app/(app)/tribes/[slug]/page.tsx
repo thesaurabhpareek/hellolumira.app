@@ -198,7 +198,7 @@ export default function TribeDetailPage() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100dvh', background: 'var(--color-surface)', paddingBottom: '100px' }}>
+      <div style={{ minHeight: '100%', background: 'var(--color-surface)', paddingBottom: '24px' }}>
         <div className="content-width mx-auto px-4 pt-6">
           <div style={{ height: '120px', borderRadius: '14px', background: 'var(--color-white)', marginBottom: '16px', animation: 'pulse 1.5s ease-in-out infinite' }} />
           {[1, 2, 3].map(i => (
@@ -212,14 +212,14 @@ export default function TribeDetailPage() {
 
   if (!tribe) {
     return (
-      <div style={{ minHeight: '100dvh', background: 'var(--color-surface)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: '100%', background: 'var(--color-surface)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <p style={{ color: 'var(--color-muted)' }}>Tribe not found</p>
       </div>
     )
   }
 
   return (
-    <div style={{ minHeight: '100dvh', background: 'var(--color-surface)', paddingBottom: '100px' }}>
+    <div style={{ minHeight: '100%', background: 'var(--color-surface)', paddingBottom: '24px' }}>
       <div className="content-width mx-auto px-4 pt-6">
         {/* Back button */}
         <button

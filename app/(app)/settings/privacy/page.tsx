@@ -267,7 +267,7 @@ export default function PrivacySettingsPage() {
     return (
       <div
         style={{
-          minHeight: '100dvh',
+          minHeight: '100%',
           background: 'var(--color-surface)',
           paddingBottom: '32px',
         }}
@@ -290,7 +290,7 @@ export default function PrivacySettingsPage() {
     return (
       <div
         style={{
-          minHeight: '100dvh',
+          minHeight: '100%',
           background: 'var(--color-surface)',
           paddingBottom: '32px',
         }}
@@ -330,7 +330,7 @@ export default function PrivacySettingsPage() {
   return (
     <div
       style={{
-        minHeight: '100dvh',
+        minHeight: '100%',
         background: 'var(--color-surface)',
         paddingBottom: '32px',
       }}

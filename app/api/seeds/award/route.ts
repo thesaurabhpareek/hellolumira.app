@@ -24,6 +24,7 @@ const CLIENT_ALLOWED_REASONS = new Set([
   'read_article',
   'invite_partner',
   'complete_profile',
+  'profile_field_completion',
 ])
 
 interface AwardRequest {

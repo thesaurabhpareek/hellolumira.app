@@ -2,9 +2,9 @@ export default function HelpLoading() {
   return (
     <div
       style={{
-        minHeight: '100dvh',
+        minHeight: '100%',
         background: '#FAFAF8',
-        paddingBottom: '100px',
+        paddingBottom: '24px',
       }}
     >
       <div style={{ maxWidth: '480px', margin: '0 auto', padding: '24px 16px' }}>

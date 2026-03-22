@@ -155,7 +155,7 @@ export default function PostDetailPage() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100dvh', background: 'var(--color-surface)', paddingBottom: '100px' }}>
+      <div style={{ minHeight: '100%', background: 'var(--color-surface)', paddingBottom: '24px' }}>
         <div className="content-width mx-auto px-4 pt-6">
           <div style={{ height: '200px', borderRadius: '14px', background: 'var(--color-white)', animation: 'pulse 1.5s ease-in-out infinite' }} />
           <style>{`@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }`}</style>
@@ -166,7 +166,7 @@ export default function PostDetailPage() {
 
   if (!post) {
     return (
-      <div style={{ minHeight: '100dvh', background: 'var(--color-surface)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: '100%', background: 'var(--color-surface)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <p style={{ color: 'var(--color-muted)' }}>Post not found</p>
       </div>
     )
@@ -176,7 +176,7 @@ export default function PostDetailPage() {
   const typeInfo = POST_TYPE_LABELS[post.post_type] || POST_TYPE_LABELS.discussion
 
   return (
-    <div style={{ minHeight: '100dvh', background: 'var(--color-surface)', paddingBottom: '120px' }}>
+    <div style={{ minHeight: '100%', background: 'var(--color-surface)', paddingBottom: '120px' }}>
       <div className="content-width mx-auto px-4 pt-6">
         {/* Back button */}
         <button

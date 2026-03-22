@@ -23,9 +23,9 @@ export default function LegalLayout({
             .legal-layout {
               min-height: 100dvh;
               height: auto;
-              background: #FAFAF8;
+              background: var(--color-surface, #FAFAF8);
               font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-              color: #2D3748;
+              color: var(--color-slate, #2D3748);
               overflow-y: auto;
               -webkit-overflow-scrolling: touch;
               overscroll-behavior-y: auto;
@@ -35,6 +35,8 @@ export default function LegalLayout({
               height: auto !important;
               min-height: 0 !important;
             }
+
+            /* ── Sticky header ── */
             .legal-topbar {
               position: sticky;
               top: 0;
@@ -42,34 +44,75 @@ export default function LegalLayout({
               background: rgba(250, 250, 248, 0.92);
               backdrop-filter: blur(12px);
               -webkit-backdrop-filter: blur(12px);
-              border-bottom: 1px solid #E2E8F0;
-              padding: 12px 24px;
+              border-bottom: 1px solid var(--color-border, #E2E8F0);
+              padding: 0 16px;
               display: flex;
               align-items: center;
               justify-content: space-between;
+              height: 56px;
             }
+            @media (min-width: 640px) {
+              .legal-topbar {
+                padding: 0 24px;
+              }
+            }
+
+            /* Back to app button — primary action */
+            .legal-back-btn {
+              display: inline-flex;
+              align-items: center;
+              gap: 6px;
+              font-size: 14px;
+              font-weight: 600;
+              color: var(--color-primary, #3D8178);
+              text-decoration: none;
+              padding: 8px 14px 8px 10px;
+              border-radius: 10px;
+              background: var(--color-primary-light, #EDF4F2);
+              border: 1px solid var(--color-primary-mid, #A8CECA);
+              transition: background 0.15s ease, border-color 0.15s ease;
+              white-space: nowrap;
+              line-height: 1;
+            }
+            .legal-back-btn:hover {
+              background: #ddeee9;
+              border-color: var(--color-primary, #3D8178);
+            }
+            .legal-back-btn:active {
+              transform: scale(0.97);
+            }
+
+            /* Center brand */
             .legal-topbar-brand {
               font-size: 17px;
               font-weight: 700;
-              color: #1F4F49; /* Sage 700 — ~8.5:1 on #FAFAF8, replaces #3D8178 which was ~3.9:1 */
+              color: #1F4F49;
               text-decoration: none;
               letter-spacing: -0.3px;
+              position: absolute;
+              left: 50%;
+              transform: translateX(-50%);
             }
             .legal-topbar-brand:hover {
               opacity: 0.85;
             }
-            .legal-topbar-back {
-              font-size: 14px;
+
+            /* Right-side link (all docs) */
+            .legal-topbar-secondary {
+              font-size: 13px;
               font-weight: 500;
-              color: #5A6478;
+              color: var(--color-muted, #718096);
               text-decoration: none;
               display: flex;
               align-items: center;
               gap: 4px;
+              white-space: nowrap;
             }
-            .legal-topbar-back:hover {
-              color: #2C6058;
+            .legal-topbar-secondary:hover {
+              color: var(--color-primary, #3D8178);
             }
+
+            /* ── Content area ── */
             .legal-main {
               max-width: 720px;
               margin: 0 auto;
@@ -85,7 +128,7 @@ export default function LegalLayout({
             .legal-h1 {
               font-size: 28px;
               font-weight: 700;
-              color: #2D3748;
+              color: var(--color-slate, #2D3748);
               margin-bottom: 6px;
               line-height: 1.25;
               letter-spacing: -0.4px;
@@ -104,14 +147,14 @@ export default function LegalLayout({
             .legal-h2 {
               font-size: 19px;
               font-weight: 700;
-              color: #2D3748;
+              color: var(--color-slate, #2D3748);
               margin-bottom: 12px;
               line-height: 1.35;
             }
             .legal-h3 {
               font-size: 16px;
               font-weight: 600;
-              color: #2D3748;
+              color: var(--color-slate, #2D3748);
               margin-bottom: 8px;
               margin-top: 20px;
               line-height: 1.4;
@@ -119,7 +162,7 @@ export default function LegalLayout({
             .legal-body {
               font-size: 15px;
               line-height: 1.75;
-              color: #2D3748;
+              color: var(--color-slate, #2D3748);
             }
             .legal-body p {
               margin-bottom: 12px;
@@ -164,7 +207,7 @@ export default function LegalLayout({
             }
             .legal-callout {
               background: #FFFFFF;
-              border: 1px solid #E2E8F0;
+              border: 1px solid var(--color-border, #E2E8F0);
               border-radius: 14px;
               padding: 20px;
               margin: 16px 0;
@@ -189,18 +232,18 @@ export default function LegalLayout({
             .legal-table th {
               text-align: left;
               padding: 10px 12px;
-              border-bottom: 2px solid #E2E8F0;
+              border-bottom: 2px solid var(--color-border, #E2E8F0);
               font-weight: 600;
-              color: #2D3748;
+              color: var(--color-slate, #2D3748);
               font-size: 13px;
               white-space: nowrap;
             }
             .legal-table td {
               padding: 10px 12px;
-              border-bottom: 1px solid #E2E8F0;
+              border-bottom: 1px solid var(--color-border, #E2E8F0);
               vertical-align: top;
               line-height: 1.6;
-              color: #2D3748;
+              color: var(--color-slate, #2D3748);
             }
             .legal-table tr:last-child td {
               border-bottom: none;
@@ -223,7 +266,7 @@ export default function LegalLayout({
             }
             .legal-card {
               background: #FFFFFF;
-              border: 1px solid #E2E8F0;
+              border: 1px solid var(--color-border, #E2E8F0);
               border-radius: 14px;
               padding: 20px;
               text-decoration: none;
@@ -232,24 +275,24 @@ export default function LegalLayout({
               display: block;
             }
             .legal-card:hover {
-              border-color: #A8CECA;
+              border-color: var(--color-primary-mid, #A8CECA);
               box-shadow: 0 2px 8px rgba(61, 129, 120, 0.08);
             }
             .legal-card-title {
               font-size: 16px;
               font-weight: 600;
-              color: #2D3748;
+              color: var(--color-slate, #2D3748);
               margin-bottom: 4px;
             }
             .legal-card-desc {
               font-size: 14px;
-              color: #718096;
+              color: var(--color-muted, #718096);
               line-height: 1.5;
               margin-bottom: 8px;
             }
             .legal-card-date {
               font-size: 12px;
-              color: #718096; /* was #A0AEC0 (~2.6:1); #718096 passes AA (~4.6:1) */
+              color: var(--color-muted, #718096);
             }
 
             /* Print styles */
@@ -273,12 +316,23 @@ export default function LegalLayout({
       />
       <div className="legal-layout">
         <nav className="legal-topbar" aria-label="Legal pages">
-          <a href="/" className="legal-topbar-brand">Lumira</a>
-          <a href="/legal" className="legal-topbar-back">
+          {/* Primary action: back to app */}
+          <a href="/settings" className="legal-back-btn">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M10 12L6 8L10 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M10 12L6 8L10 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            All legal documents
+            Settings
+          </a>
+
+          {/* Center brand */}
+          <a href="/" className="legal-topbar-brand" aria-label="Lumira home">Lumira</a>
+
+          {/* Secondary: browse all legal docs */}
+          <a href="/legal" className="legal-topbar-secondary">
+            All docs
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M6 4L10 8L6 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
           </a>
         </nav>
         <main className="legal-main">

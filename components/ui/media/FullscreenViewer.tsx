@@ -5,7 +5,6 @@ import {
   useEffect,
   useRef,
   useCallback,
-  type CSSProperties,
   type TouchEvent as ReactTouchEvent,
 } from 'react'
 
@@ -265,7 +264,7 @@ export default function FullscreenViewer({
 
   /* ── Touch handlers ──────────────────────────────────────────────── */
 
-  const getDistance = (t1: Touch, t2: Touch) =>
+  const getDistance = (t1: { clientX: number; clientY: number }, t2: { clientX: number; clientY: number }) =>
     Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY)
 
   const onTouchStart = useCallback((e: ReactTouchEvent) => {

@@ -73,7 +73,7 @@ export default async function HistoryPage() {
   return (
     <div
       style={{
-        minHeight: '100dvh',
+        minHeight: '100%',
         background: 'var(--color-surface)',
         paddingBottom: '32px',
       }}

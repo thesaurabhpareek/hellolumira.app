@@ -21,6 +21,7 @@ export const SEED_REWARDS: Record<string, number> = {
   invite_partner: 15,
   daily_streak_bonus: 2,
   first_share: 5,
+  profile_field_completion: 5, // variable amount — overridden by API route
 }
 
 /** One-time reasons — only awarded once ever (not per-day) */

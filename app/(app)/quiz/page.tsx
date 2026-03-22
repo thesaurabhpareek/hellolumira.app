@@ -269,9 +269,9 @@ export default function QuizPage() {
     <div
       ref={confettiContainerRef}
       style={{
-        minHeight: '100dvh',
+        minHeight: '100%',
         background: 'var(--color-surface)',
-        paddingBottom: '100px',
+        paddingBottom: '24px',
         position: 'relative',
         overflow: 'hidden',
       }}

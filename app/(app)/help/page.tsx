@@ -47,9 +47,9 @@ export default function HelpPage() {
   return (
     <div
       style={{
-        minHeight: '100dvh',
+        minHeight: '100%',
         background: 'var(--color-surface)',
-        paddingBottom: '100px',
+        paddingBottom: '24px',
       }}
     >
       <div className="content-width mx-auto px-4 pt-6">

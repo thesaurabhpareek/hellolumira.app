@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import ConcernStepCard from '@/components/app/ConcernStepCard'
+import LoadingScreen from '@/components/app/LoadingScreen'
 import type { ConcernFlow, ConcernAnswer, ConcernQuestion } from '@/types/app'
 
 const FLOW_MAP: Record<string, string> = {
@@ -158,9 +159,10 @@ export default function ConcernFlowPage() {
     return (
       <div
         style={{
-          minHeight: '100dvh',
-          background: 'var(--color-surface)',
+          flex: 1,
           display: 'flex',
+          flexDirection: 'column',
+          background: 'var(--color-surface)',
           alignItems: 'center',
           justifyContent: 'center',
         }}
@@ -177,9 +179,10 @@ export default function ConcernFlowPage() {
     return (
       <div
         style={{
-          minHeight: '100dvh',
-          background: 'var(--color-surface)',
+          flex: 1,
           display: 'flex',
+          flexDirection: 'column',
+          background: 'var(--color-surface)',
           alignItems: 'center',
           justifyContent: 'center',
           padding: '24px',
@@ -201,40 +204,15 @@ export default function ConcernFlowPage() {
   const progress = ((currentStep + 1) / totalSteps) * 100
 
   if (submitting) {
-    return (
-      <div
-        style={{
-          minHeight: '100dvh',
-          background: 'var(--color-surface)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '24px',
-        }}
-      >
-        <div style={{ textAlign: 'center' }}>
-          <div
-            style={{
-              width: '48px',
-              height: '48px',
-              border: '3px solid var(--color-primary-light)',
-              borderTopColor: 'var(--color-primary)',
-              borderRadius: '50%',
-              margin: '0 auto 16px',
-              animation: 'spin 0.8s linear infinite',
-            }}
-          />
-          <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
-          <p style={{ color: 'var(--color-muted)' }}>Putting together your summary...</p>
-        </div>
-      </div>
-    )
+    return <LoadingScreen variant="full" message="Putting together your summary..." />
   }
 
   return (
     <div
       style={{
-        minHeight: '100dvh',
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
         background: 'var(--color-surface)',
         paddingBottom: '32px',
       }}

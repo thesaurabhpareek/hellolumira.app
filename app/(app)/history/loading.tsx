@@ -2,7 +2,7 @@ export default function HistoryLoading() {
   return (
     <div
       style={{
-        minHeight: '100dvh',
+        minHeight: '100%',
         background: '#FAFAF8',
         paddingBottom: '32px',
       }}

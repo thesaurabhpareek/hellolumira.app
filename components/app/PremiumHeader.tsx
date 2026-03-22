@@ -56,21 +56,30 @@ export default function PremiumHeader({
   const headerRef = useRef<HTMLElement>(null)
 
   // Track scroll for collapse/blur transition
+  const getScrollParent = useCallback((): HTMLElement | null => {
+    // The header is a sibling of <main>, so we find main via the shared parent
+    const parent = headerRef.current?.parentElement
+    if (!parent) return null
+    const main = parent.querySelector('main')
+    if (!main) return null
+    // Find the scrollable child inside main
+    return main.querySelector('[class*="overflow-y"]') as HTMLElement | null
+  }, [])
+
   const handleScroll = useCallback(() => {
-    // Find the scrollable parent
-    const scrollParent = headerRef.current?.closest('main')?.querySelector('[class*="overflow-y"]') as HTMLElement | null
+    const scrollParent = getScrollParent()
     if (scrollParent) {
       setScrolled(scrollParent.scrollTop > 20)
     }
-  }, [])
+  }, [getScrollParent])
 
   useEffect(() => {
-    const scrollParent = headerRef.current?.closest('main')?.querySelector('[class*="overflow-y"]') as HTMLElement | null
+    const scrollParent = getScrollParent()
     if (scrollParent) {
       scrollParent.addEventListener('scroll', handleScroll, { passive: true })
       return () => scrollParent.removeEventListener('scroll', handleScroll)
     }
-  }, [handleScroll])
+  }, [handleScroll, getScrollParent])
 
   // Focus search input when expanded
   useEffect(() => {

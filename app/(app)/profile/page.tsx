@@ -7,10 +7,11 @@ import { BADGES } from '@/lib/badges'
 import SignOutButton from './SignOutButton'
 import DeleteAccountLink from './DeleteAccountLink'
 import ProfileCompletionSection from './ProfileCompletionSection'
+import ProfileCompletionCard from './ProfileCompletionCard'
 import BadgesGrid from './BadgesGrid'
 import AvatarPicker, { AvatarCircle } from './AvatarPicker'
 import BadgeChecker from './BadgeChecker'
-import { ArrowLeftIcon, SeedIcon, ChevronRightIcon, SettingsIcon, ShieldIcon, ShareIcon } from '@/components/icons'
+import { ArrowLeftIcon, SeedIcon, ChevronRightIcon, SettingsIcon, ShieldIcon, ShareIcon, EditIcon } from '@/components/icons'
 import type { Profile, BabyProfile } from '@/types/app'
 
 export default async function ProfilePage() {
@@ -25,7 +26,7 @@ export default async function ProfilePage() {
   // Fetch profile separately so we can handle errors gracefully
   const { data: profileData, error: profileError } = await supabase
     .from('profiles')
-    .select('id, first_name, first_time_parent, partner_invite_email, avatar_emoji, seeds_balance, current_streak, created_at')
+    .select('id, first_name, first_time_parent, partner_invite_email, avatar_emoji, seeds_balance, current_streak, created_at, display_name, pronouns, location_city, bio, birth_month, parenting_style, feeding_method, birth_type, number_of_children, languages_spoken, work_status, interests, looking_for, profile_completion_seeds_awarded')
     .eq('id', user.id)
     .single()
 
@@ -139,7 +140,7 @@ export default async function ProfilePage() {
   return (
     <div
       style={{
-        minHeight: '100dvh',
+        minHeight: '100%',
         background: 'var(--color-surface)',
         paddingBottom: '32px',
       }}
@@ -163,10 +164,31 @@ export default async function ProfilePage() {
           <ArrowLeftIcon size={16} color="#3D8178" /> Back
         </Link>
 
-        {/* Page heading */}
-        <h1 className="text-h1 mb-6" style={{ color: 'var(--color-slate)' }}>
-          Me
-        </h1>
+        {/* Page heading + Edit button */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
+          <h1 className="text-h1" style={{ color: 'var(--color-slate)', margin: 0 }}>
+            Me
+          </h1>
+          <Link
+            href="/profile/edit"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '8px 16px',
+              borderRadius: 'var(--radius-md)',
+              background: 'var(--color-primary-light)',
+              color: '#3D8178',
+              fontSize: '14px',
+              fontWeight: 600,
+              textDecoration: 'none',
+              transition: 'opacity 0.15s ease',
+            }}
+          >
+            <EditIcon size={16} color="#3D8178" />
+            Edit Profile
+          </Link>
+        </div>
 
         {/* Avatar + name card with Seeds pill */}
         <div
@@ -181,28 +203,50 @@ export default async function ProfilePage() {
                 fontSize: '20px',
                 fontWeight: 700,
                 color: 'var(--color-slate)',
-                marginBottom: '4px',
+                marginBottom: '2px',
               }}
             >
-              {profile.first_name}
+              {profile.display_name || profile.first_name}
             </p>
-            {profile.first_time_parent && (
-              <span
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  padding: '3px 10px',
-                  borderRadius: '100px',
-                  background: 'var(--color-accent-light)',
-                  color: 'var(--color-accent)',
-                  fontWeight: 600,
-                  fontSize: '12px',
-                  marginBottom: '4px',
-                }}
-              >
-                First-time parent
-              </span>
+            {profile.pronouns && (
+              <p style={{ fontSize: '13px', color: 'var(--color-muted)', marginBottom: '4px' }}>
+                {profile.pronouns}
+              </p>
             )}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginBottom: '4px' }}>
+              {profile.first_time_parent && (
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    padding: '3px 10px',
+                    borderRadius: '100px',
+                    background: 'var(--color-accent-light)',
+                    color: 'var(--color-accent)',
+                    fontWeight: 600,
+                    fontSize: '12px',
+                  }}
+                >
+                  First-time parent
+                </span>
+              )}
+              {profile.location_city && (
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    padding: '3px 10px',
+                    borderRadius: '100px',
+                    background: 'var(--color-primary-light)',
+                    color: 'var(--color-primary)',
+                    fontWeight: 600,
+                    fontSize: '12px',
+                  }}
+                >
+                  {profile.location_city}
+                </span>
+              )}
+            </div>
             <p
               style={{
                 fontSize: '14px',
@@ -247,6 +291,24 @@ export default async function ProfilePage() {
             </span>
           </div>
         </div>
+
+        {/* Bio */}
+        {profile.bio && (
+          <div
+            className="lumira-card mb-4"
+            style={{ padding: '16px' }}
+          >
+            <p
+              style={{
+                fontSize: '14px',
+                color: 'var(--color-slate)',
+                lineHeight: 1.6,
+              }}
+            >
+              {profile.bio}
+            </p>
+          </div>
+        )}
 
         {/* Stats row */}
         <div
@@ -325,6 +387,9 @@ export default async function ProfilePage() {
             currentAvatar={avatarEmoji}
           />
         </div>
+
+        {/* Profile completion gamification card */}
+        <ProfileCompletionCard profile={profile as unknown as Record<string, unknown>} />
 
         {/* Interactive profile completeness with inline actions */}
         <ProfileCompletionSection

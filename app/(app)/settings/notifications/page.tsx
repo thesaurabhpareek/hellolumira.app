@@ -279,7 +279,7 @@ export default function NotificationSettingsPage() {
     return (
       <div
         style={{
-          minHeight: '100dvh',
+          minHeight: '100%',
           background: 'var(--color-surface)',
           paddingBottom: '32px',
         }}
@@ -302,7 +302,7 @@ export default function NotificationSettingsPage() {
     return (
       <div
         style={{
-          minHeight: '100dvh',
+          minHeight: '100%',
           background: 'var(--color-surface)',
           paddingBottom: '32px',
         }}
@@ -350,7 +350,7 @@ export default function NotificationSettingsPage() {
   return (
     <div
       style={{
-        minHeight: '100dvh',
+        minHeight: '100%',
         background: 'var(--color-surface)',
         paddingBottom: '32px',
       }}

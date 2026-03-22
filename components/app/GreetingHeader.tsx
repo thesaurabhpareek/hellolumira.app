@@ -15,15 +15,16 @@ interface Props {
 }
 
 export default function GreetingHeader({ firstName }: Props) {
+  // Start with a generic greeting to avoid SSR/client mismatch
+  // (Vercel SSR uses UTC, so server-rendered hour would be wrong)
   const [greeting, setGreeting] = useState<string>(`Hello, ${firstName}`)
-
   useEffect(() => {
     const localHour = new Date().getHours()
     setGreeting(getGreeting(localHour, firstName))
   }, [firstName])
 
   return (
-    <h1 className="text-h2 text-foreground mb-1">
+    <h1 className="text-h2 text-foreground mb-1" suppressHydrationWarning>
       {greeting}
     </h1>
   )

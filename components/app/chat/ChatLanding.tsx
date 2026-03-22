@@ -87,10 +87,10 @@ export default function ChatLanding({ profile, baby, threads }: Props) {
 
   return (
     <div
+      className="flex-1"
       style={{
-        minHeight: '100dvh',
         background: 'var(--color-surface)',
-        paddingBottom: '100px',
+        paddingBottom: '24px',
       }}
     >
       <div className="content-width mx-auto px-4 pt-6">

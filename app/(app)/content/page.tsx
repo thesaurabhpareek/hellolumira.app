@@ -21,7 +21,7 @@ type Article = {
   culturally_sensitive: boolean
   reading_time_minutes: number
   tags: string[]
-  target_stages: string[] | null
+  applicable_stages: string[] | null
   created_at: string
   updated_at: string
 }
@@ -151,11 +151,11 @@ export default function ContentPage() {
     setError(null)
 
     try {
-      // Fetch articles for the active stage, including those with target_stages
+      // Fetch articles for the active stage, including those with applicable_stages
       let query = supabase
         .from('content_articles')
         .select('*')
-        .or(`stage.eq.${activeStage},target_stages.cs.{${activeStage}}`)
+        .or(`stage.eq.${activeStage},applicable_stages.cs.{${activeStage}}`)
         .order('week_or_month', { ascending: true })
         .order('created_at', { ascending: false })
 
@@ -201,9 +201,11 @@ export default function ContentPage() {
   return (
     <div
       style={{
-        minHeight: '100dvh',
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
         background: 'var(--color-surface)',
-        paddingBottom: '100px',
+        paddingBottom: '24px',
       }}
     >
       <div className="content-width mx-auto px-4 pt-6">
@@ -359,34 +361,25 @@ export default function ContentPage() {
 
         {/* ── Loading State ───────────────────────────────────────────── */}
         {loading && (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              padding: '48px 24px',
-            }}
-          >
-            <div
-              style={{
-                width: '2rem',
-                height: '2rem',
-                border: '3px solid var(--color-border)',
-                borderTopColor: 'var(--color-primary)',
-                borderRadius: '50%',
-                animation: 'spin 0.8s linear infinite',
-              }}
-            />
-            <p
-              style={{
-                fontSize: '14px',
-                color: 'var(--color-muted)',
-                marginTop: '12px',
-              }}
-            >
-              Just a moment...
-            </p>
-            <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {[1, 2, 3].map(i => (
+              <div
+                key={i}
+                style={{
+                  background: 'var(--color-white)',
+                  border: '1px solid var(--color-border)',
+                  borderRadius: '14px',
+                  padding: '16px',
+                }}
+              >
+                <div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
+                  <div className="lumira-skeleton" style={{ height: '22px', width: '80px', borderRadius: '100px' }} />
+                  <div className="lumira-skeleton" style={{ height: '22px', width: '50px', borderRadius: '100px' }} />
+                </div>
+                <div className="lumira-skeleton" style={{ height: '18px', width: '85%', borderRadius: '6px', marginBottom: '6px' }} />
+                <div className="lumira-skeleton" style={{ height: '14px', width: '60%', borderRadius: '6px' }} />
+              </div>
+            ))}
           </div>
         )}
 
@@ -484,7 +477,7 @@ export default function ContentPage() {
               const color = categoryColors[article.category] || '#3D8178'
               // Show "For you" if article is cross-stage (matched via target_stages, not primary stage)
               const isCrossStageMatch = article.stage !== activeStage
-                && article.target_stages?.includes(activeStage)
+                && article.applicable_stages?.includes(activeStage)
 
               return (
                 <div
@@ -496,8 +489,8 @@ export default function ContentPage() {
                     overflow: 'hidden',
                     transition: 'box-shadow 0.15s ease',
                     boxShadow: isExpanded
-                      ? '0 2px 12px rgba(0,0,0,0.06)'
-                      : 'none',
+                      ? '0 4px 16px rgba(0,0,0,0.08)'
+                      : '0 1px 3px rgba(0,0,0,0.03)',
                   }}
                 >
                   {/* Card header — always visible */}
@@ -508,7 +501,7 @@ export default function ContentPage() {
                     style={{
                       display: 'block',
                       width: '100%',
-                      padding: '16px',
+                      padding: '18px 18px 16px',
                       background: 'none',
                       border: 'none',
                       cursor: 'pointer',
@@ -516,13 +509,44 @@ export default function ContentPage() {
                       minHeight: '48px',
                     }}
                   >
-                    {/* Meta row */}
+                    {/* Title — prominent, first thing you read */}
+                    <p
+                      style={{
+                        fontWeight: 700,
+                        fontSize: '16px',
+                        color: 'var(--color-slate)',
+                        marginBottom: article.subtitle ? '6px' : '10px',
+                        lineHeight: 1.4,
+                        letterSpacing: '-0.01em',
+                      }}
+                    >
+                      {article.title}
+                    </p>
+
+                    {/* Subtitle — excerpt text */}
+                    {article.subtitle && (
+                      <p
+                        style={{
+                          fontSize: '14px',
+                          color: 'var(--color-muted)',
+                          lineHeight: 1.55,
+                          marginBottom: '10px',
+                          display: '-webkit-box',
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: 'vertical',
+                          overflow: 'hidden',
+                        }}
+                      >
+                        {article.subtitle}
+                      </p>
+                    )}
+
+                    {/* Meta row — small pills below content */}
                     <div
                       style={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '8px',
-                        marginBottom: '8px',
+                        gap: '6px',
                         flexWrap: 'wrap',
                       }}
                     >
@@ -530,15 +554,14 @@ export default function ContentPage() {
                         style={{
                           padding: '3px 10px',
                           borderRadius: '100px',
-                          background: `${color}15`,
+                          background: `${color}12`,
                           color,
                           fontSize: '11px',
-                          fontWeight: 700,
-                          letterSpacing: '0.3px',
+                          fontWeight: 600,
+                          letterSpacing: '0.2px',
                         }}
                       >
-                        {categoryIcons[article.category] || '📄'}{' '}
-                        {categoryLabels[article.category] || article.category}
+                        {categoryIcons[article.category] || ''} {categoryLabels[article.category] || article.category}
                       </span>
                       {stageUnit && (
                         <span
@@ -587,50 +610,37 @@ export default function ContentPage() {
                           For you
                         </span>
                       )}
-                    </div>
-
-                    {/* Title */}
-                    <p
-                      style={{
-                        fontWeight: 600,
-                        fontSize: '15px',
-                        color: 'var(--color-slate)',
-                        marginBottom: article.subtitle ? '4px' : '0',
-                        lineHeight: 1.4,
-                      }}
-                    >
-                      {article.title}
-                    </p>
-
-                    {/* Subtitle */}
-                    {article.subtitle && (
-                      <p
+                      {/* Expand indicator */}
+                      <span
                         style={{
-                          fontSize: '13px',
+                          marginLeft: 'auto',
+                          fontSize: '12px',
                           color: 'var(--color-muted)',
-                          lineHeight: 1.5,
+                          transition: 'transform 0.2s ease',
+                          transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
                         }}
                       >
-                        {article.subtitle}
-                      </p>
-                    )}
+                        {'\u25BE'}
+                      </span>
+                    </div>
                   </button>
 
                   {/* Expanded body */}
                   {isExpanded && (
                     <div
                       style={{
-                        padding: '0 16px 16px',
+                        padding: '0 18px 18px',
                         borderTop: '1px solid var(--color-border)',
                       }}
                     >
                       <div
                         style={{
-                          fontSize: '14px',
+                          fontSize: '15px',
                           color: 'var(--color-slate)',
-                          lineHeight: 1.7,
-                          paddingTop: '16px',
+                          lineHeight: 1.75,
+                          paddingTop: '18px',
                           whiteSpace: 'pre-wrap',
+                          maxWidth: '600px',
                         }}
                       >
                         <ArticleBody text={article.body} />
@@ -643,8 +653,8 @@ export default function ContentPage() {
                             display: 'flex',
                             gap: '6px',
                             flexWrap: 'wrap',
-                            marginTop: '16px',
-                            paddingTop: '12px',
+                            marginTop: '18px',
+                            paddingTop: '14px',
                             borderTop: '1px solid var(--color-border)',
                           }}
                         >
@@ -712,10 +722,11 @@ function ArticleBody({ text }: { text: string }) {
               key={i}
               style={{
                 fontWeight: 700,
-                fontSize: '14px',
+                fontSize: '15px',
                 color: 'var(--color-slate)',
-                marginTop: '12px',
-                marginBottom: '4px',
+                marginTop: '16px',
+                marginBottom: '6px',
+                lineHeight: 1.4,
               }}
             >
               {trimmed.replace(/\*\*/g, '')}
@@ -733,7 +744,7 @@ function ArticleBody({ text }: { text: string }) {
                 display: 'flex',
                 gap: '8px',
                 paddingLeft: '4px',
-                marginBottom: '4px',
+                marginBottom: '6px',
               }}
             >
               <span
@@ -752,7 +763,7 @@ function ArticleBody({ text }: { text: string }) {
 
         // Regular paragraph
         return (
-          <p key={i} style={{ marginBottom: '2px' }}>
+          <p key={i} style={{ marginBottom: '6px', lineHeight: 1.75 }}>
             {renderInlineBold(trimmed)}
           </p>
         )

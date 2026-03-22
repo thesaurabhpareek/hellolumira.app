@@ -12,10 +12,10 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   HomeIcon, HomeIconFilled,
-  HeartIcon, HeartIconFilled,
+  ChatIcon, ChatIconFilled,
+  TribeIcon, TribeIconFilled,
   BookIcon, BookIconFilled,
   UserIcon, UserIconFilled,
-  ChatIcon, ChatIconFilled,
 } from '@/components/icons'
 
 /* ── Types ─────────────────────────────────────────────────────────────────── */
@@ -41,8 +41,8 @@ interface Props {
 
 const tabs: TabItem[] = [
   { label: 'Home',    href: '/home',    icon: HomeIcon,   iconFilled: HomeIconFilled },
-  { label: 'Chat',    href: '/chat',    icon: ChatIcon,   iconFilled: ChatIconFilled },
-  { label: 'Check in', href: '/checkin', icon: HeartIcon,  iconFilled: HeartIconFilled, isCenter: true },
+  { label: 'Talk',    href: '/chat',    icon: ChatIcon,   iconFilled: ChatIconFilled, isCenter: true },
+  { label: 'Tribes',  href: '/tribes',  icon: TribeIcon,  iconFilled: TribeIconFilled },
   { label: 'Read',    href: '/content', icon: BookIcon,   iconFilled: BookIconFilled },
   { label: 'Me',      href: '/profile', icon: UserIcon,   iconFilled: UserIconFilled },
 ]

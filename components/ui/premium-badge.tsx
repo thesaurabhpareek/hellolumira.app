@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { cn } from '@/lib/utils'
-import { cva, type VariantProps } from 'class-variance-authority'
+// cva available from 'class-variance-authority' if needed for variant extensions
 
 /* ── Premium Badge ───────────────────────────────────────────────
  *  Status dots, notification counts, achievement badges with

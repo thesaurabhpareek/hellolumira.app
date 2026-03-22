@@ -9,7 +9,6 @@
 'use client'
 
 import React, { useState, useEffect, useRef, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
 import { useChatThread } from '@/hooks/useChatThread'
 import LumiraTyping from '@/components/app/LumiraTyping'
 import { LumiraAvatar } from '@/components/app/LumiraAvatar'
@@ -37,7 +36,6 @@ export default function ChatThreadView({
   thread,
   existingMessages,
 }: Props) {
-  const router = useRouter()
   const [inputValue, setInputValue] = useState('')
   const [showWellbeing, setShowWellbeing] = useState(false)
   const [emergencyMessage, setEmergencyMessage] = useState<string | null>(null)
@@ -218,26 +216,16 @@ export default function ChatThreadView({
         }}
       >
         <div className="content-width mx-auto">
-          {/* Header */}
-          <div className="flex items-center gap-3 mb-4 py-3 border-b border-border">
-            <button
-              onClick={() => router.push('/chat')}
-              aria-label="Back to conversations"
-              className="bg-transparent border-none cursor-pointer text-primary text-sm font-semibold py-4 min-h-[48px] flex items-center gap-1"
-              style={{ touchAction: 'manipulation' }}
-            >
-              &larr; Back
-            </button>
-            <div className="flex-1">
-              <p className="font-bold text-foreground text-base">
-                {thread.title || 'Talk to Lumira'}
-              </p>
-              <p className="text-[13px] text-muted-foreground">
-                {baby.stage === 'pregnancy'
-                  ? `Week ${ageInfo.pregnancy_week || '?'}`
-                  : (baby.name || 'Baby') + ' · ' + ageInfo.age_display_string}
-              </p>
-            </div>
+          {/* Thread context (title handled by PremiumHeader) */}
+          <div className="mb-4 py-3 border-b border-border">
+            <p className="font-bold text-foreground text-base">
+              {thread.title || 'Talk to Lumira'}
+            </p>
+            <p className="text-[13px] text-muted-foreground">
+              {baby.stage === 'pregnancy'
+                ? `Week ${ageInfo.pregnancy_week || '?'}`
+                : (baby.name || 'Baby') + ' · ' + ageInfo.age_display_string}
+            </p>
           </div>
 
           {/* Baby context card (collapsible) */}

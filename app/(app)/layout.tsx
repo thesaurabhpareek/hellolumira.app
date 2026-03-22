@@ -34,7 +34,7 @@ export default async function AppLayout({
   if (memberData?.baby_id) {
     const { data: babyData } = await supabase
       .from('baby_profiles')
-      .select('id, name, due_date, date_of_birth, stage, pending_proactive_type, pending_proactive_set_at, created_by_profile_id, created_at')
+      .select('id, name, due_date, date_of_birth, stage, pending_proactive_type, pending_proactive_set_at, created_by_profile_id, created_at, planning_sub_option, planning_expected_month')
       .eq('id', memberData.baby_id)
       .single()
     baby = babyData as BabyProfile | null

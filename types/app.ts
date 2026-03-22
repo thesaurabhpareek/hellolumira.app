@@ -23,6 +23,21 @@ export type Profile = {
   last_checkin_date: string | null
   created_at: string
   updated_at: string
+  // Extended profile attributes (all optional)
+  display_name: string | null
+  pronouns: string | null
+  location_city: string | null
+  bio: string | null
+  birth_month: string | null
+  parenting_style: string | null
+  feeding_method: string | null
+  birth_type: string | null
+  number_of_children: number | null
+  languages_spoken: string | null
+  work_status: string | null
+  interests: string[]
+  looking_for: string[]
+  profile_completion_seeds_awarded: Record<string, boolean>
 }
 
 export type BabyProfile = {

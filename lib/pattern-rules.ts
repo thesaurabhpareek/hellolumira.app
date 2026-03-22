@@ -31,7 +31,7 @@ type PatternResult = {
  */
 export function detectPatterns(
   checkins: DailyCheckin[],
-  stage: 'pregnancy' | 'infant' | 'toddler' | 'postpartum',
+  stage: 'planning' | 'pregnancy' | 'infant' | 'toddler' | 'postpartum',
   babyName: string | null
 ): PatternResult[] {
   // Guard: null/undefined/non-array input

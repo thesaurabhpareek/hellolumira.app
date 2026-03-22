@@ -33,7 +33,7 @@ export default async function SettingsPage() {
   if (memberData?.baby_id) {
     const { data: babyData } = await supabase
       .from('baby_profiles')
-      .select('id, name, due_date, date_of_birth, stage, pending_proactive_type, pending_proactive_set_at, created_by_profile_id, created_at')
+      .select('id, name, due_date, date_of_birth, stage, pending_proactive_type, pending_proactive_set_at, created_by_profile_id, created_at, planning_sub_option, planning_expected_month')
       .eq('id', memberData.baby_id)
       .single()
     baby = babyData
@@ -71,7 +71,7 @@ export default async function SettingsPage() {
   return (
     <div
       style={{
-        minHeight: '100dvh',
+        minHeight: '100%',
         background: 'var(--color-surface)',
         paddingBottom: '32px',
       }}

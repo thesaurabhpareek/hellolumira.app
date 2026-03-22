@@ -19,7 +19,7 @@ export default function CheckinError({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        minHeight: '100dvh',
+        minHeight: '100%',
         backgroundColor: '#FAFAF8',
         padding: '1rem',
       }}

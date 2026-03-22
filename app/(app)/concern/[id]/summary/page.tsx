@@ -62,7 +62,9 @@ export default async function ConcernSummaryPage({ params, searchParams }: Props
   return (
     <div
       style={{
-        minHeight: '100dvh',
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
         background: 'var(--color-surface)',
         paddingBottom: '32px',
       }}

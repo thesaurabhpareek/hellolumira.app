@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { getBabyAgeInfo } from '@/lib/baby-age'
 import { getDailyQuestion, getDailyQuiz } from '@/lib/home-feed-data'
-import WeekGuideCard from '@/components/app/WeekGuideCard'
+import WeekNavigator from '@/components/app/WeekNavigator'
 import DismissiblePatternFlag from '@/components/app/DismissiblePatternFlag'
 import PregnancyProgressBadge from '@/components/app/PregnancyProgressBadge'
 import ProfilePromptCard from '@/components/app/ProfilePromptCard'
@@ -88,10 +88,10 @@ export default async function HomePage() {
     // For planning stage, also fetch pregnancy articles as relevant prep content
     supabase
       .from('content_articles')
-      .select('id, title, subtitle, category, reading_time_minutes, tags, week_or_month, stage, target_stages')
+      .select('id, title, subtitle, category, reading_time_minutes, tags, week_or_month, stage, applicable_stages')
       .or(baby.stage === 'planning'
-        ? `stage.eq.planning,stage.eq.pregnancy,target_stages.cs.{${baby.stage}}`
-        : `stage.eq.${baby.stage},target_stages.cs.{${baby.stage}}`)
+        ? `stage.eq.planning,stage.eq.pregnancy,applicable_stages.cs.{${baby.stage}}`
+        : `stage.eq.${baby.stage},applicable_stages.cs.{${baby.stage}}`)
       .order('week_or_month', { ascending: true })
       .limit(10),
 
@@ -220,9 +220,11 @@ export default async function HomePage() {
   return (
     <div
       style={{
-        minHeight: '100dvh',
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
         background: 'var(--color-surface)',
-        paddingBottom: '120px',
+        paddingBottom: '24px',
       }}
     >
       <div className="content-width mx-auto px-4 pt-6">
@@ -369,15 +371,13 @@ export default async function HomePage() {
         {/* ── Article insight ── */}
         {featuredArticle && <ArticleInsightCard {...featuredArticle} />}
 
-        {/* ── Weekly guide card (not relevant for planning stage) ── */}
+        {/* ── Browse weekly guides (not relevant for planning stage) ── */}
         {baby.stage !== 'planning' && (
-          <div className="mb-4">
-            <WeekGuideCard
-              stage={guideKey.stage}
-              week_or_month={guideKey.week_or_month}
-              babyName={baby.name ?? undefined}
-            />
-          </div>
+          <WeekNavigator
+            stage={guideKey.stage}
+            currentWeekOrMonth={guideKey.week_or_month}
+            babyName={baby.name ?? undefined}
+          />
         )}
 
         {/* ── Daily reflection question ── */}

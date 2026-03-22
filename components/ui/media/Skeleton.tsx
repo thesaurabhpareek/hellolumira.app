@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, type CSSProperties, type ReactNode } from 'react'
+import { useEffect, useRef, type CSSProperties } from 'react'
 
 /* ══════════════════════════════════════════════════════════════════════════════
    Skeleton — Premium shimmer loading placeholders

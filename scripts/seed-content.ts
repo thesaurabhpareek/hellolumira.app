@@ -472,7 +472,7 @@ async function seed() {
 
   // Step 6: Update tribe post counts
   console.log('\n6. Updating tribe post counts...')
-  const affectedTribes = new Set(SEED_TRIBE_POSTS.map((p) => p.tribe_id))
+  const affectedTribes = Array.from(new Set(SEED_TRIBE_POSTS.map((p) => p.tribe_id)))
   for (const tribeId of affectedTribes) {
     const { count } = await supabase
       .from('tribe_posts')
@@ -491,7 +491,7 @@ async function seed() {
   console.log('\n🌱 Seeding complete!')
   console.log(`   Stories: ${existingProfile ? SEED_STORIES.length : 0}`)
   console.log(`   Tribe posts: ${postCount}`)
-  console.log(`   Tribes updated: ${affectedTribes.size}`)
+  console.log(`   Tribes updated: ${affectedTribes.length}`)
 }
 
 // ── Execute ─────────────────────────────────────────────────────────────────
