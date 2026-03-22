@@ -250,21 +250,6 @@ export default function Carousel({
     return () => track.removeEventListener('scroll', onScroll)
   }, [updateActiveIndex])
 
-  /* ── Auto-play ─────────────────────────────────────────────────── */
-
-  useEffect(() => {
-    if (!autoPlay || touching || total <= 1) return
-
-    autoPlayTimer.current = setInterval(() => {
-      const nextIndex = (activeIndex + 1) % total
-      scrollToIndex(nextIndex)
-    }, autoPlay)
-
-    return () => {
-      if (autoPlayTimer.current) clearInterval(autoPlayTimer.current)
-    }
-  }, [autoPlay, touching, activeIndex, total])
-
   /* ── Navigation ────────────────────────────────────────────────── */
 
   const scrollToIndex = useCallback((index: number) => {
@@ -280,6 +265,21 @@ export default function Carousel({
       behavior: 'smooth',
     })
   }, [edgePadding])
+
+  /* ── Auto-play ─────────────────────────────────────────────────── */
+
+  useEffect(() => {
+    if (!autoPlay || touching || total <= 1) return
+
+    autoPlayTimer.current = setInterval(() => {
+      const nextIndex = (activeIndex + 1) % total
+      scrollToIndex(nextIndex)
+    }, autoPlay)
+
+    return () => {
+      if (autoPlayTimer.current) clearInterval(autoPlayTimer.current)
+    }
+  }, [autoPlay, touching, activeIndex, total, scrollToIndex])
 
   const goNext = useCallback(() => {
     if (activeIndex < total - 1) scrollToIndex(activeIndex + 1)

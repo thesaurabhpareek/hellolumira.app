@@ -5,6 +5,7 @@
  * @version 1.0.0
  * @since March 2026
  */
+import Image from 'next/image'
 
 interface StoryCircleProps {
   profileId: string
@@ -51,11 +52,13 @@ export default function StoryCircle({
         <div className="w-full h-full rounded-full bg-white flex items-center justify-center p-[2px]">
           {/* Avatar */}
           {avatarUrl ? (
-            <img
+            <Image
               src={avatarUrl}
               alt={displayName}
+              width={52}
+              height={52}
               className="w-[52px] h-[52px] rounded-full object-cover"
-              loading="lazy"
+              unoptimized
             />
           ) : (
             <div className="w-[52px] h-[52px] rounded-full bg-sage-50 flex items-center justify-center">

@@ -8,6 +8,7 @@
 'use client'
 
 import { useRef, useCallback } from 'react'
+import Image from 'next/image'
 
 const MAX_CAPTION = 200
 const ACCEPTED_TYPES = 'image/jpeg,image/png,image/webp'
@@ -48,10 +49,13 @@ export default function StoryComposerImage({
       {/* Image preview or picker */}
       {imagePreviewUrl ? (
         <div className="relative rounded-xl overflow-hidden" style={{ minHeight: '200px' }}>
-          <img
+          <Image
             src={imagePreviewUrl}
             alt="Preview"
+            width={600}
+            height={300}
             className="w-full h-auto max-h-[300px] object-cover rounded-xl"
+            unoptimized
           />
 
           {/* Upload progress overlay */}

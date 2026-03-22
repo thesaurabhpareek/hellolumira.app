@@ -9,6 +9,7 @@ import {
   type DragEvent,
   type ChangeEvent,
 } from 'react'
+import Image from 'next/image'
 
 /* ══════════════════════════════════════════════════════════════════════════════
    MediaUpload — Premium file upload UI
@@ -539,7 +540,7 @@ export default function MediaUpload({
           {files.map((f) => (
             <div key={f.id} className="lumira-mu-thumb">
               {f.preview && f.file.type.startsWith('image/') && (
-                <img src={f.preview} alt={f.file.name} />
+                <Image src={f.preview} alt={f.file.name} fill unoptimized style={{ objectFit: 'cover' }} />
               )}
               {f.preview && f.file.type.startsWith('video/') && (
                 <video src={f.preview} muted playsInline />

@@ -550,9 +550,10 @@ export function HalfSheet({
 
   // ── Cleanup on unmount ──
   React.useEffect(() => {
+    const drag = dragState.current
     return () => {
       unlockBodyScroll()
-      cancelAnimationFrame(dragState.current.rafId)
+      cancelAnimationFrame(drag.rafId)
     }
   }, [unlockBodyScroll])
 

@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import { cva, type VariantProps } from 'class-variance-authority'
 
@@ -163,10 +164,12 @@ const PremiumImageCard = React.forwardRef<HTMLDivElement, PremiumImageCardProps>
     >
       {/* Image area */}
       <div className="relative overflow-hidden" style={{ height: imageHeight }}>
-        <img
+        <Image
           src={src}
           alt={alt}
-          className="absolute inset-0 w-full h-full object-cover"
+          fill
+          unoptimized
+          className="object-cover"
           loading="lazy"
         />
         {/* Gradient overlay */}

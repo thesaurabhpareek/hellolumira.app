@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import Image from 'next/image'
 import { cn } from '@/lib/utils'
 
 /* ── Premium Avatar ──────────────────────────────────────────────
@@ -173,9 +174,12 @@ function AvatarInner({
 
   if (src) {
     return (
-      <img
+      <Image
         src={src}
         alt={alt}
+        width={s.px}
+        height={s.px}
+        unoptimized
         className="w-full h-full rounded-full object-cover"
         onError={onImgError}
         loading="lazy"

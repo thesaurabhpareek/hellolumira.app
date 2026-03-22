@@ -7,6 +7,7 @@ import {
   type CSSProperties,
   type ReactNode,
 } from 'react'
+import Image from 'next/image'
 
 /* ══════════════════════════════════════════════════════════════════════════════
    ContentCard — Flexible card system for articles, guides, videos
@@ -275,16 +276,15 @@ function Thumbnail({
       }}
     >
       {src && !errored && (
-        <img
+        <Image
           src={src}
           alt={alt ?? ''}
-          loading="lazy"
+          fill
+          unoptimized
           decoding="async"
           onLoad={() => setLoaded(true)}
           onError={() => setErrored(true)}
           style={{
-            width: '100%',
-            height: '100%',
             objectFit: 'cover',
             opacity: loaded ? 1 : 0,
             transition: 'opacity 0.3s',
@@ -373,7 +373,7 @@ export default function ContentCard({
           fontSize: 14, overflow: 'hidden', flexShrink: 0,
         }}>
           {authorAvatar.startsWith('http') ? (
-            <img src={authorAvatar} alt={author} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <Image src={authorAvatar} alt={author} width={24} height={24} unoptimized style={{ objectFit: 'cover' }} />
           ) : authorAvatar}
         </span>
       )}

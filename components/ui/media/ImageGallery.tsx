@@ -7,6 +7,7 @@ import {
   useCallback,
   type CSSProperties,
 } from 'react'
+import Image from 'next/image'
 import Skeleton from './Skeleton'
 
 /* ══════════════════════════════════════════════════════════════════════════════
@@ -199,15 +200,16 @@ function LazyImage({
 
       {/* Actual image */}
       {inView && !errored && (
-        <img
+        <Image
           className="lumira-gallery-img"
           src={`${image.src}${retryCount.current ? `?retry=${retryCount.current}` : ''}`}
           alt={image.alt ?? ''}
-          loading="lazy"
+          fill
+          unoptimized
           decoding="async"
           onLoad={() => setLoaded(true)}
           onError={() => setErrored(true)}
-          style={{ opacity: loaded ? 1 : 0 }}
+          style={{ objectFit: 'cover', opacity: loaded ? 1 : 0 }}
         />
       )}
 

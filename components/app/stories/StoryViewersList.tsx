@@ -8,6 +8,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import type { StoryView } from '@/types/app'
 
 interface StoryViewersListProps {
@@ -108,11 +109,13 @@ export default function StoryViewersList({
             viewers.map((v) => (
               <div key={v.id} className="flex items-center gap-3 py-2.5">
                 {v.viewer_avatar_url ? (
-                  <img
+                  <Image
                     src={v.viewer_avatar_url}
                     alt={v.viewer_display_name || 'Viewer'}
+                    width={40}
+                    height={40}
                     className="w-10 h-10 rounded-full object-cover"
-                    loading="lazy"
+                    unoptimized
                   />
                 ) : (
                   <div className="w-10 h-10 rounded-full bg-sage-50 flex items-center justify-center">

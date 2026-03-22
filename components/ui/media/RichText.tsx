@@ -5,6 +5,7 @@ import {
   useRef,
   type CSSProperties,
 } from 'react'
+import Image from 'next/image'
 
 /* ══════════════════════════════════════════════════════════════════════════════
    RichText — Premium formatted content renderer
@@ -363,10 +364,12 @@ function renderBlock(block: RichTextBlock, index: number) {
     case 'image':
       return (
         <figure key={index}>
-          <img
-            src={block.src}
+          <Image
+            src={block.src ?? ''}
             alt={block.alt ?? ''}
-            loading="lazy"
+            width={800}
+            height={450}
+            unoptimized
             decoding="async"
           />
           {block.caption && <figcaption>{block.caption}</figcaption>}

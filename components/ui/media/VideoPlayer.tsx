@@ -355,7 +355,7 @@ export default function VideoPlayer({
       v.pause()
       setState('paused')
     }
-  }, [inView, autoPlay])
+  }, [inView, autoPlay, state])
 
   // Auto-hide controls
   const showControls = useCallback(() => {

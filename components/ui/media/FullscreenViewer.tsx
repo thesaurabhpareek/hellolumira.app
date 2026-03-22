@@ -7,6 +7,7 @@ import {
   useCallback,
   type TouchEvent as ReactTouchEvent,
 } from 'react'
+import Image from 'next/image'
 
 /* ══════════════════════════════════════════════════════════════════════════════
    FullscreenViewer — Immersive image viewer overlay
@@ -403,10 +404,13 @@ export default function FullscreenViewer({
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
       >
-        <img
+        <Image
           key={index}
           src={current.src}
           alt={current.alt ?? `Image ${index + 1}`}
+          width={1920}
+          height={1080}
+          unoptimized
           draggable={false}
           style={{ transform: imgTransform }}
         />

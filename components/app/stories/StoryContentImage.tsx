@@ -8,6 +8,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 
 interface StoryContentImageProps {
   imageUrl: string | null
@@ -28,12 +29,14 @@ export default function StoryContentImage({
       )}
 
       {imageUrl && (
-        <img
+        <Image
           src={imageUrl}
           alt="Story"
-          className="absolute inset-0 w-full h-full object-cover"
+          fill
+          className="object-cover"
           onLoad={() => setLoaded(true)}
           style={{ opacity: loaded ? 1 : 0, transition: 'opacity 0.3s ease' }}
+          unoptimized
         />
       )}
 

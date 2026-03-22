@@ -9,6 +9,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
+import Image from 'next/image'
 import type { StoryStripItem, Story } from '@/types/app'
 import StoryProgressBar from './StoryProgressBar'
 import StoryContent from './StoryContent'
@@ -226,10 +227,13 @@ export default function StoryViewer({
       <div className="flex items-center gap-3 px-4 pb-3">
         {/* Avatar */}
         {group.avatar_url ? (
-          <img
+          <Image
             src={group.avatar_url}
             alt={group.display_name}
+            width={36}
+            height={36}
             className="w-9 h-9 rounded-full object-cover"
+            unoptimized
           />
         ) : (
           <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center">
