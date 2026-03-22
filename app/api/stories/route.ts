@@ -34,7 +34,7 @@ export async function GET(_request: NextRequest) {
       .from('stories')
       .select(`
         *,
-        profiles!stories_profile_id_fkey(display_name, avatar_emoji)
+        profiles!stories_profile_id_fkey(display_name, first_name, avatar_emoji)
       `)
       .gt('expires_at', now)
       .eq('is_hidden', false)
@@ -51,7 +51,7 @@ export async function GET(_request: NextRequest) {
       .from('stories')
       .select(`
         *,
-        profiles!stories_profile_id_fkey(display_name, avatar_emoji)
+        profiles!stories_profile_id_fkey(display_name, first_name, avatar_emoji)
       `)
       .eq('profile_id', user.id)
       .order('published_at', { ascending: false })
@@ -80,13 +80,13 @@ export async function GET(_request: NextRequest) {
     const groupMap = new Map<string, StoryStripItem>()
 
     for (const story of allStories) {
-      const profile = story.profiles as { display_name: string; avatar_emoji: string | null } | null
+      const profile = story.profiles as { display_name: string | null; first_name: string | null; avatar_emoji: string | null } | null
       const profileId = story.profile_id as string
 
       if (!groupMap.has(profileId)) {
         groupMap.set(profileId, {
           profile_id: profileId,
-          display_name: profile?.display_name || 'Unknown',
+          display_name: profile?.display_name || profile?.first_name || 'Parent',
           avatar_url: profile?.avatar_emoji || null,
           stories: [],
           has_unread: false,

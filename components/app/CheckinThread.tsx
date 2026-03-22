@@ -46,17 +46,23 @@ const PREGNANCY_INTROS = [
   `Welcome! I'm Lumira — think of me as a warm, knowledgeable friend who checks in every day. No judgement, just support.\n\nHow's your body feeling right now? Anything new or different?`,
 ]
 
-const INFANT_INTROS = [
-  `Hi! I'm Lumira — I'm here to check in with you every day, help you spot patterns, and work through any concerns together.\n\nHow did things go last night? How's your little one doing today?`,
-  `Hey there! I'm Lumira, your daily parenting companion. I'll help you track patterns, answer questions, and flag anything worth knowing.\n\nHow are things going — how's baby doing today?`,
-  `Welcome! I'm Lumira. Every day I'll check in, help you notice patterns, and be here when you need to think something through.\n\nHow are you holding up? Tell me about your last 24 hours.`,
-]
+function getInfantIntros(babyName: string | null): string[] {
+  const name = babyName || 'your little one'
+  return [
+    `Hi! I'm Lumira — I'm here to check in with you every day, help you spot patterns, and work through any concerns together.\n\nHow did things go last night? How's ${name} doing today?`,
+    `Hey there! I'm Lumira, your daily parenting companion. I'll help you track patterns, answer questions, and flag anything worth knowing.\n\nHow are things going — how's ${name} doing today?`,
+    `Welcome! I'm Lumira. Every day I'll check in, help you notice patterns, and be here when you need to think something through.\n\nHow are you holding up? Tell me about the last 24 hours with ${name}.`,
+  ]
+}
 
-const TODDLER_INTROS = [
-  `Hi! I'm Lumira — I'm here to check in every day, help you notice what's working, and be here when things get tricky.\n\nHow's your toddler doing today? Anything new or different?`,
-  `Hey there! I'm Lumira, your daily parenting companion. Toddler life is an adventure — I'm here to help you navigate it.\n\nHow are things going? Any wins or challenges today?`,
-  `Welcome! I'm Lumira. Every day I'll check in and help you spot patterns, celebrate milestones, and think through the tough bits.\n\nHow's your little explorer doing today?`,
-]
+function getToddlerIntros(babyName: string | null): string[] {
+  const name = babyName || 'your little one'
+  return [
+    `Hi! I'm Lumira — I'm here to check in every day, help you notice what's working, and be here when things get tricky.\n\nHow's ${name} doing today? Anything new or different?`,
+    `Hey there! I'm Lumira, your daily parenting companion. Toddler life is an adventure — I'm here to help you navigate it.\n\nHow are things going with ${name}? Any wins or challenges today?`,
+    `Welcome! I'm Lumira. Every day I'll check in and help you spot patterns, celebrate milestones, and think through the tough bits.\n\nHow's ${name} doing today?`,
+  ]
+}
 
 export default function CheckinThread({ profile, baby, existingCheckin, prefill }: Props) {
   const router = useRouter()
@@ -173,7 +179,7 @@ export default function CheckinThread({ profile, baby, existingCheckin, prefill 
 
     if (!profile.first_checkin_complete) {
       // First ever checkin — pick from varied intros
-      const intros = baby.stage === 'pregnancy' ? PREGNANCY_INTROS : baby.stage === 'toddler' ? TODDLER_INTROS : INFANT_INTROS
+      const intros = baby.stage === 'pregnancy' ? PREGNANCY_INTROS : baby.stage === 'toddler' ? getToddlerIntros(baby.name) : getInfantIntros(baby.name)
       const introIndex = new Date().getHours() % intros.length
       const introMsg: LumiraMessage = {
         role: 'lumira',

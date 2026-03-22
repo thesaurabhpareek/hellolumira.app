@@ -197,12 +197,12 @@ export async function POST(request: NextRequest) {
 
     const { data: recentStories } = await supabase
       .from('stories')
-      .select('text_content, poll_question, question_prompt')
+      .select('text_content, poll_question, question_text')
       .eq('profile_id', SYSTEM_PROFILE_ID)
       .gte('published_at', sixHoursAgo)
 
     const recentStoryTexts = (recentStories || [])
-      .map((s) => s.text_content || s.poll_question || s.question_prompt || '')
+      .map((s) => s.text_content || s.poll_question || s.question_text || '')
       .filter(Boolean)
 
     const { data: recentPosts } = await supabase
@@ -266,7 +266,7 @@ Return ONLY the JSON array.`
       switch (story.story_type) {
         case 'text':
           row.text_content = (story.text_content || '').slice(0, 280)
-          row.bg_color = pick(STORY_BG_COLORS)
+          row.text_bg_color = pick(STORY_BG_COLORS)
           break
         case 'poll':
           row.poll_question = (story.poll_question || '').slice(0, 200)
@@ -274,7 +274,7 @@ Return ONLY the JSON array.`
           row.poll_option_b = (story.poll_option_b || '').slice(0, 100)
           break
         case 'question':
-          row.question_prompt = (story.question_prompt || '').slice(0, 200)
+          row.question_text = (story.question_prompt || '').slice(0, 200)
           break
       }
 

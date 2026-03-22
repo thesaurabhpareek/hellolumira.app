@@ -1,8 +1,9 @@
 /**
  * @module WeekNavigator
- * @description Horizontal scrollable week/month strip that lets users browse
- *   weekly developmental guides for any week, not just the current one.
- * @version 1.0.0
+ * @description Horizontal scrollable week/month journey strip that lets users
+ *   browse past, present AND future weekly developmental guides.
+ *   Future weeks show a "peek ahead" experience with milestone previews.
+ * @version 2.0.0
  * @since March 2026
  */
 'use client'
@@ -17,9 +18,6 @@ interface Props {
   babyName?: string
 }
 
-/**
- * Returns the valid range of weeks/months for a given stage.
- */
 function getRange(stage: Stage): { min: number; max: number; label: string } {
   switch (stage) {
     case 'pregnancy':
@@ -33,13 +31,53 @@ function getRange(stage: Stage): { min: number; max: number; label: string } {
   }
 }
 
+/** Milestone preview data for future weeks — makes looking ahead exciting */
+function getFutureMilestoneHint(stage: Stage, week: number, babyName?: string): { emoji: string; hint: string } | null {
+  const name = babyName || 'baby'
+  if (stage === 'pregnancy') {
+    if (week === 12) return { emoji: '🫧', hint: `${name}'s vocal cords are forming` }
+    if (week === 16) return { emoji: '💪', hint: `You might feel the first kicks soon` }
+    if (week === 20) return { emoji: '📸', hint: `Anatomy scan — you could find out the sex!` }
+    if (week === 24) return { emoji: '👂', hint: `${name} can hear your voice now` }
+    if (week === 28) return { emoji: '👀', hint: `${name}'s eyes can open and close` }
+    if (week === 30) return { emoji: '🧠', hint: `Brain is growing rapidly` }
+    if (week === 34) return { emoji: '🫁', hint: `Lungs are maturing fast` }
+    if (week === 36) return { emoji: '🎒', hint: `Time to pack the hospital bag!` }
+    if (week === 37) return { emoji: '✨', hint: `Full term — ${name} could arrive any day` }
+    if (week === 40) return { emoji: '🎉', hint: `Due date — the big moment!` }
+  }
+  if (stage === 'infant') {
+    if (week === 6) return { emoji: '😊', hint: `First social smile coming soon!` }
+    if (week === 8) return { emoji: '👀', hint: `${name} will start tracking objects` }
+    if (week === 12) return { emoji: '😂', hint: `First laughs are around the corner` }
+    if (week === 16) return { emoji: '🙌', hint: `${name} may start reaching for toys` }
+    if (week === 20) return { emoji: '🔄', hint: `Rolling over could happen soon!` }
+    if (week === 24) return { emoji: '🥄', hint: `Ready to start solid foods` }
+    if (week === 28) return { emoji: '🪑', hint: `Sitting up independently` }
+    if (week === 32) return { emoji: '👋', hint: `Waving bye-bye!` }
+    if (week === 36) return { emoji: '🧸', hint: `Crawling adventures begin` }
+    if (week === 40) return { emoji: '🗣️', hint: `First words — "mama" or "dada"?` }
+    if (week === 44) return { emoji: '🚶', hint: `Pulling up to stand` }
+    if (week === 48) return { emoji: '👣', hint: `First steps might happen!` }
+    if (week === 52) return { emoji: '🎂', hint: `Happy first birthday!` }
+  }
+  if (stage === 'toddler') {
+    if (week === 2) return { emoji: '🗣️', hint: `Vocabulary explosion starting` }
+    if (week === 4) return { emoji: '🏃', hint: `Running and climbing everything` }
+    if (week === 6) return { emoji: '🎨', hint: `Creative play is blossoming` }
+    if (week === 8) return { emoji: '🧩', hint: `Problem-solving skills emerging` }
+    if (week === 10) return { emoji: '👫', hint: `Parallel play with other kids` }
+    if (week === 12) return { emoji: '🎂', hint: `The terrific twos!` }
+  }
+  return null
+}
+
 export default function WeekNavigator({ stage, currentWeekOrMonth, babyName }: Props) {
   const [selectedWeek, setSelectedWeek] = useState(currentWeekOrMonth)
   const scrollRef = useRef<HTMLDivElement>(null)
   const pillRefs = useRef<Map<number, HTMLButtonElement>>(new Map())
   const { min, max, label } = getRange(stage)
 
-  // Scroll the current week pill into view on mount
   const scrollToWeek = useCallback((week: number, behavior: ScrollBehavior = 'smooth') => {
     const pill = pillRefs.current.get(week)
     if (pill && scrollRef.current) {
@@ -53,7 +91,6 @@ export default function WeekNavigator({ stage, currentWeekOrMonth, babyName }: P
   }, [])
 
   useEffect(() => {
-    // Use instant scroll on initial mount
     requestAnimationFrame(() => scrollToWeek(currentWeekOrMonth, 'instant'))
   }, [currentWeekOrMonth, scrollToWeek])
 
@@ -68,6 +105,8 @@ export default function WeekNavigator({ stage, currentWeekOrMonth, babyName }: P
   }
 
   const weeks = Array.from({ length: max - min + 1 }, (_, i) => min + i)
+  const isFutureSelected = selectedWeek > currentWeekOrMonth
+  const milestone = isFutureSelected ? getFutureMilestoneHint(stage, selectedWeek, babyName) : null
 
   return (
     <div className="mb-4">
@@ -83,7 +122,7 @@ export default function WeekNavigator({ stage, currentWeekOrMonth, babyName }: P
             letterSpacing: '0.5px',
           }}
         >
-          Browse weekly guides
+          {isFutureSelected ? '✨ Peek ahead' : 'Your journey'}
         </p>
         {selectedWeek !== currentWeekOrMonth && (
           <button
@@ -95,7 +134,7 @@ export default function WeekNavigator({ stage, currentWeekOrMonth, babyName }: P
               color: 'var(--color-primary)',
             }}
           >
-            This {label.toLowerCase()} &rarr;
+            Back to now &rarr;
           </button>
         )}
       </div>
@@ -114,6 +153,7 @@ export default function WeekNavigator({ stage, currentWeekOrMonth, babyName }: P
           const isSelected = week === selectedWeek
           const isFuture = week > currentWeekOrMonth
           const isPast = week < currentWeekOrMonth
+          const hasMilestone = isFuture && !!getFutureMilestoneHint(stage, week, babyName)
 
           return (
             <button
@@ -121,29 +161,46 @@ export default function WeekNavigator({ stage, currentWeekOrMonth, babyName }: P
               ref={(el) => {
                 if (el) pillRefs.current.set(week, el)
               }}
-              onClick={() => !isFuture && handleWeekSelect(week)}
-              disabled={isFuture}
-              className="shrink-0 flex flex-col items-center justify-center rounded-xl border transition-all duration-150"
+              onClick={() => handleWeekSelect(week)}
+              className="shrink-0 flex flex-col items-center justify-center rounded-xl border transition-all duration-150 relative"
               style={{
                 scrollSnapAlign: 'center',
                 width: '48px',
                 height: '56px',
-                cursor: isFuture ? 'not-allowed' : 'pointer',
+                cursor: 'pointer',
                 background: isSelected
-                  ? 'var(--color-primary)'
+                  ? isFuture
+                    ? 'linear-gradient(135deg, #C4844E, #D4956E)'
+                    : 'var(--color-primary)'
                   : isCurrent
                   ? 'var(--color-primary-light)'
                   : isFuture
-                  ? 'var(--color-surface)'
+                  ? 'linear-gradient(135deg, #FFF8F0, #FFF3E6)'
                   : 'var(--color-white)',
                 borderColor: isSelected
-                  ? 'var(--color-primary)'
+                  ? isFuture ? '#C4844E' : 'var(--color-primary)'
                   : isCurrent
                   ? 'var(--color-primary-mid, var(--color-primary))'
+                  : isFuture
+                  ? '#E8D5C0'
                   : 'var(--color-border)',
-                opacity: isFuture ? 0.4 : isPast ? 0.75 : 1,
+                opacity: isPast ? 0.7 : 1,
               }}
             >
+              {/* Milestone dot indicator */}
+              {hasMilestone && !isSelected && (
+                <span
+                  style={{
+                    position: 'absolute',
+                    top: '3px',
+                    right: '3px',
+                    width: '6px',
+                    height: '6px',
+                    borderRadius: '50%',
+                    background: '#C4844E',
+                  }}
+                />
+              )}
               <span
                 style={{
                   fontSize: '16px',
@@ -152,6 +209,8 @@ export default function WeekNavigator({ stage, currentWeekOrMonth, babyName }: P
                     ? '#FFFFFF'
                     : isCurrent
                     ? 'var(--color-primary)'
+                    : isFuture
+                    ? '#C4844E'
                     : 'var(--color-slate)',
                   lineHeight: 1,
                 }}
@@ -176,18 +235,59 @@ export default function WeekNavigator({ stage, currentWeekOrMonth, babyName }: P
         })}
       </div>
 
-      {/* Selected week label */}
-      <p
-        className="mt-2 mb-3"
-        style={{
-          fontSize: '14px',
-          fontWeight: 600,
-          color: 'var(--color-slate)',
-        }}
-      >
-        {label} {selectedWeek}
-        {selectedWeek === currentWeekOrMonth ? ' (current)' : ''}
-      </p>
+      {/* Selected week label + milestone hint */}
+      <div className="mt-2 mb-3">
+        <p
+          className="m-0"
+          style={{
+            fontSize: '14px',
+            fontWeight: 600,
+            color: isFutureSelected ? '#C4844E' : 'var(--color-slate)',
+          }}
+        >
+          {label} {selectedWeek}
+          {selectedWeek === currentWeekOrMonth ? ' (current)' : ''}
+          {isFutureSelected ? ` — ${selectedWeek - currentWeekOrMonth} ${label.toLowerCase()}${selectedWeek - currentWeekOrMonth > 1 ? 's' : ''} away` : ''}
+        </p>
+        {milestone && (
+          <p
+            className="m-0 mt-1"
+            style={{
+              fontSize: '14px',
+              color: '#9A6B3A',
+              lineHeight: 1.5,
+            }}
+          >
+            {milestone.emoji} {milestone.hint}
+          </p>
+        )}
+      </div>
+
+      {/* Milestone preview banner for future weeks */}
+      {isFutureSelected && (
+        <div
+          style={{
+            background: 'linear-gradient(135deg, #FFF8F0, #FFF3E6)',
+            border: '1px solid #E8D5C0',
+            borderRadius: 'var(--radius-lg)',
+            padding: '14px 16px',
+            marginBottom: '12px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+          }}
+        >
+          <span style={{ fontSize: '24px', lineHeight: 1, flexShrink: 0 }}>🔮</span>
+          <div>
+            <p style={{ fontSize: '13px', fontWeight: 700, color: '#9A6B3A', margin: 0 }}>
+              Looking ahead to {label} {selectedWeek}
+            </p>
+            <p style={{ fontSize: '13px', color: '#B08050', margin: '2px 0 0', lineHeight: 1.5 }}>
+              Here&apos;s what you can expect. Read ahead to feel prepared and excited!
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Guide content for selected week */}
       <WeekGuideCard

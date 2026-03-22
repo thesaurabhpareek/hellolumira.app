@@ -391,13 +391,13 @@ export interface Story {
   profile_id: string
   story_type: StoryType
   text_content: string | null
-  bg_color: string | null
+  text_bg_color: string | null
   image_url: string | null
   image_caption: string | null
   poll_question: string | null
   poll_option_a: string | null
   poll_option_b: string | null
-  question_prompt: string | null
+  question_text: string | null
   view_count: number
   reply_count: number
   reaction_count: number

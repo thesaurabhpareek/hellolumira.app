@@ -34,7 +34,7 @@ export default function StoryContent({
       return (
         <StoryContentText
           textContent={story.text_content || ''}
-          bgColor={story.bg_color}
+          bgColor={story.text_bg_color}
         />
       )
 
@@ -63,7 +63,7 @@ export default function StoryContent({
       return (
         <StoryContentQuestion
           storyId={story.id}
-          questionPrompt={story.question_prompt || ''}
+          questionPrompt={story.question_text || ''}
           isOwn={isOwn}
           answers={questionAnswers}
         />

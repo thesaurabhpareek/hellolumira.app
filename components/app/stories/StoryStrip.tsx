@@ -19,6 +19,7 @@ import StoryComposer from './StoryComposer'
 export default function StoryStrip() {
   const [items, setItems] = useState<StoryStripItem[]>([])
   const [loading, setLoading] = useState(true)
+  const [fetchError, setFetchError] = useState(false)
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
   const [viewerOpen, setViewerOpen] = useState(false)
   const [viewerGroupIndex, setViewerGroupIndex] = useState(0)
@@ -39,14 +40,17 @@ export default function StoryStrip() {
 
     async function fetchStories() {
       setLoading(true)
+      setFetchError(false)
       try {
         const res = await fetch('/api/stories', { credentials: 'same-origin' })
         if (res.ok) {
           const data = await res.json()
           if (!cancelled) setItems(data.stories || [])
+        } else {
+          if (!cancelled) setFetchError(true)
         }
       } catch {
-        // Silently fail
+        if (!cancelled) setFetchError(true)
       } finally {
         if (!cancelled) setLoading(false)
       }
@@ -93,8 +97,8 @@ export default function StoryStrip() {
     )
   }
 
-  // Don't render if no stories at all and no current user (edge case)
-  // Always show so user can create their first story
+  // Always render the strip so the user can create their first story.
+  // On fetch error, still show OwnStoryCircle so the composer remains accessible.
   return (
     <div className="mb-4">
       <div
@@ -119,9 +123,9 @@ export default function StoryStrip() {
           />
         </div>
 
-        {/* Other users' circles */}
-        {otherItems.map((item) => {
-          const hasUnread = item.stories.length > 0 // TODO: track viewed state per story
+        {/* Other users' circles — only shown when fetch succeeded */}
+        {!fetchError && otherItems.map((item) => {
+          const hasUnread = item.has_unread
           return (
             <div key={item.profile_id} className="shrink-0">
               <StoryCircle

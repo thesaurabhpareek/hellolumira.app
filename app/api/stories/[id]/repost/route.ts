@@ -43,7 +43,7 @@ export async function POST(
       .from('stories')
       .select(`
         *,
-        profiles!stories_profile_id_fkey(display_name)
+        profiles!stories_profile_id_fkey(display_name, first_name)
       `)
       .eq('id', storyId)
       .single()
@@ -76,7 +76,7 @@ export async function POST(
 
     const now = new Date()
     const expiresAt = new Date(now.getTime() + 24 * 60 * 60 * 1000).toISOString()
-    const authorProfile = original.profiles as { display_name: string } | null
+    const authorProfile = original.profiles as { display_name: string | null; first_name: string | null } | null
 
     const { data: story, error: insertErr } = await supabase
       .from('stories')
@@ -84,15 +84,15 @@ export async function POST(
         profile_id: user.id,
         story_type: original.story_type,
         text_content: note || original.text_content,
-        bg_color: original.bg_color,
+        text_bg_color: original.text_bg_color,
         image_url: original.image_url,
         image_caption: original.image_caption,
         poll_question: original.poll_question,
         poll_option_a: original.poll_option_a,
         poll_option_b: original.poll_option_b,
-        question_prompt: original.question_prompt,
+        question_text: original.question_text,
         repost_of_id: storyId,
-        repost_attribution: authorProfile?.display_name || 'Unknown',
+        repost_attribution: authorProfile?.display_name || authorProfile?.first_name || 'Parent',
         expires_at: expiresAt,
         published_at: now.toISOString(),
       })
