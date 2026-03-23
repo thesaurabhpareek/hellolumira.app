@@ -146,47 +146,41 @@ export default function StageHeroCard({ stage, babyName, planningSubOption }: Pr
         {config.description}
       </p>
 
-      {/* Quick-access items */}
+      {/* What we cover — plain text, not buttons */}
       <div
         style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '8px',
-          marginBottom: '16px',
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '4px 16px',
+          marginBottom: '18px',
+          fontSize: '13px',
+          fontWeight: 500,
+          opacity: 0.8,
         }}
       >
         {config.items.map((item) => (
-          <div
-            key={item.label}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '8px 10px',
-              background: 'rgba(255,255,255,0.15)',
-              borderRadius: 'var(--radius-md)',
-              fontSize: '13px',
-              fontWeight: 500,
-            }}
-          >
-            <span style={{ fontSize: '16px', lineHeight: 1 }}>{item.icon}</span>
+          <span key={item.label} style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+            <span style={{ fontSize: '14px', lineHeight: 1 }}>{item.icon}</span>
             {item.label}
-          </div>
+          </span>
         ))}
       </div>
 
       <Link
         href={config.ctaHref}
         style={{
-          display: 'inline-block',
-          padding: '10px 24px',
-          background: 'rgba(255,255,255,0.2)',
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '6px',
+          padding: '11px 28px',
+          background: '#FFFFFF',
           borderRadius: 'var(--radius-md)',
           fontSize: '14px',
-          fontWeight: 600,
-          color: '#FFFFFF',
+          fontWeight: 700,
+          color: '#2D5A4E',
           textDecoration: 'none',
-          transition: 'background 0.15s ease',
+          transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
         }}
       >
         {config.ctaLabel} &rarr;
