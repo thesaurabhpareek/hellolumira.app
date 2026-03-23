@@ -23,6 +23,7 @@ function makeResult(fields: {
   preAuthoredMessage: string | null
   actionUrl: string | null
   severity: RedFlagResult['severity']
+  guidanceText?: string | null
 }): RedFlagResult {
   return {
     ...fields,
@@ -30,6 +31,7 @@ function makeResult(fields: {
     immediate_action: fields.immediateAction,
     pre_authored_message: fields.preAuthoredMessage,
     action_url: fields.actionUrl,
+    guidance_text: fields.guidanceText ?? null,
   }
 }
 
@@ -384,6 +386,7 @@ function checkFeverEscalation(
       preAuthoredMessage: CATEGORY_PATTERNS.high_fever_newborn.preAuthoredMessage,
       actionUrl: 'tel:911',
       severity: 'urgent',
+      guidanceText: 'FEVER GUIDANCE: Baby is under 3 months — any temp ≥ 38°C (100.4°F) requires immediate doctor contact. Not tomorrow. Now. This is consistent AAP guidance.',
     })
   }
   if (babyAgeWeeks >= 12 && babyAgeWeeks < 24) {
@@ -395,9 +398,46 @@ function checkFeverEscalation(
       preAuthoredMessage: null,
       actionUrl: null,
       severity: null,
+      guidanceText: 'FEVER GUIDANCE: Baby is 3–6 months — temp ≥ 38°C (100.4°F) warrants same-day pediatrician call.',
     })
   }
-  return null
+  if (babyAgeWeeks >= 24 && babyAgeWeeks < 104) {
+    // Check for very high temp (40°C / 104°F)
+    const hasHighTemp = /\b40\s*°?[cC]\b|\b104/.test(lower)
+    if (hasHighTemp) {
+      return makeResult({
+        level: 'urgent',
+        category: null,
+        pattern: 'fever_very_high',
+        immediateAction: 'Seek medical attention today',
+        preAuthoredMessage: null,
+        actionUrl: null,
+        severity: 'urgent',
+        guidanceText: 'FEVER GUIDANCE: Temp > 40°C (104°F) — recommend same-day medical attention regardless of age.',
+      })
+    }
+    return makeResult({
+      level: 'none',
+      category: null,
+      pattern: 'fever_6_to_24_months',
+      immediateAction: null,
+      preAuthoredMessage: null,
+      actionUrl: null,
+      severity: null,
+      guidanceText: 'FEVER GUIDANCE: Baby is 6–24 months — temp > 39°C (102.2°F) lasting > 1 day warrants pediatrician contact. Any fever + rash/breathing difficulty/unusual drowsiness/stiff neck = EMERGENCY.',
+    })
+  }
+  // Over 24 months or age unknown — generic fever guidance
+  return makeResult({
+    level: 'none',
+    category: null,
+    pattern: 'fever_general',
+    immediateAction: null,
+    preAuthoredMessage: null,
+    actionUrl: null,
+    severity: null,
+    guidanceText: 'FEVER GUIDANCE: Fever + rash/breathing difficulty/unusual drowsiness/stiff neck at any age = EMERGENCY. Temp > 40°C (104°F) = seek medical attention today.',
+  })
 }
 
 /**
@@ -454,7 +494,7 @@ export function scanForRedFlags(
     }
   }
 
-  // 2. Fever age-specific check (may return urgent)
+  // 2. Fever age-specific check (may return urgent, call_doctor, or none-with-guidance)
   const feverResult = checkFeverEscalation(message, babyAgeWeeks)
   if (feverResult && feverResult.level === 'urgent') return feverResult
 
@@ -489,6 +529,106 @@ export function scanForRedFlags(
     }
   }
 
-  // 5. No red flag detected
+  // 5. If fever was detected with guidance but no escalation level, return it for guidance injection
+  if (feverResult && feverResult.guidance_text) return feverResult
+
+  // 6. No red flag detected
   return NO_FLAG_RESULT
+}
+
+// ── Cultural Hard-Stop Detection ────────────────────────────────────────────
+
+export interface CulturalHardStop {
+  pattern: string
+  guidance_text: string
+}
+
+/**
+ * Detects cultural practices that pose safety risks and returns deterministic
+ * guidance for Claude to deliver warmly without shaming.
+ */
+export function scanForCulturalHardStops(
+  message: string,
+  babyAgeWeeks: number,
+  stage?: string
+): CulturalHardStop | null {
+  if (!message || typeof message !== 'string') return null
+  if (stage === 'pregnancy' || stage === 'planning') return null
+  const lower = message.toLowerCase().slice(0, 10000)
+
+  if (lower.includes('honey') && babyAgeWeeks < 52) {
+    return {
+      pattern: 'honey_under_1_year',
+      guidance_text: 'CULTURAL SAFETY: Honey mentioned and baby is under 1 year. Botulism risk — state clearly and warmly that honey must not be given before 12 months regardless of amount. Frame respectfully: "Here\'s what evidence suggests, and here is the safest way to honour your tradition."',
+    }
+  }
+
+  if (lower.includes('gripe water')) {
+    return {
+      pattern: 'gripe_water',
+      guidance_text: 'CULTURAL SAFETY: Gripe water mentioned. AAP advises against alcohol-based gripe water. Herbal alcohol-free versions are not proven but not harmful — mention to pediatrician. Frame without shaming.',
+    }
+  }
+
+  if ((lower.includes('chamomile') || lower.includes('manzanilla')) && babyAgeWeeks < 26) {
+    return {
+      pattern: 'chamomile_under_6_months',
+      guidance_text: 'CULTURAL SAFETY: Chamomile/manzanilla tea mentioned and baby is under 6 months. Hyponatraemia risk — advise against any tea before 6 months. After solids established, chamomile is gentler territory. Frame warmly.',
+    }
+  }
+
+  // Water under 6 months — requires feeding context to avoid false positives
+  if (lower.includes('water') && babyAgeWeeks < 26) {
+    const waterFeedingContext = /\b(give|giving|drink|drinking|offer|offering|sip|sips)\b.*\bwater\b|\bwater\b.*\b(give|giving|drink|drinking|offer|offering|sip|sips)\b/.test(lower)
+    if (waterFeedingContext) {
+      return {
+        pattern: 'water_under_6_months',
+        guidance_text: 'CULTURAL SAFETY: Giving water to baby under 6 months. Hyponatraemia risk — WHO/AAP recommend nothing but breast milk or formula before 6 months. Frame warmly.',
+      }
+    }
+  }
+
+  return null
+}
+
+// ── Pregnancy-Specific Guidance ─────────────────────────────────────────────
+
+export interface PregnancyGuidance {
+  pattern: string
+  guidance_text: string
+}
+
+/**
+ * Detects pregnancy-specific concerns (non-emergency) and returns guidance.
+ * Note: Reduced fetal movement and preterm labor are already handled as
+ * emergency categories in scanForRedFlags.
+ */
+export function scanForPregnancyGuidance(
+  message: string,
+  stage?: string,
+  pregnancyWeek?: number
+): PregnancyGuidance | null {
+  if (stage !== 'pregnancy') return null
+  if (!message || typeof message !== 'string') return null
+  const lower = message.toLowerCase().slice(0, 10000)
+
+  // Braxton Hicks / contractions at or after 37 weeks (non-emergency)
+  if ((lower.includes('braxton') || lower.includes('contraction')) && (pregnancyWeek ?? 0) >= 37) {
+    return {
+      pattern: 'braxton_hicks_vs_real',
+      guidance_text: 'PREGNANCY GUIDANCE: Contractions at/after 37 weeks. Help differentiate: Regular + intensifying + getting closer together = real labour. Random + varying intensity + stop with position change = likely Braxton Hicks. If regular contractions, advise contacting OB or midwife.',
+    }
+  }
+
+  // Hyperemesis gravidarum
+  if (lower.includes('hyperemesis') ||
+      (lower.includes('morning sickness') && /\b(severe|extreme|terrible|awful|worst|unbearable)\b/.test(lower)) ||
+      /can'?t keep (anything|food|water) down/.test(lower)) {
+    return {
+      pattern: 'hyperemesis_gravidarum',
+      guidance_text: 'PREGNANCY GUIDANCE: Possible hyperemesis gravidarum. HG is a medical condition, NOT just "bad morning sickness." Validate how difficult this is. Recommend medical support — do not minimise or suggest it will just pass.',
+    }
+  }
+
+  return null
 }

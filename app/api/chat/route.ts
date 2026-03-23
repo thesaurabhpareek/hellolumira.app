@@ -18,7 +18,7 @@ import anthropic, { MASTER_SYSTEM_PROMPT } from '@/lib/claude'
 import { buildContextBlock } from '@/lib/context-builder'
 import { getBabyAgeInfo } from '@/lib/baby-age'
 import { inferEmotionalSignal } from '@/lib/emotional-signals'
-import { scanForRedFlags } from '@/lib/red-flag-scanner'
+import { scanForRedFlags, scanForCulturalHardStops, scanForPregnancyGuidance } from '@/lib/red-flag-scanner'
 import { classifyConcern } from '@/lib/chat/classifier'
 import { checkRateLimit } from '@/lib/rate-limit'
 import { sanitizeInput, SECURITY_HEADERS } from '@/lib/utils'
@@ -235,21 +235,57 @@ export async function POST(request: NextRequest) {
       age_display_string: ageInfo.age_display_string,
     })
 
-    // Add escalation guidance for non-emergency red flags
-    let escalationGuidance = ''
+    // Run additional detectors
+    const culturalResult = scanForCulturalHardStops(message, babyAgeWeeks, baby.stage)
+    const pregnancyResult = scanForPregnancyGuidance(message, baby.stage, ageInfo.pregnancy_week)
+
+    // Build dynamic guidance — deterministic, injected only when relevant
+    const guidanceParts: string[] = []
+
+    // Escalation guidance
     if (redFlagResult.level === 'urgent') {
-      escalationGuidance = '\nIMPORTANT: The safety scanner has flagged this message as URGENT. Recommend same-day medical assessment clearly but calmly. Include: "this warrants being seen today".'
+      guidanceParts.push('ESCALATION: Safety scanner flagged URGENT. Recommend same-day medical assessment clearly but calmly. Include: "this warrants being seen today".')
     } else if (redFlagResult.level === 'call_doctor') {
-      escalationGuidance = '\nIMPORTANT: The safety scanner has flagged this message. Recommend pediatrician contact clearly: "worth a call to your pediatrician today or tomorrow".'
+      guidanceParts.push('ESCALATION: Safety scanner flagged. Recommend pediatrician contact: "worth a call to your pediatrician today or tomorrow".')
     }
 
-    // Add distress acknowledgement guidance
-    let distressGuidance = ''
+    // Fever guidance from scanner (deterministic threshold text)
+    if (redFlagResult.guidance_text) {
+      guidanceParts.push(redFlagResult.guidance_text)
+    }
+
+    // Cultural hard-stop guidance
+    if (culturalResult) {
+      guidanceParts.push(culturalResult.guidance_text)
+    }
+
+    // Pregnancy guidance
+    if (pregnancyResult) {
+      guidanceParts.push(pregnancyResult.guidance_text)
+    }
+
+    // Emotional signal guidance (tier-specific)
     if (emotionalSignal === 'distressed') {
-      distressGuidance = '\nIMPORTANT: The parent appears distressed. Acknowledge their emotional state FIRST before any content. Surface one support resource (PSI: 1-800-944-4773).'
+      guidanceParts.push(
+        'EMOTIONAL: Parent appears distressed. Acknowledge their emotional state FIRST before any content. ' +
+        'Do not pivot to baby content until they invite it. Surface ONE resource naturally:\n' +
+        'PSI (US): 1-800-944-4773 | Samaritans (UK/IE): 116 123 | iCall (India): 9152987821'
+      )
+    } else if (emotionalSignal === 'struggling') {
+      guidanceParts.push(
+        'EMOTIONAL: Parent appears to be struggling. Lead with acknowledgment of how they are feeling. Ask how the PARENT is doing before addressing baby content.'
+      )
+    } else if (emotionalSignal === 'tired') {
+      guidanceParts.push(
+        'EMOTIONAL: Parent seems exhausted. Acknowledge exhaustion first. Keep response concise — they are tired.'
+      )
     }
 
-    const fullSystemPrompt = `${masterPrompt}\n\n---\n\nCONTEXT:\n${contextBlock}\n\nConcern category: ${concernCategory}\nEscalation level from scanner: ${redFlagResult.level}${escalationGuidance}${distressGuidance}\n\n---\n\n${CHAT_SYSTEM_ADDON}`
+    const dynamicGuidance = guidanceParts.length > 0
+      ? '\n\n' + guidanceParts.map(g => `[GUIDANCE] ${g}`).join('\n')
+      : ''
+
+    const fullSystemPrompt = `${masterPrompt}\n\n---\n\nCONTEXT:\n${contextBlock}\n\nConcern category: ${concernCategory}\nEscalation level from scanner: ${redFlagResult.level}${dynamicGuidance}\n\n---\n\n${CHAT_SYSTEM_ADDON}`
 
     // 9. Build messages array for multi-turn conversation
     // Filter to only allow 'user' and 'assistant' roles to prevent prompt injection
@@ -436,12 +472,13 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // 11b. Audit non-emergency escalations and distress signals
+    // 11b. Audit escalations, emotional signals, cultural hard-stops, and pregnancy guidance
     if (redFlagResult.level === 'urgent' || redFlagResult.level === 'call_doctor') {
       logAudit('escalation_triggered', user.id, {
         level: redFlagResult.level,
         pattern: redFlagResult.pattern,
         category: redFlagResult.category,
+        has_guidance_text: !!redFlagResult.guidance_text,
         baby_id,
         thread_id: thread_id || null,
       }, request).catch(() => {})
@@ -451,6 +488,29 @@ export async function POST(request: NextRequest) {
         signal: finalSignal,
         baby_id,
         thread_id: thread_id || null,
+      }, request).catch(() => {})
+    }
+    if (finalSignal === 'tired' || finalSignal === 'struggling') {
+      logAudit('emotional_signal_detected', user.id, {
+        signal: finalSignal,
+        baby_id,
+        thread_id: thread_id || null,
+      }, request).catch(() => {})
+    }
+    if (culturalResult) {
+      logAudit('cultural_hardstop_detected', user.id, {
+        pattern: culturalResult.pattern,
+        baby_id,
+        thread_id: thread_id || null,
+        concern_category: concernCategory,
+      }, request).catch(() => {})
+    }
+    if (pregnancyResult) {
+      logAudit('pregnancy_guidance_detected', user.id, {
+        pattern: pregnancyResult.pattern,
+        baby_id,
+        thread_id: thread_id || null,
+        pregnancy_week: ageInfo.pregnancy_week,
       }, request).catch(() => {})
     }
 

@@ -94,8 +94,13 @@ export default async function ProfilePage() {
   const currentStreak = profile.current_streak ?? 0
   const avatarEmoji = profile.avatar_emoji || '🌿'
 
-  // Earned badge IDs
+  // Earned badge IDs and earned-at timestamps
   const earnedIds = (earnedBadgeRows ?? []).map((b: { badge_id: string }) => b.badge_id)
+  const earnedAt: Record<string, string> = {}
+  for (const b of earnedBadgeRows ?? []) {
+    const row = b as { badge_id: string; awarded_at: string }
+    if (row.awarded_at) earnedAt[row.badge_id] = row.awarded_at
+  }
 
   // Profile completeness — only actionable items the user can control
   const completionItems = [
@@ -547,7 +552,7 @@ export default async function ProfilePage() {
           >
             Your Badges ({earnedIds.length}/{BADGES.length})
           </p>
-          <BadgesGrid badges={BADGES} earnedIds={earnedIds} />
+          <BadgesGrid badges={BADGES} earnedIds={earnedIds} earnedAt={earnedAt} />
         </div>
 
         {/* Partner status */}

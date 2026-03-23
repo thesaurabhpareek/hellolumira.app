@@ -4,6 +4,7 @@
     { "path": "/api/cron/concern-followup", "schedule": "0 9 * * *" },
     { "path": "/api/cron/daily-comms", "schedule": "0 12 * * *" },
     { "path": "/api/cron/seed-stories", "schedule": "0 7 * * *" },
-    { "path": "/api/cron/tribe-activity", "schedule": "37 14 * * *" }
+    { "path": "/api/cron/tribe-activity", "schedule": "37 14 * * *" },
+    { "path": "/api/cron/daily-notifications", "schedule": "23 10 * * *" }
   ]
 }

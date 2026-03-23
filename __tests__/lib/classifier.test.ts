@@ -149,4 +149,18 @@ describe('classifyConcern', () => {
       expect(classifyConcern(msg)).toBe('illness')
     })
   })
+
+  describe('cultural practice classification', () => {
+    it.each([
+      ['cultural_practice', 'can I give honey to my baby?'],
+      ['cultural_practice', 'should we use gripe water?'],
+      ['cultural_practice', 'grandmother says chamomile tea is good'],
+      ['cultural_practice', 'in our culture we use kajal for eyes'],
+      ['cultural_practice', 'nani says mustard oil massage is important'],
+      ['cultural_practice', 'is this traditional remedy safe?'],
+      ['cultural_practice', 'back home we always use herbal tea for the baby'],
+    ])('classifies "%s" for: %s', (expected, message) => {
+      expect(classifyConcern(message)).toBe(expected)
+    })
+  })
 })

@@ -7,6 +7,16 @@ import SignOutButton from './SignOutButton'
 import InvitePartnerForm from './InvitePartnerForm'
 import RemovePartnerButton from './RemovePartnerButton'
 import { ArrowLeftIcon, ChevronRightIcon, ShieldIcon, BellIcon } from '@/components/icons'
+
+// Inline lock icon for Security row — matches Lumira's stroke-based icon style
+function LockIcon({ size = 24, color = 'currentColor' }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="3" y="11" width="18" height="11" rx="2" stroke={color} strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M7 11V7a5 5 0 0110 0v4" stroke={color} strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
 import type { Profile, BabyProfile } from '@/types/app'
 
 export default async function SettingsPage() {
@@ -209,6 +219,37 @@ export default async function SettingsPage() {
               Complete onboarding to invite your partner.
             </p>
           )}
+        </div>
+
+        {/* Security */}
+        <div className="lumira-card mb-4">
+          <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '16px' }}>
+            Security
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <Link
+              href="/settings/security"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '14px 4px',
+                borderRadius: '8px',
+                textDecoration: 'none',
+                color: 'var(--color-slate)',
+                transition: 'background 0.15s ease',
+                minHeight: '48px',
+                gap: '12px',
+              }}
+            >
+              <LockIcon size={20} color="var(--color-muted)" />
+              <div style={{ flex: 1 }}>
+                <p style={{ fontWeight: 600, fontSize: '15px', marginBottom: '2px' }}>Sign-in &amp; Security</p>
+                <p style={{ fontSize: '13px', color: 'var(--color-muted)' }}>Face ID, passkeys, sign-in methods</p>
+              </div>
+              <ChevronRightIcon size={18} color="var(--color-muted)" />
+            </Link>
+          </div>
         </div>
 
         {/* Settings navigation */}

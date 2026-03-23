@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { scanForRedFlags } from '@/lib/red-flag-scanner'
+import { scanForRedFlags, scanForCulturalHardStops, scanForPregnancyGuidance } from '@/lib/red-flag-scanner'
 
 // ── GUARD / UNHAPPY PATHS ─────────────────────────────────────────────────
 
@@ -591,6 +591,177 @@ describe('Red Flag Scanner — Safe non-matches', () => {
       pre_authored_message: null,
       action_url: null,
       severity: null,
+      guidance_text: null,
     })
+  })
+})
+
+// ── Expanded Fever Thresholds ────────────────────────────────────────────────
+
+describe('Red Flag Scanner — Expanded fever thresholds', () => {
+  it('returns guidance_text for fever under 3 months', () => {
+    const result = scanForRedFlags('baby has a fever of 38°C', 8)
+    expect(result.level).toBe('urgent')
+    expect(result.guidance_text).toContain('FEVER GUIDANCE')
+    expect(result.guidance_text).toContain('under 3 months')
+  })
+
+  it('returns guidance_text for fever 3-6 months', () => {
+    const result = scanForRedFlags('temperature seems high, maybe fever', 16)
+    expect(result.level).toBe('call_doctor')
+    expect(result.guidance_text).toContain('FEVER GUIDANCE')
+    expect(result.guidance_text).toContain('3–6 months')
+  })
+
+  it('returns guidance_text for fever 6-24 months without high temp', () => {
+    const result = scanForRedFlags('she has a fever today', 30)
+    expect(result.level).toBe('none')
+    expect(result.guidance_text).toContain('FEVER GUIDANCE')
+    expect(result.guidance_text).toContain('6–24 months')
+  })
+
+  it('returns urgent for very high fever (40°C) at any age', () => {
+    const result = scanForRedFlags('fever is 40°C', 30)
+    expect(result.level).toBe('urgent')
+    expect(result.guidance_text).toContain('40°C')
+  })
+
+  it('returns generic fever guidance for older babies', () => {
+    const result = scanForRedFlags('she has a fever', 110)
+    expect(result.guidance_text).toContain('FEVER GUIDANCE')
+    expect(result.guidance_text).toContain('EMERGENCY')
+  })
+
+  it('does not return fever guidance for non-fever messages', () => {
+    const result = scanForRedFlags('baby slept well today', 20)
+    expect(result.guidance_text).toBeNull()
+  })
+})
+
+// ── Cultural Hard-Stop Detection ─────────────────────────────────────────────
+
+describe('Cultural Hard-Stop Scanner', () => {
+  it('detects honey under 1 year', () => {
+    const result = scanForCulturalHardStops('can I give honey to my baby?', 30, 'infant')
+    expect(result).not.toBeNull()
+    expect(result!.pattern).toBe('honey_under_1_year')
+    expect(result!.guidance_text).toContain('Botulism')
+  })
+
+  it('does not trigger honey for baby over 1 year', () => {
+    const result = scanForCulturalHardStops('can I give honey?', 60, 'infant')
+    expect(result).toBeNull()
+  })
+
+  it('does not trigger honey for pregnancy stage', () => {
+    const result = scanForCulturalHardStops('can I eat honey?', 30, 'pregnancy')
+    expect(result).toBeNull()
+  })
+
+  it('detects gripe water', () => {
+    const result = scanForCulturalHardStops('should I give gripe water?', 8, 'infant')
+    expect(result).not.toBeNull()
+    expect(result!.pattern).toBe('gripe_water')
+    expect(result!.guidance_text).toContain('AAP')
+  })
+
+  it('detects chamomile under 6 months', () => {
+    const result = scanForCulturalHardStops('grandmother says chamomile tea helps', 12, 'infant')
+    expect(result).not.toBeNull()
+    expect(result!.pattern).toBe('chamomile_under_6_months')
+    expect(result!.guidance_text).toContain('Hyponatraemia')
+  })
+
+  it('detects manzanilla under 6 months', () => {
+    const result = scanForCulturalHardStops('can I give manzanilla?', 10, 'infant')
+    expect(result).not.toBeNull()
+    expect(result!.pattern).toBe('chamomile_under_6_months')
+  })
+
+  it('does not trigger chamomile for baby over 6 months', () => {
+    const result = scanForCulturalHardStops('can she have chamomile tea?', 30, 'infant')
+    expect(result).toBeNull()
+  })
+
+  it('detects water in feeding context under 6 months', () => {
+    const result = scanForCulturalHardStops('should I give water to the baby?', 12, 'infant')
+    expect(result).not.toBeNull()
+    expect(result!.pattern).toBe('water_under_6_months')
+  })
+
+  it('does not trigger water for non-feeding context', () => {
+    const result = scanForCulturalHardStops('my water broke', 12, 'pregnancy')
+    expect(result).toBeNull()
+  })
+
+  it('does not trigger water for baby over 6 months', () => {
+    const result = scanForCulturalHardStops('can I give water?', 30, 'infant')
+    expect(result).toBeNull()
+  })
+
+  it('returns null for safe message', () => {
+    const result = scanForCulturalHardStops('baby is sleeping well', 20, 'infant')
+    expect(result).toBeNull()
+  })
+
+  it('handles null/empty input gracefully', () => {
+    expect(scanForCulturalHardStops('', 20, 'infant')).toBeNull()
+    expect(scanForCulturalHardStops(null as unknown as string, 20, 'infant')).toBeNull()
+  })
+})
+
+// ── Pregnancy Guidance Detection ─────────────────────────────────────────────
+
+describe('Pregnancy Guidance Scanner', () => {
+  it('detects Braxton Hicks at 38 weeks', () => {
+    const result = scanForPregnancyGuidance('having braxton hicks contractions', 'pregnancy', 38)
+    expect(result).not.toBeNull()
+    expect(result!.pattern).toBe('braxton_hicks_vs_real')
+    expect(result!.guidance_text).toContain('Regular')
+  })
+
+  it('detects contractions at 39 weeks', () => {
+    const result = scanForPregnancyGuidance('having contractions every 10 minutes', 'pregnancy', 39)
+    expect(result).not.toBeNull()
+    expect(result!.pattern).toBe('braxton_hicks_vs_real')
+  })
+
+  it('does not trigger contractions before 37 weeks (handled by emergency scanner)', () => {
+    const result = scanForPregnancyGuidance('contractions at 34 weeks', 'pregnancy', 34)
+    expect(result).toBeNull()
+  })
+
+  it('detects hyperemesis', () => {
+    const result = scanForPregnancyGuidance('I think I have hyperemesis', 'pregnancy', 12)
+    expect(result).not.toBeNull()
+    expect(result!.pattern).toBe('hyperemesis_gravidarum')
+    expect(result!.guidance_text).toContain('medical condition')
+  })
+
+  it('detects severe morning sickness', () => {
+    const result = scanForPregnancyGuidance('severe morning sickness, can barely function', 'pregnancy', 10)
+    expect(result).not.toBeNull()
+    expect(result!.pattern).toBe('hyperemesis_gravidarum')
+  })
+
+  it('detects cant keep food down', () => {
+    const result = scanForPregnancyGuidance("I can't keep anything down", 'pregnancy', 8)
+    expect(result).not.toBeNull()
+    expect(result!.pattern).toBe('hyperemesis_gravidarum')
+  })
+
+  it('does not trigger for non-pregnancy stage', () => {
+    const result = scanForPregnancyGuidance('having contractions', 'infant', 38)
+    expect(result).toBeNull()
+  })
+
+  it('returns null for normal pregnancy message', () => {
+    const result = scanForPregnancyGuidance('feeling good today, baby is kicking!', 'pregnancy', 30)
+    expect(result).toBeNull()
+  })
+
+  it('handles null/empty input gracefully', () => {
+    expect(scanForPregnancyGuidance('', 'pregnancy', 30)).toBeNull()
+    expect(scanForPregnancyGuidance(null as unknown as string, 'pregnancy', 30)).toBeNull()
   })
 })

@@ -50,6 +50,12 @@ const CATEGORY_PATTERNS: Record<ConcernCategory, string[]> = {
     'not coping', 'postpartum', 'postnatal', 'exhausted', 'cannot do this',
     'falling apart', 'help me', 'support',
   ],
+  cultural_practice: [
+    'honey', 'gripe water', 'manzanilla', 'chamomile', 'herbal tea',
+    'traditional remedy', 'home remedy', 'grandmother says', 'nani says',
+    'dadi says', 'back home we', 'in our culture', 'our tradition',
+    'kajal', 'kohl', 'oil massage', 'mustard oil',
+  ],
   general: [],
   emergency: [],
   multiple: [],

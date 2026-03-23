@@ -35,6 +35,9 @@ export type AuditEventType =
   | 'partner_invite_accepted'
   | 'escalation_triggered'
   | 'distressed_signal_detected'
+  | 'emotional_signal_detected'
+  | 'cultural_hardstop_detected'
+  | 'pregnancy_guidance_detected'
 
 /**
  * Writes an immutable audit log entry to the `audit_log` table.
@@ -71,6 +74,7 @@ export async function logAudit(
     'comms_preference_updated', 'unsubscribed_email', 'unsubscribed_sms', 'unsubscribed_whatsapp',
     'partner_invite_sent', 'partner_invite_accepted',
     'escalation_triggered', 'distressed_signal_detected',
+    'emotional_signal_detected', 'cultural_hardstop_detected', 'pregnancy_guidance_detected',
   ]
   if (!VALID_EVENT_TYPES.includes(eventType)) {
     console.error('[audit] Invalid eventType:', eventType)

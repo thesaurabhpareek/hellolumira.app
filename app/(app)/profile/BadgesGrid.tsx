@@ -7,6 +7,7 @@ import type { Badge } from '@/lib/badges'
 interface BadgesGridProps {
   badges: Badge[]
   earnedIds: string[]
+  earnedAt?: Record<string, string>
   newBadgeId?: string | null
 }
 
@@ -37,7 +38,7 @@ const BADGE_ACTIONS: Record<string, { label: string; href: string }> = {
   early_adopter: { label: 'Already earned!', href: '/home' },
 }
 
-export default function BadgesGrid({ badges, earnedIds, newBadgeId }: BadgesGridProps) {
+export default function BadgesGrid({ badges, earnedIds, earnedAt = {}, newBadgeId }: BadgesGridProps) {
   const [celebratingId, setCelebratingId] = useState<string | null>(null)
   const [selectedBadge, setSelectedBadge] = useState<Badge | null>(null)
 
@@ -251,20 +252,29 @@ export default function BadgesGrid({ badges, earnedIds, newBadgeId }: BadgesGrid
             </h3>
 
             {/* Status */}
-            <span
-              style={{
-                display: 'inline-block',
-                padding: '3px 12px',
-                borderRadius: '100px',
-                fontSize: '11px',
-                fontWeight: 600,
-                background: earnedIds.includes(selectedBadge.id) ? '#F0FDF4' : '#FEF3C7',
-                color: earnedIds.includes(selectedBadge.id) ? '#15803D' : '#92400E',
-                marginBottom: '14px',
-              }}
-            >
-              {earnedIds.includes(selectedBadge.id) ? 'Earned ✓' : 'Not earned yet'}
-            </span>
+            {(() => {
+              const isEarnedBadge = earnedIds.includes(selectedBadge.id)
+              const awardedDate = earnedAt[selectedBadge.id]
+              const dateLabel = awardedDate
+                ? new Date(awardedDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                : null
+              return (
+                <span
+                  style={{
+                    display: 'inline-block',
+                    padding: '3px 12px',
+                    borderRadius: '100px',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    background: isEarnedBadge ? '#F0FDF4' : '#FEF3C7',
+                    color: isEarnedBadge ? '#15803D' : '#92400E',
+                    marginBottom: '14px',
+                  }}
+                >
+                  {isEarnedBadge ? (dateLabel ? `Earned ${dateLabel} ✓` : 'Earned ✓') : 'Not earned yet'}
+                </span>
+              )
+            })()}
 
             {/* Description */}
             <p

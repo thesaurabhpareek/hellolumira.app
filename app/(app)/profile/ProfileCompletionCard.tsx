@@ -3,21 +3,26 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
-/** All optional profile fields that count toward completion */
+/** Profile fields that count toward completion — core (onboarding) + enrichment (optional) */
 const PROFILE_FIELDS = [
-  { key: 'display_name', label: 'Display name', seeds: 5, prompt: 'Add a display name' },
-  { key: 'pronouns', label: 'Pronouns', seeds: 5, prompt: 'Set your pronouns' },
-  { key: 'bio', label: 'Bio', seeds: 10, prompt: 'Write a short bio' },
-  { key: 'location_city', label: 'City', seeds: 5, prompt: 'Add your city' },
-  { key: 'birth_month', label: 'Birth month', seeds: 5, prompt: 'Add your birth month' },
-  { key: 'parenting_style', label: 'Parenting style', seeds: 5, prompt: 'Share your parenting style' },
-  { key: 'feeding_method', label: 'Feeding method', seeds: 5, prompt: 'Share your feeding approach' },
-  { key: 'birth_type', label: 'Birth type', seeds: 5, prompt: 'Add birth type' },
-  { key: 'number_of_children', label: 'Number of children', seeds: 5, prompt: 'How many children do you have?' },
-  { key: 'languages_spoken', label: 'Languages', seeds: 5, prompt: 'What languages do you speak?' },
-  { key: 'work_status', label: 'Work status', seeds: 5, prompt: 'Share your work situation' },
-  { key: 'interests', label: 'Interests', seeds: 10, prompt: 'Choose topics you care about' },
-  { key: 'looking_for', label: 'Looking for', seeds: 10, prompt: 'What do you want from community?' },
+  // Core fields — filled during onboarding, give baseline credit, no seeds reward
+  { key: 'first_name', label: 'Name', weight: 3, seeds: 0, prompt: '', core: true },
+  { key: 'avatar_emoji', label: 'Avatar', weight: 2, seeds: 0, prompt: '', core: true },
+  { key: 'first_time_parent', label: 'Parent experience', weight: 2, seeds: 0, prompt: '', core: true },
+  // Enrichment fields — optional, post-onboarding, earn seeds
+  { key: 'display_name', label: 'Display name', weight: 2, seeds: 5, prompt: 'Add a display name', core: false },
+  { key: 'pronouns', label: 'Pronouns', weight: 2, seeds: 5, prompt: 'Set your pronouns', core: false },
+  { key: 'bio', label: 'Bio', weight: 3, seeds: 10, prompt: 'Write a short bio', core: false },
+  { key: 'location_city', label: 'City', weight: 2, seeds: 5, prompt: 'Add your city', core: false },
+  { key: 'birth_month', label: 'Birth month', weight: 2, seeds: 5, prompt: 'Add your birth month', core: false },
+  { key: 'parenting_style', label: 'Parenting style', weight: 2, seeds: 5, prompt: 'Share your parenting style', core: false },
+  { key: 'feeding_method', label: 'Feeding method', weight: 2, seeds: 5, prompt: 'Share your feeding approach', core: false },
+  { key: 'birth_type', label: 'Birth type', weight: 2, seeds: 5, prompt: 'Add birth type', core: false },
+  { key: 'number_of_children', label: 'Number of children', weight: 2, seeds: 5, prompt: 'How many children do you have?', core: false },
+  { key: 'languages_spoken', label: 'Languages', weight: 2, seeds: 5, prompt: 'What languages do you speak?', core: false },
+  { key: 'work_status', label: 'Work status', weight: 2, seeds: 5, prompt: 'Share your work situation', core: false },
+  { key: 'interests', label: 'Interests', weight: 3, seeds: 10, prompt: 'Choose topics you care about', core: false },
+  { key: 'looking_for', label: 'Looking for', weight: 3, seeds: 10, prompt: 'What do you want from community?', core: false },
 ] as const
 
 type ProfileData = Record<string, unknown>
@@ -25,6 +30,7 @@ type ProfileData = Record<string, unknown>
 function isFieldComplete(key: string, profile: ProfileData): boolean {
   const val = profile[key]
   if (val === null || val === undefined || val === '') return false
+  if (typeof val === 'boolean') return true // boolean fields are "complete" once set (false is valid)
   if (Array.isArray(val)) return val.length > 0
   if (typeof val === 'number') return true
   return !!val
@@ -46,8 +52,13 @@ export default function ProfileCompletionCard({ profile }: ProfileCompletionCard
   const [animatedPct, setAnimatedPct] = useState(0)
 
   const completed = PROFILE_FIELDS.filter((f) => isFieldComplete(f.key, profile))
-  const incomplete = PROFILE_FIELDS.filter((f) => !isFieldComplete(f.key, profile))
-  const pct = Math.round((completed.length / PROFILE_FIELDS.length) * 100)
+  const allIncomplete = PROFILE_FIELDS.filter((f) => !isFieldComplete(f.key, profile))
+  // Only show enrichment fields as actionable — core fields are done during onboarding
+  const incomplete = allIncomplete.filter((f) => !f.core)
+  // Weight-based percentage instead of count-based
+  const totalWeight = PROFILE_FIELDS.reduce((sum, f) => sum + f.weight, 0)
+  const completedWeight = completed.reduce((sum, f) => sum + f.weight, 0)
+  const pct = Math.round((completedWeight / totalWeight) * 100)
   const milestone = getMilestone(pct)
 
   // Animate the ring on mount

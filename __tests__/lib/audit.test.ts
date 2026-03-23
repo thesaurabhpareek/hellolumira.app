@@ -32,7 +32,7 @@ describe('logAudit', () => {
     expect(insertArg.created_at).toBeTruthy()
   })
 
-  it('accepts all 19 valid AuditEventType variants', async () => {
+  it('accepts all 22 valid AuditEventType variants', async () => {
     const validTypes: AuditEventType[] = [
       'account_created', 'account_deleted', 'profile_updated',
       'magic_link_sent', 'magic_link_used', 'session_created',
@@ -41,6 +41,7 @@ describe('logAudit', () => {
       'comms_preference_updated', 'unsubscribed_email', 'unsubscribed_sms', 'unsubscribed_whatsapp',
       'partner_invite_sent', 'partner_invite_accepted',
       'escalation_triggered', 'distressed_signal_detected',
+      'emotional_signal_detected', 'cultural_hardstop_detected', 'pregnancy_guidance_detected',
     ]
     for (const eventType of validTypes) {
       vi.clearAllMocks()

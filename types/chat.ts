@@ -3,7 +3,8 @@
 export type ConcernCategory =
   | 'sleep' | 'feeding' | 'crying' | 'digestion' | 'teething'
   | 'illness' | 'development' | 'skin' | 'safety'
-  | 'mental_health_parent' | 'general' | 'emergency' | 'multiple'
+  | 'mental_health_parent' | 'cultural_practice'
+  | 'general' | 'emergency' | 'multiple'
 
 export type EscalationLevel = 'none' | 'monitor' | 'call_doctor' | 'urgent' | 'emergency'
 
@@ -64,6 +65,8 @@ export type RedFlagResult = {
   /** snake_case canonical name */
   action_url: string | null
   severity: 'emergency' | 'urgent' | 'same_day' | null
+  /** Deterministic guidance text to inject into system prompt. Null if no specific guidance. */
+  guidance_text: string | null
 }
 
 export type ChatSuggestedPrompt = {
