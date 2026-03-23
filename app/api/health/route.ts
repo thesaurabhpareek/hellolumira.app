@@ -8,7 +8,13 @@ import { SECURITY_HEADERS } from '@/lib/utils'
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
-export async function GET() {
+export async function GET(request: Request) {
+  const healthSecret = process.env.HEALTH_CHECK_SECRET
+  const authHeader = request.headers.get('authorization')
+  if (healthSecret && authHeader !== `Bearer ${healthSecret}`) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   let dbStatus: 'ok' | 'error' = 'error'
 
   try {

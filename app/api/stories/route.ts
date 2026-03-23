@@ -15,8 +15,9 @@ import type { Story, StoryStripItem, StoryType } from '@/types/app'
 
 const ALLOWED_STORY_TYPES: readonly StoryType[] = ['text', 'image', 'poll', 'question'] as const
 
-// Supabase storage domain validation
-const SUPABASE_STORAGE_PATTERN = /^https:\/\/[a-z0-9-]+\.supabase\.co\/storage\//
+// Supabase storage domain validation — locked to this project's bucket
+const projectHost = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://gomjthjjqcmrhnpwsdqh.supabase.co').hostname
+const SUPABASE_STORAGE_PATTERN = new RegExp(`^https://${projectHost.replace('.', '\\.')}/storage/`)
 
 export async function GET(_request: NextRequest) {
   try {

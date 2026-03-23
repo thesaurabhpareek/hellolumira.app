@@ -90,7 +90,7 @@ function escapeHtml(str: string): string {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
+    .replace(/'/g, '&#039;')
 }
 
 function htmlResponse(title: string, body: string, status = 200): NextResponse {

@@ -366,8 +366,13 @@ function checkFeverEscalation(
 ): RedFlagResult | null {
   if (!message || typeof message !== 'string') return null
   const lower = message.toLowerCase()
+  // Require temperature numbers (38, 39, 40) to be followed by a unit or preceded by
+  // a fever/temperature keyword to avoid false positives like "38 weeks old".
+  const hasTempNumber = /\b3[89]\s*°?[cCfF]\b|\b40\s*°?[cCfF]\b|\b100\.4/.test(lower) ||
+    /(fever|temperature)\b.*\b3[89]\b|\b3[89]\b.*(fever|temperature)/.test(lower) ||
+    /(fever|temperature)\b.*\b40\b|\b40\b.*(fever|temperature)/.test(lower)
   const hasFever = lower.includes('fever') || lower.includes('temperature') ||
-    lower.includes('100.4') || lower.includes('38') || lower.includes('39') || lower.includes('40')
+    lower.includes('100.4') || hasTempNumber
   if (!hasFever) return null
 
   if (babyAgeWeeks < 12) {
