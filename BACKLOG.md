@@ -190,6 +190,13 @@
 
 ## P3 — Nice-to-Have (Backlog)
 
+### BUG-04 · Low contrast text — unreadable on multiple home page cards
+- **Reported by:** User (visual review)
+- **Example:** "TODAY'S REFLECTION" card — prompt text (e.g. "What's one thing that's going really well...") is illegible against the card background
+- **Scope:** Multiple instances across home page — likely any card using `text-muted-foreground` on a coloured/gradient surface (reflection card, weekly guide card, check-in prompts)
+- **Fix:** Audit all home page card components; ensure body/prompt text meets WCAG AA contrast (4.5:1). Replace `text-muted-foreground` with `text-foreground` or a darker token on coloured backgrounds.
+- **Effort:** S (half day)
+
 ### FEAT-08 · Growth tracking (weight/height/head circumference + WHO percentile charts)
 - **Issue:** Competitive gap vs. Huckleberry, Baby Tracker. Parents track this for pediatrician visits.
 - **Effort:** L (1–2 weeks)
