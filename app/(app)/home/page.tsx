@@ -1,4 +1,6 @@
 // app/(app)/home/page.tsx — Home screen (server component)
+export const dynamic = 'force-dynamic'
+
 import type React from 'react'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
