@@ -8,7 +8,7 @@ export async function GET() {
       data: { user },
       error,
     } = await supabase.auth.getUser()
-    if (error || !user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    if (error || !user) return NextResponse.json({ error: 'Please sign in to continue.' }, { status: 401 })
 
     const service = await createServiceClient()
     const { data: passkeys } = await service

@@ -13,10 +13,10 @@ export async function POST(req: NextRequest) {
       data: { user },
       error: authError,
     } = await supabase.auth.getUser()
-    if (authError || !user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    if (authError || !user) return NextResponse.json({ error: 'Please sign in to continue.' }, { status: 401 })
 
     const body = await req.json()
-    if (!body.credential) return NextResponse.json({ error: 'Missing credential' }, { status: 400 })
+    if (!body.credential) return NextResponse.json({ error: 'Passkey setup was incomplete. Please try again.' }, { status: 400 })
 
     const service = await createServiceClient()
 

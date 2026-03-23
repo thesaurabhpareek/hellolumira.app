@@ -14,9 +14,14 @@ export default function PasskeyEnrollmentSheet({ isOpen, onClose, onEnrolled }: 
   const [error, setError] = useState('')
   const [toastVisible, setToastVisible] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [supported, setSupported] = useState<boolean | null>(null)
 
   useEffect(() => {
     setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    setSupported(typeof window !== 'undefined' && !!window.PublicKeyCredential)
   }, [])
 
   // Reset error when sheet opens
@@ -54,6 +59,10 @@ export default function PasskeyEnrollmentSheet({ isOpen, onClose, onEnrolled }: 
   }
 
   if (!mounted) return null
+
+  // Don't render at all if passkeys are not supported on this browser
+  if (!isOpen || supported === false) return null
+  if (supported === null) return null  // still checking
 
   return (
     <>

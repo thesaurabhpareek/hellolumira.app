@@ -41,7 +41,9 @@ export async function signInWithPasskey(email?: string): Promise<PasskeySignInRe
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email }),
     })
-    if (!optRes.ok) throw new Error('Failed to get authentication options')
+    if (!optRes.ok) {
+      return { success: false, cancelled: false, error: 'Unable to start sign-in. Please try again or use a magic link.' }
+    }
     const options = await optRes.json()
 
     // Prepare options — convert challenge and allowCredentials IDs from base64url to ArrayBuffer

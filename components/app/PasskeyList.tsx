@@ -89,6 +89,8 @@ export default function PasskeyList({ passkeys, onRemove, isRemoving }: PasskeyL
           const isThisDevice = currentDevicePasskeyId === pk.id
           const removing = isRemoving === pk.id
 
+          const deviceName = pk.device_hint || 'Unknown device'
+
           return (
             <div
               key={pk.id}
@@ -134,7 +136,7 @@ export default function PasskeyList({ passkeys, onRemove, isRemoving }: PasskeyL
                         color: 'var(--color-slate)',
                       }}
                     >
-                      {pk.device_hint}
+                      {deviceName}
                     </span>
 
                     {isThisDevice && (
@@ -190,7 +192,7 @@ export default function PasskeyList({ passkeys, onRemove, isRemoving }: PasskeyL
               <button
                 onClick={() => handleRemoveClick(pk.id)}
                 disabled={removing}
-                aria-label={`Remove passkey for ${pk.device_hint}`}
+                aria-label={`Remove passkey for ${deviceName}`}
                 style={{
                   flexShrink: 0,
                   padding: '6px 12px',
@@ -269,7 +271,7 @@ export default function PasskeyList({ passkeys, onRemove, isRemoving }: PasskeyL
                 lineHeight: 1.5,
               }}
             >
-              This will remove <strong style={{ color: 'var(--color-slate)' }}>{confirmPasskey.device_hint}</strong> from your account.
+              This will remove <strong style={{ color: 'var(--color-slate)' }}>{confirmPasskey.device_hint || 'Unknown device'}</strong> from your account.
             </p>
 
             {/* iCloud warning */}

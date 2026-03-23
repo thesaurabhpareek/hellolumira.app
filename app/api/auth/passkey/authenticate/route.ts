@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
     const service = await createServiceClient()
     const body = await req.json()
     if (!body.credential?.id)
-      return NextResponse.json({ error: 'Missing credential' }, { status: 400 })
+      return NextResponse.json({ error: 'Sign-in request was incomplete. Please try again.' }, { status: 400 })
 
     const { data: passkey } = await service
       .from('passkeys')
@@ -116,7 +116,7 @@ export async function POST(req: NextRequest) {
 
     const { data: ud } = await service.auth.admin.getUserById(passkey.user_id)
     if (!ud?.user?.email)
-      return NextResponse.json({ error: 'Account not found.' }, { status: 401 })
+      return NextResponse.json({ error: "We couldn't find your account. Please try signing in with your email." }, { status: 401 })
 
     const { data: linkData, error: linkError } = await service.auth.admin.generateLink({
       type: 'magiclink',

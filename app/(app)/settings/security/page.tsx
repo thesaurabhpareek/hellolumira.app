@@ -42,6 +42,10 @@ export default function SecuritySettingsPage() {
     setRemoveError('')
     try {
       const res = await fetch(`/api/auth/passkey/${id}`, { method: 'DELETE' })
+      if (res.status === 401) {
+        setRemoveError('Your session has expired. Please refresh the page and try again.')
+        return
+      }
       if (res.status === 429) {
         setRemoveError('Too many passkeys removed recently. Wait 24 hours or contact support.')
         return
@@ -128,18 +132,26 @@ export default function SecuritySettingsPage() {
 
           {/* Fetch error */}
           {!loading && error && (
-            <div
-              role="alert"
-              style={{
-                background: 'var(--color-red-light)',
-                border: '1px solid #FEB2B2',
-                borderRadius: '8px',
-                padding: '12px 14px',
-                fontSize: '14px',
-                color: 'var(--color-red)',
-              }}
-            >
-              {error}
+            <div style={{ textAlign: 'center', padding: '32px 16px' }}>
+              <p style={{ color: 'var(--color-muted)', fontSize: '14px', marginBottom: '16px' }}>
+                Couldn&apos;t load your passkeys. Check your connection and try again.
+              </p>
+              <button
+                onClick={loadPasskeys}
+                style={{
+                  background: 'var(--color-primary)',
+                  color: '#fff',
+                  border: 'none',
+                  padding: '10px 20px',
+                  borderRadius: 'var(--radius-md)',
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  fontFamily: 'inherit',
+                }}
+              >
+                Try again
+              </button>
             </div>
           )}
 

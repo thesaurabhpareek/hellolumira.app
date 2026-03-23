@@ -51,6 +51,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(options)
   } catch (err) {
     console.error('[passkey/authentication-options]', err)
-    return NextResponse.json({ error: 'Failed to generate options' }, { status: 500 })
+    return NextResponse.json({ error: 'Unable to start sign-in. Please try again or use a magic link.' }, { status: 500 })
   }
 }

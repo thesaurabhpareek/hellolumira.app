@@ -13,7 +13,7 @@ export async function POST(_req: NextRequest) {
       data: { user },
       error: authError,
     } = await supabase.auth.getUser()
-    if (authError || !user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    if (authError || !user) return NextResponse.json({ error: 'Please sign in to continue.' }, { status: 401 })
 
     const service = await createServiceClient()
 
@@ -75,6 +75,6 @@ export async function POST(_req: NextRequest) {
     return NextResponse.json(options)
   } catch (err) {
     console.error('[passkey/registration-options]', err)
-    return NextResponse.json({ error: 'Failed to generate options' }, { status: 500 })
+    return NextResponse.json({ error: 'Unable to start passkey setup. Please try again.' }, { status: 500 })
   }
 }
