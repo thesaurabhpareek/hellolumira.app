@@ -283,6 +283,10 @@
     --story-palette-6: #1F4F49;
     --story-palette-7: #706D67;
     --story-palette-8: #E8A598;
+
+    /* ── Skeleton loading ── */
+    --color-skeleton: #F0F0EE;
+    --color-skeleton-shimmer: #E8E6E1;
   }
 
   .dark {
@@ -342,6 +346,41 @@
     --shadow-lg:  0 8px 32px rgba(0, 0, 0, 0.30);
     --shadow-xl:  0 16px 48px rgba(0, 0, 0, 0.35);
     --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+
+    /* ── Dark mode legacy --color-* overrides ── */
+    --color-slate: #F0EEEA;
+    --color-muted: #9C9A94;
+    --color-border: #282623;
+    --color-surface: #131210;
+    --color-white: #1C1A17;
+    --color-primary-light: #1F403B;
+    --color-primary-mid: #29554F;
+    --color-accent-light: #3A2413;
+    --color-amber: #F6E05E;
+    --color-amber-light: #2A2008;
+    --color-red: #FC8181;
+    --color-red-light: #2D1515;
+    --color-green: #68D391;
+    --color-green-light: #0F2A1D;
+    --color-skeleton: #2A2826;
+    --color-skeleton-shimmer: #343230;
+  }
+
+  /* ── Theme transition (applied momentarily during toggle) ── */
+  html.theme-transition,
+  html.theme-transition *,
+  html.theme-transition *::before,
+  html.theme-transition *::after {
+    transition: background-color 0.3s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html.theme-transition,
+    html.theme-transition *,
+    html.theme-transition *::before,
+    html.theme-transition *::after {
+      transition: none !important;
+    }
   }
 
   * {
@@ -1314,6 +1353,15 @@ html { scroll-behavior: smooth; }
     background: rgba(255, 255, 255, 0.97);
   }
 }
+.dark .premium-bottom-nav {
+  background: rgba(19, 18, 16, 0.82);
+  border-top-color: rgba(255, 255, 255, 0.06);
+}
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .dark .premium-bottom-nav {
+    background: rgba(19, 18, 16, 0.97);
+  }
+}
 
 .premium-bottom-nav__track {
   position: absolute;
@@ -1457,6 +1505,13 @@ html { scroll-behavior: smooth; }
     background: rgba(255, 255, 255, 0.97);
     border-bottom: 0.5px solid rgba(0, 0, 0, 0.08);
   }
+}
+.dark .premium-header {
+  background: rgba(19, 18, 16, 0.92);
+}
+.dark .premium-header--scrolled {
+  background: rgba(19, 18, 16, 0.82);
+  box-shadow: 0 0.5px 0 rgba(255, 255, 255, 0.06);
 }
 
 .premium-header__progress-track {
