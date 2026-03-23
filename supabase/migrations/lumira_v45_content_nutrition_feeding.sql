@@ -1702,4 +1702,638 @@ Severe (anaphylaxis): difficulty breathing, widespread hives, pale or floppy, lo
 ## High-risk babies
 
 Babies with severe eczema or an existing food allergy are at higher risk and should be discussed with their GP or referred to a paediatric allergist before introducing high-risk allergens.',
-'feeding', 6, ARRAY['allergens', 'peanut', 'egg-allergy', 'early-introduction', 'LEAP-trial', 'infant', 'solids', 'allergy-prevention'], true, true, 'Lumira Health Team');
+'feeding', 6, ARRAY['allergens', 'peanut', 'egg-allergy', 'early-introduction', 'LEAP-trial', 'infant', 'solids', 'allergy-prevention'], true, true, 'Lumira Health Team'),
+
+-- Article 34: Iron-rich first foods
+('infant', 17,
+'Iron-Rich First Foods for Babies',
+'Iron is the most critical nutrient to prioritise when starting solids — here''s how to make every meal count.',
+'## Why iron is the top priority at six months
+
+A baby is born with a store of iron accumulated during pregnancy. By around six months, these stores begin to deplete — and breast milk, while excellent in most respects, contains very little iron. Formula is iron-fortified, which is why breastfed babies in particular need iron-rich foods introduced promptly at six months.
+
+Iron deficiency in infancy is associated with developmental delays, impaired cognitive function, and poor immune response. The good news is that iron-rich foods are widely available and can be introduced from the very first days of weaning.
+
+## Haem iron sources (most easily absorbed)
+
+Haem iron comes from animal sources and is absorbed at a rate of approximately 20–30 percent — far higher than plant-based iron.
+
+- **Red meat**: minced beef, lamb, and pork are excellent. Cook well and either blend into a smooth purée or serve as soft, manageable pieces for baby-led weaning.
+- **Chicken and turkey**: dark meat (thigh) contains more iron than breast meat. Blend with vegetables or shred finely.
+- **Fish**: sardines and salmon contain moderate haem iron alongside valuable omega-3s.
+- **Liver**: extremely high in iron (and many other nutrients). Suitable from six months in small amounts — once or twice a week maximum. Blend into smooth purée. Avoid in excess due to very high vitamin A content.
+
+## Non-haem iron sources (plant-based)
+
+Non-haem iron, from plant foods, is absorbed at around 5–12 percent — less efficient, but can be significantly boosted by combining with vitamin C.
+
+- **Fortified baby cereals and porridge** (look for iron-fortified on the label)
+- **Lentils, chickpeas, and beans** (red lentil dal, hummus, mashed chickpeas)
+- **Tofu** (soft tofu blended or cut into small pieces for finger feeding)
+- **Dark leafy greens**: spinach, kale (puréed or finely chopped into food)
+- **Dried apricots** (purée for younger babies; chopped softly for older infants)
+- **Fortified bread and pasta**
+
+## The vitamin C trick
+
+Pairing plant-based iron with a vitamin C source at the same meal increases non-haem iron absorption by up to three times. Simple combinations:
+
+- Lentil dal + a spoonful of tomato purée
+- Spinach purée + mashed sweet potato (which contains some vitamin C)
+- Fortified porridge + stewed strawberries or mashed kiwi
+- Bean stew + squeeze of lemon or orange juice in cooking
+
+## What reduces iron absorption
+
+- **Cow''s milk**: do not give cow''s milk as a drink before 12 months and avoid large amounts at mealtimes as it competes with iron absorption. Small amounts of yoghurt and cheese are fine.
+- **Tea**: never give tea to babies or toddlers — tannins in tea dramatically inhibit iron absorption.
+- **Calcium-rich foods**: a very large amount of calcium at the same meal (e.g., a large serving of cheese alongside an iron-rich food) can mildly reduce absorption. Do not stress about normal meal combinations — this only becomes relevant with very large portions.
+
+## Practical daily approach
+
+Aim to include at least one iron-rich food at every meal from six months. A baby eating two to three times per day should have iron-rich food at most of those meals.',
+'nutrition', 5, ARRAY['iron', 'first-foods', 'infant', 'solids', 'weaning', 'haem-iron', 'vitamin-C', 'deficiency-prevention'], true, true, 'Lumira Health Team'),
+
+-- Article 35: Texture progression
+('infant', 17,
+'Texture Progression: From Purée to Lumpy to Finger Foods',
+'Moving through food textures is a developmental journey — here''s how to progress at the right pace.',
+'## Why texture matters
+
+Texture progression is not just about digestion — it is about developing the oral motor skills that a child will use for speech, chewing, and eating for life. Babies who remain on smooth purées for too long may show reluctance to accept lumpy or textured foods later, a pattern that can contribute to fussy eating in toddlerhood.
+
+The goal is to move through textures steadily, following the baby''s developmental readiness, and to introduce finger foods alongside spoon-feeding from early in the weaning journey.
+
+## Stage 1: Smooth purées (around 6 months)
+
+At six months, the first foods are typically smooth — either completely smooth for spoon-fed babies, or very soft, easily squishable pieces for baby-led weaning. Examples:
+- Single-ingredient vegetable purées (butternut squash, sweet potato, carrot)
+- Fruit purées (apple, pear, mango)
+- Baby rice mixed with breast milk or formula
+- Smooth lentil purée
+
+## Stage 2: Mashed and lumpier textures (around 7 months)
+
+By seven months, most babies are ready for foods that have some texture — soft lumps that dissolve or break down easily with gum pressure. This is the critical window for introducing texture.
+- Mashed rather than blended vegetables (some soft lumps remaining)
+- Soft mashed fruit with small pieces
+- Porridge with soft cooked pieces of fruit stirred through
+- Well-cooked pasta shapes (very soft)
+- Mashed fish (ensuring bones removed)
+
+## Stage 3: Minced and chopped foods (around 8–9 months)
+
+The baby is developing more refined jaw and tongue movement. Foods can now be:
+- Finely minced meat (cooked, moist, not dry)
+- Soft, small pasta pieces
+- Small pieces of soft cooked vegetables
+- Soft finger foods of increasing variety
+
+## Stage 4: Chopped family foods (around 10–12 months)
+
+By 10–12 months, most babies can manage chopped versions of what the family is eating, provided food is:
+- Soft enough to squish between finger and thumb
+- Not a choking hazard (no whole grapes, whole nuts, large chunks of hard raw vegetable)
+- Low in salt and added sugar
+
+## Finger foods alongside spoon-feeding
+
+Current guidance recommends introducing soft finger foods alongside spoon-feeding from around six months, even if starting with purées. Suitable early finger foods:
+- Steamed broccoli florets (soft enough to squish)
+- Soft cooked carrot sticks
+- Banana pieces (broken, not whole)
+- Toast strips with a thin scraping of nut butter or avocado
+- Ripe pear or peach pieces
+
+## Signs a baby is managing textures well
+
+- Moves food to the side of the mouth with the tongue
+- Chews (gumming) up and down rather than just swallowing
+- Gagging less frequently as experience builds
+- Showing interest in picking up food independently
+
+## When to seek advice
+
+Speak to a health visitor or paediatric dietitian if your baby consistently refuses textures beyond smooth, gags and vomits with all textured food after several weeks of trying, or shows signs of distress around mealtimes.',
+'feeding', 5, ARRAY['texture-progression', 'infant', 'solids', 'purees', 'finger-foods', 'BLW', 'oral-development', 'weaning'], true, true, 'Lumira Health Team'),
+
+-- Article 36: Feeding schedule at 6 months
+('infant', 26,
+'The Feeding Schedule at 6 Months: Balancing Meals and Milk',
+'At six months, solids begin — but milk remains the main source of nutrition. Here''s how to structure the day.',
+'## Milk first, food second (at first)
+
+When starting solids at around six months, the priority remains milk — breast milk or formula provides the bulk of nutrition and calories. Solids at this stage are about exploration, learning, and beginning to build eating skills. The phrase "food before one is just for fun" oversimplifies things slightly (iron-rich foods from six months genuinely matter) but captures the principle: don''t reduce milk too soon.
+
+A baby at six months still needs approximately 500–600ml of formula per day (or equivalent breastfeeding frequency — roughly 4–5 feeds) alongside whatever they eat at mealtimes.
+
+## A sample daily schedule at 6 months
+
+**Morning:**
+- Milk feed on waking
+- 30–60 minutes later: solid breakfast (porridge, fruit purée, soft finger food)
+
+**Midday:**
+- Solid lunch (vegetable purée, lentils, soft finger foods)
+- Milk feed after lunch or before nap
+
+**Afternoon:**
+- Milk feed (breastfed babies may feed more frequently)
+
+**Evening:**
+- Solid dinner (introducing savoury flavours, protein and vegetables)
+- Bedtime milk feed
+
+## What changes over the coming months
+
+As the baby approaches 7–8 months:
+- Portion sizes increase gradually
+- Texture advances from smooth to mashed to chopped
+- A third meal (breakfast) becomes more established
+- Some milk feeds reduce naturally as food intake grows
+
+By 9–10 months, most babies are eating three meals and some snacks, and total formula consumption may reduce to around 400ml per day (breastfed babies self-regulate).
+
+## Offer, don''t force
+
+At every meal, offer food and allow the baby to decide how much to eat. Appetite varies day to day. A baby who eats very little at one meal may eat more at the next. Avoid spoonfuls "for Grandma" or racing through portions — this disrupts the baby''s natural satiety cues, which are the foundation of a healthy relationship with food.
+
+## Common questions
+
+**What if my baby isn''t interested in solids at 6 months?**
+Continue offering once a day consistently. Some babies take several weeks to engage meaningfully. As long as milk feeding is going well, there is no cause for concern.
+
+**Can I combine breast and formula feeding at this stage?**
+Yes. Many parents combine both. Breast milk and formula are interchangeable in terms of the feeding schedule approach above.
+
+**Should I offer water?**
+Yes — sips of water in an open cup at mealtimes from six months. This does not replace milk, just helps with hydration and cup-drinking skill development.',
+'feeding', 4, ARRAY['6-months', 'feeding-schedule', 'infant', 'solids', 'milk-feeds', 'weaning', 'routine', 'first-foods'], true, true, 'Lumira Health Team'),
+
+-- Article 37: Finger foods at 7-8 months
+('infant', 26,
+'Finger Foods at 7–8 Months: Ideas and Safety',
+'Finger foods develop independence, hand-eye coordination, and chewing skills — here''s what to offer and how to keep it safe.',
+'## Why finger foods matter
+
+Offering finger foods from early in the weaning journey — even alongside spoon-feeding — develops critical skills: hand-eye coordination, the pincer grip (thumb and forefinger picking up small pieces), chewing movement, and oral exploration. Babies who experience a range of finger foods early tend to have broader food acceptance later.
+
+At 7–8 months, most babies can manage a good variety of soft finger foods, even those who started weaning primarily on purées.
+
+## Safety principles
+
+Before listing ideas, the core safety rules:
+
+- **Squish test**: any food offered as a finger food should squish easily between your thumb and forefinger. If you can''t squish it, it''s too hard.
+- **Shape matters**: cylindrical shapes (whole grapes, whole blueberries, chunks of sausage) pose higher choking risk. Cut grapes and blueberries in half or quarters; sausage into thin strips rather than rounds.
+- **No whole nuts**: never offer whole nuts to children under five.
+- **Stay present**: always stay with baby during eating. Never leave a baby to eat unattended.
+- **Seated upright**: always feed in a high chair or supported seat, never lying down or in a car seat.
+
+## Finger food ideas by food group
+
+**Carbohydrates:**
+- Toast strips (with a thin scraping of butter, nut butter, or avocado)
+- Soft cooked pasta shapes (fusilli or penne work well — they''re easy to grip)
+- Rice cakes (low-salt)
+- Soft pitta strips
+
+**Vegetables:**
+- Steamed broccoli florets (stalk end is the easiest to grip)
+- Soft cooked carrot sticks (steamed until completely soft)
+- Roasted courgette chunks
+- Soft cooked green beans
+- Cucumber strips (remove seeds for younger babies)
+
+**Fruit:**
+- Ripe banana pieces
+- Ripe mango chunks
+- Soft pear or peach pieces (ripe or lightly poached)
+- Halved or quartered strawberries
+- Kiwi pieces (peeled)
+
+**Protein:**
+- Strips of soft omelette
+- Flakes of well-cooked fish (salmon, cod — pinbone carefully removed)
+- Soft pieces of well-cooked chicken (thigh is more tender than breast)
+- Hummus on toast strips
+- Soft tofu pieces
+
+**Dairy:**
+- Soft cheese (cream cheese on toast, or small pieces of mild cheddar — though not a large volume as first food)
+- Full-fat yoghurt (on a spoon or loaded spoon for self-feeding)
+
+## Managing the mess
+
+Finger feeding is inherently messy. A wipe-clean high chair tray, a good bib (silicone bibs with a catch pocket are popular), and a splash mat under the high chair make life easier. The mess is developmentally important — babies explore food with their hands before putting it in their mouths, and this tactile exploration is part of learning to accept different foods.',
+'feeding', 5, ARRAY['finger-foods', '7-months', '8-months', 'infant', 'BLW', 'choking-prevention', 'weaning', 'independence'], true, true, 'Lumira Health Team'),
+
+-- Article 38: Gagging vs choking
+('infant', 26,
+'Gagging vs Choking: Knowing the Difference',
+'These two responses look alarming but are very different — understanding which is which could be lifesaving.',
+'## The gag reflex is protective
+
+Gagging is a normal, healthy reflex that protects babies from choking. A baby''s gag reflex is positioned much further forward in the mouth than an adult''s — roughly at the middle of the tongue — which means it triggers relatively easily when a piece of food moves too far back before the baby is ready to swallow it.
+
+When a baby gags, they may:
+- Make retching or coughing sounds
+- Go red in the face
+- Push food forward with their tongue
+- Even vomit briefly
+
+This is the system working correctly. The gag reflex moves the food forward so the baby can re-chew or spit it out.
+
+## Gagging: what to do
+
+**Do nothing.** Stay calm, maintain eye contact if possible, and let the baby manage it. Intervening — putting fingers in the baby''s mouth, picking them up, patting their back — can interfere with the reflex and potentially increase choking risk. Babies are remarkably capable of managing a gag safely.
+
+Frequency of gagging decreases significantly as babies gain oral experience. Most babies gag much less by 8–9 months than they did at 6 months.
+
+## Choking: recognising the signs
+
+Choking occurs when an object partially or completely obstructs the airway. Unlike gagging, choking is silent or near-silent — because the airway is blocked, little or no sound can be made.
+
+Signs of choking:
+- Silence or very weak sounds (no normal crying or coughing sounds)
+- Baby''s face may be going blue or pale, particularly around the lips
+- Obvious distress and panic
+- No effective coughing or gagging sounds
+
+## Choking: what to do immediately
+
+1. **Call for help** — shout for someone to call 999 if you are not alone
+2. **Back blows**: lay the baby face-down along your forearm, supporting the head lower than the body. Give up to 5 firm back blows between the shoulder blades with the heel of your hand.
+3. **Check the mouth**: if the obstruction is visible and easily removable, remove it. Never do a blind finger sweep.
+4. **Chest thrusts**: if back blows do not clear the obstruction, turn baby face-up and give up to 5 chest thrusts (two fingers to the centre of the chest, just below the nipple line).
+5. **Repeat** and call 999 immediately if not resolved.
+
+All parents and caregivers of young children are strongly encouraged to take a paediatric first aid course before starting solids.
+
+## Prevention
+
+- Always stay present during meals
+- Use the squish test for all finger foods
+- Avoid round, firm foods: whole grapes, whole blueberries, chunks of hard raw apple, whole cherry tomatoes, round coins of sausage
+- Seat baby upright in a supportive high chair
+- Never feed a baby while they are lying down or reclined',
+'feeding', 5, ARRAY['choking', 'gagging', 'infant-safety', 'first-aid', 'BLW', 'finger-foods', 'weaning', 'gag-reflex'], true, true, 'Lumira Health Team'),
+
+-- Article 39: Introducing water
+('infant', 26,
+'Introducing Water to Babies: When and How Much',
+'Babies under six months need no water — after that, small amounts at mealtimes support healthy habits.',
+'## Under six months: water is unnecessary and potentially harmful
+
+Breast milk and formula are both primarily water — they fully meet all fluid needs for babies under six months. Giving extra water to young babies can:
+- Displace milk feeds, reducing calorie and nutrient intake
+- In larger quantities, cause hyponatraemia (low blood sodium) — a dangerous condition
+
+Do not offer water to babies under six months, even in hot weather. If you are concerned your baby is dehydrated (fewer wet nappies than usual), speak to your midwife or health visitor.
+
+## From six months: sips with meals
+
+When solids are introduced at around six months, water can be offered at mealtimes in a small open cup or a free-flow sippy cup. Start with:
+- A few sips at each mealtime
+- An open cup (a small cup without a valve) is recommended over a spout cup, as it better supports oral development
+
+## How much water for babies 6–12 months
+
+There is no precise daily target, but as a guide:
+- 6–9 months: a few sips at mealtimes, perhaps 60–120ml across the day
+- 9–12 months: up to around 120–180ml per day is typical alongside milk feeds
+
+Milk — breast milk or formula — remains the primary drink and main fluid source throughout the first year. Water is supplementary.
+
+## Choosing the right cup
+
+Open cups (small, lip cups without lids) are the gold standard — they encourage sipping rather than suckling and support jaw and tongue development. They are messy at first but most babies manage sips from an open cup by 6–7 months with support.
+
+Free-flow cups (sippy cups without a valve) are the next best option — liquid flows freely when tilted without requiring suction. Avoid 360-degree cups and non-spill valved cups for everyday use as they require a sucking action similar to bottle feeding.
+
+## From 12 months
+
+After 12 months, water and cow''s milk are the recommended drinks. Fruit juice should be avoided (high sugar content, poor nutritional value, damaging to teeth). Squash, flavoured milk drinks, and fizzy drinks are not appropriate for toddlers.
+
+## Signs your baby may need more fluid
+
+- Fewer wet nappies than usual (less than 6 in 24 hours)
+- Dark yellow urine (should be pale straw coloured)
+- Dry mouth or lips
+- Lethargy
+
+These can indicate dehydration — always contact your GP if concerned, particularly if your baby is also unwell.',
+'nutrition', 4, ARRAY['water', 'hydration', 'infant', 'cups', 'open-cup', 'solids', 'weaning', 'drinks'], true, true, 'Lumira Health Team'),
+
+-- Article 40: Common food allergies in babies
+('infant', 26,
+'Common Food Allergies in Babies: Signs and Management',
+'Food allergies affect around 5–8% of children — knowing the signs enables fast, appropriate action.',
+'## How common are food allergies in children?
+
+Food allergy in childhood is more common than often appreciated — affecting an estimated 5–8 percent of children in the UK. The good news is that many childhood food allergies (particularly egg and milk) are outgrown during the school years, though peanut, tree nut, and shellfish allergies tend to persist into adulthood.
+
+## The most common food allergens in children
+
+1. **Cow''s milk protein** (CMPA) — the most common food allergy in infants
+2. **Egg** — particularly egg white
+3. **Peanut**
+4. **Tree nuts** (walnut, cashew, almond)
+5. **Wheat and gluten** (note: coeliac disease is an autoimmune condition, not an allergy)
+6. **Soy**
+7. **Fish and shellfish**
+8. **Sesame**
+
+## Types of allergic reaction
+
+**IgE-mediated (immediate):** Symptoms appear within minutes to two hours of exposure.
+- Hives (urticaria) — red, itchy raised welts on the skin
+- Swelling of the face, lips, tongue, or throat
+- Vomiting
+- Runny nose, watery eyes
+- In severe cases: anaphylaxis — breathing difficulty, collapse, loss of consciousness
+
+**Non-IgE-mediated (delayed):** Symptoms appear hours to days after exposure — harder to identify.
+- Eczema flare-up
+- Vomiting, diarrhoea, or reflux (persistent)
+- Blood or mucus in stools
+- Poor weight gain
+- General irritability after feeds
+
+Cow''s milk protein allergy in infants often presents as a non-IgE reaction — eczema, reflux, and blood in stool — rather than immediate hives.
+
+## What to do if you suspect a reaction
+
+**Mild reaction** (hives around the mouth, mild facial flushing): stop offering the food, observe, note what was eaten and when. Contact your GP.
+
+**Severe reaction / anaphylaxis**: call 999 immediately. If your child has a known allergy and has been prescribed an adrenaline auto-injector (EpiPen / Jext), use it.
+
+## Getting a diagnosis
+
+See your GP if you suspect a food allergy. They may refer to a paediatric allergist who can perform:
+- Skin prick testing
+- Specific IgE blood tests
+- Supervised oral food challenges
+
+Do not attempt to diagnose or manage food allergies by unilaterally excluding foods long-term — multiple exclusions without dietetic support can lead to nutritional deficiencies.
+
+## CMPA in formula-fed babies
+
+If cow''s milk protein allergy is suspected in a formula-fed baby, your GP can prescribe extensively hydrolysed formula or amino acid-based formula. Do not switch to soy formula without medical advice — around 30–40 percent of babies with CMPA also react to soy.',
+'feeding', 6, ARRAY['food-allergy', 'CMPA', 'egg-allergy', 'peanut-allergy', 'infant', 'anaphylaxis', 'IgE', 'weaning', 'allergens'], true, true, 'Lumira Health Team'),
+
+-- Article 41: 12-month feeding transition
+('infant', 26,
+'Feeding at 12 Months: Transitioning to Family Foods',
+'At 12 months, babies move toward eating what the family eats — here''s how to make that transition confidently.',
+'## What changes at 12 months
+
+Around 12 months, several feeding changes happen simultaneously:
+- Whole cow''s milk can be introduced as a main drink (replacing formula if using)
+- Breastfeeding can continue for as long as mother and baby wish
+- Formula is no longer needed (though some families continue briefly)
+- The diet increasingly mirrors what the rest of the family is eating
+- Three meals plus two snacks is now the typical pattern
+
+This is a milestone worth marking — the baby is now a toddler, and the feeding approach shifts accordingly.
+
+## Moving to family foods
+
+At 12 months, there are very few foods that need to be prepared differently for baby. The main considerations:
+- **Salt**: still limit added salt. The family dish can be portioned out for the toddler before seasoning is added.
+- **Sugar**: limit added sugars, honey (fine now — the botulism risk that applies under 12 months resolves at one year), and sweet drinks.
+- **Texture**: most 12-month-olds can manage well-chopped soft pieces of most foods. Whole nuts remain unsafe until age 5 due to choking risk.
+- **Choking hazards**: whole grapes, whole cherry tomatoes, round sausage coins — continue to cut these.
+
+## How much milk at 12 months?
+
+Around 300–400ml of whole cow''s milk per day is appropriate from 12 months. This provides calcium and fat without displacing food intake. Offering milk mainly at breakfast and bedtime, with water at mealtimes, is a common approach that works well.
+
+Semi-skimmed milk can be introduced from age 2 if the child is eating well and growing well. Skimmed milk is not recommended before age 5.
+
+## A typical day of eating at 12 months
+
+**Breakfast**: porridge with mashed fruit, or scrambled eggs on toast, or yoghurt with chopped fruit + milk to drink
+
+**Morning snack**: rice cake with cream cheese, soft fruit pieces, or oatcakes
+
+**Lunch**: soft pasta with vegetable and meat sauce; or lentil dal with soft naan; or a sandwich with soft fillings + chopped vegetables
+
+**Afternoon snack**: banana, oatcake, small pot of yoghurt
+
+**Dinner**: portion of the family meal (fish pie, chicken casserole, vegetable curry) with soft vegetables
+
+**Drinks throughout**: water, milk at breakfast and bedtime
+
+## When to worry
+
+Speak to your health visitor or GP if your 12-month-old:
+- Is refusing all solid foods and relying entirely on milk
+- Has not progressed to any finger foods
+- Has significantly dropped weight or is not growing on the expected centile
+- Consistently gags and vomits on all textured foods
+
+A paediatric dietitian referral can be very helpful for persistent feeding difficulties.',
+'feeding', 5, ARRAY['12-months', 'family-foods', 'toddler-transition', 'cow-milk', 'infant', 'weaning', 'feeding-schedule', 'milestone'], true, true, 'Lumira Health Team'),
+
+-- Article 42: Toddler portion sizes
+('toddler', 18,
+'Toddler Portion Sizes: What a Serving Really Looks Like',
+'Toddler appetite is wildly variable and portion sizes are much smaller than parents expect — here''s what''s actually normal.',
+'## The toddler appetite paradox
+
+Many parents of toddlers are convinced their child doesn''t eat enough. Often, this worry is based on comparing toddler portions to adult expectations. The reality is that a healthy toddler''s portion is roughly one quarter of an adult portion — and toddler appetite fluctuates dramatically day to day, meal to meal.
+
+Understanding what a normal toddler serving actually looks like is one of the most reassuring pieces of information for parents.
+
+## The rule of thumb for portions
+
+A widely used guide: **one tablespoon of each food per year of age**. So a 1-year-old needs roughly one tablespoon of each food group per meal; a 2-year-old, two tablespoons; and so on. This is a starting point, not a strict rule.
+
+## Realistic portion examples by food group
+
+**Starchy foods (bread, rice, pasta, potato):**
+- 1-year-old: 1–2 tablespoons of cooked pasta or rice; half a slice of bread
+- 2-year-old: 2–3 tablespoons cooked pasta; half to one slice of bread
+- 3-year-old: 3–4 tablespoons cooked pasta; one slice of bread
+
+**Vegetables:**
+- 2 to 3 tablespoons of cooked or raw vegetables at each meal
+- Aim for 5 A Day spread across the day — but any vegetables offered is good
+
+**Fruit:**
+- A few pieces of chopped fruit, or half a banana, or a small handful of berries
+
+**Protein (meat, fish, eggs, beans):**
+- 1-year-old: 1–2 tablespoons minced meat, or one small egg, or 2 tablespoons lentils
+- 2-year-old: 2–3 tablespoons, or one egg, or 3 tablespoons lentils
+
+**Dairy:**
+- 300–350ml of whole milk per day as a drink (not more — displaces food)
+- Equivalent dairy from yoghurt and cheese (roughly 2 x 125g yoghurts, or 30g cheese per day)
+
+## Why toddler appetite varies so much
+
+- **Growth rate slows dramatically after 12 months**: the rapid growth of infancy tapers. A toddler simply does not need as many calories per kilogram as they did at 3 months.
+- **Developmental distraction**: toddlers are more interested in the world than in eating. Food is just one of many stimuli competing for attention.
+- **Neophobia peaks at 18–24 months**: the biological fear of new foods is at its height in this period.
+
+## What consistent refusal of all food groups may mean
+
+If a toddler is consistently eating very little across all food groups, losing weight, or extremely distressed around mealtimes, speak to your health visitor or GP. Most toddlers who eat small amounts but eat a range of foods and are growing and energetic are fine.',
+'nutrition', 5, ARRAY['toddler', 'portions', 'appetite', 'picky-eating', 'growth', 'serving-size', 'normal-eating', 'feeding'], true, true, 'Lumira Health Team'),
+
+-- Article 43: Picky eaters
+('toddler', 24,
+'Dealing with Picky Eaters: Evidence-Based Strategies',
+'Food refusal in toddlers is developmentally normal — here''s what actually helps and what tends to backfire.',
+'## Neophobia: the science behind fussy eating
+
+Food neophobia — the fear of or reluctance to try new foods — is a normal and nearly universal developmental phase in toddlers, peaking between 18 months and 3 years. It is thought to have an evolutionary basis: as toddlers began to explore the world independently in our ancestral environment, caution around unknown foods was protective.
+
+Knowing that fussy eating is biologically programmed, rather than a personal failing or parental mistake, is the foundation of responding effectively.
+
+## What the research says works
+
+**1. Repeated exposure without pressure**
+The single most evidence-backed strategy. Studies show it takes an average of 8–15 exposures to a new food before a toddler accepts it. Exposure does not mean eating — even seeing a food on the plate, touching it, or smelling it counts. Continue offering disliked foods regularly without pressure to eat them.
+
+**2. Division of responsibility (Ellyn Satter model)**
+Parents decide what food is offered, when it is offered, and where eating happens. The child decides whether to eat and how much. This model, well-supported by research, protects the child''s natural satiety cues and reduces mealtime conflict.
+
+**3. Family meals**
+Eating together as a family is one of the most consistent predictors of broader food acceptance. Children learn to eat what they see others eating — social modelling is powerful.
+
+**4. Serving the disliked food alongside accepted foods**
+Never serve only the disliked food, but include it alongside familiar favourites. This reduces anxiety and makes the unfamiliar less threatening.
+
+**5. Food play outside of mealtimes**
+Cooking together, visiting a farmers'' market, growing vegetables, playing "chefs" — any positive non-pressure interaction with food expands a toddler''s relationship with it without the stakes of a mealtime.
+
+## What tends to backfire
+
+- **Pressuring, bribing, or rewarding with food**: "eat three more bites and you can have pudding" consistently backfires in research — it increases dislike of the pressured food and overvalues the reward food.
+- **Short-order cooking**: making a separate meal for the toddler consistently every night removes the exposure to family foods they need.
+- **Hiding vegetables**: blending vegetables into sauces occasionally is fine, but if it replaces ever offering vegetables in recognisable form, the child never learns to accept them.
+- **Making mealtimes a battle**: high stress around food correlates with more, not less, food refusal.
+
+## When fussy eating may need professional support
+
+Some children have feeding difficulties that go beyond normal neophobia — sensory processing issues, oral motor difficulties, or anxiety that makes eating genuinely distressing. Signs to seek help:
+- Accepted fewer than 20 foods total and list is shrinking
+- Gagging or vomiting on the texture of most foods beyond infancy
+- Extreme distress (panic, crying) around all mealtimes
+- No progression in food acceptance over many months
+
+A paediatric dietitian or feeding therapist (speech and language therapist with feeding specialism) can help.',
+'nutrition', 6, ARRAY['picky-eating', 'neophobia', 'toddler', 'fussy-eating', 'division-of-responsibility', 'mealtime', 'food-acceptance', 'strategies'], true, true, 'Lumira Health Team'),
+
+-- Article 44: Milk after 12 months
+('toddler', 12,
+'Milk After 12 Months: Cow''s Milk, Plant Milks, and the Right Amounts',
+'Milk remains important through toddlerhood — but the type and amount matters more than many parents realise.',
+'## The transition from formula or breast milk
+
+At 12 months, the transition to whole cow''s milk as a main drink is recommended for formula-fed babies. Breastfeeding can and does continue beyond 12 months for as long as mother and baby wish — the WHO recommends continued breastfeeding alongside solid foods until age 2 and beyond.
+
+Formula is not required after 12 months — full cow''s milk provides adequate nutrition for a toddler eating a varied diet. "Growing up milks" (stage 2, 3, and 4 formulas) are not medically necessary and are not recommended by the NHS or SACN.
+
+## How much cow''s milk?
+
+The recommended amount of whole cow''s milk for toddlers aged 1–3 years is **300–400ml per day** (around 1 to 1.5 cups). This provides:
+- Adequate calcium for bone development
+- Protein and fat for growth
+- Vitamin B12 and iodine
+
+More than 400–500ml per day is associated with:
+- Displacement of solid food intake (milk is filling)
+- Increased risk of iron deficiency — cow''s milk is low in iron and may impair iron absorption
+- Tooth decay if offered in a bottle at bedtime
+
+## Whole milk until age 2
+
+Semi-skimmed milk can be introduced from age 2 if the toddler is eating well. Skimmed or 1% milk is not appropriate before age 5 — the fat content of whole milk is needed for brain development and calorie supply in younger toddlers.
+
+## Plant-based milks
+
+Unsweetened, calcium-fortified soy milk is the only plant milk generally considered a suitable substitute for cow''s milk in toddlers, provided the toddler is eating a varied diet and getting nutrients from food. It has a comparable protein content to cow''s milk.
+
+Oat milk, almond milk, coconut milk, and rice milk are **not suitable as main drinks** for toddlers under 5:
+- They are low in protein
+- Rice milk contains levels of inorganic arsenic that make it unsuitable for young children
+- Most are nutritionally inadequate as a milk replacement without careful dietary compensation
+
+If a plant-based diet is followed, seek advice from a paediatric dietitian to ensure nutritional adequacy.
+
+## Cow''s milk protein allergy (CMPA) after 12 months
+
+Children with confirmed CMPA will continue to need dairy-free alternatives. Calcium-fortified soy milk or a prescribed formula equivalent may be recommended. A dietitian should be involved in managing dairy-free toddler diets.
+
+## Vitamin D supplementation
+
+Toddlers aged 1–4 should receive a daily supplement containing 10 micrograms of vitamin D, regardless of milk intake. This is a universal recommendation in the UK — sunlight exposure is insufficient year-round at UK latitudes.',
+'nutrition', 5, ARRAY['cow-milk', 'plant-milk', 'toddler', '12-months', 'calcium', 'iron', 'CMPA', 'dairy-free', 'milk-amounts'], true, true, 'Lumira Health Team'),
+
+-- Article 45: Toddler iron deficiency
+('toddler', 18,
+'Toddler Iron Deficiency: Signs, Causes, and Prevention',
+'Iron deficiency is the most common nutritional deficiency in toddlers worldwide — and largely preventable.',
+'## How common is it?
+
+Iron deficiency is the most prevalent nutritional deficiency globally, and toddlers aged 12–24 months are among the highest-risk groups. In the UK, studies have found that iron deficiency (not necessarily anaemia, which is a more severe stage) affects a significant proportion of toddlers — estimates range from 12 to 28 percent depending on the population studied.
+
+## Why toddlers are vulnerable
+
+Several factors converge to make iron deficiency particularly common in this age group:
+
+**High demand**: toddlers are growing rapidly and need proportionally more iron per kilogram of body weight than adults.
+
+**Dietary transition**: moving away from iron-fortified formula or breast milk (with its highly bioavailable iron) to cow''s milk and table foods, which may be lower in iron if not carefully chosen.
+
+**Excess cow''s milk**: drinking more than 400–500ml of cow''s milk per day is strongly associated with iron deficiency. Cow''s milk is low in iron and contains proteins that inhibit iron absorption.
+
+**Fussy eating**: toddlers who refuse meat, fish, and legumes — common iron-rich foods — are at higher risk.
+
+**Previous deficiency**: babies who were iron-deficient in infancy carry that deficit into toddlerhood.
+
+## Signs and symptoms
+
+Early iron deficiency may have no obvious symptoms — which is why it is often missed. Signs to watch for:
+- Unusual pallor (pale skin, pale inner eyelids and lips)
+- Tiredness and low energy — a toddler who seems unusually lethargic
+- Reduced appetite
+- Frequent infections (iron is needed for immune function)
+- Developmental slowing — reduced engagement, less babbling or language progress
+- Pica — eating non-food items (soil, paint, paper) is a classic sign of iron deficiency
+
+## Iron deficiency vs iron deficiency anaemia
+
+Iron deficiency exists on a spectrum. Iron stores can be depleted (affecting function) before haemoglobin drops low enough to be classified as anaemia on a blood test. Both stages matter — sub-anaemic iron deficiency still impairs cognitive development and immunity.
+
+A simple blood test (full blood count + ferritin level) can detect both.
+
+## Prevention: the diet approach
+
+**Include iron-rich foods daily:**
+- Red meat (beef, lamb, pork): 2–3 times per week
+- Chicken and turkey (dark meat)
+- Fish: 2 portions per week (one oily)
+- Eggs
+- Lentils, chickpeas, beans
+- Iron-fortified cereals and bread
+- Dark leafy greens (spinach in pasta sauce, kale in soup)
+
+**Pair plant iron with vitamin C:**
+- Lentil soup with tomato
+- Fortified cereal with kiwi or strawberry
+- Spinach pasta with squeeze of lemon
+
+**Limit cow''s milk to 300–400ml per day.** This single step is one of the most effective preventive measures.
+
+**Avoid tea.** Tannins in tea dramatically impair iron absorption. Tea is not an appropriate drink for children.
+
+## When to see a GP
+
+If you notice signs of iron deficiency, or your toddler is a very selective eater avoiding iron-rich foods, speak to your GP. A blood test can confirm the picture, and a short course of prescribed iron drops is effective treatment. Do not self-prescribe iron supplements — excess iron can be harmful.',
+'nutrition', 6, ARRAY['iron-deficiency', 'toddler', 'anaemia', 'iron-rich-foods', 'prevention', 'picky-eating', 'cow-milk', 'nutrition', 'pallor'], true, true, 'Lumira Health Team');
+
