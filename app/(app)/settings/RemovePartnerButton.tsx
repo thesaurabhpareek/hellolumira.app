@@ -18,6 +18,7 @@ export default function RemovePartnerButton({ babyId, partnerProfileId }: Props)
   const router = useRouter()
   const [confirming, setConfirming] = useState(false)
   const [removing, setRemoving] = useState(false)
+  const [removeError, setRemoveError] = useState('')
 
   const handleRemove = async () => {
     if (!confirming) {
@@ -26,6 +27,7 @@ export default function RemovePartnerButton({ babyId, partnerProfileId }: Props)
     }
 
     setRemoving(true)
+    setRemoveError('')
     try {
       const res = await fetch('/api/partner/remove', {
         method: 'POST',
@@ -35,11 +37,11 @@ export default function RemovePartnerButton({ babyId, partnerProfileId }: Props)
       if (res.ok) {
         router.refresh()
       } else {
-        console.error('Failed to remove partner')
+        setRemoveError("We couldn't remove partner access right now. Please try again.")
         setConfirming(false)
       }
     } catch {
-      console.error('Failed to remove partner')
+      setRemoveError("We couldn't remove partner access right now. Please try again.")
       setConfirming(false)
     } finally {
       setRemoving(false)
@@ -48,6 +50,12 @@ export default function RemovePartnerButton({ babyId, partnerProfileId }: Props)
 
   if (confirming) {
     return (
+      <div>
+        {removeError && (
+          <p style={{ fontSize: '13px', color: 'var(--color-red)', marginBottom: '8px' }}>
+            {removeError}
+          </p>
+        )}
       <div style={{ display: 'flex', gap: '8px' }}>
         <button
           onClick={handleRemove}
@@ -84,6 +92,7 @@ export default function RemovePartnerButton({ babyId, partnerProfileId }: Props)
         >
           Cancel
         </button>
+      </div>
       </div>
     )
   }

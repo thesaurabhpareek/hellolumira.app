@@ -186,7 +186,7 @@ export default function ContentPage() {
 
       if (fetchError) {
         console.error('[Content] Fetch error:', fetchError)
-        setError("We couldn't load articles right now. Please try again.")
+        setError("We couldn't load articles right now. Check your connection and try again.")
         setArticles([])
       } else {
         const isOwnStage = activeStage === userStage
@@ -435,7 +435,7 @@ export default function ContentPage() {
                 marginBottom: '8px',
               }}
             >
-              Hmm, something went wrong
+              Articles couldn&apos;t load right now
             </p>
             <p
               style={{
@@ -495,7 +495,7 @@ export default function ContentPage() {
                 maxWidth: '260px',
               }}
             >
-              We&apos;re working on new articles for this stage and category — check back soon!
+              New articles are on the way for this stage. In the meantime, try browsing a different category or check back tomorrow.
             </p>
           </div>
         )}

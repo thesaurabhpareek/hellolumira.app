@@ -45,7 +45,7 @@ export default function ConcernFlowPage() {
         const flowModule = await import(`@/lib/concern-flows/${fileName}.json`)
         setFlow(flowModule.default as ConcernFlow)
       } catch {
-        setError("Couldn't load this concern flow.")
+        setError("We couldn't load your concern details. Check your connection and try again.")
         setLoading(false)
         return
       }
@@ -149,7 +149,7 @@ export default function ConcernFlowPage() {
         const data = await attempt()
         router.push(`/concern/${concernId}/summary?session=${data.session_id}`)
       } catch {
-        setError("Couldn't generate summary. Please try again.")
+        setError("The summary isn't ready yet — tap to try again.")
         setSubmitting(false)
       }
     }

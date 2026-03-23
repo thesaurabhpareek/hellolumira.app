@@ -160,7 +160,7 @@ export default function CheckinThread({ profile, baby, existingCheckin, prefill 
       } catch {
         const errorMsg: LumiraMessage = {
           role: 'lumira',
-          content: "Something went wrong on my end — sorry about that. Feel free to try again.",
+          content: "I couldn't process that right now. Your check-in data is saved — try sending again, or come back in a moment.",
           timestamp: new Date().toISOString(),
         }
         setMessages((prev) => [...prev, errorMsg])

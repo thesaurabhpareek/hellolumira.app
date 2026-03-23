@@ -112,7 +112,7 @@ export default function WeekGuideCard({ stage, week_or_month, babyName, recentCh
         setGuide(g)
       }
     } catch {
-      setError("Couldn't load your guide — tap to retry")
+      setError("This week's guide couldn't load. Tap to try again, or check your connection.")
     } finally {
       setLoading(false)
     }
@@ -149,7 +149,7 @@ export default function WeekGuideCard({ stage, week_or_month, babyName, recentCh
     return (
       <div className="lumira-card text-center">
         <p className="text-muted-foreground mb-4">
-          {error || "Your guide isn\u2019t loading right now \u2014 tap to try again"}
+          {error || "This week's guide couldn't load. Tap to try again, or check your connection."}
         </p>
         <button onClick={fetchGuide} className="btn-primary">Try again</button>
       </div>

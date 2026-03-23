@@ -74,22 +74,20 @@ function LoginForm() {
 
     const supabase = createClient()
 
-    // In signup mode, check if account already exists before sending OTP
+    // Always check if account exists — helps personalize messaging
     let accountExists = false
-    if (isSignup) {
-      try {
-        const res = await fetch('/api/auth/check-account', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: email.trim() }),
-        })
-        if (res.ok) {
-          const json = await res.json()
-          accountExists = json.exists === true
-        }
-      } catch {
-        // Fail open — proceed normally if check fails
+    try {
+      const res = await fetch('/api/auth/check-account', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim() }),
+      })
+      if (res.ok) {
+        const json = await res.json()
+        accountExists = json.exists === true
       }
+    } catch {
+      // Fail open — proceed normally if check fails
     }
 
     try {
@@ -126,6 +124,7 @@ function LoginForm() {
           email: email.trim(),
           options: {
             emailRedirectTo: `${window.location.origin}/login/callback`,
+            shouldCreateUser: !accountExists,
           },
         })
         if (err2) throw err2

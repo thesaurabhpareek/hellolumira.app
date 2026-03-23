@@ -114,7 +114,7 @@ export default function QuizPage() {
         setCompleted(false)
       }
     } catch {
-      setError('We couldn\'t load the quiz right now. Please try again.')
+      setError("The quiz isn't loading right now. Check your connection and try again — your progress is saved.")
     } finally {
       setLoading(false)
     }
@@ -342,7 +342,7 @@ export default function QuizPage() {
         {error && !loading && (
           <div style={{ textAlign: 'center', padding: '48px 24px' }}>
             <p style={{ fontSize: '15px', fontWeight: 600, color: 'var(--color-slate)', marginBottom: '8px' }}>
-              Hmm, something went wrong
+              The quiz couldn&apos;t load right now
             </p>
             <p style={{ fontSize: '13px', color: 'var(--color-muted)', marginBottom: '16px' }}>{error}</p>
             <button onClick={fetchNextQuestion} className="btn-primary" style={{ maxWidth: '200px', margin: '0 auto' }}>

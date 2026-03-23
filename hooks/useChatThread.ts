@@ -136,10 +136,10 @@ export function useChatThread(initialMessages: ChatMsg[] = []): UseChatThreadRes
         setConcernCategory(data.concern_category)
       }
     } catch {
-      setError('Lumira is taking a moment. Try again.')
+      setError("I'm having trouble connecting right now. Your conversation is saved — tap to try again.")
       const errorMsg: ChatMsg = {
         role: 'assistant',
-        content: 'Lumira is taking a moment. Please try again.',
+        content: "I'm having trouble connecting right now. Your conversation is saved — tap to try again.",
         timestamp: new Date().toISOString(),
       }
       setMessages(prev => [...prev, errorMsg])

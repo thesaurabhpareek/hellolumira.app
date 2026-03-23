@@ -77,10 +77,10 @@ export default function ProfileCompletionSection({
           router.refresh()
         })
       } else {
-        showToast("Hmm, that didn't save. Please try again.")
+        showToast("Your changes weren't saved. Check your connection and try again.")
       }
     } catch {
-      showToast('Something went wrong — please try again.')
+      showToast("Your changes weren't saved. Check your connection and try again.")
     }
   }
 

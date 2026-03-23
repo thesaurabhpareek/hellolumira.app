@@ -46,7 +46,7 @@ export default function PartnerInviteClient({ babyName, token, babyId }: Props) 
         setState('success')
       } catch (err) {
         setErrorMessage(
-          err instanceof Error ? err.message : 'Something went wrong. Please try again.'
+          err instanceof Error ? err.message : "We couldn't set up partner access right now. Check your connection and try again, or ask your partner to resend the invite."
         )
         setState('error')
       }
