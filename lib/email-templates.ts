@@ -1199,7 +1199,7 @@ export function passkeySuspendedEmail({
   const safeName = escapeHtml(firstName)
   const safeDevice = escapeHtml(deviceHint)
   const safeSupportUrl = supportUrl
-  const safeSettingsUrl = settingsUrl
+  const _safeSettingsUrl = settingsUrl
   const loginUrl = `${APP_URL}/login`
 
   const content = `
