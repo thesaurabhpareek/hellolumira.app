@@ -208,7 +208,7 @@ export default function ChatThreadView({
       {/* Messages area */}
       <div
         ref={messagesAreaRef}
-        className="flex-1 overflow-y-auto overflow-x-hidden p-4"
+        className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden p-4"
         style={{
           overscrollBehavior: 'contain',
           WebkitOverflowScrolling: 'touch',

@@ -46,6 +46,8 @@ export default function AppShell({ children, profile, baby }: Props) {
     return undefined
   }
 
+  const isChatThread = pathname.startsWith('/chat/') && pathname !== '/chat'
+
   return (
     <div className="h-dvh bg-[var(--color-white)] flex flex-col font-sans overflow-hidden">
 
@@ -64,7 +66,7 @@ export default function AppShell({ children, profile, baby }: Props) {
         className="flex-1 flex flex-col overflow-hidden min-h-0"
         style={{ paddingBottom: 'calc(56px + max(0px, env(safe-area-inset-bottom)))' }}
       >
-        <div className="max-w-content mx-auto w-full flex-1 flex flex-col min-h-0 overflow-y-auto overflow-x-hidden [-webkit-overflow-scrolling:touch]">
+        <div className={`max-w-content mx-auto w-full flex-1 flex flex-col min-h-0 ${isChatThread ? 'overflow-hidden' : 'overflow-y-auto overflow-x-hidden [-webkit-overflow-scrolling:touch]'}`}>
           <PageTransition>
             {children}
           </PageTransition>
