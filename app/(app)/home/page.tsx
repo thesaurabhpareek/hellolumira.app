@@ -17,7 +17,6 @@ import DailyQuestionCard from '@/components/app/DailyQuestionCard'
 import QuizCard from '@/components/app/QuizCard'
 import UpcomingMilestonesCard from '@/components/app/UpcomingMilestonesCard'
 import SeedsBalancePill from '@/components/app/SeedsBalancePill'
-import BugReportButton from '@/components/app/BugReportButton'
 import StageHeroCard from '@/components/app/StageHeroCard'
 import StoryStrip from '@/components/app/stories/StoryStrip'
 import { ClipboardIcon, ChatIcon, EditIcon, QuizIcon, CheckIcon } from '@/components/icons'
@@ -568,8 +567,6 @@ export default async function HomePage() {
         </div>
       </div>
 
-      {/* Bug report floating button */}
-      <BugReportButton userEmail={user.email} userName={profile.first_name} />
     </div>
   )
 }

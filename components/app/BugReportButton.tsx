@@ -104,7 +104,8 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
   const [error, setError] = useState('')
 
   // Drag state
-  const [pos, setPos] = useState({ x: 0, y: 0 })
+  const [mounted, setMounted] = useState(false)
+  const [pos, setPos] = useState({ x: -100, y: -100 }) // offscreen until mounted
   const [dragging, setDragging] = useState(false)
   const [opacity, setOpacity] = useState(IDLE_OPACITY)
   const dragRef = useRef({ startX: 0, startY: 0, startPosX: 0, startPosY: 0, moved: false })
@@ -120,6 +121,7 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
       x: vw - BUTTON_SIZE - EDGE_MARGIN,
       y: Math.round(vh * 0.6),
     })
+    setMounted(true)
   }, [])
 
   // Fade to idle after 3s of no interaction
@@ -283,7 +285,7 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
   return (
     <>
       {/* Draggable floating button — Apple AssistiveTouch style */}
-      <button
+      {mounted && <button
         ref={buttonRef}
         aria-label="Send feedback"
         onTouchStart={handleTouchStart}
@@ -330,7 +332,7 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
             style={{ color: 'var(--color-slate)' }}
           />
         </svg>
-      </button>
+      </button>}
 
       {/* Modal overlay */}
       {isOpen && (

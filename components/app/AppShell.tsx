@@ -15,6 +15,7 @@ import PremiumHeader from './PremiumHeader'
 import PageTransition from './PageTransition'
 import ThemeToggleButton from './ThemeToggleButton'
 import { NotificationBell } from './NotificationBell'
+import BugReportButton from './BugReportButton'
 import type { Profile, BabyProfile } from '@/types/app'
 
 interface Props {
@@ -75,6 +76,9 @@ export default function AppShell({ children, profile, baby }: Props) {
 
       {/* -- Bottom Tab Bar -- */}
       <PremiumBottomNav />
+
+      {/* -- Floating feedback button (all screens) -- */}
+      <BugReportButton />
     </div>
   )
 }
