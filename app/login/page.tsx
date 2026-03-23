@@ -5,7 +5,7 @@ import { useState, useEffect, useRef, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
-type AuthState = 'idle' | 'loading' | 'success' | 'error' | 'rate_limited'
+type AuthState = 'idle' | 'loading' | 'success' | 'success_existing' | 'error' | 'rate_limited'
 type GoogleState = 'idle' | 'loading'
 
 const RESEND_COOLDOWN_SECONDS = 60
@@ -74,11 +74,30 @@ function LoginForm() {
 
     const supabase = createClient()
 
+    // In signup mode, check if account already exists before sending OTP
+    let accountExists = false
+    if (isSignup) {
+      try {
+        const res = await fetch('/api/auth/check-account', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email.trim() }),
+        })
+        if (res.ok) {
+          const json = await res.json()
+          accountExists = json.exists === true
+        }
+      } catch {
+        // Fail open — proceed normally if check fails
+      }
+    }
+
     try {
       const { error } = await supabase.auth.signInWithOtp({
         email: email.trim(),
         options: {
           emailRedirectTo: `${window.location.origin}/login/callback`,
+          shouldCreateUser: !accountExists, // don't create new account if one exists
         },
       })
 
@@ -96,7 +115,7 @@ function LoginForm() {
         return
       }
 
-      setState('success')
+      setState(accountExists ? 'success_existing' : 'success')
       startCooldown()
     } catch (err) {
       // One retry for transient network errors (not rate limits)
@@ -110,7 +129,7 @@ function LoginForm() {
           },
         })
         if (err2) throw err2
-        setState('success')
+        setState(accountExists ? 'success_existing' : 'success')
         startCooldown()
       } catch {
         const raw = err instanceof Error ? err.message : ''
@@ -212,7 +231,7 @@ function LoginForm() {
           </p>
 
           {/* Google sign-in button */}
-          {state !== 'success' && (
+          {state !== 'success' && state !== 'success_existing' && (
             <div style={{ marginBottom: '20px' }}>
               <button
                 onClick={handleGoogleSignIn}
@@ -272,6 +291,57 @@ function LoginForm() {
                 <div style={{ flex: 1, height: '1px', background: 'var(--color-border)' }} />
                 <span style={{ fontSize: '13px', color: 'var(--color-muted)', fontWeight: 500 }}>or use email</span>
                 <div style={{ flex: 1, height: '1px', background: 'var(--color-border)' }} />
+              </div>
+            </div>
+          )}
+
+          {/* Existing account detected during signup */}
+          {state === 'success_existing' && (
+            <div
+              role="status"
+              aria-live="polite"
+              className="animate-fade-in"
+              style={{
+                background: 'var(--color-primary-light)',
+                border: '1px solid var(--color-primary-mid)',
+                borderRadius: 'var(--radius-md)',
+                padding: '20px',
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '12px',
+                marginBottom: '16px',
+              }}
+            >
+              <span aria-hidden="true" style={{ fontSize: '24px', lineHeight: 1 }}>👋</span>
+              <div style={{ flex: 1 }}>
+                <p style={{ fontWeight: 600, color: 'var(--color-primary)', marginBottom: 4 }}>
+                  Looks like you already have an account
+                </p>
+                <p style={{ color: 'var(--color-slate)', fontSize: '14px', marginBottom: 12 }}>
+                  We sent a sign-in link to <strong>{email}</strong>. It expires in 10 minutes — check your spam folder if you don&apos;t see it.
+                </p>
+                {cooldown > 0 ? (
+                  <p style={{ fontSize: '13px', color: 'var(--color-muted)' }}>
+                    Didn&apos;t get it? You can resend in {cooldown}s.
+                  </p>
+                ) : (
+                  <button
+                    onClick={handleResend}
+                    style={{
+                      fontSize: '13px',
+                      color: 'var(--color-primary)',
+                      fontWeight: 600,
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      padding: '8px 0',
+                      minHeight: '44px',
+                      textDecoration: 'underline',
+                    }}
+                  >
+                    Didn&apos;t get it? Resend link
+                  </button>
+                )}
               </div>
             </div>
           )}
@@ -405,8 +475,8 @@ function LoginForm() {
             </div>
           )}
 
-          {/* Form — shown in idle/loading/error states (not when rate limited and on cooldown) */}
-          {state !== 'success' && !(state === 'rate_limited' && cooldown > 0) && (
+          {/* Form — hidden once a link has been sent or rate limited with cooldown */}
+          {state !== 'success' && state !== 'success_existing' && !(state === 'rate_limited' && cooldown > 0) && (
             <form id="login-form" onSubmit={handleSubmit}>
               <div className="mb-4">
                 <label
