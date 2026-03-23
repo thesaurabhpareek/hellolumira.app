@@ -571,10 +571,9 @@ describe('emailWrapper — Fix 5 regressions', () => {
     expect(html).not.toContain("If you did not request")
   })
 
-  it('footer DOES contain the replacement "Received this by mistake" phrasing', () => {
+  it('footer DOES contain the "Received this without requesting it" phrasing', () => {
     const html = emailWrapper('<p>Test</p>', 'Preview', 'user@example.com')
-    expect(html).toContain('Received this by mistake')
-    expect(html).toContain('your account is safe')
+    expect(html).toContain('Received this without requesting it')
   })
 
   it('footer disclaimer includes recipient email address', () => {

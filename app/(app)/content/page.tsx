@@ -243,24 +243,6 @@ export default function ContentPage() {
       }}
     >
       <div className="content-width mx-auto px-4 pt-6">
-        {/* ── Back button ──────────────────────────────────────────────── */}
-        <button
-          onClick={() => window.history.back()}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '4px',
-            color: '#3D8178',
-            fontSize: '14px',
-            fontWeight: 600,
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            padding: '16px 0',
-          }}
-        >
-          &larr; Back
-        </button>
         {/* ── Header ──────────────────────────────────────────────────── */}
         <h1
           className="text-h1"

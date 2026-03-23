@@ -2,6 +2,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import type { Badge } from '@/lib/badges'
 
 interface BadgesGridProps {
@@ -112,7 +113,7 @@ export default function BadgesGrid({ badges, earnedIds, earnedAt = {}, newBadgeI
                         alignItems: 'center',
                         padding: '12px 6px',
                         borderRadius: '12px',
-                        background: isEarned ? 'var(--color-primary-light)' : '#F9FAFB',
+                        background: isEarned ? 'var(--color-primary-light)' : 'var(--color-surface)',
                         opacity: isEarned ? 1 : 0.6,
                         transition: 'all 0.3s ease',
                         position: 'relative',
@@ -195,8 +196,8 @@ export default function BadgesGrid({ badges, earnedIds, earnedAt = {}, newBadgeI
         `}</style>
       </div>
 
-      {/* Badge Detail Overlay */}
-      {selectedBadge && (
+      {/* Badge Detail Overlay — portal to escape overflow:hidden */}
+      {selectedBadge && typeof document !== 'undefined' && createPortal(
         <>
           <div
             onClick={() => setSelectedBadge(null)}
@@ -372,7 +373,8 @@ export default function BadgesGrid({ badges, earnedIds, earnedAt = {}, newBadgeI
               Close
             </button>
           </div>
-        </>
+        </>,
+        document.body
       )}
     </>
   )
