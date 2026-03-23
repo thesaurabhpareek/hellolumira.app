@@ -7,6 +7,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 
 interface BugReportButtonProps {
   userEmail?: string
@@ -124,6 +125,7 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
           opacity: 0.45,
           transition: 'opacity 0.3s ease, transform 0.15s ease',
           WebkitTapHighlightColor: 'transparent',
+          pointerEvents: 'auto',
         }}
         onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9' }}
         onMouseLeave={(e) => { e.currentTarget.style.opacity = '0.45' }}
@@ -134,8 +136,8 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
         </svg>
       </button>
 
-      {/* Modal */}
-      {isOpen && (
+      {/* Modal — rendered via portal to escape AppShell overflow-hidden */}
+      {isOpen && typeof document !== 'undefined' && createPortal(
         <div
           onClick={handleBackdropClick}
           className="fixed inset-0 z-[200] flex items-end justify-center p-4"
@@ -187,7 +189,8 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
               </>
             )}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       <style>{`

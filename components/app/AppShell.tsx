@@ -77,8 +77,12 @@ export default function AppShell({ children, profile, baby }: Props) {
       {/* -- Bottom Tab Bar -- */}
       <PremiumBottomNav />
 
-      {/* -- Floating feedback button (all screens) -- */}
-      <BugReportButton />
+      {/* -- Floating feedback button — inside content-width wrapper so it stays in bounds -- */}
+      <div className="max-w-content mx-auto w-full" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, pointerEvents: 'none', height: '100%' }}>
+        <div style={{ position: 'relative', width: '100%', height: '100%', pointerEvents: 'none' }}>
+          <BugReportButton />
+        </div>
+      </div>
     </div>
   )
 }
