@@ -86,30 +86,6 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Coming soon badge                                                  */
-/* ------------------------------------------------------------------ */
-
-function ComingSoonBadge() {
-  return (
-    <span
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        padding: '2px 10px',
-        borderRadius: '100px',
-        background: 'var(--color-accent-light)',
-        color: 'var(--color-accent)',
-        fontSize: '12px',
-        fontWeight: 600,
-        marginLeft: '8px',
-      }}
-    >
-      Coming soon
-    </span>
-  )
-}
-
-/* ------------------------------------------------------------------ */
 /*  Skeleton card                                                      */
 /* ------------------------------------------------------------------ */
 
@@ -548,35 +524,6 @@ export default function NotificationSettingsPage() {
           </div>
         </div>
 
-        {/* ---- WhatsApp ---- */}
-        <div className="lumira-card" style={{ borderRadius: '14px', marginBottom: '24px' }}>
-          <SectionLabel>
-            WhatsApp
-            <ComingSoonBadge />
-          </SectionLabel>
-          <ToggleRow
-            label="WhatsApp notifications"
-            description="Get check-in reminders and updates via WhatsApp"
-            checked={false}
-            onChange={() => {}}
-            disabled
-          />
-        </div>
-
-        {/* ---- SMS ---- */}
-        <div className="lumira-card" style={{ borderRadius: '14px', marginBottom: '24px' }}>
-          <SectionLabel>
-            SMS
-            <ComingSoonBadge />
-          </SectionLabel>
-          <ToggleRow
-            label="SMS notifications"
-            description="Get check-in reminders and updates via text message"
-            checked={false}
-            onChange={() => {}}
-            disabled
-          />
-        </div>
       </div>
     </div>
   )
