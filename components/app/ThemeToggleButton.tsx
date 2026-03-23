@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { useTheme } from '@/components/ThemeProvider'
 
 export default function ThemeToggleButton() {

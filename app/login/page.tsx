@@ -237,8 +237,9 @@ function LoginForm() {
                 }}
                 onMouseEnter={(e) => {
                   if (googleState !== 'loading') {
-                    e.currentTarget.style.background = '#F8F8F8'
-                    e.currentTarget.style.borderColor = '#C0C0C0'
+                    const isDark = document.documentElement.classList.contains('dark')
+                    e.currentTarget.style.background = isDark ? '#2A2826' : '#F8F8F8'
+                    e.currentTarget.style.borderColor = isDark ? '#383532' : '#C0C0C0'
                   }
                 }}
                 onMouseLeave={(e) => {
@@ -298,7 +299,7 @@ function LoginForm() {
                   Check your inbox
                 </p>
                 <p style={{ color: 'var(--color-slate)', fontSize: '14px', marginBottom: 12 }}>
-                  We sent a sign-in link to <strong>{email}</strong>. It expires in 24 hours — also check your spam folder.
+                  We sent a sign-in link to <strong>{email}</strong>. It expires in 10 minutes — check your spam folder if you don&apos;t see it.
                 </p>
                 {cooldown > 0 ? (
                   <p style={{ fontSize: '13px', color: 'var(--color-muted)' }}>

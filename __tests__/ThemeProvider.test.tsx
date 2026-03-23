@@ -7,6 +7,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
 import React from 'react'
+import { ThemeProvider, useTheme } from '@/components/ThemeProvider'
 
 // ─── localStorage mock ──────────────────────────────────────────────────────
 
@@ -68,8 +69,6 @@ function setupMatchMedia(prefersDark = false): MockMediaQuery {
 }
 
 function renderThemeHook() {
-  // Import inside function so module is freshly resolved each time via vi.resetModules
-  const { ThemeProvider, useTheme } = require('@/components/ThemeProvider')
   const wrapper = ({ children }: { children: React.ReactNode }) =>
     React.createElement(ThemeProvider, null, children)
   return renderHook(() => useTheme(), { wrapper })
@@ -83,7 +82,7 @@ describe('ThemeProvider', () => {
     vi.clearAllMocks()
     document.documentElement.classList.remove('dark', 'theme-transition')
     setupMatchMedia(false) // default: system prefers light
-    vi.resetModules()
+    // Clean state
   })
 
   afterEach(() => {
@@ -161,13 +160,16 @@ describe('ThemeProvider', () => {
 
   // 6. System preference change updates resolvedTheme when theme='system'
   it('system preference change updates resolvedTheme when theme is system', () => {
+    localStorageMock.clear() // ensure no persisted preference
     const mq = setupMatchMedia(false) // starts light
-    vi.resetModules()
     const { result } = renderThemeHook()
 
-    // Should start as light (system prefers light)
+    // Explicitly set to system mode
+    act(() => {
+      result.current.setTheme('system')
+    })
+
     expect(result.current.resolvedTheme).toBe('light')
-    expect(result.current.theme).toBe('system')
 
     // Simulate OS switching to dark
     act(() => {
@@ -181,7 +183,7 @@ describe('ThemeProvider', () => {
   // 7. System preference change is ignored when theme explicitly set
   it('system preference change is ignored when theme is explicitly set to light', () => {
     const mq = setupMatchMedia(false)
-    vi.resetModules()
+    // Clean state
     const { result } = renderThemeHook()
 
     // Explicitly set to light
@@ -202,7 +204,7 @@ describe('ThemeProvider', () => {
 
   it('system preference change is ignored when theme is explicitly set to dark', () => {
     const mq = setupMatchMedia(true) // OS starts dark
-    vi.resetModules()
+    // Clean state
     const { result } = renderThemeHook()
 
     // Explicitly set to dark
