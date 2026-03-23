@@ -144,11 +144,11 @@ describe('scanForRedFlags — actual module', () => {
   // ── False positive: fever substring matching (BUG-030) ──
 
   describe('BUG-030: fever false positives from numeric substrings', () => {
-    it('"my baby is 38 weeks" triggers fever (KNOWN BUG)', () => {
-      // This documents the false positive from matching '38' as substring
+    it('"my baby is 38 weeks" no longer triggers fever (BUG FIXED)', () => {
+      // The false positive from matching '38' as substring has been fixed.
+      // '38 weeks' now requires a unit or fever/temperature keyword context.
       const result = scanForRedFlags('my baby is 38 weeks old', 8, 'infant')
-      // Currently this incorrectly triggers — documenting as known bug
-      expect(result.level).toBe('urgent') // BUG: should be 'none'
+      expect(result.level).toBe('none') // BUG FIXED: was incorrectly 'urgent'
     })
   })
 

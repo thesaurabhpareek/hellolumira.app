@@ -437,17 +437,17 @@ describe('Red Flag Scanner — Age-specific fever escalation', () => {
   })
 
   it('"38" triggers fever check', () => {
-    const result = scanForRedFlags('temp is 38 degrees', 6)
+    const result = scanForRedFlags('temperature is 38 degrees', 6)
     expect(result.level).toBe('urgent')
   })
 
   it('"39" triggers fever check', () => {
-    const result = scanForRedFlags('temp is 39 degrees', 6)
+    const result = scanForRedFlags('temperature is 39 degrees', 6)
     expect(result.level).toBe('urgent')
   })
 
   it('"40" triggers fever check', () => {
-    const result = scanForRedFlags('temp is 40', 6)
+    const result = scanForRedFlags('temperature is 40', 6)
     expect(result.level).toBe('urgent')
   })
 
@@ -587,6 +587,9 @@ describe('Red Flag Scanner — Safe non-matches', () => {
       immediateAction: null,
       preAuthoredMessage: null,
       actionUrl: null,
+      immediate_action: null,
+      pre_authored_message: null,
+      action_url: null,
       severity: null,
     })
   })

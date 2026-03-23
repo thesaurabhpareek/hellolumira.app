@@ -208,8 +208,8 @@ describe('SECURITY_HEADERS', () => {
     expect(SECURITY_HEADERS['Permissions-Policy']).toContain('geolocation=()')
   })
 
-  it('has exactly 4 headers', () => {
-    expect(Object.keys(SECURITY_HEADERS)).toHaveLength(4)
+  it('has exactly 5 headers', () => {
+    expect(Object.keys(SECURITY_HEADERS)).toHaveLength(5)
   })
 
   it('is frozen (cannot be modified)', () => {

@@ -12,10 +12,13 @@ vi.mock('@supabase/supabase-js', () => ({
 import { POST } from '@/app/api/early-access/route'
 import { NextRequest } from 'next/server'
 
+// Use a unique IP per request so the in-module rate limiter never blocks tests
+let _ipCounter = 0
 function makeRequest(body: unknown): NextRequest {
+  const ip = `10.0.0.${(_ipCounter++ % 254) + 1}`
   return new NextRequest('http://localhost/api/early-access', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'x-forwarded-for': ip },
     body: JSON.stringify(body),
   })
 }
@@ -71,9 +74,10 @@ describe('POST /api/early-access', () => {
   })
 
   it('returns 400 for invalid JSON body', async () => {
+    const ip = `10.0.0.${(_ipCounter++ % 254) + 1}`
     const req = new NextRequest('http://localhost/api/early-access', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'x-forwarded-for': ip },
       body: 'not-json{',
     })
     const res = await POST(req)

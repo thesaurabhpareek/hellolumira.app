@@ -238,7 +238,7 @@ describe('useChatThread', () => {
     await waitFor(() => {
       expect(result.current.error).toBeTruthy()
     })
-    expect(result.current.error).toBe('Lumira is taking a moment. Try again.')
+    expect(result.current.error).toBe("I'm having trouble connecting right now. Your conversation is saved — tap to try again.")
   }, 10000)
 
   // ── setMessages ──

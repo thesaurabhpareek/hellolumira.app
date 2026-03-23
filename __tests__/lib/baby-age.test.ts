@@ -174,7 +174,7 @@ describe('getBabyAgeInfo', () => {
       })
       const info = getBabyAgeInfo(baby)
       expect(info.age_display_string).toContain('Week')
-      expect(info.age_display_string).toContain('Trimester')
+      expect(info.age_display_string).toContain('trimester')
     })
 
     it('handles invalid due_date string gracefully', () => {

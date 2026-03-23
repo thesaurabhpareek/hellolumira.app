@@ -14,7 +14,7 @@ describe('Analytics — trackEvent', () => {
     const { trackEvent } = await import('@/lib/analytics')
     trackEvent('onboarding_started', { step: 1 })
     expect(consoleSpy).toHaveBeenCalledWith(
-      '[Analytics]',
+      '[analytics]',
       'onboarding_started',
       { step: 1 }
     )
@@ -53,7 +53,7 @@ describe('Analytics — trackEvent', () => {
     const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
     const { trackEvent } = await import('@/lib/analytics')
     trackEvent('page_viewed', { path: '/home' })
-    expect(consoleSpy).toHaveBeenCalledWith('[Analytics]', 'page_viewed', { path: '/home' })
+    expect(consoleSpy).toHaveBeenCalledWith('[analytics]', 'page_viewed', { path: '/home' })
     consoleSpy.mockRestore()
     vi.unstubAllEnvs()
   })
@@ -63,7 +63,7 @@ describe('Analytics — trackEvent', () => {
     const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
     const { trackEvent } = await import('@/lib/analytics')
     trackEvent('app_opened')
-    expect(consoleSpy).toHaveBeenCalledWith('[Analytics]', 'app_opened', '')
+    expect(consoleSpy).toHaveBeenCalledWith('[analytics]', 'app_opened', '')
     consoleSpy.mockRestore()
     vi.unstubAllEnvs()
   })
@@ -75,7 +75,7 @@ describe('Analytics — identifyUser', () => {
     const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
     const { identifyUser } = await import('@/lib/analytics')
     identifyUser('user-123')
-    expect(consoleSpy).toHaveBeenCalledWith('[Analytics] Identify:', 'user-123')
+    expect(consoleSpy).toHaveBeenCalledWith('[analytics] identify:', 'user-123')
     consoleSpy.mockRestore()
     vi.unstubAllEnvs()
   })

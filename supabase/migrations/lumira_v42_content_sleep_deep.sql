@@ -1,2067 +1,1330 @@
--- =============================================================================
--- Lumira v42: Deep-Dive Sleep Content Library
--- =============================================================================
--- 45 articles covering every major sleep question across infant and toddler stages.
--- Topics: foundations, safe sleep, naps, regressions, sleep training,
---         night feeding, environment, routine, travel, and illness.
--- Medical review: all articles contain disclaimers, evidence-based guidance.
--- Sources: AAP, WHO, NHS, Red Nose Foundation, SIDS and Kids, Sleep Foundation.
--- =============================================================================
+-- ============================================================
+-- Lumira v42: Sleep Deep-Dive Content Library
+-- 45 articles covering sleep across all parenting stages
+-- ============================================================
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES
+INSERT INTO public.content_articles (stage, week_or_month, title, subtitle, body, category, reading_time_minutes, tags, medically_reviewed, culturally_sensitive, author) VALUES
 
--- ─────────────────────────────────────────────────────────────────────────────
--- FOUNDATIONS (1–7)
--- ─────────────────────────────────────────────────────────────────────────────
+('infant', 0, 'How Newborn Sleep Works', 'Understanding sleep cycles, active sleep, and light sleep in your newborn', '## Why Newborn Sleep Feels So Chaotic
 
-(
-  'infant',
-  'sleep',
-  'How Much Sleep Do Babies Need? A Full Age-by-Age Chart',
-  $$**Sleep Needs Change Dramatically in the First Year**
+If you feel like your newborn sleeps all day and then is wide awake at inconvenient hours, you are not imagining it. Newborn sleep is fundamentally different from adult sleep — and understanding why can take the edge off those exhausting early weeks.
 
-One of the most common questions new parents have is: is my baby sleeping enough? The answer depends entirely on age, because sleep needs shift significantly in the first twelve months. Total sleep per day drops from around 16–18 hours in the newborn phase to roughly 12–14 hours by the end of the first year.
+## Sleep Architecture in the First Weeks
 
-**Age-by-Age Sleep Chart**
+Adults cycle through sleep stages roughly every 90 minutes, spending most of their time in deep, restorative slow-wave sleep. Newborns do something very different. Their sleep cycles last only **40–50 minutes**, and they spend up to **50% of their sleep time in active sleep** — the newborn equivalent of REM (rapid eye movement) sleep.
 
-| Age | Total daily sleep | Night sleep | Naps |
-|---|---|---|---|
-| 0–4 weeks | 15–18 hours | 8–9 hours (fragmented) | 7–9 hours across 4–6 naps |
-| 1–2 months | 14–17 hours | 8–10 hours | 6–7 hours across 3–5 naps |
-| 3–4 months | 14–16 hours | 9–10 hours | 4–5 hours across 3–4 naps |
-| 5–6 months | 13–15 hours | 10–11 hours | 3–4 hours across 2–3 naps |
-| 7–9 months | 12–15 hours | 10–12 hours | 2–3 hours across 2 naps |
-| 10–12 months | 12–14 hours | 11–12 hours | 2–3 hours across 1–2 naps |
+During active sleep you will notice your baby:
+- Moving their arms and legs
+- Making sucking motions or facial grimaces
+- Fluttering their eyelids
+- Making small sounds or grunts
 
-**Night sleep is fragmented — that is normal**
+This is completely normal. Many parents mistake active sleep for waking and pick the baby up, inadvertently interrupting a sleep cycle.
 
-In the early weeks, night sleep is spread across many short stretches. Babies have tiny stomachs, immature nervous systems, and a circadian rhythm that has not yet developed. Expecting long unbroken nights before around four to six months is not realistic for most babies.
+## Active Sleep vs Quiet Sleep
 
-**Signs of a well-rested baby**
+Newborn sleep alternates between two states:
 
-- Wakes in a reasonably good mood
-- Has periods of alert, engaged wakefulness
-- Does not fall asleep immediately every time they are held
-- Feeds well and gains weight appropriately
+**Active sleep (REM-like):** The brain is highly active. Research suggests this state is critical for rapid brain development — synaptic connections are forming at an extraordinary rate. Premature babies spend even more time in active sleep, supporting this theory.
 
-**When to check in with your provider**
+**Quiet sleep (NREM-like):** The baby is still, breathing is regular, and the body is doing physical repair work — growing, restoring immune function, consolidating feeds.
 
-If your baby is consistently sleeping far less than the ranges above, is very difficult to wake, or shows signs of breathing irregularity during sleep, raise these with your paediatrician.
+Unlike adults, newborns often **enter sleep through active sleep first**, which is why they can appear to wake just as you put them down. They have not yet transitioned into the deeper quiet sleep phase.
 
-*This article is for informational purposes only and is not a substitute for personalised medical advice. Every baby is different — use these ranges as a guide, not a strict target.*$$,
-  0,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'National Sleep Foundation', 'NHS UK'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-how-much-sleep-babies-need-chart'
-),
+## The 40-Minute Wake Window
 
-(
-  'infant',
-  'sleep',
-  'Understanding Baby Sleep Cycles: Why Babies Wake So Often',
-  $$**Why Does My Baby Wake Up So Much?**
+Most newborns can only handle **45–90 minutes of wakefulness** before they need to sleep again. Overtiredness in a newborn is not obvious — it does not look like yawning and eye-rubbing the way it does in toddlers. Instead you may see:
+- Arching away from stimulation
+- Turning the head side to side
+- Staring blankly
+- A sudden increase in fussiness
 
-If you feel like your baby wakes at the slightest sound, or after every nap ends after exactly 30 minutes, sleep cycles are the explanation. Understanding them can make the exhaustion feel a little less bewildering.
+Catching sleep cues before overtiredness sets in makes settling far easier.
 
-**Adult vs baby sleep cycles**
+## The Circadian Rhythm: Not Yet Online
 
-Adults move through sleep cycles of roughly 90 minutes, spending extended time in deep non-REM sleep before surfacing briefly between cycles. Babies have much shorter cycles — roughly 45 to 50 minutes — and spend a much larger proportion of their sleep in lighter, active (REM) sleep.
+Newborns are born without a functioning circadian rhythm — the internal 24-hour clock that tells the body when to sleep and when to be awake. This does not develop until around **6–8 weeks of age**, which explains why newborns distribute their sleep fairly evenly across day and night.
 
-**Why so much light sleep?**
+Light is the primary signal that sets the circadian clock. From 6 weeks onward, **morning light exposure** and **dim evenings** help establish day-night differentiation. Keeping the environment bright and stimulating during daytime feeds, and dark and calm during night feeds, accelerates this process.
 
-Current research suggests that active sleep in infants may serve critical developmental functions. The brain is doing enormous processing work during this phase. It is also thought that the lighter sleep of early infancy is a protective mechanism — easier arousal may reduce the risk of SIDS.
+## Total Sleep Needs
 
-**What happens at the end of a sleep cycle**
+Newborns typically need **14–17 hours of sleep per 24 hours**, distributed across many short sleep periods. By 6 weeks most babies begin to show a slightly longer stretch at night — often 3–4 hours. This is a sign the circadian rhythm is beginning to establish.
 
-At the end of each cycle, all sleepers — adults included — surface slightly. Adults have learned to self-settle back to sleep without fully waking. Babies have not yet developed this skill, particularly if they rely on a feed, a cuddle, or rocking to fall asleep in the first place. When they surface, they look for the same conditions that were present when they went to sleep.
+## What This Means for You
 
-**What this means for you**
+- **Wait before responding.** Give your baby 5–10 seconds before picking them up. They may be in active sleep and will resettle on their own.
+- **Watch wake windows, not the clock.** Putting a baby down at the right biological moment matters more than a rigid schedule.
+- **Do not compare.** Sleep development varies enormously. Some babies consolidate sleep earlier, some later — both are within the normal range.
+- **This phase is temporary.** The chaotic newborn sleep pattern has a developmental purpose and resolves naturally as the brain matures.
 
-- Short naps of 30 to 45 minutes are developmentally normal in younger babies, not a problem to fix
-- Frequent night wakings are expected, especially under four months
-- As babies develop and learn to self-settle, consolidated sleep becomes more achievable
+Understanding the biology of newborn sleep does not make the 3am feeds easier — but it does make them make sense.', 'sleep', 7, ARRAY['newborn', 'sleep cycles', 'active sleep', 'REM', 'circadian rhythm', 'infant sleep'], true, true, 'Lumira Health Team'),
 
-**Will it get better?**
+('infant', 0, 'Safe Sleep for Your Newborn', 'The complete guide to reducing SIDS risk with back-to-sleep, firm surfaces, and a clear sleep space', '## Why Safe Sleep Matters
 
-Yes — for most babies, sleep consolidates meaningfully between four and twelve months, though the path is rarely linear.
+Sudden Infant Death Syndrome (SIDS) and sleep-related infant deaths are among the most devastating outcomes any family can face. The good news: decades of research have identified clear, evidence-based practices that **significantly reduce risk**. The "Back to Sleep" campaign, launched in 1994, led to a more than 50% reduction in SIDS deaths in the US and similar declines worldwide.
 
-*This article is for informational purposes only. Consult your healthcare provider with any concerns about your baby''s sleep or development.*$$,
-  0,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'National Sleep Foundation', 'Mindell JA et al. - Pediatrics 2006'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-baby-sleep-cycles-why-babies-wake'
-),
+Following safe sleep guidelines does not eliminate all risk, but it meaningfully shifts the odds in your baby''s favour.
 
-(
-  'infant',
-  'sleep',
-  'Wake Windows by Age: The Key to Better Naps and Night Sleep',
-  $$**What Is a Wake Window?**
+## The ABCs of Safe Sleep
 
-A wake window is the amount of time a baby can comfortably stay awake between sleep periods before becoming overtired. It is one of the most useful concepts in infant sleep — get the timing right and naps and bedtime become significantly easier.
+Safe sleep guidelines from the American Academy of Pediatrics (AAP) and equivalent bodies worldwide can be summarised as:
 
-**Why wake windows matter**
+**A — Alone:** Your baby should sleep alone, in their own sleep surface, without other people or pets sharing the sleep space.
 
-An overtired baby produces more cortisol (a stress hormone) and actually finds it harder to fall asleep and stay asleep. An undertired baby is not ready for sleep and will resist it. The wake window sits in the sweet spot between these two states.
+**B — Back:** Always place your baby on their back for every sleep — naps and night sleep. Once a baby can roll both ways independently, you do not need to reposition them if they roll during sleep.
 
-**Wake windows by age**
+**C — Cot (or crib/bassinet):** Use a firm, flat, safety-approved sleep surface with a well-fitted sheet and nothing else in the sleep space.
 
-| Age | Wake window |
-|---|---|
-| 0–4 weeks | 45–60 minutes |
-| 4–8 weeks | 60–90 minutes |
-| 2–3 months | 75–90 minutes |
-| 3–4 months | 90 minutes–2 hours |
-| 4–5 months | 1.5–2.5 hours |
-| 5–6 months | 2–2.5 hours |
-| 6–8 months | 2.5–3 hours |
-| 8–10 months | 3–3.5 hours |
-| 10–12 months | 3.5–4 hours |
+## The Sleep Surface
 
-**The last wake window matters most**
+- **Firmness matters.** A firm surface prevents the baby''s face from sinking into soft material, which can obstruct the airway.
+- **Flat is safest.** The sleep surface should be level, not inclined. Devices marketed to keep babies at an angle are not safe for unsupervised sleep.
+- **Fitted sheet only.** No pillows, bumpers, wedges, positioners, blankets, stuffed animals, or sleep nests in the crib.
 
-The window before bedtime is especially important. Too short and your baby is not tired enough; too long and they become overtired. Many parents find that adjusting bedtime to align with the last wake window makes a noticeable difference.
+## Room Sharing (Not Bed Sharing)
 
-**Watch the baby, not the clock**
+The AAP recommends **room sharing for at least the first 6 months**, ideally the full first year. Having the baby in a bassinet or crib in your room reduces SIDS risk by up to 50% — possibly because parents are more aware of the baby''s sounds and breathing, and because breastfeeding is more easily maintained.
 
-Wake windows are guidelines. Tired cues — yawning, rubbing eyes, losing interest in play, staring blankly — matter more than the clock. Over time you will learn your baby''s rhythms.
+Room sharing is not the same as bed sharing. Sharing an adult bed with a newborn significantly increases the risk of sleep-related death, particularly when:
+- A parent has consumed alcohol or sedating medication
+- There is soft bedding (duvets, pillows)
+- The parent is extremely sleep-deprived
 
-**Common mistakes**
+## Temperature and Clothing
 
-- Keeping babies awake longer to ''tire them out'' (backfires with overtiredness)
-- Putting babies down too early (they resist and protest)
-- Using one universal wake window regardless of age
+Overheating is an independent risk factor for SIDS. Keep the room between **16–20°C (61–68°F)** and dress your baby in one layer more than you would wear. Check for overheating by feeling the back of the neck — it should feel warm but not sweaty.
 
-*This article is for informational purposes only. Always follow your healthcare provider''s guidance for your individual baby.*$$,
-  0,
-  true,
-  ARRAY['National Sleep Foundation', 'Weissbluth M - Healthy Sleep Habits, Happy Child', 'Mindell JA - Sleeping Through the Night'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-wake-windows-by-age-better-naps'
-),
+## Smoke Exposure
 
-(
-  'infant',
-  'sleep',
-  'Drowsy But Awake: Teaching Your Baby to Self-Settle',
-  $$**What Does "Drowsy But Awake" Mean?**
+Prenatal and postnatal smoke exposure — including third-hand smoke on clothing and furniture — significantly increases SIDS risk. This applies to e-cigarettes and vaping as well.
 
-''Drowsy but awake'' is one of the most repeated phrases in infant sleep advice — and one of the most misunderstood. It refers to putting your baby down in their sleep space when they are clearly sleepy but still conscious, giving them the chance to drift off without being fully asleep in your arms first.
+## Breastfeeding and Dummies (Pacifiers)
 
-**Why it matters**
+Both **breastfeeding** and **offering a dummy/pacifier at sleep times** are associated with reduced SIDS risk. Researchers believe the dummy may help maintain airway patency and prevent deep sleep states associated with risk. You do not need to reinsert it if it falls out during sleep.
 
-When babies fall asleep in one place (your arms, at the breast, in the pram) and then wake in a different place (their cot), they can feel disoriented and alarmed — and cry out. If they fall asleep in the cot, they are more likely to be able to settle themselves back to sleep when they naturally surface between sleep cycles.
+## Car Seats and Bouncers
 
-**What drowsy but awake actually looks like**
+Car seats are designed for travel, not sleep. If your baby falls asleep in the car seat, transfer them to a flat sleep surface as soon as it is safe to do so.
 
-- Heavy, slow eyelids — blinking slowly
-- Relaxed body, but still able to look around if stimulated
-- Sucking may be slowing but still responding
-- Not fully limp or deeply asleep
+## When Can the Rules Relax?
 
-It is a narrow window — and it takes practice to catch it consistently.
+SIDS risk peaks between **2 and 4 months** and declines significantly after 6 months. By 12 months, risk is very low. However, safe sleep practices remain best practice for the entire first year.
 
-**How to practise**
+The guidelines can feel restrictive — especially when a tired parent is desperate for any solution. But no short-term sleep gain is worth compromising a baby''s safety.', 'sleep', 8, ARRAY['safe sleep', 'SIDS', 'back to sleep', 'newborn', 'crib safety', 'room sharing'], true, true, 'Lumira Health Team'),
 
-1. Run your usual wind-down routine (feed, bath, story, song)
-2. When you notice drowsy cues, place your baby in the cot
-3. Offer a reassuring hand or voice briefly, then give them space
-4. It is normal for it to take time — this is a skill being learned
+('infant', 0, 'Room Sharing vs Bed Sharing', 'What the evidence says about where your baby should sleep', '## The Debate in Context
 
-**A note on realistic expectations**
+Few parenting topics generate as much confusion — and judgment — as where a baby sleeps. Room sharing, bed sharing, co-sleeping, and independent nursery sleep all have passionate advocates. What does the evidence actually say?
 
-Many babies, especially under three to four months, are not developmentally ready to self-settle. If it is not working and causing significant distress, there is no harm in returning to whatever works for your family. Drowsy but awake is a useful tool, not a mandatory technique.
+## What the Research Shows
 
-**Not every baby takes to it immediately**
+**Room sharing** (baby in your room in their own sleep surface) is consistently associated with **lower SIDS risk** — estimates range from 30–50% reduction. The AAP, NHS, and most international paediatric bodies recommend room sharing for at least the first 6 months.
 
-Start with one sleep period — often the first nap of the day when your baby is freshest — rather than overhauling all sleep at once.
+**Bed sharing** (sharing an adult sleep surface) is more complex. In low-risk conditions — sober, non-smoking parents on a firm mattress with minimal bedding — some research suggests the absolute risk increase is small. However, in high-risk conditions (sofa or armchair sharing, alcohol, exhaustion, soft bedding), risk increases sharply. A significant proportion of sleep-related infant deaths in the UK and US occur in adult beds.
 
-*This article is for informational purposes only. Consult your paediatrician or a certified sleep consultant for personalised guidance.*$$,
-  8,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'Mindell JA et al. - Pediatrics 2006', 'National Sleep Foundation'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-drowsy-but-awake-self-settling'
-),
+**Independent room sleep** from birth has not been shown to produce better infant sleep outcomes or safer conditions.
 
-(
-  'infant',
-  'sleep',
-  'Sleep Associations: Helpful vs. Dependent — What''s the Difference?',
-  $$**What Is a Sleep Association?**
+## Why Room Sharing Helps
 
-A sleep association is anything your baby links with falling asleep — a feed, being rocked, a dummy, white noise, or even a particular position. All humans have sleep associations. The question is whether yours are ''dependent'' (require your active involvement every time) or ''independent'' (your baby can re-create without you).
+Several mechanisms may explain the protective effect of room sharing:
+- Parents respond more quickly to subtle changes in the baby''s breathing or sounds
+- The parent''s breathing and movement may provide gentle arousal cues for the baby
+- Breastfeeding is more easily maintained, which independently reduces SIDS risk
 
-**Helpful sleep associations**
+## Bed Sharing: Reducing Risk When You Choose It
 
-These are things your baby can access on their own after you leave the room:
-- White noise playing from a speaker
-- A dim room
-- A sleep sack
-- A familiar smell (a worn item of your clothing near — not in — the cot for older babies)
-- A dummy that your baby can replace themselves (from around 6–7 months)
+For many families — particularly those who breastfeed — some bed sharing happens whether planned or not. A parent falling asleep while feeding is extremely common. The **Safe Sleep Seven** (developed by La Leche League) outlines conditions under which bed sharing carries lower risk:
+1. Non-smoking parents
+2. Sober parent (no alcohol, sedating medication, or drugs)
+3. Breastfeeding baby
+4. Healthy, full-term baby
+5. Baby placed on their back
+6. No soft bedding around the baby
+7. Not on a sofa or recliner
 
-**Dependent sleep associations**
+Even under these conditions, bed sharing remains riskier than room sharing with a separate surface.
 
-These require you to be present and actively doing something:
-- Feeding to sleep
-- Rocking or bouncing to sleep
-- Holding until deeply asleep
-- Patting that must continue until they are fully asleep
+## The Accidental Bed Share Problem
 
-Dependent associations are not harmful — they are soothing and attachment-building. The trade-off is that your baby will call for you each time they naturally surface between sleep cycles overnight.
+The most dangerous scenario is an unplanned bed share: a parent who sits in bed or on the sofa to feed and falls asleep. Sofas and armchairs are particularly dangerous because the baby can fall into crevices or become wedged against cushions.
 
-**Should you change them?**
+**Harm reduction:** If you know you might fall asleep while feeding, prepare a safer bed-sharing environment in advance — clear the bedding from the area, ensure no gaps the baby could roll into.
 
-Only if the current arrangement is not sustainable for your family. Many families are happy feeding or rocking to sleep for months. If night wakings are becoming unmanageable, shifting toward more independent sleep associations is one of the most effective changes you can make.
+## Cultural Context
 
-**How to shift gradually**
+Bed sharing is the norm in many cultures globally and has been the default human parenting behaviour throughout history. Research from populations where bed sharing is universal does not always replicate the same risk levels seen in Western studies — this may reflect differences in sleep surface, bedding, breastfeeding rates, and maternal sobriety. Families from cultures where bed sharing is standard should be met with information and respect, not judgment.
 
-Start by introducing independent associations (white noise, sleep sack, dark room) consistently. Then begin putting your baby down slightly less asleep each night, over one to two weeks. Gradual change is easier on everyone than an abrupt switch.
+## Making Your Decision
 
-*This article is for informational purposes only. Every family''s situation is unique — seek support from your healthcare provider or a certified infant sleep consultant if needed.*$$,
-  4,
-  true,
-  ARRAY['Mindell JA et al. - Pediatrics 2006', 'National Sleep Foundation', 'American Academy of Pediatrics (AAP)'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-associations-helpful-vs-dependent'
-),
+- **Prioritise room sharing for the first 6 months** if possible.
+- **If you choose or need to bed share**, understand and mitigate the risks.
+- **Never sleep with your baby on a sofa or armchair.**
+- Discuss your family''s situation with your midwife or health visitor for personalised guidance.
 
-(
-  'infant',
-  'sleep',
-  'White Noise for Babies: Safe Volume, Best Types, and How Long to Use It',
-  $$**Why White Noise Works for Babies**
+There is no single right answer for every family. There is only the best-informed decision you can make with the information available to you.', 'sleep', 7, ARRAY['room sharing', 'bed sharing', 'co-sleeping', 'SIDS', 'safe sleep', 'newborn'], true, true, 'Lumira Health Team'),
 
-The womb is surprisingly loud — continuous whooshing sounds from blood flow and digestion register at around 80 to 85 decibels. For many newborns, silence is actually unfamiliar. White noise mimics this environment, helping babies settle and reducing their startle response.
+('infant', 0, 'SIDS Prevention: A Complete Guide', 'Everything parents need to know to reduce the risk of Sudden Infant Death Syndrome', '## Understanding SIDS
 
-**Types of white noise**
+Sudden Infant Death Syndrome (SIDS) is defined as the sudden, unexplained death of an apparently healthy baby under 12 months of age, where no cause is found even after a thorough post-mortem investigation. It is sometimes called "cot death." SIDS is the leading cause of death in babies between 1 month and 12 months of age in high-income countries.
 
-- **True white noise**: A flat, static sound covering all frequencies equally
-- **Pink noise**: Emphasises lower frequencies; many babies respond well to this
-- **Brown noise**: Even deeper, richer — similar to rushing water or a fan
-- **Nature sounds**: Rain, ocean waves, river sounds — often effective and pleasant
-- **Shushing sounds**: Similar to what parents do naturally when settling babies
+It is important to acknowledge upfront: SIDS cannot be completely prevented, and it is never the parent''s fault. But evidence-based practices can substantially reduce risk.
 
-**Safe volume — this matters**
+## The Triple Risk Model
 
-The AAP and other paediatric organisations recommend keeping white noise machines at or below **50 decibels** at the baby''s ear level. Place the device at least 2 metres from the cot, not directly next to the baby''s head. At safe levels, white noise is not harmful to infant hearing.
+Most researchers understand SIDS through a "triple risk" framework. A baby is at highest risk when three factors overlap:
+1. **A vulnerable infant** — perhaps with subtle differences in brainstem arousal mechanisms
+2. **A critical developmental period** — peak risk is 2–4 months
+3. **An external stressor** — such as sleeping prone, overheating, or a soft sleep surface
 
-To give you a reference point: normal conversation is around 60 decibels. Your white noise should be quieter than that.
+Removing external stressors is what safe sleep guidelines target.
 
-**How long to use it**
+## Evidence-Based Prevention Measures
 
-White noise can be used for as long as it is helpful. There is no evidence of harm from continued use. Many families phase it out naturally as their toddler grows — and many continue it through toddlerhood. When you do decide to phase it out, reduce the volume gradually over one to two weeks rather than stopping abruptly.
+### Always Place Baby on Their Back
+The single most impactful change families can make. Front (prone) sleeping increases SIDS risk by 3–5 times. Side sleeping is not safe because babies can roll to their front. **Every sleep, every time** — including naps at grandparents'' homes, childcare, and while travelling.
 
-**Practical tips**
+Once a baby can roll front to back AND back to front independently, you do not need to reposition them.
 
-- Use a dedicated white noise machine rather than a phone speaker (safer and more reliable)
-- Keep it consistent for every sleep — naps and nights
-- Do not vary the volume or type randomly; consistency helps association
+### Use a Firm, Flat Sleep Surface
+A firm mattress in a safety-approved crib, cot, or bassinet is essential. Avoid inclined sleepers or rockers for unsupervised sleep, baby nests, sleep positioners, or sofa sleep.
 
-*This article is for informational purposes only. Please consult your paediatrician if you have concerns about your baby''s hearing or sleep environment.*$$,
-  0,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'Hugh SC et al. - Pediatrics 2014', 'National Sleep Foundation'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-white-noise-safe-volume-types'
-),
+### Keep the Sleep Space Clear
+Nothing but a well-fitted sheet should be in the crib. No bumpers, pillows, blankets, stuffed animals, or wedges. Use a baby sleeping bag rated for room temperature rather than blankets.
 
-(
-  'infant',
-  'sleep',
-  'Room Temperature for Safe Baby Sleep',
-  $$**Why Room Temperature Matters**
+### Room Share for at Least 6 Months
+The baby''s own sleep surface in the parent''s room reduces SIDS risk significantly. Do not bed share on a sofa or armchair.
 
-Babies cannot regulate their own body temperature the way adults can. A room that is too warm increases the risk of overheating — a recognised risk factor for SIDS (sudden infant death syndrome). A room that is too cold disrupts sleep and can stress a young baby''s system.
+### Avoid Smoke Exposure
+Both prenatal smoking and postnatal smoke exposure are strongly associated with SIDS. Third-hand smoke (residue on clothing, furniture) also increases risk. There is no safe level of smoke exposure for an infant.
 
-**The recommended range**
+### Avoid Overheating
+Keep room temperature between 16–20°C. Check the baby''s neck — warm is fine, sweaty is not. Do not combine heavy clothing with thick swaddling.
 
-Most paediatric and SIDS organisations recommend keeping a baby''s sleep room at **16 to 20 degrees Celsius** (61 to 68 degrees Fahrenheit). Within this range, most babies sleep comfortably when dressed appropriately for the temperature.
+### Breastfeed if Possible
+Breastfeeding for at least 2 months is associated with a 50% reduction in SIDS risk. The mechanism is not fully understood but may involve immune protection, arousal thresholds, and the biology of breastfeeding feeding patterns.
 
-**How to dress your baby for the temperature**
+### Offer a Dummy at Sleep Time
+Offering a pacifier (dummy) when putting the baby down to sleep is associated with reduced SIDS risk. If breastfeeding, introduce after 3–4 weeks once feeding is established.
 
-A useful guide is the TOG (Thermal Overall Grade) system used on sleep sacks:
+### Avoid Alcohol and Drug Exposure
+Parental alcohol or drug use dramatically increases risk if the parent is sharing a sleep surface.
 
-| Room temp | Suggested clothing + sleep sack TOG |
-|---|---|
-| Below 16°C | Vest + sleepsuit + 2.5 TOG or higher |
-| 16–18°C | Vest + sleepsuit + 2.5 TOG |
-| 18–20°C | Vest + sleepsuit + 1.0 TOG |
-| 20–22°C | Vest + 1.0 TOG sleep sack |
-| 22–24°C | Vest only + 0.5 TOG |
-| Above 24°C | Nappy/vest only, consider a fan for air circulation |
+## Vaccinations and SIDS
 
-**How to check if your baby is too hot or cold**
+Research consistently shows that **vaccination does not increase SIDS risk**. In fact, several studies suggest vaccinated babies have lower SIDS rates. Keep your baby''s vaccination schedule on track.
 
-Check the back of the neck or chest — not the hands or feet, which are often cool even in a comfortable baby. Signs of overheating include sweating, flushed skin, rapid breathing, or feeling very warm to the touch.
+## Home Monitoring
 
-**Never use loose blankets with young infants**
+Commercial baby monitors and pulse oximeters marketed to SIDS-anxious parents have not been shown to reduce SIDS risk and can create false reassurance. They are not recommended by any major paediatric body as a prevention tool.
 
-If your home is cold, use a sleep sack or swaddle rather than placing blankets in the cot. Loose bedding in the sleep space is a significant suffocation risk for babies under 12 months.
+## If the Worst Happens
 
-*This article is for informational purposes only. Always follow your regional safe sleep guidelines and consult your healthcare provider with any concerns.*$$,
-  0,
-  true,
-  ARRAY['Red Nose Foundation Australia', 'American Academy of Pediatrics (AAP)', 'Lullaby Trust UK', 'NHS UK'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-room-temperature-safe-baby-sleep'
-),
+If you find your baby unresponsive, call emergency services immediately and begin infant CPR if trained. Do not assume it is too late — call first.
 
--- ─────────────────────────────────────────────────────────────────────────────
--- SAFE SLEEP (8–12)
--- ─────────────────────────────────────────────────────────────────────────────
+SIDS bereavement is a uniquely devastating grief. Organisations like The Lullaby Trust (UK) and First Candle (US) provide specialist support to bereaved families.
 
-(
-  'infant',
-  'sleep',
-  'Back to Sleep: Why Babies Must Sleep on Their Back',
-  $$**The Evidence Is Clear**
+## Talking to Others
 
-Since the ''Back to Sleep'' campaign launched in the early 1990s, rates of SIDS (sudden infant death syndrome) have dropped by more than 50% in countries where the guidance was widely adopted. Placing babies on their back to sleep is one of the most evidence-backed recommendations in all of paediatric medicine.
+Grandparents and childcare providers may not be up to date on current safe sleep recommendations — particularly around back sleeping and clear sleep spaces, which differ from practices common 20–30 years ago. A gentle, factual conversation before every new caregiver looks after your baby is worth having.', 'sleep', 9, ARRAY['SIDS', 'safe sleep', 'cot death', 'newborn safety', 'prevention', 'infant'], true, true, 'Lumira Health Team'),
 
-**Why back sleeping is safer**
+('infant', 1, 'Swaddling Safely', 'How to swaddle your newborn correctly — and when it is time to stop', '## Why Swaddling Works
 
-When a baby sleeps on their stomach, several risks increase:
-- Rebreathing exhaled carbon dioxide if the face becomes partially covered
-- Overheating, as body heat cannot dissipate as easily
-- Reduced ability to rouse from sleep in response to these stresses
+Swaddling — wrapping a baby snugly in a light blanket or using a purpose-made swaddle — is one of the oldest infant soothing techniques in human history. When done correctly, it mimics the contained feeling of the womb and can dramatically reduce newborn startle reflex (Moro reflex) wake-ups that interrupt sleep.
 
-Babies on their back can more easily turn their head, open their airway, and rouse themselves if needed.
+Research shows that swaddled babies:
+- Cry less
+- Sleep longer stretches
+- Have lower heart rates during sleep
+- Self-soothe more easily
 
-**Common concerns — addressed**
+## How to Swaddle Safely
 
-*''My baby hates being on their back.''*
-Many babies take time to adjust. Keep offering back sleep consistently. Their preference is not a safety indicator.
+The key risks with swaddling are hip dysplasia (if legs are wrapped too tightly) and overheating. A safe swaddle:
 
-*''Won''t they choke if they spit up?''*
-This is a very common worry and largely unfounded. Healthy babies have a natural reflex that protects their airway. Stomach sleeping actually increases choking risk because the airway is positioned differently.
+**Keeps hips free:** Babies'' hips should be able to fall naturally into a "frog" position — knees bent and spread apart. Wrapping the legs straight and tight is associated with hip dysplasia. Look for swaddles specifically designed with a hip-healthy pouch at the bottom.
 
-*''My parents put me on my stomach and I was fine.''*
-Many babies were — but the data on SIDS risk is compelling. Our understanding has improved significantly.
+**Is snug at the chest, not the hips:** The upper body wrap should be firm enough to prevent the arms breaking free (which triggers the Moro reflex), but the legs should have freedom of movement.
 
-**When babies can roll**
+**Is made from lightweight fabric:** Muslin or cotton are appropriate. Fleece or heavy blankets risk overheating. Adjust clothing underneath based on room temperature.
 
-Once a baby can roll from back to tummy and back again independently (typically around four to six months), you do not need to reposition them if they roll in their sleep. Continue placing them on their back to start each sleep.
+**Keeps the face clear:** The swaddle should never cover the baby''s face or restrict the chin toward the chest, which can compromise the airway.
 
-**Supervised tummy time**
+## The Signs to Stop Swaddling
 
-Tummy time while your baby is awake and supervised is essential for development. It builds neck and shoulder strength and helps prevent positional flat head. The rule is: back for sleep, tummy for play.
+You must stop swaddling when your baby shows signs of rolling. Rolling while swaddled — where arms cannot be used to push up — is dangerous. Watch for:
+- Attempting to roll (rocking onto their side, pushing with legs)
+- Rolling from back to front at any point
+- Increased arm strength — consistently breaking out of the swaddle
 
-*This article is for informational purposes only. Please follow the safe sleep guidelines from your regional paediatric authority and consult your healthcare provider with any concerns.*$$,
-  0,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'Red Nose Foundation Australia', 'Lullaby Trust UK', 'WHO'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-back-to-sleep-why-babies-back'
-),
+Most babies begin showing rolling attempts between **2 and 4 months**. Do not wait until they successfully roll to stop swaddling — begin transitioning when you see the early attempts.
 
-(
-  'infant',
-  'sleep',
-  'The ABCs of Safe Sleep: Alone, Back, Cot',
-  $$**A Simple Framework That Saves Lives**
+## Transitioning Out of the Swaddle
 
-Safe sleep guidelines can feel overwhelming, but the core principle is often summarised in three letters: ABC — Alone, Back, Cot. This framework, supported by the AAP and equivalent bodies worldwide, captures the most protective conditions for infant sleep.
+Cold turkey works for some babies. Others need a more gradual approach:
 
-**A — Alone**
+**One arm out:** Swaddle as normal but leave one arm free for 3–5 nights, then free both arms.
 
-Your baby should sleep alone in their sleep space, without other people or pets sharing the surface. This means:
-- No sharing a bed with adults, siblings, or pets (bed-sharing significantly increases SIDS risk, especially with soft mattresses, duvets, or if a parent has consumed alcohol, sedatives, or is a smoker)
-- Room-sharing is encouraged — having your baby''s cot or bassinet in your room for at least the first six months reduces SIDS risk
-- Room-sharing is not the same as bed-sharing
+**Swaddle with arms up:** Some purpose-made transition swaddles position the arms up by the face (the natural startle response position) rather than pinned to the sides.
 
-**B — Back**
+**Transition sleep sacks:** Products that bridge the gap between swaddling and a standard sleep bag work well for many families.
 
-Every sleep, every time. Back sleeping is the only recommended position for healthy infants. If your baby rolls independently, you do not need to reposition them, but always start them on their back.
+Expect 2–5 days of disrupted sleep during the transition. This is normal and will resolve.
 
-**C — Cot (or safe sleep surface)**
+## Common Swaddling Mistakes
 
-Your baby should sleep on a firm, flat, safety-approved surface with a fitted sheet. This includes:
-- A cot, bassinet, or Moses basket that meets current safety standards
-- A firm, flat mattress with no sagging
-- No inclined sleepers, loungers, or bouncers for unattended sleep
-- No pillows, bumpers, positioners, or loose toys
+- **Too loose:** The baby breaks free and the loose fabric becomes a hazard
+- **Too tight at the hips:** Risks hip dysplasia
+- **Used past rolling attempts:** The most serious safety risk
+- **Combined with other warming layers:** Can cause dangerous overheating
+- **Used during awake time:** Swaddling should be reserved for sleep; babies need freedom of movement during waking hours for motor development
 
-**Room-sharing without bed-sharing**
+Always place a swaddled baby on their **back**. Once the swaddle is discontinued, transition to an appropriate sleeping bag — this keeps the baby warm without the loose blanket hazard in the crib.', 'sleep', 6, ARRAY['swaddling', 'newborn', 'Moro reflex', 'safe sleep', 'rolling', 'hip dysplasia'], true, true, 'Lumira Health Team'),
 
-Having your baby''s cot next to your bed offers the best of both worlds — proximity for feeding and comfort, with a safer sleep surface for your baby.
+('infant', 1, 'White Noise for Baby Sleep', 'The science behind white noise — benefits, safe volumes, and how to use it well', '## Why White Noise Works
 
-**If you fall asleep while feeding**
+White noise is not a gimmick. It works through well-understood mechanisms, and when used correctly, it is one of the most effective and low-risk sleep aids for infants.
 
-Plan ahead. If there is a chance you might doze off during a night feed, set up the safest possible surface in advance. A firm sofa arm or reclined chair is significantly more dangerous than a firm bed — so a firm bed with no loose bedding is preferable to a sofa if you do fall asleep.
+The womb is loud — research estimates the intrauterine sound environment is roughly equivalent to a vacuum cleaner running continuously, around **75–85 decibels**. Newborns are not accustomed to silence; they find it unfamiliar and sometimes stimulating. White noise recreates something closer to the sound environment they know.
 
-*This article is for informational purposes only. Safe sleep guidelines may vary slightly by country. Always follow the guidance of your regional paediatric authority.*$$,
-  0,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'Red Nose Foundation Australia', 'Lullaby Trust UK', 'NHS UK'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-abcs-safe-sleep-alone-back-cot'
-),
+## The Science
 
-(
-  'infant',
-  'sleep',
-  'Safe Cot Setup: What Should and Should Not Be in the Cot',
-  $$**The Cot Is a Sleep Space, Not a Decoration Zone**
+White noise works through two mechanisms:
 
-It is tempting to make a baby''s cot feel cosy and welcoming — but many of the items traditionally placed in cots are associated with suffocation and SIDS risk. A safe cot setup is a minimal one.
+**1. Masking:** White noise contains sound at all audible frequencies simultaneously. This "fills" the auditory field and masks sudden sounds — a door closing, a sibling shouting, a car outside — that would otherwise trigger the Moro (startle) reflex and wake the baby.
 
-**What belongs in the cot**
+**2. Calming:** Research published in the journal *Archives of Disease in Childhood* found that 80% of newborns fell asleep within 5 minutes when exposed to white noise, compared to 25% in the control group. The monotony of the sound appears to reduce cortisol levels and promote relaxation.
 
-- A firm, flat mattress that fits snugly with no gaps around the edges
-- A single fitted sheet designed for that specific mattress size
-- Your baby (and nothing else, for babies under 12 months)
+## Types of Sound
 
-**What does NOT belong in the cot**
+- **True white noise:** A static-like hiss covering all frequencies
+- **Pink noise:** Similar to white noise but with more bass — resembles rainfall
+- **Brown noise:** Even more bass-heavy, resembles a distant rumble
+- **Shushing sounds:** The human "shhh" is white noise produced by parents; it works the same way
+- **Womb sounds:** Recordings of intrauterine sounds, often effective for very young newborns
+- **Fan noise, ocean waves, rain:** All variations that work for different babies
 
-- **Pillows**: Risk of suffocation; not needed until well into toddlerhood
-- **Loose blankets or duvets**: Use a sleep sack instead
-- **Cot bumpers**: Now strongly advised against by the AAP and many global bodies — they provide no safety benefit and can be a suffocation hazard
-- **Soft toys or stuffed animals**: Save these for supervised playtime
-- **Positioners or wedges**: No evidence of benefit; evidence of harm
-- **Mobiles that can fall into the cot**
-- **Blanket rolls or rolled towels**
+Experiment to find what your baby responds to best.
 
-**The mattress matters**
+## Safe Volume Guidelines
 
-A good cot mattress should be:
-- Firm and flat — your hand should not leave an impression
-- The correct size for the cot (no gaps at the sides)
-- Covered with a waterproof protector underneath a fitted sheet
+The AAP recommends keeping white noise machines at a maximum of **50 decibels** at the baby''s ear level — roughly the volume of a quiet conversation. Many white noise machines played near the crib exceed this.
 
-**Second-hand cots and mattresses**
+Guidelines for safe use:
+- Place the white noise source **at least 2 metres (6 feet) from the baby**, not directly in the crib or attached to the cot rail
+- Keep volume below **50–60dB** — use a free decibel meter app to check
+- Do not use the maximum setting on any device
+- Avoid small clip-on devices placed directly on the crib
 
-Second-hand cots are fine if they meet current safety standards (check the manufacture date and recall status). The AAP recommends using a new mattress where possible, as a mattress that has been exposed to moisture from another baby may have a different microbiological profile. If using a second-hand mattress, ensure it is firm, undamaged, and thoroughly clean.
+Prolonged exposure to loud noise in infancy can affect auditory development. The goal is a gentle, consistent background hum — not a blast.
 
-*This article is for informational purposes only. Always follow your regional safe sleep standards. Consult your healthcare provider with any concerns.*$$,
-  0,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'Lullaby Trust UK', 'Red Nose Foundation Australia', 'Consumer Product Safety Commission (CPSC)'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-safe-cot-setup-what-in-out'
-),
+## Does It Create a Dependency?
 
-(
-  'infant',
-  'sleep',
-  'Sleep Positioners and Wedges: Why the Evidence Is Against Them',
-  $$**What Are Sleep Positioners?**
+Many parents worry that their baby will need white noise forever. The research does not support this concern. White noise is a sleep association, and like all sleep associations, it can be faded gradually when the time is right. Many families use it successfully through the first year and then simply reduce the volume over time without difficulty.
 
-Sleep positioners — also called wedges, anti-roll devices, or infant nests — are products designed to keep a baby in a specific position during sleep, often propped on a wedge or held in place by bolsters. They are marketed with claims around reflux, flat head prevention, or simply keeping a baby ''secure.''
+If your baby is developmentally ready for independent sleep and has white noise as their only sleep association, it is one of the easiest associations to fade — because unlike a feed or a cuddle, you can control it remotely.
 
-**The evidence does not support their use**
+## Practical Tips
 
-Major paediatric bodies — including the AAP, the UK''s Medicines and Healthcare products Regulatory Agency (MHRA), and Australia''s Red Nose Foundation — advise against using sleep positioners for healthy infants. The reasons:
+- Use white noise consistently for all sleeps, not just at night — this helps with nap sleep too
+- A dedicated machine with a loop setting is more convenient than a phone
+- The sound should be audible when you walk into the room, but not overwhelming
+- Some families continue white noise well beyond infancy with no ill effects — it is a personal choice
 
-- Babies can become wedged against the side of a positioner with their face obstructed
-- Several infant deaths have been linked to positioner use
-- The claimed benefits (for reflux, flat head) are not supported by clinical evidence
-- They create an unstable surface and can shift position during sleep
+White noise is one of the simplest, most evidence-supported tools in the infant sleep toolkit. Used at safe volumes, it helps babies sleep longer, helps parents sleep better, and costs very little.', 'sleep', 6, ARRAY['white noise', 'newborn', 'sleep aid', 'sound machine', 'safe volume', 'sleep environment'], true, true, 'Lumira Health Team'),
 
-**The reflux argument**
+('infant', 2, 'Dream Feeds: What They Are and Do They Work', 'The evidence on dream feeds, how to do them, and when to stop', '## What Is a Dream Feed?
 
-Some positioners are sold for babies with gastro-oesophageal reflux. The evidence does not support elevation as a safe or effective intervention for infant reflux. The AAP specifically recommends against head-of-bed elevation for infant reflux. If your baby has significant reflux symptoms, work with your paediatrician on evidence-based management.
+A dream feed is a feed given to a sleeping or semi-sleeping baby — typically between 10pm and midnight — with the goal of topping up their calories before the parent goes to sleep. The idea is that a well-fed baby will sleep a longer stretch, allowing parents to get a block of uninterrupted sleep.
 
-**What about flat head (positional plagiocephaly)?**
+## How to Do a Dream Feed
 
-Flat head prevention is better addressed through supervised tummy time while awake, varied awake positioning, and — if needed — physiotherapy. Not through sleep positioners.
+1. Lift the baby from their crib without waking them fully
+2. Bring the breast or bottle to their mouth — the rooting reflex will engage even in deep sleep
+3. Feed until the baby stops sucking or pulls away
+4. Wind/burp gently if your baby is prone to wind
+5. Return to the crib
 
-**What to use instead**
+You do not need to fully rouse the baby. The goal is a sleepy, semi-conscious feed.
 
-A firm, flat, empty cot with a well-fitted sheet is the safest sleep surface. If you are worried about your baby rolling or moving during sleep, rest assured that a firm flat surface without positioners is safer than one with them.
+## Does It Actually Work?
 
-*This article is for informational purposes only. Please consult your paediatrician if you have specific concerns about your baby''s sleep position or reflux.*$$,
-  0,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'Red Nose Foundation Australia', 'MHRA UK', 'FDA USA'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-positioners-wedges-evidence-against'
-),
+The evidence is nuanced. **For some babies, dream feeds work extremely well** — particularly in the first 3 months when sleep is primarily hunger-driven.
 
-(
-  'infant',
-  'sleep',
-  'Sleeping in the Car Seat: The Risks of Extended Use',
-  $$**Car Seats Are Designed for Travel, Not Sleep**
+Dream feeds are most effective when:
+- The baby is under 4 months old
+- The baby regularly wakes between midnight and 2am from hunger
+- The baby can transfer back to the crib without fully waking
 
-Car seats are life-saving devices when used correctly in vehicles. They are not safe sleep surfaces for extended, unsupervised use outside the car. This distinction matters — and it is one of the most overlooked safe sleep issues.
+However, **for other babies**, a dream feed can:
+- Disrupt a longer natural sleep stretch the baby was already developing
+- Create a habitual hunger signal at that time of night
+- Cause increased wind or discomfort that leads to more waking, not less
 
-**Why car seat sleep carries risks**
+## When to Try It
 
-When a baby sleeps in a car seat outside the car (in a pram frame, a trolley, or left in the seat at home), several risks arise:
+Dream feeds are worth trying between **weeks 2 and 16**. Many parents find them most useful from around 6–8 weeks when the baby begins to show a slightly longer sleep stretch at night and you want to align that stretch with your own sleep window.
 
-- The semi-reclined angle can cause an infant''s head to fall forward, compressing the airway — this is called positional asphyxiation
-- Young babies, particularly newborns and premature infants, have weak neck muscles and cannot correct their head position if it falls forward
-- The risk is greatest when the seat is not at the correct recline angle (seats are designed to sit at a specific angle in the car installation, not always the angle they sit at independently)
+## When to Stop
 
-**What the research shows**
+Most sleep consultants recommend dropping the dream feed around **6–8 months**, when the baby should be developmentally capable of sleeping longer stretches without it. At this point, the dream feed may be maintaining a night waking habit rather than preventing hunger.
 
-A study published in Pediatrics found that more than 30% of infant sleep-related deaths in car seats, bouncers, and similar devices occurred while the infant was being supervised. Being nearby does not eliminate the risk if you are not watching continuously.
+Signs it is time to stop:
+- Baby is taking solids and growing well
+- Baby barely feeds at the dream feed and seems disinterested
+- Night wakings are not reducing despite consistent dream feeding
 
-**Safe practices**
+Drop it gradually — reduce the volume (if bottle feeding) or the duration by a few minutes over a week, rather than stopping abruptly.
 
-- Limit car seat time to the duration of travel
-- Transfer your baby to a firm, flat sleep surface as soon as you arrive home
-- If your baby falls asleep in the car, try to transfer them — or stay in the vehicle and watch them until you arrive at your destination
-- Do not place a sleeping baby in their car seat on the floor, pram frame, or shopping trolley for a nap
+## Dream Feeds and Breastfeeding
 
-**The pram question**
+Dream feeds are entirely compatible with breastfeeding. Some breastfeeding advocates note an additional benefit: feeding at 10–11pm stimulates prolactin production during its natural overnight peak, which can support milk supply.
 
-Many prams have a lie-flat position for newborns, which is significantly safer than a car seat recline. If you need your baby to sleep on the go, a lie-flat pram or carrier with appropriate head support is preferable to leaving them in the car seat.
+## The Bottom Line
 
-*This article is for informational purposes only. Consult your paediatrician or child safety authority for guidance specific to your situation.*$$,
-  0,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'Liaw P et al. - Pediatrics 2019', 'Red Nose Foundation Australia', 'Lullaby Trust UK'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-car-seat-risks-extended-use'
-),
+Try dream feeds for 5–7 nights consistently. If your night''s sleep improves, keep going. If the baby''s night waking pattern does not change or worsens, the dream feed is not working for your baby — move on without guilt.', 'sleep', 6, ARRAY['dream feed', 'newborn', 'night feeding', 'sleep strategy', 'infant feeding', 'breastfeeding'], true, true, 'Lumira Health Team'),
 
--- ─────────────────────────────────────────────────────────────────────────────
--- NAPS (13–19)
--- ─────────────────────────────────────────────────────────────────────────────
+('infant', 1, 'Reading Your Newborn''s Sleep Cues', 'Learning to spot tiredness before overtiredness — the key to easier settling', '## Why Cue Reading Matters
 
-(
-  'infant',
-  'sleep',
-  'Newborn Naps: How Long, How Many, and Wake Windows',
-  $$**Newborn Sleep Is Chaotic — and That''s Normal**
+The difference between a baby who settles within minutes and one who fights sleep for an hour is often timing. Put a baby down too early and they are not ready. Put them down too late and they are overtired — flooded with cortisol and adrenaline, their body fighting sleep even though they desperately need it.
 
-In the first eight weeks of life, naps do not follow a schedule. Newborns sleep in short bursts throughout the day and night, with no strong distinction between the two — their circadian rhythm has not yet developed. Trying to enforce a nap schedule at this stage tends to cause more stress than sleep.
+Learning to read your baby''s sleep cues gives you the narrow window between ready and overtired. With newborns, that window is small — sometimes only 10–15 minutes.
 
-**How many naps do newborns take?**
+## Early Sleep Cues (Act Now)
 
-Most newborns take four to six naps in a 24-hour period, totalling seven to nine hours of daytime sleep. Each nap may last anywhere from 20 minutes to two hours. The variation is completely normal.
+These are the green-light signals. Your baby is approaching tiredness but is not yet overtired:
 
-**Wake windows for newborns**
+- **Slowing down:** Becoming quieter, less active, less interested in their environment
+- **Staring:** A glassy, fixed gaze — the world has stopped being interesting
+- **Turning the head away:** Averting gaze from faces or stimulation
+- **Pulling at ears or rubbing eyes:** In context, signals tiredness
+- **Yawning:** One of the later early cues — by the time you see it, you have a few minutes
 
-- Weeks 0 to 4: 45 to 60 minutes maximum awake time
-- Weeks 4 to 8: 60 to 90 minutes maximum awake time
+When you see two or more early cues, begin the settle process immediately.
 
-At these ages, watch closely for tired cues — yawning, losing interest in stimulation, staring, fussing. When you see two or three cues, it is time to begin settling.
+## Late Cues (You Have Missed the Window)
 
-**What newborn naps look like**
+These signals mean the baby has crossed into overtiredness. Settling will be harder and take longer:
 
-- Mostly happen in arms, at the breast, in a carrier, or in a pram — and that is fine
-- Short naps (20 to 45 minutes) are the norm; a 90-minute nap is a gift, not an expectation
-- Naps and night sleep are interchangeable at this stage — there is no meaningful day-night pattern yet
+- **Arching the back:** The classic overtired arch, combined with crying
+- **Clenched fists and rigid limbs:** The body is flooded with stress hormones
+- **Inconsolable crying:** Escalating quickly, nothing helps temporarily
+- **Frantic feeding:** Seeking comfort at the breast or bottle but unable to settle
+- **Redness around the eyes:** The skin around the eyes flushes when a baby is overtired
 
-**Helping day-night distinction develop**
+With an overtired baby, focus on calming before sleep — dim the lights, reduce stimulation, increase skin contact.
 
-You can gently encourage circadian rhythm development from around two weeks:
-- Bright light and activity during the day
-- Keep nap environments slightly lighter and noisier than the night environment
-- Dark, quiet, calm environment for night sleep
+## Wake Windows by Age
 
-**What you do not need to do yet**
+- **0–4 weeks:** 45–60 minutes of wakefulness maximum
+- **4–8 weeks:** 60–90 minutes
+- **2–3 months:** 75–90 minutes
+- **3–4 months:** 90 minutes to 2 hours
 
-- Follow a strict eat-play-sleep routine
-- Worry about nap location (cot vs arms)
-- Limit nap length (unless advised by your provider for feeding reasons)
+These are averages. Your baby''s cues are more reliable than the clock.
 
-*This article is for informational purposes only and is not a substitute for personalised advice. Speak with your midwife, health visitor, or paediatrician with any concerns.*$$,
-  0,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'National Sleep Foundation', 'Mindell JA - Sleeping Through the Night'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-newborn-naps-how-long-many-windows'
-),
+## The Active Sleep Trap
 
-(
-  'infant',
-  'sleep',
-  'The 4-to-3 Nap Transition: When It Happens and How to Navigate It',
-  $$**When Do Babies Drop to Three Naps?**
+Many parents read active sleep as wakefulness and respond to their baby when the baby is actually still asleep. Signs your baby is in active sleep rather than waking:
+- Eyes flutter or briefly open but do not fully engage
+- Movement is cyclical, not escalating
+- No actual crying — sounds are grunts, sighs, or brief vocalisations
+- The cycle resolves within 5–10 minutes without intervention
 
-Most babies make the transition from four naps to three naps somewhere between 3 and 4 months of age (around weeks 12 to 16). This is one of the earlier nap transitions and often happens gradually and somewhat naturally.
+Practice the pause — wait 30–60 seconds before responding to sounds. You will be surprised how often the baby settles back on their own.
 
-**Signs your baby is ready**
+## Keeping a Log
 
-- Consistently resisting the fourth nap or taking a very long time to fall asleep for it
-- The fourth nap is pushing bedtime very late
-- Wake windows of around 90 minutes to 2 hours are becoming manageable
-- Naps are starting to lengthen slightly (more than 30 to 45 minutes)
+In the early weeks, tracking sleep times and noting when you see cues can reveal your baby''s natural rhythm. Even a simple note ("fed 9am, first yawn 10:05am, settled 10:15am, asleep 10:22am") builds a picture over 3–4 days that makes timing much easier.
 
-**Signs they are NOT ready**
+Cue reading is a skill that improves with practice. By 6–8 weeks, most parents find they can reliably identify their baby''s individual signals and settle them far more smoothly as a result.', 'sleep', 6, ARRAY['sleep cues', 'newborn', 'overtiredness', 'wake windows', 'settling', 'infant sleep'], true, true, 'Lumira Health Team'),
 
-- Still on very short wake windows (60 to 75 minutes)
-- Extremely overtired without the fourth nap
-- Under 12 weeks of age
+('infant', 1, 'Day-Night Confusion in Newborns', 'Why your baby has it backwards — and how to gently reset their clock', '## What Is Day-Night Confusion?
 
-**How to make the transition**
+Day-night confusion is the phenomenon where newborns sleep most of the day and are wide awake — sometimes for hours — in the middle of the night. For exhausted new parents, it can feel deliberate. It is not. It is biology.
 
-Rather than dropping the fourth nap abruptly, try extending wake windows by 10 to 15 minutes every few days. As wake windows grow, the gap between naps lengthens, and the fourth nap becomes unnecessary.
+In the womb, babies are rocked to sleep by their mother''s daytime movement and wake when she rests at night. They are also shielded from light, so they never receive the environmental signals that would establish a circadian rhythm. They are born into the world without any internal day-night clock.
 
-A sample three-nap structure:
-- Wake around 7:00 am
-- Nap 1 at around 8:30–9:00 am
-- Nap 2 at around 12:00–12:30 pm
-- Nap 3 (catnap) at around 3:00–3:30 pm
-- Bedtime around 7:00–7:30 pm
+## The Biology of Circadian Rhythm Development
 
-The third nap at this stage is often a short catnap of 30 to 45 minutes — just enough to prevent overtiredness before bed.
+The circadian rhythm does not become functional until around **6–8 weeks of age**. Even then, it needs environmental cues to calibrate to the local day-night cycle.
 
-**Expect some adjustment**
+The primary environmental cue is **light** — specifically, blue-spectrum light detected by specialised cells in the eye that communicate directly with the suprachiasmatic nucleus (SCN) in the hypothalamus. Bright morning light suppresses melatonin and signals "wake time"; dim evening light allows melatonin to rise and signals "sleep time."
 
-The transition period can last two to three weeks. Bedtime may need to be moved earlier temporarily while the new rhythm settles.
+Until this system is online and calibrated, babies have no biological basis for sleeping more at night than during the day.
 
-*This article is for informational purposes only. All babies develop at different rates — your health visitor or paediatrician can advise if you are uncertain.*$$,
-  12,
-  true,
-  ARRAY['National Sleep Foundation', 'Weissbluth M - Healthy Sleep Habits, Happy Child', 'Mindell JA - Sleeping Through the Night'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-4-to-3-nap-transition'
-),
+## How to Help Reset the Clock
 
-(
-  'infant',
-  'sleep',
-  'The 3-to-2 Nap Transition: Signs and How to Manage It',
-  $$**When Do Babies Drop to Two Naps?**
+### Light
+- **Morning:** Open curtains wide, let natural light into the room during morning feeds. A short outdoor time in morning light is powerful.
+- **Daytime:** Keep the environment bright and stimulating. Do not dim lights for daytime naps.
+- **Evening:** Begin dimming lights 1–2 hours before the intended bedtime. Use warm-spectrum lighting.
+- **Night feeds:** Keep lights as dim as possible. A nightlight or low lamp is enough.
 
-The transition from three naps to two typically happens between four and six months of age (around weeks 16 to 24). It is one of the more straightforward transitions for most families, though it requires some schedule adjustment.
+### Activity and Stimulation
+- **Daytime:** Talk to your baby during feeds, make eye contact, move to different rooms, go outside if possible.
+- **Night:** Keep night feeds business-like — feed, wind, change if necessary, return to sleep. Minimal talking, no play, no bright lights.
 
-**Signs your baby is ready for two naps**
+### Feed Timing
+Research suggests that feeding according to demand during the day and not stretching feeds during daylight hours helps calibrate hunger rhythms to daytime, which feeds into circadian development.
 
-- Consistently refusing or fighting the third nap
-- Taking a very long time to fall asleep for the third nap
-- The third nap is pushing bedtime past 8:00 pm
-- Wake windows of around 2 to 2.5 hours are manageable
-- Naps are lasting 45 minutes or longer consistently
+## When Will It Resolve?
 
-**Signs they are not quite ready**
+Most newborns show meaningful improvement in day-night confusion by **6–8 weeks**. By 3 months, the circadian rhythm is typically well enough established that the baby has a clear longer sleep period at night — even if it is only 4–5 hours.
 
-- Becoming extremely overtired and cranky without the third nap
-- Under 16 weeks of age
-- Wake windows still under 90 minutes
+The variation between babies is real. Some settle into a clearer day-night pattern by 4–5 weeks; others take until 10–12 weeks. This is not a reflection of parenting — it is individual biology.
 
-**A sample two-nap schedule**
+## Surviving the Phase
 
-- Wake around 7:00 am
-- Nap 1 around 9:00–9:30 am (45 minutes to 1.5 hours)
-- Nap 2 around 1:00–1:30 pm (45 minutes to 1.5 hours)
-- Bedtime around 7:00–7:30 pm (depending on when second nap ends)
+While the circadian rhythm develops, the most effective coping strategy is **shifting your own expectations**. Trying to keep the baby awake during the day in hopes they will sleep longer at night does not work — it simply creates an overtired baby who sleeps worse. Let the baby sleep when they need to sleep. Prioritise your own rest where you can. This phase is temporary and biologically driven; it always ends.', 'sleep', 7, ARRAY['day night confusion', 'newborn', 'circadian rhythm', 'night waking', 'melatonin', 'infant sleep'], true, true, 'Lumira Health Team'),
 
-**Managing the transition period**
+('infant', 2, 'Contact Napping', 'When sleeping on you is okay — and how to transition to independent naps when you are ready', '## What Is Contact Napping?
 
-- The third nap can be dropped gradually — try every other day first
-- On days the third nap is dropped, move bedtime earlier by 30 to 45 minutes to avoid overtiredness
-- Expect a two to three week adjustment period
+A contact nap is a nap taken while the baby is on or against a caregiver''s body — in arms, in a carrier, or lying on a chest. It is one of the most common newborn sleep patterns, and for many families, it is simply how naps work in the early weeks.
 
-**Why this transition can feel hard**
+Contact napping is not a bad habit. It is a biological norm. Human babies are born the most neurologically immature of any primate. Close physical contact with a caregiver regulates their heart rate, breathing, temperature, and cortisol levels. Research shows that held babies have lower stress hormone levels and more stable physiological states than babies left to sleep independently.
 
-The gap between the second nap ending and bedtime can feel very long initially. An earlier bedtime is your best friend during this period — overtired babies do not sleep better, they sleep worse.
+## When Contact Napping Is Completely Fine
 
-*This article is for informational purposes only. Every baby is different — consult your healthcare provider if you are unsure whether your baby is ready for this transition.*$$,
-  16,
-  true,
-  ARRAY['National Sleep Foundation', 'Weissbluth M - Healthy Sleep Habits, Happy Child', 'Mindell JA - Sleeping Through the Night'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-3-to-2-nap-transition'
-),
+In the **first 8–12 weeks**, contact napping is not only acceptable — many sleep specialists consider it optimal. A newborn who sleeps well in contact and is not in an unsafe position is getting what they biologically need.
 
-(
-  'infant',
-  'sleep',
-  'The 2-to-1 Nap Transition: Navigating the Big One',
-  $$**The Most Disruptive Nap Transition**
+If contact napping is working for your family, there is no developmental damage being done. Babies who are held more do not become more anxious or dependent — research consistently shows the opposite.
 
-Moving from two naps to one is typically the most challenging transition in the first two years. It usually happens between 12 and 18 months (around weeks 40 to 72), and many families find their toddler seems caught between two nap needs for several weeks — too tired for one nap, too wakeful for two.
+## Safe Contact Napping
 
-**Signs your baby might be ready**
+The main risk with contact napping is an exhausted parent falling asleep in an unsafe position — particularly on a sofa or armchair, where a baby can become wedged.
 
-- Consistently refusing one of the two naps, several days in a row
-- Taking a very long time (45 minutes or more) to fall asleep for the second nap
-- One nap is pushing bedtime very late
-- Able to manage a wake window of around 4 to 5 hours
+Safe contact napping guidelines:
+- If you are sitting reclined, ensure a second adult knows you are there
+- **Never contact nap on a sofa if you are likely to fall asleep**
+- In a carrier, follow TICKS guidelines (Tight, In view, Close enough to kiss, Keep chin off chest, Supported back)
+- If lying down, the baby should be on your chest, not face-down against your arm
 
-**Signs they are not ready yet**
+## When You Might Want to Transition
 
-- Under 12 months
-- Only occasionally refusing a nap (developmental leaps and illness can cause temporary nap resistance)
-- Becoming extremely overtired when naps are missed
+There is no required timeline. Common reasons families choose to transition:
+- Going back to work
+- Caring for older children
+- Physical discomfort from extended holding
+- Baby''s weight making extended carrying difficult
+- Wanting to work on longer, more restorative naps
 
-**How to make the transition**
+Most families find the transition more manageable from around **3–4 months**.
 
-Rather than switching abruptly, try a gradual approach:
-- Begin pushing the first nap later by 15 minutes every few days
-- Work towards a single midday nap starting around 12:00 to 1:00 pm
-- Keep this nap capped at 1.5 to 2 hours initially to protect night sleep
-- Move bedtime earlier during the adjustment period — a 6:30 to 7:00 pm bedtime is common during transition
+## How to Transition
 
-**The ''in-between'' phase**
+**Gradual approach:** Start with the first nap of the day (when the baby is least overtired). Do your usual settling routine, then place in the crib when the baby is deeply asleep — wait for floppy limbs and slow, regular breathing. Time the transfer for the transition from active to quiet sleep (around 15–20 minutes into the nap).
 
-Many children need two naps on some days and one on others for a period of two to six weeks. Follow your child''s cues rather than forcing a fixed schedule too quickly.
+**Warmth:** A warm (not hot) water bottle placed briefly on the crib mattress before transfer and removed before putting the baby down can prevent the temperature shock that triggers waking.
 
-**What to expect after the transition**
+**Gradual reduction:** Some families transition by starting the nap in-arms and progressively moving the baby slightly further from full contact over several days.
 
-Once settled on one nap, most toddlers sleep for 1.5 to 2.5 hours in the middle of the day and have a bedtime of around 7:00 to 8:00 pm.
+Expect some failed transfers. This is normal and not a sign that independent napping is impossible — it is simply a skill that takes time to develop.', 'sleep', 7, ARRAY['contact napping', 'newborn', 'nap transition', 'babywearing', 'independent sleep', 'infant naps'], true, true, 'Lumira Health Team');
 
-*This article is for informational purposes only. Consult your paediatrician or health visitor if you are uncertain about your child''s readiness.*$$,
-  40,
-  true,
-  ARRAY['National Sleep Foundation', 'Weissbluth M - Healthy Sleep Habits, Happy Child', 'American Academy of Pediatrics (AAP)'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-2-to-1-nap-transition'
-),
+-- Articles 11-20: 4-12 Month Sleep
 
-(
-  'infant',
-  'sleep',
-  'Short Naps: Why Babies Wake After 30 to 40 Minutes',
-  $$**Why Does My Baby Always Wake After 30 Minutes?**
+INSERT INTO public.content_articles (stage, week_or_month, title, subtitle, body, category, reading_time_minutes, tags, medically_reviewed, culturally_sensitive, author) VALUES
 
-If your baby wakes consistently at the 30 to 45 minute mark of every nap, you are witnessing sleep cycle endings in action. This is one of the most common infant sleep questions — and one of the most frustrating experiences for parents.
+('infant', 16, 'The 4-Month Sleep Regression', 'Why it happens, how long it lasts, and what to do', '## What Is the 4-Month Sleep Regression?
 
-**The sleep cycle explanation**
+The 4-month sleep regression is one of the most well-documented and universally experienced challenges of infant sleep. Unlike later "regressions" — which are often caused by developmental leaps, illness, or teething — the 4-month regression has a specific, permanent neurological cause: **the maturation of sleep architecture**.
 
-Babies have sleep cycles of approximately 45 minutes. At the end of each cycle, all sleepers (including adults) surface slightly. Adults have learned to roll over and fall back asleep without fully waking. Many babies have not yet developed this skill, particularly if they rely on feeding or rocking to fall asleep in the first place.
+Around 3.5–4.5 months, the infant brain undergoes a significant shift. Sleep cycles change permanently from the newborn two-state pattern (active sleep / quiet sleep) to a more adult-like four-stage pattern, including light NREM, deeper NREM, and REM stages. This is developmental progress — but it creates a new challenge.
 
-**When nap extensions start to happen naturally**
+## Why Sleep Gets Worse Before It Gets Better
 
-Most babies begin linking sleep cycles (and taking longer naps) somewhere between four and six months — some earlier, some later. It is a developmental achievement, not something that happens on a fixed timeline.
+In the newborn period, babies often enter sleep through active (REM-like) sleep and can be placed in a crib while deeply asleep without waking. After the 4-month shift, babies enter sleep through light sleep first — just like adults. This means:
 
-**What you can try**
+1. Baby falls asleep at the breast, on a dummy, being rocked, or in arms
+2. Baby enters light NREM sleep — where partial arousal is normal
+3. Baby checks (subconsciously) whether conditions match those when they fell asleep
+4. If the breast, dummy, arms, or rocking are no longer present, the baby fully wakes and signals for them to be reinstated
 
-- **Pause before responding**: When you hear stirring at 30 minutes, wait two to three minutes before going in. Some babies will self-settle back to sleep.
-- **Improve independent settling**: Babies who can fall asleep independently at nap start are more likely to link cycles, because they can re-create the conditions they need.
-- **Adjust wake windows**: Putting a baby down when slightly more tired (but not overtired) can encourage deeper initial sleep.
-- **Environmental consistency**: Ensure white noise, darkness, and temperature are consistent throughout the nap.
+This is called a **sleep association problem**, and it is the core mechanism behind the 4-month regression and most subsequent night-waking issues.
 
-**When short naps are fine**
+## What the Regression Looks Like
 
-- Under four months: Short naps are completely normal and not a problem to solve
-- If your baby wakes happy and feeds well, a 30-minute nap may be sufficient for their current needs
-- Multiple short naps totalling adequate daily sleep are fine — it is the total that matters more than individual nap length
+- Previously good sleeper suddenly waking every 1–2 hours at night
+- Short naps (30–45 minutes — one sleep cycle)
+- Difficulty settling at bedtime
+- Feeding more frequently at night than in previous weeks
+- General fussiness and clinginess during waking hours
 
-*This article is for informational purposes only. If you are concerned about your baby''s sleep, consult your healthcare provider or a certified infant sleep consultant.*$$,
-  8,
-  true,
-  ARRAY['Mindell JA et al. - Pediatrics 2006', 'National Sleep Foundation', 'Weissbluth M - Healthy Sleep Habits, Happy Child'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-short-naps-why-wake-30-minutes'
-),
+## How Long Does It Last?
 
-(
-  'infant',
-  'sleep',
-  'Naps on the Go: Car, Pram, and Carrier — Pros and Cons',
-  $$**Does Nap Location Really Matter?**
+Left without any changes to sleep approach, the 4-month regression does not truly "end" — the underlying sleep architecture change is permanent. Families who were previously able to settle their baby at the breast or by rocking and transfer them asleep may find this no longer works reliably. The regression resolves when either:
+- **The baby develops independent sleep skills** (with or without parental guidance)
+- **The sleep associations are maintained consistently enough** that the baby re-learns to signal for them at every cycle
 
-Many parents find that their baby sleeps brilliantly in the pram or car but barely at all in the cot. The question then becomes: is this a problem? And the honest answer is — it depends on your stage and your goals.
+## What to Do
 
-**Car naps**
+### Option 1: Ride it out
+Some babies, particularly those who can self-settle to some degree, will work through this period in 2–4 weeks. If night wakings are manageable and you are coping, waiting is valid.
 
-Pros: Motion is soothing, many babies settle quickly, useful when out and about.
-Cons: You cannot go anywhere while the nap is happening; extended car seat use outside the car carries safety risks (positional asphyxiation); you cannot transfer most babies without waking them.
+### Option 2: Address sleep associations
+This is the moment many families choose to begin gentle sleep work. Because the regression exposes the underlying sleep association issue, addressing associations at this stage can be highly effective.
 
-If car naps are your primary nap strategy, they work — but be aware that the nap ends when the car stops, and leaving a baby sleeping in a stationary car seat is not recommended for extended periods (see our article on car seat sleep safety).
+Start with **bedtime first** — focus on putting the baby down awake (or drowsy but awake) at bedtime before tackling night wakings. The skill learned at bedtime gradually generalises to night wakings and naps.
 
-**Pram naps**
+### Option 3: Seek professional guidance
+If you are severely sleep-deprived, struggling with mental health, or feeling overwhelmed, this is the right time to speak with a health visitor, GP, or infant sleep consultant.
 
-Pros: Fresh air, flexibility, good for walking-dependent families, many babies love motion.
-Cons: Motion becomes a dependent sleep association; naps may be shorter if the pram stops; not a controlled environment for temperature or noise.
+## What Will Not Help
 
-A lie-flat pram position is much safer than a car seat angle for sleeping. If your baby naps in the pram regularly, this is completely fine.
+- Increasing daytime feeds to "tank up" the baby (caloric intake is rarely the primary driver after 4 months)
+- Keeping the baby awake longer in hopes of longer night sleep (usually backfires)
+- Introducing solids early (not recommended before 6 months and will not resolve a sleep association issue)
 
-**Carrier naps**
+The 4-month regression is not your fault, and it does not mean you have been doing anything wrong. It means your baby''s brain is developing exactly as it should.', 'sleep', 8, ARRAY['4 month regression', 'sleep regression', 'sleep associations', 'infant sleep', 'night waking', 'sleep training'], true, true, 'Lumira Health Team'),
 
-Pros: Close contact is soothing; hands-free; supports circadian rhythm through light exposure.
-Cons: You cannot easily do other tasks; over time, contact becomes a dependent association; not ideal for all postures (ensure baby''s airway is open — TICKS guidelines apply).
+('infant', 16, 'Sleep Associations: What They Are and Which Matter', 'Understanding the sleep props that help and the ones that create night waking', '## What Is a Sleep Association?
 
-**The ''nap anywhere'' stage: birth to ~4 months**
+A sleep association is any condition, object, person, or behaviour that a baby associates with falling asleep. When a baby wakes between sleep cycles — which happens normally 4–6 times a night — they check whether those conditions are still present. If they are not, the baby signals (cries) for them to be reinstated.
 
-In the early weeks, nap location matters very little for development. The priority is that your baby sleeps. From around four months, many parents start to work toward some cot naps, but this is a gradual process, not an abrupt switch.
+This is not manipulation. It is a neurologically normal process. Adults do the same thing — if you fall asleep with a pillow and wake without it, you will notice its absence and reach for it. The difference is that adults can retrieve their own pillow; babies cannot.
 
-**When to shift toward cot naps**
+## Positive Sleep Associations
 
-If you are working on independent settling and sleep consolidation, cot naps support that work. One cot nap per day as a starting point — often the first morning nap — is a reasonable approach.
+Some sleep associations are stable — they are either present all night or can be self-managed by the baby:
 
-*This article is for informational purposes only. Safe carrier use and pram safety guidelines should always be followed.*$$,
-  8,
-  true,
-  ARRAY['National Sleep Foundation', 'Baby Carrier Industry Alliance', 'Red Nose Foundation Australia'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-naps-on-the-go-car-pram-carrier'
-),
+- **White noise** — if a machine runs all night, the association is consistently present. Stable and non-problematic.
+- **A sleeping bag** — worn all night, present at every waking.
+- **A dark room** — if blackout blinds are used, darkness is consistent.
+- **A comfort object (lovey)** — safe from around 6–7 months. Increasingly self-manageable as motor skills develop.
+- **A dummy/pacifier** — from around 6–7 months, many babies can retrieve a dummy themselves. Before that age, it requires parental reinsertion at each waking.
 
-(
-  'infant',
-  'sleep',
-  'Nap Regressions: What They Are and How Long They Last',
-  $$**Why Has My Baby''s Napping Suddenly Got Worse?**
+## Problematic Sleep Associations
 
-Just when naps seem to be settling into a pattern, something shifts. Your baby who was taking two solid naps a day is suddenly fighting sleep, waking early from naps, or refusing one nap entirely. This is often described as a nap regression.
+These are associations that are not present during natural night wakings:
 
-**What actually causes nap regressions**
+- **Feeding to sleep** — the most common. Baby feeds at breast or bottle, falls asleep, is placed in crib. Mid-cycle, wakes and needs to feed again to return to sleep. Can result in 4–8+ night feeds in an older baby who is nutritionally capable of sleeping longer.
+- **Rocking or bouncing to sleep** — similar mechanism. Baby needs movement to fall back asleep at each waking.
+- **Being held** — contact is not present in the crib.
+- **Parental presence** — baby needs a parent in the room to fall asleep. If parent leaves, baby wakes.
 
-Nap regressions are usually caused by one of three things:
-1. **Developmental leaps**: When the brain is undergoing rapid development (rolling, crawling, pulling up, walking, language), sleep is often temporarily disrupted
-2. **Nap transition readiness**: Fighting a nap may signal readiness to drop to fewer naps — but not necessarily
-3. **Schedule drift**: Wake windows may need adjusting as your baby grows
+## Not All Associations Need to Be Broken
 
-**The most common nap regression periods**
+If a sleep association is working for your family — if you are sleeping enough and night feeds feel manageable — there is no imperative to change anything. Sleep associations become "problems" only when they are creating a level of night disruption that is affecting the family''s wellbeing.
 
-- **Around 4 months**: The four-month sleep regression affects both naps and nights
-- **Around 8 months**: Developmental leap, separation anxiety, and possible approach of the 2-to-1 nap transition
-- **Around 12 to 18 months**: The extended 2-to-1 transition period
+## The Goal: Falling Asleep Independently
 
-**How long do they last?**
+The foundation of most sleep training approaches is teaching the baby to fall asleep at bedtime **without the association** — so that when they wake in the night, they can use the same skill to return to sleep without parental assistance. This is called "independent sleep" or "self-settling."
 
-A true developmental regression typically lasts two to four weeks. If nap difficulties persist beyond four to six weeks, it may be a schedule issue (wake windows need adjusting) rather than a regression.
+## Timing
 
-**What to do during a nap regression**
+The earliest most sleep consultants and paediatricians recommend beginning to address sleep associations is **4–6 months**, once the sleep architecture shift has occurred and the baby is developmentally ready to self-soothe. Before 4 months, responding to all night wakings is appropriate regardless of association type.', 'sleep', 7, ARRAY['sleep associations', 'self settling', 'night waking', 'infant sleep', 'sleep props', 'sleep training'], true, true, 'Lumira Health Team'),
 
-- Stay consistent with your settling approach — inconsistency during regressions can create new dependent associations
-- Check whether wake windows need extending for this age
-- Rule out teething, illness, or environmental changes
-- Consider whether a nap transition may be approaching
+('infant', 20, 'Teaching Independent Sleep: The Principles', 'What sleep training actually is — the core concepts behind every method', '## What Sleep Training Really Means
 
-**What not to do**
+Sleep training is a term that provokes strong reactions — partly because it means different things to different people. In its broadest sense, sleep training simply means **helping a baby learn to fall asleep independently at bedtime**, so that when they wake between sleep cycles, they can return to sleep without requiring parental intervention.
 
-- Abandon all structure entirely — some consistency helps
-- Assume it will last forever — it will not
+It does not inherently mean leaving a baby to cry. It encompasses a wide spectrum of approaches, from gradual no-cry methods to faster extinction-based methods. What all approaches share is a common goal and a set of underlying principles.
 
-*This article is for informational purposes only. Consult your health visitor or paediatrician if sleep disruptions are prolonged or concerning.*$$,
-  16,
-  true,
-  ARRAY['National Sleep Foundation', 'Mindell JA et al. - Pediatrics 2006', 'American Academy of Pediatrics (AAP)'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-nap-regressions-what-how-long'
-),
+## Core Principle 1: The Bedtime Opportunity
 
--- ─────────────────────────────────────────────────────────────────────────────
--- SLEEP REGRESSIONS (20–25)
--- ─────────────────────────────────────────────────────────────────────────────
+All sleep training starts at bedtime, not during the night. Bedtime is when the baby is tired enough to learn a new skill — the sleep drive is working in your favour. Changes made at bedtime gradually generalise to night wakings and naps.
 
-(
-  'infant',
-  'sleep',
-  'The 4-Month Sleep Regression: What Causes It and What Helps',
-  $$**The Most Well-Known Sleep Regression**
+## Core Principle 2: Falling Asleep at the Point of Sleep Onset
 
-The four-month sleep regression is not a myth — it is a real, documented neurological shift that permanently changes how your baby sleeps. Unlike other regressions, it does not resolve on its own and return to the previous sleep pattern. It represents a fundamental change in sleep architecture.
+Whatever the baby does to fall asleep at the start of the night, they will need to repeat at every night waking. So the practice change is always: **put the baby down awake** (or drowsy but awake) and allow them to complete the falling-asleep process in their crib.
 
-**What happens at four months**
+This single change — regardless of what method is used — is the critical one. Everything else is about how much support you provide during that process.
 
-Before this point, babies cycle between two sleep states: active (REM) and quiet (non-REM). At around three to four months, the brain matures and develops the adult pattern of four distinct sleep stages. This means more transitions between lighter and deeper sleep — and more opportunities to fully wake between cycles.
+## Core Principle 3: Consistency
 
-**Why does it feel so sudden?**
+The baby''s brain learns from consistent patterns. Inconsistent responses — sometimes responding immediately, sometimes waiting — take significantly longer to result in sleep change and can increase distress. Choose an approach you can apply consistently for at least 7–14 nights.
 
-For many families, a baby who was sleeping in two to four hour stretches suddenly starts waking every 45 to 90 minutes overnight. It can feel like going backwards, but it is actually a sign of normal brain development.
+## Core Principle 4: Emotional Readiness
 
-**What helps**
+The parent''s readiness matters as much as the baby''s. Sleep training is significantly harder when a parent is ambivalent or anxious. Choosing a method that matches your own emotional tolerance increases the likelihood of success. The best method is the one you can follow through on consistently.
 
-- **Begin working on independent settling**: If your baby has only ever fallen asleep with feeding or rocking, this is a good time to start gradually shifting those associations
-- **Adjust wake windows**: At four months, wake windows of 90 minutes to 2 hours are typical — overtiredness makes everything worse
-- **Optimise the sleep environment**: Dark room, white noise, consistent temperature
-- **Earlier bedtime**: Overtired babies have more frequent night wakings — a 7:00 to 7:30 pm bedtime often helps
+## Core Principle 5: Developmental Appropriateness
 
-**What does not help**
+Most professional guidance recommends not beginning sleep training before **4–6 months** corrected age. Before this, night feeding serves a genuine nutritional purpose, the circadian rhythm is not yet mature, and the developmental readiness to self-soothe is limited.
 
-- Hoping it will pass without any changes (it may ease slightly, but the sleep architecture change is permanent)
-- Keeping babies up later to ''make them more tired'' (backfires)
-- Frequent schedule changes during the regression
+## What the Research Shows
 
-**How long does it last?**
+Research consistently shows that completed sleep training programmes do not produce harmful levels of cortisol or attachment disruption in healthy babies. Multiple studies, including long-term follow-up studies, have found no difference in stress markers, attachment security, or emotional development between sleep-trained and non-sleep-trained children.
 
-The regression itself typically peaks over two to four weeks. Sleep improvement depends largely on what changes you make to settling strategies.
+## What Makes Sleep Training Fail
 
-*This article is for informational purposes only. Please consult your paediatrician or a certified sleep consultant for personalised support.*$$,
-  16,
-  true,
-  ARRAY['Mindell JA et al. - Pediatrics 2006', 'National Sleep Foundation', 'American Academy of Pediatrics (AAP)'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-4-month-regression-causes-what-helps'
-),
+- Starting before the baby is developmentally ready
+- Inconsistency in applying the method
+- Illness or teething disrupting the learning period
+- Parental burnout causing abandonment before the baby has had time to learn
+- Underlying feeding or medical issues driving the wakings (hunger, reflux, tongue tie)
 
-(
-  'infant',
-  'sleep',
-  'The 8 to 10 Month Sleep Regression: Separation Anxiety and Development',
-  $$**Why the Eight to Ten Month Period Is Particularly Disruptive**
+Address medical and feeding issues before beginning any sleep training programme.', 'sleep', 7, ARRAY['sleep training', 'independent sleep', 'self settling', 'infant sleep', 'bedtime', 'sleep methods'], true, true, 'Lumira Health Team'),
 
-Many parents who navigated the four-month regression find that just as sleep was improving, a new wave of disruption arrives around eight to ten months. This regression is driven by a combination of developmental leaps and the emergence of separation anxiety.
+('infant', 20, 'The Ferber Method: A Complete Guide', 'How graduated extinction works, what to expect, and how to do it', '## What Is the Ferber Method?
 
-**What is happening developmentally**
+The Ferber method — named after Dr Richard Ferber, director of the Center for Pediatric Sleep Disorders at Boston Children''s Hospital — is one of the most studied and misunderstood infant sleep approaches in existence. It is formally known as **graduated extinction** or **progressive waiting**.
 
-- Babies are learning major physical skills: crawling, pulling to stand, cruising along furniture
-- **Object permanence** is emerging — your baby now knows you exist when you leave the room, which makes your absence more distressing
-- **Separation anxiety** peaks between eight and eighteen months — it is a healthy sign of attachment, but it makes night wakings more fraught
-- Language comprehension is expanding rapidly, adding cognitive load
+Despite its reputation as a "leave them to cry" method, the Ferber method involves regular parental check-ins. The core principle is that brief parental visits at increasing intervals give the baby reassurance while still allowing them to practise falling asleep independently.
 
-**How it shows up in sleep**
+## Who Is It For?
 
-- Increased night wakings after a period of better sleep
-- Strong protests at bedtime or when placed in the cot
-- Difficulty settling without a parent present
-- Early waking or cat-napping returning
+The Ferber method is typically recommended for:
+- Babies **5–6 months and older**
+- Babies with established sleep associations (feeding, rocking, dummy replacement)
+- Parents who want a structured, relatively fast method (most families see significant improvement within 7–10 nights)
+- Parents who can tolerate some crying if they understand its purpose
 
-**What helps**
+## The Waiting Intervals
 
-- **Maintain consistency**: Your settling approach matters more than ever during this period — inconsistency can reinforce the association of crying bringing you back
-- **Daytime attachment activities**: Lots of eye contact, responsive play, and cuddles during the day can reduce anxiety at night
-- **Peek-a-boo and object permanence games**: These actually help babies understand that you come back — great to do during awake time
-- **Brief, calm goodnight ritual**: A predictable goodbye that does not drag on reduces distress
-- **Consider adjusting wake windows**: At this age, wake windows of 2.5 to 3.5 hours are typical
+The classic Ferber schedule increases waiting time before check-ins progressively:
 
-**How long does it last?**
+- **Night 1:** Wait 3 min, then 5 min, then 10 min for subsequent wakings
+- **Night 2:** Wait 5 min, then 10 min, then 12 min
+- **Night 3:** Wait 10 min, then 12 min, then 15 min
+- **Night 4+:** Wait 12 min, then 15 min, then 17 min
 
-Usually two to six weeks. Separation anxiety as a broader phase may continue through twelve to eighteen months, but the acute sleep disruption typically improves.
+These are guidelines, not rigid rules. Some families use shorter or longer intervals based on their baby''s temperament.
 
-*This article is for informational purposes only. If sleep disruption is severe or your baby seems unwell, consult your healthcare provider.*$$,
-  32,
-  true,
-  ARRAY['National Sleep Foundation', 'Mindell JA et al. - Pediatrics 2006', 'American Academy of Pediatrics (AAP)'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-8-10-month-regression-separation-anxiety'
-),
+## How Check-Ins Work
 
-(
-  'infant',
-  'sleep',
-  'The 12-Month Sleep Regression: What to Expect',
-  $$**Around the First Birthday**
+A Ferber check-in is:
+- Brief — 1–2 minutes maximum
+- Calm — a quiet verbal reassurance ("you''re okay, I love you, time to sleep")
+- Non-stimulating — no lights, no picking up, no prolonged patting or rocking
+- **Not designed to stop the crying** — it is reassurance that you are present, not a settling tool
 
-The twelve-month sleep regression is one of the more common disruptions families report in the second half of the first year. It often coincides with a period of rapid physical and cognitive development — walking, language explosion, and a significant neurological leap.
+If check-ins are making the baby more upset rather than less, it is acceptable to stop doing them. Some babies find parental presence at check-ins more stimulating than soothing.
 
-**What drives the twelve-month regression**
+## What to Expect Night by Night
 
-- **Gross motor development**: Many babies are pulling to stand, cruising, or beginning to walk around this time — the brain is highly active
-- **Nap transition signals**: Some babies begin showing signs of readiness for the 2-to-1 nap transition around 12 months (though most are not fully ready until 12 to 18 months)
-- **Language and cognitive leaps**: Understanding more of the world around them; processing more during sleep
-- **Separation anxiety**: Still present and active at this age
+**Night 1–2:** Often the hardest. Crying can be prolonged — sometimes 45–60 minutes at the initial bedtime.
 
-**How it presents**
+**Night 3–4:** Most families see meaningful improvement. Crying reduces in duration and intensity.
 
-- Previously good sleeper suddenly waking more overnight
-- Fighting naps or one nap much more than usual
-- Earlier morning waking
-- Taking longer to settle at bedtime
+**Night 5–7:** Many babies are falling asleep within 10–15 minutes at bedtime, and night wakings are significantly reduced.
 
-**What to do**
+**Night 10–14:** For most babies, night sleep is substantially improved. Naps take longer to consolidate.
 
-- **Do not rush the nap transition**: Unless your baby is showing consistent, prolonged signs of readiness (not just during the regression), stick with two naps
-- **Keep the routine consistent**: Predictability is comforting during a developmental leap
-- **Check wake windows**: At twelve months, wake windows are typically 3 to 4 hours
-- **Offer extra comfort during the day**: This can reduce the need for reassurance at night
+## Handling Night Wakings
 
-**How long does it last?**
+Apply the same approach at night wakings as at bedtime. Night feeds can be maintained if the baby still genuinely needs them — many families continue one night feed and sleep-train around it.
 
-Typically two to four weeks, assuming no major schedule or environmental changes compound it.
+## The Research
 
-*This article is for informational purposes only. Speak with your paediatrician if the regression seems unusually prolonged or if your child seems unwell.*$$,
-  12,
-  true,
-  ARRAY['National Sleep Foundation', 'American Academy of Pediatrics (AAP)', 'Weissbluth M - Healthy Sleep Habits, Happy Child'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-12-month-regression'
-),
+Studies on graduated extinction consistently find:
+- No significant difference in cortisol levels, attachment security, or emotional health between sleep-trained and control groups at follow-up
+- Significant improvements in infant sleep consolidation
+- Significant improvements in maternal mental health and wellbeing
 
-(
-  'toddler',
-  'sleep',
-  'The 18-Month Sleep Regression: Why It''s the Hardest One',
-  $$**Often Considered the Most Challenging Regression**
+## Common Mistakes
 
-Many parents report that the eighteen-month sleep regression is the most disruptive they experience. It arrives just when families feel they have established good sleep habits, and it can be particularly intense for several converging reasons.
+- Not checking for illness or teething before starting
+- Check-ins that are too long or too stimulating
+- Abandoning on night 3 — often the night before improvement
+- Inconsistency — giving in after 45 minutes teaches the baby that 45 minutes is the new threshold', 'sleep', 8, ARRAY['Ferber method', 'graduated extinction', 'sleep training', 'infant sleep', 'night waking', 'check ins'], true, true, 'Lumira Health Team'),
 
-**What makes eighteen months uniquely disruptive**
+('infant', 20, 'The Fading and Chair Method: Step by Step', 'A gentler approach to sleep training for families who want gradual change', '## What Is the Fading Method?
 
-- **Separation anxiety peaks** around eighteen months — this is the developmental zenith of this phase
-- **Language explosion**: Toddlers understand far more than they can express, which causes frustration and increased emotional reactivity
-- **Independence vs. dependency tension**: The classic toddler paradox — wanting independence but also wanting to stay close to parents
-- **The 2-to-1 nap transition** is often still in progress or recently completed, disrupting the schedule
-- **Cognitive leaps**: Imagination is developing — fears, including nighttime fears, may begin
+The fading method (also called the "sleep lady shuffle," "chair method," or "gradual retreat") is a sleep training approach that involves **gradually reducing parental presence** at bedtime over a period of one to three weeks, rather than removing it all at once.
 
-**How it shows up in sleep**
+It is slower than extinction-based methods but requires less tolerance for hearing the baby cry, making it a popular choice for parents who find cry-based methods emotionally difficult.
 
-- Dramatic bedtime protests and requests to delay sleep
-- Frequent night wakings calling for parents
+## How the Chair Method Works
+
+The basic principle: you start with your chair/position right next to the crib, and every 2–3 days you move it further away — closer to the door, then outside the door, then down the hallway — until your presence is no longer needed.
+
+**Week 1:** Sit in a chair right next to the crib. You can shush, pat intermittently, and offer verbal reassurance, but do not pick the baby up (unless they are extremely distressed). Stay until the baby falls asleep.
+
+**Week 2:** Move the chair to the middle of the room. Reduce shushing and patting to occasional, brief contact.
+
+**Week 3:** Move the chair to the doorway. Minimal verbal reassurance. Stay until the baby is asleep or nearly asleep.
+
+**Week 4 and beyond:** Move outside the door, then gradually check in less frequently until your presence is no longer needed.
+
+## What the Fading Method Looks Like in Practice
+
+The baby will likely cry during this process — particularly in the early nights and when you move further away. The key difference from graduated extinction is that **you remain present and responsive** throughout, rather than leaving the room.
+
+This is reassuring for many parents. However, it also means the process takes longer — typically 2–4 weeks versus 1–2 weeks for Ferber or extinction.
+
+## The Fading Approach Without the Chair
+
+An alternative fading approach targets the specific sleep association rather than parental presence:
+
+- **If feeding to sleep:** Gradually move the feed earlier in the bedtime routine. Feed, then do a book, then songs, then into the crib. Progressively shorten the feed duration each night.
+- **If rocking to sleep:** Rock for progressively shorter periods each night, then put down drowsier each night, then put down awake.
+- **If dummy reliance:** Move the dummy reinsertion later and later each night; gradually reduce the number of reinsertions.
+
+## Who Is It Best For?
+
+The fading method works well for:
+- Babies 4–18 months
+- Parents who cannot tolerate extended crying
+- Families with a strong attachment parenting philosophy
+- Babies with anxious or sensitive temperaments
+- Families where a parent being present during sleep is not itself the problem
+
+## Managing Your Own Presence
+
+One risk of the chair method is that **parental presence becomes the new sleep association**. If you are sitting in the chair, the baby may become dependent on seeing you there to fall asleep — which is better than needing to be held, but still requires your presence.
+
+The key is to gradually become less active (less patting, less shushing, less eye contact) as you move the chair, so the baby is genuinely learning to settle independently, not simply with a more distant version of you in the room.
+
+## Realistic Expectations
+
+Most families see meaningful progress after 2 weeks. A subset of babies do not respond well to the gradual approach and actually find repeated parental presence and withdrawal more distressing than a cleaner break. If after two weeks there is no meaningful progress, reconsider whether a different method might suit your baby better.', 'sleep', 7, ARRAY['fading method', 'chair method', 'sleep training', 'gradual retreat', 'infant sleep', 'gentle sleep'], true, true, 'Lumira Health Team'),
+
+('infant', 20, 'Extinction (Cry It Out): The Research and How to Do It Kindly', 'What the evidence shows about full extinction and how families can approach it thoughtfully', '## What Is Extinction?
+
+Extinction — commonly called "cry it out" or CIO — is the sleep training approach where the parent puts the baby down awake at bedtime and does not return until morning (or until a pre-agreed feed time). There are no check-ins, no gradual intervals — just a consistent, loving bedtime routine followed by leaving the room.
+
+The term sounds harsh. The practice, in a well-prepared family with appropriate context, is not.
+
+## The Research
+
+Extinction is the most studied infant sleep training method, with a research base spanning decades. Key findings:
+
+- **No evidence of harm.** Multiple randomised controlled trials and long-term follow-up studies have found no significant differences in cortisol levels, attachment security, behaviour, or emotional development between extinction-trained babies and controls at 1-year, 2-year, and 5-year follow-ups.
+- **Fastest results.** Of all sleep training methods, extinction typically produces the quickest improvements — most babies show dramatic change within 3–5 nights.
+- **Parental mental health benefits.** Studies consistently show that improved infant sleep is associated with reduced maternal depression and improved family functioning.
+
+The 2016 study by Hiscock et al. in *Pediatrics*, one of the most rigorous, found no negative outcomes at 5-year follow-up for children whose families used extinction or graduated extinction.
+
+## Who Is It Appropriate For?
+
+Extinction is typically appropriate for:
+- Healthy babies aged **6 months and older**
+- Babies without underlying medical issues (reflux, feeding problems, illness)
+- Parents who feel confident about the approach and can remain consistent
+- Families where partial methods have been tried and failed
+
+It is not appropriate for:
+- Babies under 4–5 months
+- Babies who are unwell or teething significantly
+- Parents who feel deeply uncomfortable with the approach (consistency is essential; ambivalence leads to inconsistent application)
+
+## How to Do It Thoughtfully
+
+**Preparation:**
+1. Ensure the baby is healthy — no illness, significant teething, or upcoming travel
+2. Tell your partner, co-parent, or support person what you are doing and agree on it together
+3. Prepare yourself for the first night to be hard — forewarned is forearmed
+
+**The bedtime routine:**
+Keep it consistent, predictable, and calm — bath, feed (not to sleep), book, song, into the crib awake. The routine signals sleep is coming and provides comfort.
+
+**After you leave:**
+Do not return for non-emergency reasons. Remind yourself that the baby''s protest is communication — "this is different, I do not like different" — not suffering.
+
+**Night wakings:**
+Apply the same approach. Pre-decide whether you will include a night feed (many families do for babies under 9 months) and respond consistently to that one waking only.
+
+## What to Expect
+
+**Night 1:** Crying, often significant. Most babies fall asleep within 30–60 minutes. Some take longer.
+**Night 2:** Often similar to night 1, sometimes worse — the baby may be testing whether the pattern is consistent.
+**Night 3–4:** Significant improvement for most babies. Crying reduces dramatically in duration and intensity.
+**Night 5–7:** Most babies are settling within 5–15 minutes.
+
+If there is no improvement by night 7, reconsider whether there is an underlying medical issue or whether the method is being applied consistently.
+
+## Looking After Yourself
+
+The hardest part of extinction for most parents is the first hour of night 1. Having something planned for that time — watching something engaging, calling a friend, going outside — helps. Most parents who have been through it report that the distress they anticipated was worse than the reality.', 'sleep', 8, ARRAY['cry it out', 'extinction', 'sleep training', 'infant sleep', 'CIO', 'night waking'], true, true, 'Lumira Health Team'),
+
+('infant', 20, 'Pick Up Put Down Method', 'A responsive approach to sleep training for younger babies', '## What Is Pick Up Put Down?
+
+Pick Up Put Down (PUPD) is a sleep training method popularised by Tracy Hogg in "The Baby Whisperer." It involves putting the baby in the crib awake, and when they cry, picking them up to calm them — then immediately putting them back down, even if they start crying again. This cycle is repeated until the baby falls asleep in the crib.
+
+The logic: the baby is never left to cry alone, but is also repeatedly returned to the crib — so they are learning that the crib is where sleep happens.
+
+## Who Is It For?
+
+PUPD is typically recommended for babies aged **4–6 months**. It tends to be less effective — and more stimulating — for older babies (6+ months), who may find the repeated pick-up and put-down cycle exciting rather than settling.
+
+For very young babies (under 4 months), it can be too stimulating during the learning phase.
+
+## How to Do It
+
+1. Complete your bedtime routine and place the baby in the crib awake
+2. When the baby cries, wait a moment (5–15 seconds) before responding
+3. Pick up and hold the baby close, with gentle shushing, until crying reduces to a whimper
+4. **As soon as crying settles**, put the baby back in the crib — do not wait until they are fully calm or asleep
+5. If crying escalates again, repeat
+6. Continue until the baby falls asleep in the crib
+
+The key phrase is "as soon as." Waiting until the baby is fully calm before putting down teaches them that being held = calm, not that the crib = safe.
+
+## What to Expect
+
+PUPD can involve **many repetitions** on the first night — sometimes 30–50 pick-ups over the course of an hour or more. This is physically exhausting and emotionally demanding. Improvement typically comes over 5–10 nights.
+
+For some babies, being picked up is stimulating rather than calming — they stop crying when held not because they are calm but because they are alert. For these babies, PUPD may not be effective, and a method with less physical interaction (such as the chair method or graduated extinction) may work better.
+
+## Modifying the Approach
+
+A gentler modification used by many families is to replace the full pick-up with:
+- A firm hand on the chest with shushing ("the pause")
+- Brief pick-up with immediate return
+- Picking up until just below full calm, then putting down
+
+Experiment to find what works for your baby''s temperament.
+
+## The Bottom Line
+
+PUPD works well for the right baby — typically a younger infant (4–5 months) with a calm temperament who finds physical contact genuinely soothing. For older or more active babies, other methods may be more effective. The method requires significant parental stamina in the first few nights but offers the reassurance of never leaving the baby to cry without a response.', 'sleep', 6, ARRAY['pick up put down', 'PUPD', 'sleep training', 'infant sleep', 'baby whisperer', 'gentle sleep'], true, true, 'Lumira Health Team'),
+
+('infant', 20, 'The No-Cry Sleep Solution Approach', 'How to improve sleep without any intentional crying — and what to realistically expect', '## What Is the No-Cry Sleep Solution?
+
+The No-Cry Sleep Solution, developed by Elizabeth Pantley and described in her widely-read book of the same name, is an approach to improving infant sleep that aims to make gradual changes without leaving the baby to cry. It focuses on identifying sleep associations, creating healthy sleep habits, and making small, incremental adjustments over time.
+
+It is the approach most aligned with attachment parenting philosophy and is popular with families who find cry-based methods incompatible with their values.
+
+## Core Techniques
+
+### The Pantley Gentle Removal Plan
+The central technique targets feeding to sleep. When the baby falls asleep at the breast or bottle:
+1. Break the latch/bottle connection just as the baby is about to fully fall asleep
+2. If the baby protests, reinsert briefly, then try again when they are more deeply asleep
+3. Over many nights, gradually remove earlier and earlier in the sleep process
+
+The goal is to teach the baby to complete the falling-asleep process without the feed as the final step.
+
+### Creating a Sleep-Positive Environment
+The approach emphasises:
+- A consistent, predictable bedtime routine
+- Age-appropriate nap schedules
+- Appropriate wake windows
+- A dark, cool sleep environment
+- White noise
+
+### Sleep Log and Pattern Recognition
+Pantley recommends keeping a detailed sleep log to identify patterns — when the baby naturally sleeps better, what precedes easier settling — and building on those patterns rather than imposing a rigid structure.
+
+## What to Realistically Expect
+
+The no-cry approach is **effective but slow**. Most families report meaningful improvement over 3–8 weeks, compared to 1–2 weeks with cry-based methods. Some babies, particularly those with deeply entrenched sleep associations (feeding to sleep multiple times a night), may not respond significantly to the gentle approach alone.
+
+Research on no-cry methods is more limited than on extinction or graduated extinction, but available evidence suggests they can produce meaningful improvements in sleep with no adverse effects.
+
+## Is There Really No Crying?
+
+Not quite. The "no-cry" label means no **intentional** crying — you are not deliberately leaving the baby to cry as part of the method. But as sleep associations change, some protest is normal and expected. The baby may fuss when the breast is removed before full sleep; they may whimper as you gradually reduce night feeds. This is not the same as extended crying without response.
+
+## Who Is It Best For?
+
+The no-cry approach works best for:
+- Families where the current sleep situation is manageable, not desperate
+- Babies of any age — particularly those under 4 months where cry-based methods are not appropriate
+- Parents who are philosophically opposed to any form of intentional crying
+- Families with a lot of time and patience for gradual change
+
+If you are severely sleep-deprived, struggling with postnatal depression, or returning to work in two weeks, a slower method may not give you results fast enough to matter. There is no shame in choosing a faster approach when circumstances demand it.', 'sleep', 7, ARRAY['no cry sleep solution', 'gentle sleep training', 'Pantley', 'attachment parenting', 'infant sleep', 'sleep associations'], true, true, 'Lumira Health Team'),
+
+('infant', 20, 'Which Sleep Training Method Is Right for You?', 'A decision guide for choosing the approach that fits your baby, your values, and your situation', '## There Is No Single Best Method
+
+Research has not established that any one sleep training method is superior for all families. The best method is the one you can apply **consistently**, that matches **your baby''s temperament**, and that you can sustain without significant emotional or physical cost to yourself.
+
+This article is designed to help you think through the decision — not to tell you what to do.
+
+## Questions to Ask Before You Start
+
+**1. How old is your baby?**
+- Under 4 months: most sleep training is not developmentally appropriate. Focus on establishing a bedtime routine and responding to all wakings.
+- 4–6 months: gentle approaches (PUPD, early fading) are appropriate. Some families begin Ferber at 5–6 months.
+- 6+ months: all approaches are developmentally appropriate for healthy babies.
+
+**2. What is your tolerance for hearing your baby cry?**
+- High tolerance + want fast results: extinction (CIO) or Ferber method
+- Moderate tolerance + want structure: Ferber (graduated extinction)
+- Low tolerance + want to remain present: chair method / fading
+- Very low tolerance + time to be patient: no-cry / Pantley approach
+
+**3. What sleep association are you dealing with?**
+- Feeding to sleep: any method works, but the no-cry gentle removal plan specifically targets this
+- Dummy reliance: Ferber or extinction typically most effective
+- Needing to be held: all methods address this; fading may be gentler
+- Parental presence: chair method is specifically designed for this
+
+**4. Is there a co-parent or partner?**
+Two-parent households benefit from agreeing on the method and sharing the settling responsibility. Inconsistency between parents is a common reason sleep training fails.
+
+**5. What has your gut been telling you?**
+Parental instinct matters. If a method feels deeply wrong to you, you are less likely to apply it consistently. A method you believe in — even if it is slower — will work better than a theoretically superior method you abandon on night 3.
+
+## A Quick Comparison
+
+**Extinction (CIO):** Fastest results. Requires highest tolerance for crying. No check-ins. Evidence-based. Appropriate from 6 months.
+
+**Ferber (graduated extinction):** Fast results. Moderate tolerance for crying. Regular check-ins. Heavily evidence-based. Appropriate from 5–6 months.
+
+**Chair / fading method:** Moderate results. Lower tolerance required. Parent present throughout. Appropriate from 4 months.
+
+**PUPD:** Moderate results. Physically demanding. Parent highly involved. Best for 4–6 months.
+
+**No-cry / Pantley:** Slowest results. Minimal crying. Highest parental investment over time. Appropriate from any age.
+
+## A Note on "Failure"
+
+Sleep training "fails" for a few consistent reasons: starting during illness or teething; inconsistency in application; underlying feeding or medical issues; the baby not being developmentally ready. It is rarely because the family chose the wrong method or did it wrong. If one approach is not working after a genuine 2-week attempt, it is reasonable to try a different one or seek professional guidance.
+
+Most babies, in most circumstances, can learn independent sleep skills. The path to get there looks different for every family.', 'sleep', 8, ARRAY['sleep training', 'which method', 'Ferber', 'cry it out', 'fading', 'sleep guide', 'infant sleep'], true, true, 'Lumira Health Team'),
+
+('infant', 24, 'Split Nights: Why Your Baby Wakes for Hours at 3am', 'Understanding split nights and how to fix them', '## What Is a Split Night?
+
+A split night is when a baby wakes in the middle of the night and is fully, cheerfully awake for 1–3 hours — playing, babbling, not distressed — before going back to sleep. Unlike normal night wakings where the baby is upset and seeking reassurance, split night babies are not crying. They are just... awake. Wide awake. At 2am.
+
+For parents, this is particularly bewildering and exhausting. The baby is not upset. But neither are they sleeping.
+
+## What Causes Split Nights
+
+Split nights are most commonly caused by **too much daytime sleep** relative to the baby''s developmental sleep needs. The mechanism is straightforward: sleep pressure (the biological drive to sleep, driven by adenosine build-up in the brain) is exhausted by the overnight sleep, and the baby simply does not have enough sleep drive left to sleep through until morning.
+
+Other causes include:
+- **Nap too late in the day** — a late afternoon nap too close to bedtime reduces sleep pressure at night
+- **Bedtime too early** — counterintuitive, but an overly early bedtime can exhaust overnight sleep drive by 2–3am, resulting in a split
+- **Incorrect nap schedule for age** — too many naps, or naps that are too long, for the baby''s developmental stage
+- **Circadian rhythm disruption** — illness, travel, or schedule changes can temporarily shift the biological clock
+
+## Ruling Out Other Causes
+
+Not all middle-of-the-night waking is a true split night. Distinguish:
+- **Hunger wakings:** Baby wakes upset, feeds readily, returns to sleep within 30 minutes
+- **Overtiredness wakings:** Baby wakes distressed and difficult to resettle — often caused by the opposite problem (not enough daytime sleep)
+- **True split night:** Baby wakes cheerful, alert, and not interested in going back to sleep
+
+## How to Fix a Split Night
+
+### Audit the nap schedule
+Is the total daytime sleep appropriate for the baby''s age?
+- 4–6 months: 3–4 hours daytime sleep
+- 6–9 months: 2.5–3.5 hours daytime sleep
+- 9–12 months: 2–3 hours daytime sleep
+
+If daytime sleep consistently exceeds these ranges, the overnight sleep capacity has been partially used up.
+
+### Move bedtime later
+If bedtime is before 6:30pm, try gradually shifting it 15 minutes later every few days. A bedtime of 7–7:30pm is appropriate for most babies 4–12 months.
+
+### Cap the last nap
+Ensure the last nap of the day ends at least 2–2.5 hours before bedtime to allow sleep pressure to rebuild.
+
+### Shorten or drop a nap
+If the baby is at a nap transition age (3-to-2 or 2-to-1), a split night can signal readiness to drop a nap.
+
+## How Long Does It Take to Resolve?
+
+Once the schedule adjustment is made, most split nights resolve within **3–7 days**. If they persist beyond two weeks of consistent schedule changes, consider consulting a health visitor or sleep specialist.', 'sleep', 7, ARRAY['split nights', 'night waking', 'infant sleep', 'sleep schedule', 'nap schedule', '3am waking'], true, true, 'Lumira Health Team');
+
+-- Articles 21-28: More 4-12 Month Sleep
+
+INSERT INTO public.content_articles (stage, week_or_month, title, subtitle, body, category, reading_time_minutes, tags, medically_reviewed, culturally_sensitive, author) VALUES
+
+('infant', 24, 'Early Waking: Preventing the 5am Start', 'Why babies wake at dawn and what you can do about it', '## The 5am Problem
+
+Few sleep challenges are as demoralising as the consistent early wake. You have survived the night, you are nearly at morning, and then — 5am. Your baby is wide awake, fully rested, and ready to face the day. You are not.
+
+Early waking is one of the most common and hardest infant sleep challenges to fix, because it sits at the intersection of circadian biology and sleep pressure — two forces that are harder to manipulate than a simple sleep association.
+
+## What Is Early Waking?
+
+A true early wake is anything consistently before **6am** that the baby treats as the start of the day (not a night waking they return to sleep from). Most experts define appropriate morning waking as somewhere between 6am and 7:30am, depending on the family.
+
+## Common Causes
+
+### 1. Circadian rhythm — the dawn cortisol surge
+The human circadian rhythm naturally produces a surge of cortisol in the early hours of the morning — a biological wake signal. In babies, this typically occurs between 5am and 7am. Babies with a slightly earlier clock will hit this surge at 5am and wake regardless of when they went to bed.
+
+### 2. Light
+Even a small amount of light entering the room at dawn triggers melatonin suppression and waking. This is the most common and most fixable cause of early waking. True blackout blinds (no gaps, no light edges) can make a significant difference.
+
+### 3. Noise
+Birds, garbage trucks, street noise, siblings, household sounds — noise at dawn can trigger waking in a baby who was just in a light sleep phase.
+
+### 4. Overtiredness (counterintuitive)
+An overtired baby — too little daytime sleep, too late a bedtime — often wakes earlier, not later. The stress hormones of overtiredness are compounded by the morning cortisol surge.
+
+### 5. Bedtime too early
+If bedtime is 6pm and the baby sleeps 11 hours, 5am is their natural morning. Moving bedtime later can shift the morning wake accordingly.
+
+### 6. Last nap too early or too short
+If the baby wakes from their last nap at 2pm, by 5am they have had 11 hours of wakefulness with sleep. Their sleep pressure is naturally lower in the early morning.
+
+## What to Try
+
+**Blackout blinds first:** Install true blackout blinds before trying anything else. This alone resolves early waking for a significant proportion of families.
+
+**White noise:** A continuous source of white noise masks dawn sounds.
+
+**Move bedtime 15–30 minutes later:** Do this gradually — 15 minutes every 3 days — rather than all at once.
+
+**Adjust nap schedule:** Ensure the last nap is not finishing too early in the afternoon.
+
+**Do not rush in at 5am:** Treating 5am as "waking time" confirms to the baby that 5am is morning. If conditions are safe, allow some settling time before responding.
+
+## Managing Expectations
+
+Some babies are genuinely early risers by temperament and circadian biology. If you have addressed all environmental factors and the baby consistently wakes between 5–6am and is well-rested, you may be dealing with a constitutionally early riser. In that case, the most helpful intervention is an earlier parental bedtime. A 5:30am start is more manageable after a 9pm bedtime than an 11pm one.', 'sleep', 7, ARRAY['early waking', 'early rising', '5am', 'infant sleep', 'circadian rhythm', 'blackout blinds'], true, true, 'Lumira Health Team'),
+
+('infant', 16, 'Nap Schedules by Age: 0–12 Months', 'How many naps your baby needs at every stage — and how to structure them', '## Why Nap Schedules Matter
+
+Naps are not just a break from parenting — they are biologically essential for infant brain development. During daytime sleep, the brain consolidates new learning, grows neural pathways, and processes the stimulation of waking hours. Insufficient or poorly timed naps lead to overtiredness, which paradoxically makes night sleep worse, not better.
+
+Understanding the nap schedule appropriate for your baby''s age is one of the most powerful tools for improving overall sleep.
+
+## 0–6 Weeks: No Schedule, Just Sleep
+
+In the newborn period, structured nap scheduling is neither possible nor appropriate. Wake windows are tiny (45–60 minutes maximum) and naps should happen whenever the baby shows tiredness cues. Total daytime sleep is 8–10 hours spread across 4–6 naps.
+
+**Focus:** Catching sleep cues, preventing overtiredness, keeping night feeds distinct from daytime feeds.
+
+## 6–12 Weeks: Emerging Patterns
+
+The circadian rhythm begins developing and loose patterns emerge — often a longer morning nap, several shorter afternoon naps, and a brief early evening nap. Wake windows extend to 60–90 minutes.
+
+**Focus:** Consistent bedtime, distinguishing day from night, letting patterns emerge naturally.
+
+## 3–4 Months: 4–5 Naps
+
+The 4-month sleep architecture shift often disrupts naps temporarily. Naps shorten to 30–45 minutes (one sleep cycle) as the baby cycles into light sleep and cannot yet bridge cycles independently. Total daytime sleep: 4–5 hours across 4–5 naps. Wake windows: 75–90 minutes.
+
+**Focus:** Age-appropriate wake windows, not over-scheduling.
+
+## 4–6 Months: 3–4 Naps
+
+Wake windows extend to 1.5–2 hours. A rough schedule might look like: nap 1 at 9am, nap 2 at 12:30pm, nap 3 at 3:30pm, possibly a brief cat nap at 5pm. Total daytime sleep: 3.5–4.5 hours.
+
+**Focus:** Moving toward a more predictable schedule, watching for the 3-nap consolidation.
+
+## 6–9 Months: 2–3 Naps
+
+Most babies consolidate to 2 naps around 6–8 months, though some manage 3 naps until 8–9 months. A 2-nap schedule: nap 1 around 9–9:30am (1–1.5 hours), nap 2 around 1–2pm (1–2 hours). Total daytime sleep: 2.5–3.5 hours.
+
+**Focus:** The 3-to-2 nap transition, ensuring nap 2 ends by 4pm to protect bedtime.
+
+## 9–12 Months: 2 Naps
+
+Two naps remain appropriate for most babies until 12–15 months. Wake windows extend to 2.5–3.5 hours. Total daytime sleep: 2.5–3 hours. Bedtime typically 7–7:30pm.
+
+**Focus:** Consistent 2-nap schedule, watching for signs of readiness for 1-nap transition (usually not before 12 months).
+
+## Signs of an Incorrect Nap Schedule
+
+Too much daytime sleep:
+- Split nights (waking for hours at 2–3am)
+- Late morning wake or difficulty waking in the morning
+- Bedtime battles (not tired enough at bedtime)
+
+Too little daytime sleep:
 - Early morning waking
-- Nap refusal or very short naps
-- Increased separation distress at drop-off
+- Short naps despite seeming tired
+- Very difficult to settle at night — overtired state
+- Frequent night wakings with distress', 'sleep', 7, ARRAY['nap schedule', 'naps', 'infant sleep', 'wake windows', 'daytime sleep', '0-12 months'], true, true, 'Lumira Health Team'),
 
-**What helps**
+('infant', 12, 'The 4-to-3 Nap Transition', 'How to move from four naps to three — and how to know your baby is ready', '## When Does the 4-to-3 Transition Happen?
 
-- **Hold the boundaries with empathy**: Acknowledge feelings while maintaining the bedtime routine
-- **Predictable, consistent routine**: A visual bedtime routine chart (even a simple one) can help toddlers who resist transitions
-- **A comfort object**: A teddy or special blanket can serve as an independent comfort source overnight
-- **Daytime connection**: Lots of responsive, engaged daytime interaction reduces nighttime needs
-- **Earlier bedtime**: 6:30 to 7:00 pm often works better than a later bedtime during this phase
+Most babies consolidate from 4–5 naps to 3 naps somewhere between **3 and 5 months** of age. The timing varies significantly by baby and is driven by two factors: the extension of wake windows (the baby can simply stay awake longer) and increasing nap consolidation (naps begin lasting longer than 30–45 minutes).
 
-**Duration**
+## Signs Your Baby Is Ready
 
-Typically three to six weeks. The intensity can feel relentless in the thick of it — it does pass.
+- Wake windows are consistently extending beyond 90 minutes without overtiredness
+- The fourth or fifth nap of the day is being refused or resulting in a very late bedtime
+- The baby is staying awake through what used to be a catnap period
+- Naps are starting to lengthen — 45–60 minutes instead of 30 minutes
 
-*This article is for informational purposes only. If your toddler''s sleep is severely disrupted for more than six weeks, consider speaking with your paediatrician or a certified sleep consultant.*$$,
-  18,
-  true,
-  ARRAY['National Sleep Foundation', 'American Academy of Pediatrics (AAP)', 'Zero to Three Organisation'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'toddler-sleep-18-month-regression-hardest-one'
-),
+## How to Make the Transition
 
-(
-  'toddler',
-  'sleep',
-  'The 2-Year Sleep Regression: Causes and What to Do',
-  $$**Sleep Disruption at Two Years**
+**Step 1:** Begin by capping or eliminating the last nap of the day (the late afternoon catnap). This nap is the most dispensable and its removal has the least impact on the day''s structure.
 
-The two-year sleep regression is often driven by a combination of developmental changes, nap transitions, and the toddler''s growing sense of autonomy. It can emerge suddenly or gradually, and it frequently coincides with other life changes — a new sibling, starting childcare, or toilet training.
+**Step 2:** Gradually extend wake windows between the remaining naps. If the baby was previously on a 90-minute window, begin pushing toward 105–120 minutes.
 
-**Why two-year-olds regress in sleep**
+**Step 3:** Move bedtime slightly earlier (by 15–30 minutes) to compensate for the lost late nap, and to prevent overtiredness. A temporary earlier bedtime is normal during transitions.
 
-- **Developmental leap**: Language is expanding rapidly; toddlers are processing enormous amounts of social and emotional information
-- **Imagination and fears**: By two years, many toddlers develop fears of the dark, monsters, or being alone — nighttime is when these surface
-- **Autonomy and control**: Two-year-olds are asserting independence in every domain, including sleep
-- **Dropping the nap**: Some two-year-olds begin resisting their single nap, creating overtiredness
-- **Life changes**: New sibling, new room, toilet training, and childcare transitions all affect sleep
+## What to Expect
 
-**What this looks like**
+Expect 1–2 weeks of transition disruption. The baby may be overtired toward the end of the day initially, leading to fussiness and earlier-than-ideal bedtimes. This is temporary. Once the wake windows adjust, the three-nap schedule typically runs smoothly for several weeks before the next transition.
 
-- Bedtime battles and stalling (asking for water, another story, more hugs)
-- Calling out or leaving the bedroom repeatedly
-- Night waking with calls for parents
-- Nightmares or night terrors beginning
-- Nap refusal
+## A Sample 3-Nap Schedule (4–5 Months)
 
-**What helps**
+- Wake: 7am
+- Nap 1: 8:45am–10am
+- Nap 2: 12pm–1:30pm
+- Nap 3: 3:15pm–4pm (capped at 45 minutes)
+- Bedtime: 7–7:30pm
 
-- **Clear, predictable routine**: Two-year-olds respond well to knowing what comes next
-- **Choices within limits**: ''Do you want one story or two stories?'' gives a sense of control without opening unlimited negotiation
-- **Address fears with empathy**: A nightlight, a monster-proof spray (water in a spray bottle), or a guardian toy can help
-- **If dropping the nap**: Protect quiet time even if sleep does not happen — rest is still important
-- **Firm, warm consistency**: Not punitive, but clear that the expectation remains
+Adjust to your baby''s natural wake time and response to the schedule.', 'sleep', 5, ARRAY['nap transition', '4 to 3 naps', 'infant naps', 'nap schedule', 'daytime sleep', 'wake windows'], true, true, 'Lumira Health Team'),
 
-**Duration**
+('infant', 20, 'The 3-to-2 Nap Transition', 'Moving from three naps to two — timing, signs of readiness, and how to manage it', '## When Does It Happen?
 
-Usually two to six weeks. Significant life events can extend the disruption.
+Most babies transition from 3 naps to 2 naps between **6 and 8 months** of age, though some babies manage 3 naps until 9 months. The 3-to-2 transition is one of the more disruptive nap transitions because it significantly reorganises the day.
 
-*This article is for informational purposes only. Please consult your healthcare provider for personalised guidance.*$$,
-  24,
-  true,
-  ARRAY['National Sleep Foundation', 'American Academy of Pediatrics (AAP)', 'Zero to Three Organisation'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'toddler-sleep-2-year-regression-causes'
-),
+## Signs Your Baby Is Ready
 
-(
-  'infant',
-  'sleep',
-  'Is This a Regression or Something Else? Teething, Illness, and Travel',
-  $$**Not Every Sleep Disruption Is a Regression**
+- The third nap of the day is consistently refused or only results in a 10–15 minute catnap
+- The baby can stay awake for 2.5–3 hours between naps without becoming overtired
+- The late afternoon nap is pushing bedtime past 8pm
+- Night sleep is being disrupted by an overly late bedtime
 
-The term ''sleep regression'' is widely used — sometimes too widely. Before attributing disrupted sleep to a developmental regression, it is worth checking whether another explanation fits better.
+## How to Approach the Transition
 
-**Teething**
+**Drop the third nap first.** Begin by eliminating the late afternoon catnap and moving bedtime earlier (6:30–7pm) to compensate. This is often the hardest part — the baby will be tired and fussy in the late afternoon without the third nap.
 
-Teething begins around four to seven months and continues through the second year. It is a genuine source of discomfort, but research suggests it is often blamed for more sleep disruption than it actually causes. Studies show that teething symptoms (drooling, fussiness, gum discomfort) are most intense in the 48 hours before and after a tooth emerges — not for weeks at a time.
+**Extend wake windows gradually.** Move from 2–2.5 hour windows to 2.5–3 hour windows between the two remaining naps.
 
-If sleep disruption has lasted more than two or three days with no sign of a tooth emerging, teething is probably not the primary cause.
+**Lengthen remaining naps.** As total nap number drops, the two remaining naps should extend — aim for 1–1.5 hours each.
 
-**Illness**
+**Use a temporary earlier bedtime.** During the transition (typically 2–4 weeks), bedtime may need to move earlier — sometimes to 6–6:30pm — to prevent overtiredness. This is not permanent.
 
-Any illness — a cold, an ear infection, a stomach bug — will disrupt sleep, often significantly. Disruption during illness is not a regression; it is a normal response. The key is not to reinforce new dependent associations during recovery. Offer extra comfort, but try to return to your normal settling approach as your baby recovers.
+## A Sample 2-Nap Schedule (7–9 Months)
 
-Post-illness sleep often takes one to two weeks to fully normalise.
+- Wake: 7am
+- Nap 1: 9:30–11am (1.5 hours)
+- Nap 2: 2–3:30pm (1.5 hours)
+- Bedtime: 7–7:30pm
 
-**Travel and time zones**
+## Managing the Transition Period
 
-Travel disrupts sleep through schedule changes, new environments, and jet lag. The younger the baby, the more adaptable they tend to be to environmental changes — but the more dependent they are on familiar sleep conditions. Bring your usual white noise machine and sleep sack if travelling.
+Expect a bumpy 2–4 weeks. The baby may be more tired than usual, night sleep may temporarily worsen, and you may have some days where a third catnap is necessary to get through to bedtime. This is fine — transitions are not rigid.
 
-Jet lag takes roughly one day per time zone crossed to resolve. Light exposure at appropriate local times helps reset circadian rhythms.
+If after 4 weeks the baby is still not managing 2 naps well, they may not be ready and reverting to 3 naps temporarily is not a step backwards.', 'sleep', 6, ARRAY['nap transition', '3 to 2 naps', 'infant naps', 'nap schedule', 'daytime sleep', 'bedtime'], true, true, 'Lumira Health Team'),
 
-**Environmental changes**
+('toddler', 12, 'The 2-to-1 Nap Transition', 'Moving from two naps to one — the biggest nap transition of the first two years', '## When Does It Happen?
 
-Moving house, a new room, a new cot, even a different pram — these can all temporarily disrupt sleep. Allow one to two weeks for adjustment.
+The 2-to-1 nap transition is the biggest and most impactful nap change of infancy, and it typically happens between **12 and 18 months**, with most babies landing around 14–15 months. It is also one of the most commonly done too early — which leads to chronic overtiredness.
 
-**How to tell the difference from a regression**
+## Signs Your Baby Is Ready
 
-- If sleep disruption is accompanied by other developmental markers (rolling, standing, language burst): likely regression
-- If accompanied by temperature, feeding changes, runny nose, pulling at ears: likely illness
-- If it appeared around a schedule or environment change: likely situational
+Do not rush this transition. Signs of genuine readiness include:
+- Consistently refusing one of the two naps for 2–3 weeks (not just occasionally)
+- Taking a very long time to fall asleep for the second nap
+- Night sleep being disrupted by an overly long total daytime sleep
+- Wake windows extending comfortably to 4+ hours
+- Age — most babies are not ready before 12 months
 
-*This article is for informational purposes only. If you are concerned about your baby''s health, always consult your healthcare provider.*$$,
-  16,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'National Sleep Foundation', 'Macknin ML et al. - Pediatrics 2000'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-regression-or-teething-illness-travel'
-),
+Signs that look like readiness but are not:
+- A brief period of nap refusal during the 12-month sleep regression (give it 2 weeks before deciding)
+- One or two days of refusing the afternoon nap (normal)
 
--- ─────────────────────────────────────────────────────────────────────────────
--- SLEEP TRAINING (26–34)
--- ─────────────────────────────────────────────────────────────────────────────
+## How to Approach the Transition
 
-(
-  'infant',
-  'sleep',
-  'Should I Sleep Train? Weighing It Up Without Judgment',
-  $$**A Decision Only Your Family Can Make**
+**Gradually shift the morning nap later.** Rather than dropping a nap abruptly, move the first nap 15 minutes later every few days until it lands around midday. This creates a single consolidated midday nap.
 
-Sleep training is one of the most debated topics in parenting — and one where strong opinions abound. The goal of this article is not to tell you what to do, but to give you accurate information to make a decision that works for your family.
+**Adjust wake time if needed.** If the baby wakes at 6am, a 12pm nap may be a long stretch. Target wake-to-nap gap of 4–5 hours once established.
 
-**What is sleep training?**
+**Use an earlier bedtime.** During the transition, bedtime often needs to move to 6–6:30pm. A single nap creates a longer afternoon awake window, and overtiredness is common until the baby adjusts.
 
-Sleep training is any intentional process of helping a baby learn to fall asleep with less or no parental intervention. It ranges from gentle, gradual approaches with minimal or no crying, to more direct methods that involve some crying while a parent waits or checks in at intervals.
+**Use "quiet time" for non-nappers.** Some toddlers drop the afternoon nap quickly and resist the single midday nap. A daily quiet time (books, calm play) at the usual nap time helps regulate the body clock.
 
-**What does the research say?**
+## A Sample 1-Nap Schedule (15–18 Months)
 
-Multiple large, well-designed studies — including a landmark 2016 randomised controlled trial in Pediatrics — have found that sleep training methods (including those involving some crying) do not cause lasting emotional harm, do not affect attachment security, and significantly improve infant sleep and parental wellbeing. This finding has been replicated across multiple studies.
+- Wake: 6:30–7am
+- Nap: 12:30–2:30pm (2 hours)
+- Bedtime: 7–7:30pm
 
-**Who sleep training helps**
+## The Transition Takes Time
 
-Sleep training tends to be most helpful when:
-- Night wakings are frequent enough to significantly impair parental functioning
-- Your baby is developmentally ready (typically after four months, ideally from six months)
-- The family is in a position to be consistent for several days
+Expect 4–6 weeks for the new schedule to fully consolidate. During this period, some days will need a small catnap; other days the single nap will go beautifully. Consistency with timing — even on harder days — speeds the adjustment.', 'sleep', 6, ARRAY['nap transition', '2 to 1 nap', 'toddler sleep', 'nap schedule', 'daytime sleep', '12 months'], true, true, 'Lumira Health Team'),
 
-**Who might take a different path**
+('infant', 24, '6-Month Sleep: Consolidation and Longer Nights', 'What to expect at 6 months and how to support longer, more consolidated sleep', '## The 6-Month Sleep Milestone
 
-- Families for whom co-sleeping or feeding to sleep is a sustainable and satisfying arrangement
-- Families whose cultural or personal values prioritise a different kind of nighttime parenting
-- Families whose babies are not yet developmentally ready
-- Babies with medical issues affecting sleep
+Six months is a significant milestone in infant sleep development. By this age:
+- The circadian rhythm is well established
+- The baby can be developmentally ready to self-soothe
+- Many babies (though not all) are nutritionally capable of reducing night feeds
+- Sleep architecture has matured from the newborn pattern
+- The biological capacity for longer consolidated sleep periods is present
 
-**There is no single right approach**
+Six months does not mean the baby will automatically sleep through the night. But it does mean the conditions for longer nights are in place — and with the right approach, many families see meaningful improvement.
 
-Whether you choose a structured sleep training method, a gentle gradual approach, or no formal approach at all — what matters most is that the arrangement is sustainable for your family and your baby''s needs are being met.
+## What Sleep Can Look Like at 6 Months
 
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider or a certified infant sleep consultant for personalised guidance.*$$,
-  16,
-  true,
-  ARRAY['Price AMH et al. - Pediatrics 2016', 'Gradisar M et al. - Pediatrics 2016', 'American Academy of Pediatrics (AAP)', 'Mindell JA et al. - Sleep 2006'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-should-i-sleep-train-weighing-up'
-),
+A well-rested 6-month-old might sleep:
+- 10–12 hours overnight (with one feed, or none)
+- 2 naps of 1–1.5 hours each during the day
+- Total sleep: 13–15 hours per 24 hours
 
-(
-  'infant',
-  'sleep',
-  'Cry It Out (Extinction): The Evidence and How It Works',
-  $$**What Is Extinction Sleep Training?**
+Many babies at 6 months are still waking 2–4 times overnight. This is within the normal range but may not be necessary from a nutritional standpoint for healthy, typically growing babies.
 
-Extinction — commonly called ''cry it out'' or CIO — is a sleep training method in which parents place their baby in the cot awake at bedtime and do not return until morning (or a set time), allowing the baby to settle themselves. It is the most direct and typically the fastest of the sleep training methods.
+## Night Feeds at 6 Months
 
-**The evidence**
+Whether to eliminate night feeds at 6 months is a personal and medical decision. Key considerations:
+- **Is the baby growing well?** If weight gain is on track, night feeds may be comfort-driven rather than nutritional.
+- **Is the baby eating well during the day?** A baby who feeds well during daylight hours has less nutritional need at night.
+- **What does your health visitor or paediatrician say?** If there are any feeding or growth concerns, night feeds should not be reduced without professional guidance.
 
-Extinction has been studied extensively. The 2016 Gradisar et al. randomised controlled trial found that extinction and graduated extinction both significantly improved infant sleep and caused no measurable difference in cortisol levels, emotional health, or attachment outcomes at twelve months compared to no sleep training. This aligns with the broader research consensus.
+If reducing night feeds is appropriate, do so gradually — shorten breastfeed sessions by 2–3 minutes each night, or reduce bottle volume by 15–30ml every 2 nights.
 
-**How to implement extinction**
+## Sleep Training at 6 Months
 
-1. Ensure your baby is developmentally ready (most practitioners recommend at least six months, though some suggest from four months after paediatric clearance)
-2. Run a clear, consistent bedtime routine of 20 to 30 minutes
-3. Place your baby in the cot awake — drowsy but awake, or even fully awake
-4. Say goodnight calmly and leave the room
-5. Do not return until morning or a pre-set wake time (unless your baby is clearly unwell)
-6. Be consistent for at least three to five nights
+Six months is a common starting point for sleep training if the family chooses to pursue it. All evidence-based methods are appropriate from this age. The foundation remains the same: consistent bedtime routine, putting the baby down awake, responding consistently.
 
-**What to expect**
+## The 6-Month Sleep Regression
 
-- Night one is typically the hardest — crying may last 30 to 60 minutes or longer
-- Most babies improve dramatically by night three to five
-- Some babies have a brief resurgence on night two before improving significantly
+Some babies experience a sleep disruption around 6 months coinciding with major developmental milestones — learning to sit, increased motor activity, and cognitive leaps. If sleep that was going well suddenly regresses, give it 2 weeks before making any changes to approach. Many short regressions resolve on their own.', 'sleep', 7, ARRAY['6 months', 'infant sleep', 'sleep consolidation', 'night feeds', 'sleep training', 'longer nights'], true, true, 'Lumira Health Team'),
 
-**Common concerns addressed**
+('infant', 36, 'The 8-9 Month Sleep Regression', 'What is behind the sleep disruption at 8-9 months and how to navigate it', '## Why 8-9 Months Is Disrupted
 
-*Will it damage our bond?* Research says no — secure attachment is built across thousands of interactions, not one night.
-*Is it cruel?* Feeling upset when a baby cries is normal. The evidence suggests the outcome — independent settling — is beneficial for families, including babies.
+The 8-9 month sleep regression is one of the more intense of the first year, and it has multiple overlapping causes — which is why it can feel particularly relentless.
 
-**It is not for every family**
+**1. Gross motor development**
+At 8-9 months, most babies are learning to pull to stand, cruise along furniture, and some are beginning to crawl. The brain is intensely active processing new motor programs. Research suggests that periods of rapid motor development are associated with increased night waking as the brain rehearses new skills during sleep.
 
-If extinction does not feel right for your values, there are alternative approaches.
+**2. Cognitive leaps**
+Around 8-9 months, babies experience a significant cognitive shift — they develop object permanence (understanding that things exist even when they cannot see them). This is wonderful for development and more difficult for sleep. The baby now knows you are somewhere in the house. They want you. They know you exist and they want you there.
 
-*This article is for informational purposes only. Consult your paediatrician before beginning any sleep training.*$$,
-  16,
-  true,
-  ARRAY['Gradisar M et al. - Pediatrics 2016', 'Price AMH et al. - Pediatrics 2016', 'Mindell JA et al. - Sleep 2006', 'American Academy of Pediatrics (AAP)'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-cry-it-out-extinction-evidence-how'
-),
+**3. Separation anxiety**
+Object permanence leads directly to separation anxiety — one of the most significant drivers of night waking in the second half of the first year. The baby is not being manipulative; they are experiencing a genuine emotional response to separation that reflects healthy attachment.
 
-(
-  'infant',
-  'sleep',
-  'The Ferber Method (Graduated Extinction): Step-by-Step Guide',
-  $$**What Is the Ferber Method?**
+**4. Nap transition pressure**
+Around 8-9 months, many babies begin the 3-to-2 nap transition. If the nap schedule is in flux, night sleep often suffers simultaneously.
 
-The Ferber method — developed by Dr Richard Ferber — is a form of graduated extinction. Unlike full extinction (cry it out), the Ferber method involves returning to your baby at gradually increasing intervals to offer brief reassurance, without picking them up or fully resettling them.
+## How Long Does It Last?
 
-**The core principle**
+The 8-9 month regression typically lasts **2–6 weeks**. It resolves as the developmental skills consolidate and the baby adapts to the emotional reality of object permanence.
 
-The method teaches self-settling by gradually increasing the time before check-ins. The check-ins are brief and calm — a touch, a few words, and then leaving again. The parent''s presence reassures the baby but does not resettle them to sleep.
+## What Helps
 
-**The Ferber check-in schedule**
+- **Increase daytime connection:** More physical closeness, eye contact, and responsive play during waking hours reduces the anxiety-driven night waking.
+- **Maintain your bedtime routine:** Consistency and predictability are particularly soothing during periods of developmental anxiety.
+- **Practice separations during the day:** Brief, predictable separations ("I''m going to get a glass of water, I''ll be right back") help the baby practice the emotional experience of you leaving and returning.
+- **Do not start new sleep training during the regression:** If you have not yet done sleep work, wait until the regression has passed. If you have established independent sleep skills, hold your approach consistently — the skills are still there.
+- **Respond with warmth at night:** This is not the time for rigid interval-based responses if the baby is genuinely distressed. Brief reassurance followed by consistent settling is appropriate.', 'sleep', 7, ARRAY['8 month regression', 'sleep regression', 'separation anxiety', 'infant sleep', 'object permanence', '9 months'], true, true, 'Lumira Health Team'),
 
-| Night | First wait | Second wait | Third wait | Subsequent waits |
-|---|---|---|---|---|
-| 1 | 3 min | 5 min | 10 min | 10 min |
-| 2 | 5 min | 10 min | 12 min | 12 min |
-| 3 | 10 min | 12 min | 15 min | 15 min |
-| 4+ | Gradually increase further |
+('infant', 24, 'Teething and Sleep: How to Manage', 'What teething actually does to sleep — and what helps', '## The Teething-Sleep Relationship
 
-These are guidelines — many practitioners adjust the intervals based on individual baby temperament.
+Teething is one of the most commonly cited explanations for infant sleep disruption — and one of the most frequently over-attributed. Understanding what teething actually does to sleep helps parents distinguish genuine teething discomfort from developmental sleep patterns that would exist regardless.
 
-**How to do a check-in**
+## What the Research Shows
 
-- Enter briefly (30 to 60 seconds maximum)
-- Speak calmly: ''I love you, it''s time to sleep, I''ll see you in the morning''
-- A brief touch or pat is fine — do not pick up
-- Leave again even if your baby is crying
-- The check-in is for your reassurance as much as your baby''s
+Studies on teething and sleep are nuanced. A 2000 study published in *Pediatrics* tracking 125 children through teething found that tooth eruption was associated with:
+- Increased daytime drooling and biting
+- Mild temperature elevation (not true fever — not above 38°C/100.4°F)
+- Slightly increased fussiness
+- Mild sleep disruption in the 1–2 days immediately before and after eruption
 
-**What to expect**
+Importantly, the disruption was **short-lived and mild** — not weeks of terrible sleep. Prolonged sleep disruption blamed on teething is more likely to have another cause — a developmental regression, a sleep association problem, illness, or schedule issues.
 
-Many families see significant improvement by night three to five. Some babies become more upset during check-ins (the parent''s arrival and departure is more frustrating than a steady state). In those cases, full extinction may be a better fit.
+## Signs of True Teething Discomfort
 
-**Minimum age**
+- Swollen, red gum tissue where a tooth is erupting
+- Drooling significantly more than usual
+- Chewing or biting on objects for relief
+- Mild fussiness — particularly in the 24–48 hours before a tooth appears
+- Low-grade warmth (under 38°C)
 
-Most practitioners recommend four to six months minimum, with medical clearance.
+A baby who is waking every hour for weeks, repeatedly blamed on teething, is likely experiencing something else.
 
-*This article is for informational purposes only. Please consult your paediatrician or certified sleep consultant before beginning sleep training.*$$,
-  16,
-  true,
-  ARRAY['Ferber R - Solve Your Child''s Sleep Problems', 'Gradisar M et al. - Pediatrics 2016', 'American Academy of Pediatrics (AAP)'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-ferber-method-graduated-extinction-guide'
-),
+## What Actually Helps
 
-(
-  'infant',
-  'sleep',
-  'The Chair Method (Sleep Lady Shuffle): Gradual Retreat Explained',
-  $$**What Is the Chair Method?**
+**For genuine teething discomfort:**
+- Cold (not frozen) teething toys — the cold reduces inflammation temporarily
+- Clean finger gum massage — counter-pressure can relieve discomfort
+- Teething gel (age-appropriate formulations without lidocaine or benzocaine)
+- Infant paracetamol or ibuprofen (as per packaging guidelines) on particularly difficult nights
 
-The chair method — popularised by Kim West in her book ''Good Night, Sleep Tight'' and sometimes called the Sleep Lady Shuffle — is a gradual retreat approach to sleep training. It involves the parent sitting in the room while the baby learns to settle, and moving progressively further away over ten to fourteen days.
+**For sleep:**
+- Do not introduce new sleep associations during a teething period that you are not prepared to maintain long-term. If you bring the baby into your bed for a few nights of teething, expect them to expect this every night thereafter.
+- Offer extra comfort and reassurance at night — a brief check-in is appropriate
+- Maintain your usual settling approach as much as possible
 
-**The core idea**
+## Teething Myths
 
-Rather than abrupt separation, you physically remain in the room but reduce your active involvement in settling. Over time, you move your chair closer to the door each night until you are outside the room entirely.
-
-**A typical chair method schedule**
-
-- **Nights 1 to 3**: Sit in a chair next to the cot. Offer minimal physical comfort (intermittent patting). Avoid sustained rocking or feeding to sleep.
-- **Nights 4 to 6**: Move the chair to the middle of the room.
-- **Nights 7 to 9**: Move the chair to the doorway.
-- **Nights 10 to 12**: Sit just outside the door, occasionally offering a verbal reassurance.
-- **Night 13+**: Leave the room after the settling routine.
-
-**The strengths of this method**
-
-- Lower distress for many parents, who find it difficult to leave the room entirely
-- A clear, progressive structure
-- Works well for babies who are soothed by presence rather than active contact
-
-**The challenges**
-
-- Requires significant commitment from the parent sitting in the room
-- Some babies become more distressed seeing a parent not respond actively — this can work against the method
-- Takes longer than extinction or Ferber
-- Consistency across both parents and carers is critical
-
-**Who it suits best**
-
-Parents who want to remain present during the process and can commit to the gradual timeline. It tends to work well for babies from around six months onwards.
-
-*This article is for informational purposes only. Please consult your paediatrician or a certified sleep consultant before beginning sleep training.*$$,
-  16,
-  true,
-  ARRAY['West K - Good Night, Sleep Tight', 'Mindell JA et al. - Sleep 2006', 'National Sleep Foundation'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-chair-method-sleep-lady-shuffle'
-),
-
-(
-  'infant',
-  'sleep',
-  'Pick Up Put Down: A Gentle Approach for Younger Babies',
-  $$**What Is Pick Up Put Down?**
-
-Pick Up Put Down (PUPD) is a gentle sleep training technique developed by Tracy Hogg (The Baby Whisperer). It involves placing your baby in the cot awake, and if they cry, picking them up to calm — but not to sleep — then putting them back down. This is repeated until the baby settles.
-
-**The principle**
-
-PUPD aims to teach self-settling without leaving a baby to cry alone. The parent remains actively involved, offering physical comfort when needed, but encourages the baby to complete the process of falling asleep in the cot.
-
-**How to do it**
-
-1. Complete your wind-down routine and place your baby in the cot awake
-2. If your baby cries beyond a brief protest, pick them up calmly
-3. Hold them upright, pat their back, and speak soothingly until crying reduces (not until they fall asleep)
-4. Place them back in the cot before they are fully asleep
-5. If they cry again, wait briefly, then repeat
-6. Continue until they settle
-
-**Realistic expectations**
-
-- PUPD can be very time-consuming, especially at first — some sessions can last 45 to 90 minutes
-- It works better for younger babies (around 3 to 5 months) than for older ones, who may become more stimulated by pick-ups
-- From around six months, some babies get more upset when picked up and put down repeatedly — at that point, a modified approach with fewer pick-ups may work better
-
-**When it does not work well**
-
-- For older, more alert babies (six months and above) who find pick-ups stimulating
-- When parents are too exhausted to sustain the approach consistently
-- If the baby becomes more aroused, not calmer, when picked up
-
-**A gentle, time-intensive option**
-
-PUPD is among the gentlest structured approaches — but it requires patience and consistency. It suits families committed to being present throughout the process.
-
-*This article is for informational purposes only. Please consult your healthcare provider before making any changes to your baby''s sleep routine.*$$,
-  12,
-  true,
-  ARRAY['Hogg T - Secrets of the Baby Whisperer', 'National Sleep Foundation', 'Mindell JA et al. - Sleep 2006'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-pick-up-put-down-gentle-approach'
-),
-
-(
-  'infant',
-  'sleep',
-  'The Fading Method: Reducing Parental Support Gradually',
-  $$**What Is the Fading Method?**
-
-The fading method is a sleep training approach based on gradually reducing parental involvement in the settling process over time, rather than removing it abruptly. It is considered one of the gentler approaches and involves minimal to no prolonged crying.
-
-**How fading works**
-
-You identify your current settling habit and systematically reduce it step by step. The process looks different depending on your starting point:
-
-**If you currently feed to sleep:**
-- Feed to drowsy but not asleep → put down slightly more awake each night → feed before bath instead of just before cot → gradually separate the feed from sleep further
-
-**If you currently rock or hold to sleep:**
-- Rock until drowsy but not asleep → reduce rocking movement gradually → hold without rocking → sit next to cot with hand on baby → remove hand → sit nearby without touching → move chair progressively further
-
-**If you use patting:**
-- Pat until drowsy → reduce duration of patting → intermittent pats → presence without patting → leave room
-
-**Timeframe**
-
-Fading is the slowest of the sleep training methods — typically taking two to four weeks. Progress can feel frustratingly slow, but the gradual nature means most babies do not experience significant distress.
-
-**Who it suits**
-
-- Families who want to avoid any crying and are willing to invest more time
-- Younger babies (four to six months) where a very gentle approach is preferred
-- Families where one parent has strong feelings about not using extinction methods
-
-**Risks to watch for**
-
-- Inconsistency: If some nights you follow the plan and others you revert, progress will be very slow
-- Moving too fast: Each step should be held for several nights before moving on
-
-*This article is for informational purposes only. Please consult a certified infant sleep consultant or your healthcare provider for personalised guidance.*$$,
-  16,
-  true,
-  ARRAY['Mindell JA et al. - Sleep 2006', 'National Sleep Foundation', 'Kuhn BR and Elliott AJ - Child and Adolescent Psychiatric Clinics 2003'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-fading-method-reducing-support-gradually'
-),
-
-(
-  'infant',
-  'sleep',
-  'No-Cry Sleep Approaches: What Actually Works',
-  $$**Can Babies Learn to Sleep Without Any Crying?**
-
-The honest answer is: some can, some cannot — and it depends on your definition of ''no crying.'' Any change to a baby''s settled sleep routine will likely involve some protest. The question is the degree of distress and how it is managed.
-
-**What no-cry approaches focus on**
-
-No-cry sleep approaches (popularised by Elizabeth Pantley in ''The No-Cry Sleep Solution'') focus on:
-- Gradually shifting sleep associations rather than removing them abruptly
-- Watching and responding to cues
-- Working with the baby''s natural rhythm rather than imposing a rigid schedule
-
-**Techniques commonly used in no-cry approaches**
-
-- **Pantley''s Gentle Removal Plan**: Unlatch or remove your input before the baby is fully asleep, then replace if needed — repeated over many nights to gradually shift the association
-- **Fading** (see our full article on this method)
-- **Consistent, calming bedtime routines**: Strong routines reduce the cognitive work of settling
-- **Wake-to-sleep**: Lightly rousing a baby just before a predictable early waking to reset the cycle
-- **Scheduled awakenings**: Waking your baby shortly before they would wake themselves — used for predictable night waking patterns
-
-**What the evidence shows**
-
-No-cry methods are less well-studied than extinction and graduated extinction, primarily because they are harder to standardise in research settings. What evidence exists suggests they can be effective, particularly for younger babies, but results take longer and outcomes vary more than with structured methods.
-
-**Who they suit best**
-
-- Families opposed to any form of crying
-- Younger babies (under four to five months)
-- Families with time and patience for a slower process
-
-**Managing expectations**
-
-Progress is real but slow — typically measured in weeks rather than days. Consistency is everything.
-
-*This article is for informational purposes only. Please consult your healthcare provider or a certified infant sleep consultant for support.*$$,
-  16,
-  true,
-  ARRAY['Pantley E - The No-Cry Sleep Solution', 'Mindell JA et al. - Sleep 2006', 'National Sleep Foundation'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-no-cry-approaches-what-works'
-),
-
-(
-  'infant',
-  'sleep',
-  'When Sleep Training Does Not Work: Troubleshooting Guide',
-  $$**Why Sleep Training Sometimes Fails**
-
-Sleep training works for the vast majority of families when applied consistently to an appropriate candidate. When it does not work — or stops working — the reason is almost always one of the following.
-
-**1. Inconsistency**
-
-This is the most common reason. Sleep training requires doing the same thing every night, and ideally across every caregiver. If one parent does extinction while the other rocks to sleep, the baby learns that persistence pays off. Consistency does not mean rigidity, but it does mean all adults on the same page.
-
-**2. Age or developmental readiness**
-
-Some babies under four months are not yet developmentally ready to settle independently for extended periods. If your baby is younger than four months and sleep training is not working, that may simply be why.
-
-**3. An underlying medical issue**
-
-Babies with unmanaged reflux, sleep apnoea, allergies, ear infections, or other medical issues will not sleep train successfully until those issues are addressed. If your baby seems genuinely distressed (not just protesting) and sleep does not improve after several days, discuss this with your paediatrician.
-
-**4. Schedules that are off**
-
-A baby put down overtired or undertired will fight sleep regardless of method. If sleep training is not working, audit your wake windows and total sleep before assuming the method is the problem.
-
-**5. Method mismatch**
-
-Some babies respond better to presence (chair method) and some to no check-ins (extinction). If one approach is not working after five to seven consistent days, it may be worth trying a different method.
-
-**6. Developmental leap or regression**
-
-Sleep training during a major developmental leap (four-month regression, eight-month leap) is harder. It can still work, but progress may be slower.
-
-**What to do**
-
-- Review consistency and schedule first
-- Rule out medical causes
-- Consider a consultation with a certified infant sleep consultant
-
-*This article is for informational purposes only. Please consult your paediatrician if you have concerns about your baby''s health or wellbeing.*$$,
-  16,
-  true,
-  ARRAY['Mindell JA et al. - Sleep 2006', 'American Academy of Pediatrics (AAP)', 'National Sleep Foundation'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-training-troubleshooting-when-not-working'
-),
-
-(
-  'infant',
-  'sleep',
-  'Sleep Training With Two Children Sharing a Room',
-  $$**One of the Most Challenging Sleep Scenarios**
-
-Families with two children sharing a room face a genuine logistical challenge when sleep training: will the older child be woken? Will crying disturb both? The answer depends on age gap, sleep stage, and the method you choose.
-
-**What actually wakes older siblings**
-
-Older children (toddlers and above) are often more resilient to a crying baby than parents expect. Children in deep sleep stages are very difficult to rouse. Many families find that once the older child is used to the baby being in the room, they sleep through early phases of sleep training.
-
-**Strategies for room-sharing families**
-
-- **Separate the settling times**: Get the older child to sleep first, then bring in the baby to settle. This reduces the overlap during the highest-crying window.
-- **White noise**: A white noise machine benefits both children — it masks the baby''s crying for the older child and creates a consistent settling environment for the baby.
-- **Temporary separation during training**: Some families temporarily move one child to another room for the first three to five nights of sleep training, then reintroduce room-sharing once the baby is settling more independently. A pack-and-play in a hallway or parents'' room can work.
-- **Start with a short, predictable method**: Extinction or a rapid check-in approach (rather than the chair method) means crying is typically resolved faster.
-
-**The older child**
-
-Involve older children who are old enough to understand. A brief, honest explanation (''The baby is learning to sleep on their own — it might be loud for a few nights'') can reduce their anxiety and enlist their patience.
-
-**What to expect**
-
-Most families find that within three to five nights, disruption to the older child is minimal. The first two nights are typically the hardest.
-
-*This article is for informational purposes only. Please consult your healthcare provider or sleep consultant for guidance specific to your family.*$$,
-  16,
-  true,
-  ARRAY['Mindell JA et al. - Sleep 2006', 'National Sleep Foundation', 'American Academy of Pediatrics (AAP)'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-training-two-children-sharing-room'
-),
-
--- ─────────────────────────────────────────────────────────────────────────────
--- NIGHT FEEDING AND WEANING (35–38)
--- ─────────────────────────────────────────────────────────────────────────────
-
-(
-  'infant',
-  'sleep',
-  'Night Feeding by Age: What Is Developmentally Normal?',
-  $$**Night Feeds Are Not a Problem to Solve — Until They Are**
-
-Night feeding is biologically normal for young babies. Understanding what is developmentally typical for each age can help parents calibrate expectations and avoid unnecessary stress.
-
-**Newborns (0 to 4 weeks)**
-
-Feeding every one to three hours around the clock is normal and necessary. Newborns have tiny stomachs (initially the size of a marble), cannot distinguish day from night, and rely on frequent feeding to maintain blood sugar and support the establishment of milk supply. Never restrict or skip feeds at this age.
-
-**1 to 3 months**
-
-Most babies still require two to four night feeds. Some may naturally extend to one three to four hour stretch, particularly between midnight and early morning. This is a biological development, not something to engineer.
-
-**4 to 6 months**
-
-Many babies are physiologically capable of a longer sleep stretch (four to six hours) at some point in the night. However, ''capable'' does not mean ''will'' — sleep associations, growth spurts, and developmental leaps all influence actual night feeding. Two to three night feeds remain common.
-
-**6 to 9 months**
-
-For many babies, one to two night feeds is typical. Some breastfed babies continue to genuinely need or want a night feed at this age. Formula-fed babies may extend to one or zero night feeds.
-
-**9 to 12 months**
-
-Most term, healthy babies are physiologically capable of not needing calories overnight. Continued night waking at this age is often habit or sleep-association-based rather than hunger-driven — though comfort nursing or bottle feeding remains valid if it is working for your family.
-
-**Cultural and individual variation**
-
-Night feeding norms vary significantly across cultures. Many families worldwide continue night nursing through toddlerhood, with no negative outcomes. There is no universally ''right'' time to night wean.
-
-*This article is for informational purposes only. Discuss night feeding with your paediatrician, particularly if your baby has weight or feeding concerns.*$$,
-  0,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'WHO', 'Breastfeeding Medicine Academy', 'National Sleep Foundation'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-night-feeding-by-age-normal'
-),
-
-(
-  'infant',
-  'sleep',
-  'Weaning From Night Feeds: Gradual Approaches That Work',
-  $$**When and How to Begin Night Weaning**
-
-Night weaning — reducing or eliminating feeds during the night hours — is appropriate when your baby is medically ready (typically after five to six months, with paediatric clearance) and you feel the current arrangement is not sustainable for your family.
-
-**Before you begin**
-
-Check with your paediatrician that your baby''s weight gain is on track and that they do not have medical reasons to continue night feeding. Confirm that daytime feeding is adequate to compensate for removed night calories.
-
-**Approach 1: Gradual volume reduction (bottle)**
-
-If bottle feeding, reduce the volume of each night feed by 30 ml every two to three nights. As feeds become very small, most babies stop waking for them — the caloric reward is no longer worth the waking effort.
-
-**Approach 2: Gradual unlatching (breastfeeding)**
-
-When your baby falls asleep at the breast during a night feed, gently unlatch and offer comfort settling (patting, shushing) rather than re-latching. Over one to two weeks, offer shorter nursing times and more settling without the breast.
-
-**Approach 3: Dreamfeed and drop**
-
-If you are currently doing a dreamfeed (a feed given to a sleeping baby before your own bedtime), this is often the last feed to establish and the first one families choose to drop. Gradually move the dreamfeed earlier until it merges with the bedtime routine.
-
-**Approach 4: Stretch and delay**
-
-When your baby wakes for a feed, try brief settling first (patting, shushing, a dummy) before offering a feed. Gradually extend the settling period each night. Over one to two weeks, many babies stop waking or accept minimal settling.
-
-**What to expect**
-
-Some protest is normal during the weaning process. A gradual approach means less acute distress than abrupt stopping, but there will still be nights of complaint during the adjustment.
-
-*This article is for informational purposes only. Please discuss night weaning with your paediatrician before beginning, particularly if your baby is under six months.*$$,
-  20,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'Breastfeeding Medicine Academy', 'WHO', 'Pantley E - The No-Cry Sleep Solution'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-weaning-night-feeds-gradual-approaches'
-),
-
-(
-  'infant',
-  'sleep',
-  'Dream Feeding: Does It Help Babies Sleep Longer Stretches?',
-  $$**What Is a Dream Feed?**
-
-A dream feed is a feed given to a sleeping (or nearly sleeping) baby — typically between 10:00 pm and 11:00 pm — before the parents go to bed. The idea is that ''topping up'' the baby''s stomach before the parents sleep will extend the stretch of time the baby sleeps without waking.
-
-**Does it work?**
-
-The evidence is mixed. Some families find that a dreamfeed meaningfully extends the baby''s first sleep stretch. Others find it has no effect, or even disrupts sleep by activating the baby. Individual response varies considerably.
-
-**How to do a dream feed**
-
-- Lift your baby gently without turning on bright lights
-- Offer the breast or bottle while they are still drowsy — do not fully wake them
-- Wind gently afterwards (this matters — skipping winding after a dreamfeed can cause discomfort)
-- Place them back down without fully waking
-
-**Best age for dream feeding**
-
-Dreamfeeds tend to work best between about six weeks and four months. After the four-month sleep regression, when sleep cycles fragment further, many families find the dreamfeed stops helping and may actually create an additional waking. This is a common time to phase it out.
-
-**How to phase out the dreamfeed**
-
-Move the dreamfeed gradually earlier by ten to fifteen minutes every three to four days until it merges with the regular bedtime feed and is no longer a separate event.
-
-**Who benefits most**
-
-- Parents of younger babies (6 to 16 weeks) who want to attempt a longer stretch in the early part of the night
-- Breastfeeding parents wanting to protect supply while also getting a longer sleep stretch
-
-**Who it may not help**
-
-- Babies after the four-month regression
-- Babies who fully wake during the dreamfeed and cannot resettle
-
-*This article is for informational purposes only. Please consult your midwife or paediatrician with any questions about your baby''s feeding needs.*$$,
-  8,
-  true,
-  ARRAY['Mindell JA - Sleeping Through the Night', 'National Sleep Foundation', 'American Academy of Pediatrics (AAP)'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-dream-feeding-longer-stretches'
-),
-
-(
-  'infant',
-  'sleep',
-  'Comfort vs. Hunger Night Waking: How to Tell the Difference',
-  $$**Not All Night Wakings Are About Hunger**
-
-This is one of the most common questions from parents in the second half of the first year: my baby is waking up — are they hungry, or are they waking out of habit and comfort? The distinction matters because the response you choose will differ.
-
-**Signs of genuine hunger**
-
-- Waking with urgency — strong, escalating cry rather than a gradual build
-- Feeds vigorously and takes a full feed before settling back to sleep
-- Has a consistent pattern (wakes at roughly the same time each night)
-- Is in a growth spurt or leap period with increased daytime feeding too
-- Has not been gaining weight well and your paediatrician has recommended maintaining feeds
-
-**Signs of comfort/habit waking**
-
-- Wakes and settles quickly with minimal feeding (takes a few sips and falls asleep)
-- Can be resettled by non-feeding means — a dummy, a brief pat, or a parent''s voice
-- Wakes multiple times per night at variable intervals
-- Is over six months, has good weight gain, and takes full daytime feeds
-- The feed volume at night has been declining over time
-
-**The feeding to sleep connection**
-
-Many night wakings that appear to be hunger are actually sleep-association wakings. If feeding is your baby''s primary sleep association, they will search for it every time they surface between sleep cycles — even if they are not hungry. This can look like very frequent feeding but is driven by the need to return to sleep, not caloric need.
-
-**A useful test**
-
-Try offering settling without a feed first. If your baby settles within a few minutes of being patted or shushed, the waking was likely comfort-based. If they escalate and cannot be settled without feeding after five to ten minutes, it is more likely genuine hunger.
-
-*This article is for informational purposes only. Always discuss your baby''s nutritional needs with your paediatrician, particularly if you have concerns about weight gain.*$$,
-  16,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'Mindell JA - Sleeping Through the Night', 'National Sleep Foundation'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-comfort-vs-hunger-night-waking'
-),
-
--- ─────────────────────────────────────────────────────────────────────────────
--- ENVIRONMENT AND ROUTINE (39–45)
--- ─────────────────────────────────────────────────────────────────────────────
-
-(
-  'infant',
-  'sleep',
-  'Bedtime Routines: Why Consistency Matters More Than Content',
-  $$**The Power of a Predictable Routine**
-
-Bedtime routines are one of the most evidence-backed tools in infant and toddler sleep. Multiple studies — including a large 2009 Mindell et al. multi-country study — have shown that a consistent bedtime routine significantly improves infant sleep onset, reduces night wakings, and improves maternal mood.
-
-**Why routines work**
-
-Routines work through classical conditioning: the sequence of events (bath → massage → feed → story → song → cot) becomes a powerful cue for sleep. The body begins to prepare for sleep (melatonin rises, alertness drops) as the routine begins. This is why the content of the routine matters far less than its consistency.
-
-**What a good bedtime routine includes**
-
-A routine does not need to be elaborate. Most effective routines:
-- Are 20 to 30 minutes long (toddlers can extend to 30 to 40 minutes)
-- Happen at the same time each evening
-- Follow the same order of steps
-- Involve calming, low-stimulation activities
-- End in the sleep space
-
-Example: bath → moisturiser or massage → sleepsuit and sleep sack → dim room → feed → brief story or song → cot.
-
-**What to avoid in the routine**
-
-- Screens in the hour before bed (blue light suppresses melatonin)
-- Stimulating play or physical activity
-- Loud environments or visitors during the wind-down
-
-**When can you start a routine?**
-
-A brief, consistent wind-down can be introduced from as early as four to six weeks. It need not be complex — even a simple: feed, song, cot — starts building the association.
-
-**Consistency beats perfection**
-
-You do not need to do the ''right'' routine. You need to do the same routine reliably. A three-step routine done consistently outperforms a ten-step routine done inconsistently.
-
-*This article is for informational purposes only. Consult your health visitor or paediatrician for personalised sleep guidance.*$$,
-  8,
-  true,
-  ARRAY['Mindell JA et al. - Sleep 2009', 'American Academy of Pediatrics (AAP)', 'National Sleep Foundation'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-bedtime-routine-consistency-matters'
-),
-
-(
-  'infant',
-  'sleep',
-  'Dark Rooms for Better Sleep: Blackout Blinds and Why They Work',
-  $$**Light Is the Most Powerful Regulator of the Circadian Clock**
-
-Melatonin — the hormone that signals sleep — is suppressed by light. Even modest light exposure during sleep periods can disrupt melatonin production and fragment sleep. For babies, whose circadian systems are still developing and particularly sensitive, room darkness makes a meaningful difference to sleep quality and duration.
-
-**What level of darkness works?**
-
-The goal is not pitch blackness but significant dimness. The practical test: if you can comfortably read a book in the room without turning on a light, it is too bright. A room where you can barely make out shapes is about right.
-
-**Blackout blinds or curtains**
-
-Blackout blinds are one of the most straightforwardly effective sleep environment investments. They are particularly valuable:
-- In summer, when early sunrise extends significantly
-- In climates where daylight persists until late evening
-- For naps, when the sun is at its highest
-
-**Red light vs. white or blue light**
-
-If you need a nightlight for night feeds or settling checks, red-wavelength light has the least impact on melatonin compared to white or blue-spectrum lights. Many families use a dim red night light in a corner of the room.
-
-**Light in the morning**
-
-The flip side of darkness at night is the importance of bright light in the morning. Opening curtains or taking your baby outside after waking helps anchor the circadian clock and reinforces the day-night distinction.
-
-**Practical tips**
-
-- Blackout blind liners can be added to any existing curtain
-- Portable, adhesive blackout panels are available for travel
-- Consistent darkness at nap time supports better nap duration
-
-*This article is for informational purposes only. Please consult your paediatrician if you have concerns about your baby''s sleep.*$$,
-  8,
-  true,
-  ARRAY['National Sleep Foundation', 'Cajochen C et al. - Journal of Sleep Research', 'American Academy of Pediatrics (AAP)'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-dark-rooms-blackout-blinds-why-work'
-),
-
-(
-  'infant',
-  'sleep',
-  'Sleep Sacks and Sleeping Bags: Sizes, TOG Ratings, and When to Use Them',
-  $$**A Safer Alternative to Loose Blankets**
-
-Sleep sacks (also called sleeping bags or wearable blankets) are one of the most recommended infant sleep environment products — not because they ''improve sleep,'' but because they keep babies warm without the suffocation risk of loose blankets in the cot.
-
-**Why sleep sacks instead of blankets?**
-
-The AAP and equivalent organisations worldwide advise against loose blankets in the cot for babies under twelve months. Sleep sacks provide warmth safely — they cannot ride up over a baby''s face, and they prevent babies from slipping under bedding.
-
-**TOG ratings explained**
-
-TOG measures the thermal insulation of a sleep sack. The higher the TOG, the warmer the sack.
-
-| TOG | Best for room temperature |
-|---|---|
-| 0.5 | 24–27°C |
-| 1.0 | 20–24°C |
-| 2.5 | 16–20°C |
-| 3.5 | Below 16°C |
-
-Always adjust the clothing underneath accordingly — in a warmer room with a lower TOG, less clothing is needed.
-
-**Sizing**
-
-Sleep sacks are sized by weight and height rather than age, as babies vary considerably. Check each brand''s size guide. The sack should be roomy enough for leg movement but not so large that the baby can slip inside it.
-
-**When to start using a sleep sack**
-
-Sleep sacks can be used from birth — they come in newborn sizes and are suitable from the earliest days. They are compatible with swaddling in the newborn phase (some ''transition'' sleep sacks have armhole wraps for the swaddle-to-sleep-sack transition).
-
-**How long can you use them?**
-
-Sleep sacks are available in sizes to fit toddlers through age four to five. There is no upper age limit — they remain a useful and safe option as long as they fit correctly and your child has not learned to climb out of them.
-
-*This article is for informational purposes only. Please consult your paediatrician for advice specific to your baby''s needs.*$$,
-  0,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'Lullaby Trust UK', 'Red Nose Foundation Australia'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-sacks-sleeping-bags-tog-sizes-when-use'
-),
-
-(
-  'infant',
-  'sleep',
-  'Swaddle-to-Sleep-Sack Transition: When and How to Make the Switch',
-  $$**Why Swaddling Has a Time Limit**
-
-Swaddling — wrapping a newborn snugly in a blanket or swaddle wrap — can be a powerful tool for settling young babies. It mimics the contained feeling of the womb and suppresses the startle reflex. However, swaddling must stop before your baby begins to roll.
-
-**When to transition**
-
-The swaddle-to-sleep-sack transition should happen as soon as your baby shows any signs of rolling — typically between eight and sixteen weeks. Rolling while swaddled (arms restrained) is a significant safety risk.
-
-Signs to watch for:
-- Rocking side to side when on their back
-- Managing to roll during tummy time
-- Wriggling out of the swaddle consistently
-
-If your baby begins rolling, the swaddle must stop immediately, regardless of how much they seemed to rely on it.
-
-**How to transition**
-
-**Option 1: Cold turkey**
-Remove the swaddle entirely and move to a sleep sack in one step. This is the simplest approach. Many babies adjust within two to five nights with some sleep disruption.
-
-**Option 2: One arm out**
-Transition one arm out of the swaddle for a few nights, then both arms free in the swaddle, then move to a sleep sack. This more gradual approach helps babies adjust to the loss of containment slowly.
-
-**Option 3: Transition sleep sacks**
-Several brands make sleep sacks with optional arm wraps that allow a gradual reduction of containment. These can be helpful for babies who seem particularly dependent on swaddling.
-
-**What to expect**
-
-Some increase in startle waking is normal for one to two weeks after the swaddle is removed. White noise and a consistent dark room can support the adjustment period.
-
-*This article is for informational purposes only. If your baby is rolling or showing signs of it, stop swaddling immediately and consult your paediatrician.*$$,
-  8,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'Red Nose Foundation Australia', 'Lullaby Trust UK'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-swaddle-to-sleep-sack-transition'
-),
-
-(
-  'infant',
-  'sleep',
-  'Teething and Sleep: What Really Helps at Night',
-  $$**The Teething-Sleep Disruption Reality Check**
-
-Teething is frequently blamed for sleep regression, but the relationship is more nuanced than commonly believed. Research suggests that teething symptoms are most acute in the 24 to 72 hours around a tooth erupting — not for weeks of continuous disruption.
-
-**When teething actually disrupts sleep**
-
-- In the few nights immediately before and after a tooth emerges
-- When pain is significant enough to prevent settling — though many babies tolerate teething with minimal distress
-- When gum inflammation is visible and your baby is clearly uncomfortable
-
-**Signs teething is genuinely causing the waking**
-
-- You can see or feel a tooth about to emerge
-- Your baby is drooling excessively and chewing everything during the day
-- They are settling briefly after waking but waking again repeatedly
-- Other illness signs are absent
-
-**What actually helps with teething pain at night**
-
-- **Cool teething rings** offered before bedtime — not placed in the cot
-- **Paracetamol or ibuprofen** (age-appropriate doses — check with your pharmacist or paediatrician before use; not suitable for all ages)
-- **Teething gel with anaesthetic** has limited evidence and some gels are no longer recommended for young infants — check current guidance in your country
-- **Gum rubbing** with a clean finger before sleep
-
-**What to avoid**
-
-- Teething necklaces (amber, silicone): associated with strangulation and choking risk; not recommended by any paediatric authority
-- Homeopathic teething tablets: no evidence of efficacy
-- Benzocaine-containing gels: not recommended for infants under two in many countries due to rare but serious adverse effects
-
-**Maintaining sleep habits during teething**
-
-Extra comfort is appropriate when your baby is in genuine pain. Try to return to your usual settling approach as soon as the acute phase passes.
-
-*This article is for informational purposes only. Consult your pharmacist or paediatrician before giving any medication to your baby.*$$,
-  24,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'Macknin ML et al. - Pediatrics 2000', 'NHS UK', 'Therapeutic Goods Administration (TGA) Australia'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-teething-what-helps-at-night'
-),
-
-(
-  'infant',
-  'sleep',
-  'Illness and Sleep: Getting Back on Track After a Bad Patch',
-  $$**Why Illness Wrecks Sleep**
-
-A sick baby needs more support, more comfort, and often more feeds. It is entirely appropriate — and kind — to offer extra holding, night feeds, and physical presence during an illness. The challenge comes in the recovery phase, when the illness resolves but the sleep disruptions and new habits linger.
-
-**During the illness**
-
-- Do what it takes to keep your baby comfortable
-- Expect more night waking — congestion, ear pain, and general malaise all disrupt sleep
-- Offer feeds on demand — unwell babies may need more calories and hydration
-- Do not worry about ''undoing'' sleep training during this period
-
-**The recovery trap**
-
-During an illness, you may have reintroduced feeding to sleep, co-sleeping, or holding through the night. These are compassionate responses. The problem is that after recovery, the new habits can stick — your baby learned that those conditions are again available.
-
-**How to get back on track**
-
-**Step 1: Wait for full recovery**
-Sleep is still disrupted for five to seven days after an illness even when your baby seems better. Do not attempt to re-establish routines immediately — allow full recovery first.
-
-**Step 2: Reintroduce the routine first**
-Before tackling night wakings, restore the bedtime routine — same time, same steps, same settling environment. This signals that things are returning to normal.
-
-**Step 3: Gradually withdraw the illness-era support**
-If you are now feeding to sleep again after previously having weaned that association, return to your previous settling approach over three to five nights. It will likely be faster than the first time — your baby still has the memory of independent settling.
-
-**Expect a brief protest period**
-
-Two to four nights of re-establishing is typical. It is usually shorter and less intense than the original sleep training.
-
-*This article is for informational purposes only. Always prioritise your baby''s health and comfort during illness. Consult your healthcare provider with any medical concerns.*$$,
-  0,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'National Sleep Foundation', 'Mindell JA - Sleeping Through the Night'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-illness-getting-back-on-track'
-),
-
-(
-  'infant',
-  'sleep',
-  'Travel and Time Zones: Keeping Baby Sleep on Track',
-  $$**Travelling With a Baby — Sleep Expectations**
-
-Travel inevitably disrupts sleep. New environments, different light cycles, schedule changes, and the stress of travel itself all affect how babies sleep. That said, with some preparation, you can minimise the disruption and help your baby adjust reasonably quickly.
-
-**Before you travel**
-
-- Bring your usual sleep tools: portable white noise machine, a familiar sleep sack, a worn item of your clothing for scent (for older babies)
-- Pack a portable blackout blind — many travel versions use suction cups or velcro and fold flat
-- Research your accommodation''s cot or crib options in advance
-
-**Managing jet lag**
-
-The general rule is one day per time zone crossed for full adjustment. Young babies (under three months) often adapt faster than older babies and toddlers because their circadian rhythms are not yet strongly set.
-
-**Strategies for eastward travel (harder direction)**
-
-- Expose your baby to morning light as early as possible at the destination to shift the clock forward
-- Keep naps capped to avoid them being too long in the new timezone
-- Bring bedtime forward on arrival night
-
-**Strategies for westward travel (easier direction)**
-
-- Expose your baby to afternoon light to shift the clock back
-- Allow a slightly later bedtime initially and adjust forward over several days
-
-**Maintaining routine during travel**
-
-The specific environment matters less than the routine. Running the same bedtime sequence (bath, feed, song, sleep sack) in a hotel room signals sleep as effectively as at home.
-
-**Shared rooms while travelling**
-
-If sharing a room with your baby during travel, a travel cot in the corner with your portable blackout and white noise creates a reasonable sleep environment. Some families temporarily co-sleep during travel — if so, follow safe sleep guidelines for bed-sharing.
-
-**After you return home**
-
-Expect two to five days of adjustment upon return. Return to your usual routine immediately rather than waiting for your baby to ''settle'' first.
-
-*This article is for informational purposes only. Consult your paediatrician before long-haul travel with a young baby.*$$,
-  12,
-  true,
-  ARRAY['National Sleep Foundation', 'American Academy of Pediatrics (AAP)', 'Centers for Disease Control and Prevention (CDC)'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-travel-time-zones-keeping-on-track'
-)
-
-ON CONFLICT (slug) DO NOTHING;
+- **Teething does not cause high fever** (above 38°C). If your baby has a fever, look for another cause and consult your GP.
+- **Teething does not cause diarrhoea** — despite this being widely believed, the research does not support it.
+- **Amber teething necklaces have no evidence** of effectiveness and carry a strangulation and choking risk. They are not recommended by any paediatric body.', 'sleep', 6, ARRAY['teething', 'infant sleep', 'sleep disruption', 'teething pain', 'night waking', 'gum relief'], true, true, 'Lumira Health Team');

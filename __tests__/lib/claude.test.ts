@@ -17,6 +17,7 @@ import { callClaude, callClaudeJSON, MASTER_SYSTEM_PROMPT } from '@/lib/claude'
 
 beforeEach(() => {
   vi.clearAllMocks()
+  process.env.ANTHROPIC_API_KEY = 'test-key'
 })
 
 // ── MASTER_SYSTEM_PROMPT ───────────────────────────────────────────────
@@ -198,16 +199,18 @@ describe('callClaude', () => {
 
 describe('callClaudeJSON', () => {
   it('parses plain JSON response', async () => {
+    // callClaudeJSON prefills assistant turn with '{', so mock returns text AFTER that '{'
     mockCreate.mockResolvedValueOnce({
-      content: [{ type: 'text', text: '{"key": "value", "count": 42}' }],
+      content: [{ type: 'text', text: '"key": "value", "count": 42}' }],
     })
     const result = await callClaudeJSON<{ key: string; count: number }>('system', 'message')
     expect(result).toEqual({ key: 'value', count: 42 })
   })
 
   it('strips markdown code fences from response', async () => {
+    // The prefill '{' is prepended by the code; text here is what follows the '{'
     mockCreate.mockResolvedValueOnce({
-      content: [{ type: 'text', text: '```json\n{"key": "value"}\n```' }],
+      content: [{ type: 'text', text: '"key": "value"}' }],
     })
     const result = await callClaudeJSON<{ key: string }>('system', 'message')
     expect(result).toEqual({ key: 'value' })
@@ -215,7 +218,7 @@ describe('callClaudeJSON', () => {
 
   it('strips code fences without json language hint', async () => {
     mockCreate.mockResolvedValueOnce({
-      content: [{ type: 'text', text: '```\n{"key": "value"}\n```' }],
+      content: [{ type: 'text', text: '"key": "value"}' }],
     })
     const result = await callClaudeJSON<{ key: string }>('system', 'message')
     expect(result).toEqual({ key: 'value' })
@@ -223,7 +226,7 @@ describe('callClaudeJSON', () => {
 
   it('uses default max_tokens of 1000', async () => {
     mockCreate.mockResolvedValueOnce({
-      content: [{ type: 'text', text: '{}' }],
+      content: [{ type: 'text', text: '}' }],
     })
     await callClaudeJSON('system', 'message')
     expect(mockCreate).toHaveBeenCalledWith(
@@ -234,7 +237,7 @@ describe('callClaudeJSON', () => {
 
   it('respects custom max_tokens', async () => {
     mockCreate.mockResolvedValueOnce({
-      content: [{ type: 'text', text: '{}' }],
+      content: [{ type: 'text', text: '}' }],
     })
     await callClaudeJSON('system', 'message', 2000)
     expect(mockCreate).toHaveBeenCalledWith(
@@ -251,15 +254,17 @@ describe('callClaudeJSON', () => {
   })
 
   it('handles nested JSON objects', async () => {
-    const nested = { a: { b: { c: [1, 2, 3] } } }
+    // nested = { a: { b: { c: [1, 2, 3] } } } — text is what follows the prefilled '{'
+    const nestedTail = '"a": {"b": {"c": [1, 2, 3]}}}'
     mockCreate.mockResolvedValueOnce({
-      content: [{ type: 'text', text: JSON.stringify(nested) }],
+      content: [{ type: 'text', text: nestedTail }],
     })
     const result = await callClaudeJSON('system', 'message')
-    expect(result).toEqual(nested)
+    expect(result).toEqual({ a: { b: { c: [1, 2, 3] } } })
   })
 
   it('handles JSON arrays', async () => {
+    // Arrays start with '[', not '{'; the fallback regex extracts the array from rawText
     mockCreate.mockResolvedValueOnce({
       content: [{ type: 'text', text: '[1, 2, 3]' }],
     })

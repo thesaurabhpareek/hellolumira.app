@@ -505,7 +505,7 @@ describe('Analytics route has input size protection', () => {
   it('limits body size to prevent log injection', () => {
     const source = readRoute('app/api/analytics/route.ts')
     expect(source).toContain('10_000')
-    expect(source).toContain('.slice(0, 2000)')
+    expect(source).toContain('.slice(0, 255)')
   })
 })
 

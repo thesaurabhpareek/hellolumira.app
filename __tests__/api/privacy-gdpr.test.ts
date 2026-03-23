@@ -187,12 +187,19 @@ describe('GET /api/privacy/export/[token] — Export download', () => {
   it('unhappy: returns 400 for invalid/short token', async () => {
     // We mock at the supabase-js level since this route uses createClient from @supabase/supabase-js
     vi.resetModules()
+    vi.doMock('@/lib/rate-limit', () => ({
+      checkIpRateLimit: vi.fn().mockResolvedValue({ allowed: true }),
+    }))
     vi.doMock('@supabase/supabase-js', () => ({
       createClient: vi.fn(() => ({
         from: vi.fn(() => ({
-          select: vi.fn(() => ({
+          update: vi.fn(() => ({
             eq: vi.fn(() => ({
-              single: vi.fn().mockResolvedValue({ data: null, error: { message: 'not found' } }),
+              eq: vi.fn(() => ({
+                select: vi.fn(() => ({
+                  single: vi.fn().mockResolvedValue({ data: null, error: { message: 'not found' } }),
+                })),
+              })),
             })),
           })),
         })),
@@ -207,12 +214,19 @@ describe('GET /api/privacy/export/[token] — Export download', () => {
 
   it('unhappy: returns 404 for non-existent token', async () => {
     vi.resetModules()
+    vi.doMock('@/lib/rate-limit', () => ({
+      checkIpRateLimit: vi.fn().mockResolvedValue({ allowed: true }),
+    }))
     vi.doMock('@supabase/supabase-js', () => ({
       createClient: vi.fn(() => ({
         from: vi.fn(() => ({
-          select: vi.fn(() => ({
+          update: vi.fn(() => ({
             eq: vi.fn(() => ({
-              single: vi.fn().mockResolvedValue({ data: null, error: { message: 'not found' } }),
+              eq: vi.fn(() => ({
+                select: vi.fn(() => ({
+                  single: vi.fn().mockResolvedValue({ data: null, error: { message: 'not found' } }),
+                })),
+              })),
             })),
           })),
         })),
@@ -229,21 +243,28 @@ describe('GET /api/privacy/export/[token] — Export download', () => {
   it('unhappy: returns 410 for expired token', async () => {
     const expiredDate = new Date(Date.now() - 86400000).toISOString()
     vi.resetModules()
+    vi.doMock('@/lib/rate-limit', () => ({
+      checkIpRateLimit: vi.fn().mockResolvedValue({ allowed: true }),
+    }))
     vi.doMock('@supabase/supabase-js', () => ({
       createClient: vi.fn(() => ({
         from: vi.fn(() => ({
-          select: vi.fn(() => ({
+          update: vi.fn(() => ({
             eq: vi.fn(() => ({
-              single: vi.fn().mockResolvedValue({
-                data: {
-                  id: 'export-1',
-                  status: 'ready',
-                  expires_at: expiredDate,
-                  export_data: { profile: {} },
-                  download_token: VALID_TOKEN,
-                },
-                error: null,
-              }),
+              eq: vi.fn(() => ({
+                select: vi.fn(() => ({
+                  single: vi.fn().mockResolvedValue({
+                    data: {
+                      id: 'export-1',
+                      status: 'ready',
+                      expires_at: expiredDate,
+                      export_data: { profile: {} },
+                      download_token: VALID_TOKEN,
+                    },
+                    error: null,
+                  }),
+                })),
+              })),
             })),
           })),
         })),
@@ -261,28 +282,31 @@ describe('GET /api/privacy/export/[token] — Export download', () => {
 
   it('happy: returns JSON file for valid token', async () => {
     const futureDate = new Date(Date.now() + 86400000).toISOString()
-    const mockUpdate = vi.fn(() => ({
-      eq: vi.fn().mockResolvedValue({ error: null }),
-    }))
     vi.resetModules()
+    vi.doMock('@/lib/rate-limit', () => ({
+      checkIpRateLimit: vi.fn().mockResolvedValue({ allowed: true }),
+    }))
     vi.doMock('@supabase/supabase-js', () => ({
       createClient: vi.fn(() => ({
         from: vi.fn(() => ({
-          select: vi.fn(() => ({
+          update: vi.fn(() => ({
             eq: vi.fn(() => ({
-              single: vi.fn().mockResolvedValue({
-                data: {
-                  id: 'export-1',
-                  status: 'ready',
-                  expires_at: futureDate,
-                  export_data: { profile: { first_name: 'Test' }, baby_profiles: [] },
-                  download_token: VALID_TOKEN,
-                },
-                error: null,
-              }),
+              eq: vi.fn(() => ({
+                select: vi.fn(() => ({
+                  single: vi.fn().mockResolvedValue({
+                    data: {
+                      id: 'export-1',
+                      status: 'ready',
+                      expires_at: futureDate,
+                      export_data: { profile: { first_name: 'Test' }, baby_profiles: [] },
+                      download_token: VALID_TOKEN,
+                    },
+                    error: null,
+                  }),
+                })),
+              })),
             })),
           })),
-          update: mockUpdate,
         })),
       })),
     }))
@@ -297,23 +321,24 @@ describe('GET /api/privacy/export/[token] — Export download', () => {
   })
 
   it('edge: export token reuse after download returns 404 (status changed to downloaded)', async () => {
-    // After first download, status changes from 'ready' to 'downloaded'
+    // After first download, the atomic update won't match status='ready' → returns {data:null, error}
     vi.resetModules()
+    vi.doMock('@/lib/rate-limit', () => ({
+      checkIpRateLimit: vi.fn().mockResolvedValue({ allowed: true }),
+    }))
     vi.doMock('@supabase/supabase-js', () => ({
       createClient: vi.fn(() => ({
         from: vi.fn(() => ({
-          select: vi.fn(() => ({
+          update: vi.fn(() => ({
             eq: vi.fn(() => ({
-              single: vi.fn().mockResolvedValue({
-                data: {
-                  id: 'export-1',
-                  status: 'downloaded', // Already downloaded
-                  expires_at: new Date(Date.now() + 86400000).toISOString(),
-                  export_data: { profile: {} },
-                  download_token: VALID_TOKEN,
-                },
-                error: null,
-              }),
+              eq: vi.fn(() => ({
+                select: vi.fn(() => ({
+                  single: vi.fn().mockResolvedValue({
+                    data: null,
+                    error: { message: 'no rows' },
+                  }),
+                })),
+              })),
             })),
           })),
         })),
@@ -324,35 +349,38 @@ describe('GET /api/privacy/export/[token] — Export download', () => {
     const { NextRequest } = await import('next/server')
     const req = new NextRequest(`http://localhost:3000/api/privacy/export/${VALID_TOKEN}`)
     const res = await GET(req, { params: Promise.resolve({ token: VALID_TOKEN }) })
-    // Status is 'downloaded', not 'ready', so it should return 404
+    // Status is 'downloaded', not 'ready', so atomic update returns no rows → 404
     expect(res.status).toBe(404)
   })
 
   it('edge: token expiry boundary — just before 48h returns 200', async () => {
     // 47h 59m 59s from now — still valid
     const justBeforeExpiry = new Date(Date.now() + 1000).toISOString()
-    const mockUpdate = vi.fn(() => ({
-      eq: vi.fn().mockResolvedValue({ error: null }),
-    }))
     vi.resetModules()
+    vi.doMock('@/lib/rate-limit', () => ({
+      checkIpRateLimit: vi.fn().mockResolvedValue({ allowed: true }),
+    }))
     vi.doMock('@supabase/supabase-js', () => ({
       createClient: vi.fn(() => ({
         from: vi.fn(() => ({
-          select: vi.fn(() => ({
+          update: vi.fn(() => ({
             eq: vi.fn(() => ({
-              single: vi.fn().mockResolvedValue({
-                data: {
-                  id: 'export-2',
-                  status: 'ready',
-                  expires_at: justBeforeExpiry,
-                  export_data: { profile: {} },
-                  download_token: VALID_TOKEN,
-                },
-                error: null,
-              }),
+              eq: vi.fn(() => ({
+                select: vi.fn(() => ({
+                  single: vi.fn().mockResolvedValue({
+                    data: {
+                      id: 'export-2',
+                      status: 'ready',
+                      expires_at: justBeforeExpiry,
+                      export_data: { profile: {} },
+                      download_token: VALID_TOKEN,
+                    },
+                    error: null,
+                  }),
+                })),
+              })),
             })),
           })),
-          update: mockUpdate,
         })),
       })),
     }))
@@ -368,21 +396,28 @@ describe('GET /api/privacy/export/[token] — Export download', () => {
     // 1 second in the past — expired
     const justAfterExpiry = new Date(Date.now() - 1000).toISOString()
     vi.resetModules()
+    vi.doMock('@/lib/rate-limit', () => ({
+      checkIpRateLimit: vi.fn().mockResolvedValue({ allowed: true }),
+    }))
     vi.doMock('@supabase/supabase-js', () => ({
       createClient: vi.fn(() => ({
         from: vi.fn(() => ({
-          select: vi.fn(() => ({
+          update: vi.fn(() => ({
             eq: vi.fn(() => ({
-              single: vi.fn().mockResolvedValue({
-                data: {
-                  id: 'export-3',
-                  status: 'ready',
-                  expires_at: justAfterExpiry,
-                  export_data: { profile: {} },
-                  download_token: VALID_TOKEN,
-                },
-                error: null,
-              }),
+              eq: vi.fn(() => ({
+                select: vi.fn(() => ({
+                  single: vi.fn().mockResolvedValue({
+                    data: {
+                      id: 'export-3',
+                      status: 'ready',
+                      expires_at: justAfterExpiry,
+                      export_data: { profile: {} },
+                      download_token: VALID_TOKEN,
+                    },
+                    error: null,
+                  }),
+                })),
+              })),
             })),
           })),
         })),
@@ -398,12 +433,19 @@ describe('GET /api/privacy/export/[token] — Export download', () => {
 
   it('security: error messages do not leak PII or internal IDs', async () => {
     vi.resetModules()
+    vi.doMock('@/lib/rate-limit', () => ({
+      checkIpRateLimit: vi.fn().mockResolvedValue({ allowed: true }),
+    }))
     vi.doMock('@supabase/supabase-js', () => ({
       createClient: vi.fn(() => ({
         from: vi.fn(() => ({
-          select: vi.fn(() => ({
+          update: vi.fn(() => ({
             eq: vi.fn(() => ({
-              single: vi.fn().mockResolvedValue({ data: null, error: { message: 'not found' } }),
+              eq: vi.fn(() => ({
+                select: vi.fn(() => ({
+                  single: vi.fn().mockResolvedValue({ data: null, error: { message: 'not found' } }),
+                })),
+              })),
             })),
           })),
         })),
