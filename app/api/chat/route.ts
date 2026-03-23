@@ -294,9 +294,9 @@ export async function POST(request: NextRequest) {
 
     // 10. Call Claude with temperature 0.4 and timeout
     if (!process.env.ANTHROPIC_API_KEY) {
-      console.error('[chat] ANTHROPIC_API_KEY is not configured')
+      console.error('[chat] ANTHROPIC_API_KEY is not configured — set this environment variable to enable AI features')
       return NextResponse.json(
-        { error: true, message: 'Lumira is temporarily unavailable. Please try again later.' },
+        { error: true, message: 'Chat service is temporarily unavailable. Please try again later.' },
         { status: 503, headers: SECURITY_HEADERS }
       )
     }
@@ -316,6 +316,25 @@ export async function POST(request: NextRequest) {
           { role: 'assistant', content: '{' },
         ],
       }, { signal: controller.signal })
+    } catch (claudeErr) {
+      clearTimeout(timeout)
+      const isTimeout = claudeErr instanceof Error && claudeErr.name === 'AbortError'
+      if (isTimeout) {
+        console.error('[chat] Claude API request timed out after 30s')
+        return NextResponse.json(
+          { error: true, message: 'Lumira took too long to respond. Please try again.' },
+          { status: 503, headers: SECURITY_HEADERS }
+        )
+      }
+      const isAuthError = claudeErr instanceof Error && claudeErr.message.includes('401')
+      if (isAuthError) {
+        console.error('[chat] Claude API authentication failed — check ANTHROPIC_API_KEY validity')
+        return NextResponse.json(
+          { error: true, message: 'Chat service is temporarily unavailable. Please try again later.' },
+          { status: 503, headers: SECURITY_HEADERS }
+        )
+      }
+      throw claudeErr
     } finally {
       clearTimeout(timeout)
     }

@@ -66,7 +66,8 @@ function getClient() {
 // Constants
 // ---------------------------------------------------------------------------
 
-const FROM_ADDRESS = 'HelloLumira <hello@hellolumira.app>'
+const FROM_ADDRESS = 'Lumira <hello@hellolumira.app>'
+const REPLY_TO_ADDRESS = 'Lumira Support <support@hellolumira.app>'
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://hellolumira.app'
 
 // ---------------------------------------------------------------------------
@@ -75,12 +76,14 @@ const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://hellolumira.app'
 
 /** Options for the generic sendEmail function. */
 export type SendEmailOptions = {
-  /** Reply-to address. */
+  /** Reply-to address (defaults to Lumira Support). */
   replyTo?: string
   /** Custom unsubscribe URL (defaults to the standard app unsubscribe page). */
   unsubscribeUrl?: string
   /** Additional email tags for analytics. */
   tags?: { name: string; value: string }[]
+  /** Plain-text version of the email body (strongly recommended for deliverability). */
+  text?: string
 }
 
 /** Result returned by all email-sending functions. */
@@ -127,16 +130,37 @@ export async function sendEmail(
         <p><a href="${unsubscribeUrl}" style="color:#6b7280;text-decoration:underline;">Unsubscribe or manage preferences</a></p>
       </div>`
 
+    // Plain-text fallback: use provided text or strip HTML tags as a basic fallback.
+    // Having a text part significantly improves deliverability and spam scores.
+    const finalText =
+      options?.text ||
+      html
+        .replace(/<style[\s\S]*?<\/style>/gi, '')
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/&nbsp;/gi, ' ')
+        .replace(/&amp;/gi, '&')
+        .replace(/&lt;/gi, '<')
+        .replace(/&gt;/gi, '>')
+        .replace(/&rsquo;/gi, "'")
+        .replace(/&mdash;/gi, '—')
+        .replace(/&copy;/gi, '©')
+        .replace(/\s{2,}/g, ' ')
+        .trim() +
+        `\n\n---\nTo unsubscribe or manage email preferences, visit: ${unsubscribeUrl}\n© 2026 Lumira Inc.`
+
     const { data, error } = await client.emails.send({
       from: FROM_ADDRESS,
       to: [to],
       subject,
       html: finalHtml,
-      replyTo: options?.replyTo,
+      text: finalText,
+      reply_to: options?.replyTo || REPLY_TO_ADDRESS,
       tags: options?.tags,
       headers: {
-        'List-Unsubscribe': `<${unsubscribeUrl}>`,
+        'List-Unsubscribe': `<mailto:unsubscribe@hellolumira.app?subject=unsubscribe>, <${unsubscribeUrl}>`,
         'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+        'X-Mailer': 'Lumira/2.0',
+        'X-Entity-Ref-ID': `lumira-${Date.now()}`,
       },
     })
 

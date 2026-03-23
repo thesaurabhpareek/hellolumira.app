@@ -90,7 +90,11 @@ export function useChatThread(initialMessages: ChatMsg[] = []): UseChatThreadRes
           conversation_history: conversationHistory.current,
         }),
       })
-      if (!res.ok) throw new Error('API error')
+      if (!res.ok) {
+        const err = new Error('API error') as Error & { status: number }
+        err.status = res.status
+        throw err
+      }
       return res.json()
     }
 
@@ -135,11 +139,20 @@ export function useChatThread(initialMessages: ChatMsg[] = []): UseChatThreadRes
       if (data.concern_category) {
         setConcernCategory(data.concern_category)
       }
-    } catch {
-      setError("I'm having trouble connecting right now. Your conversation is saved — tap to try again.")
+    } catch (e) {
+      const status = (e as Error & { status?: number }).status
+      const errorContent =
+        status === 503
+          ? "Chat is temporarily unavailable — we're on it. Your conversation is saved."
+          : status === 429
+          ? "You're sending messages too quickly. Please wait a moment and try again."
+          : status === 401 || status === 403
+          ? "Session expired. Please refresh the page and try again."
+          : "I'm having trouble connecting right now. Your conversation is saved — tap to try again."
+      setError(errorContent)
       const errorMsg: ChatMsg = {
         role: 'assistant',
-        content: "I'm having trouble connecting right now. Your conversation is saved — tap to try again.",
+        content: errorContent,
         timestamp: new Date().toISOString(),
       }
       setMessages(prev => [...prev, errorMsg])
