@@ -52,6 +52,10 @@ export default function StoryViewer({
   const [showViewers, setShowViewers] = useState(false)
   const [showReport, setShowReport] = useState(false)
 
+  // Transition animation state
+  const [transitioning, setTransitioning] = useState(false)
+  const [transitionDir, setTransitionDir] = useState<'left' | 'right'>('right')
+
   // Swipe dismiss state
   const [touchStartY, setTouchStartY] = useState<number | null>(null)
   const [translateY, setTranslateY] = useState(0)
@@ -104,12 +108,19 @@ export default function StoryViewer({
   }, [groupIndex, storyIndex, paused, closing])
 
   const goNext = useCallback(() => {
-    setProgress(0)
-    if (storyIndex < stories.length - 1) {
-      setStoryIndex((i) => i + 1)
-    } else if (groupIndex < items.length - 1) {
-      setGroupIndex((i) => i + 1)
-      setStoryIndex(0)
+    if (storyIndex < stories.length - 1 || groupIndex < items.length - 1) {
+      setTransitionDir('right')
+      setTransitioning(true)
+      setTimeout(() => {
+        setProgress(0)
+        if (storyIndex < stories.length - 1) {
+          setStoryIndex((i) => i + 1)
+        } else if (groupIndex < items.length - 1) {
+          setGroupIndex((i) => i + 1)
+          setStoryIndex(0)
+        }
+        setTransitioning(false)
+      }, 150)
     } else {
       handleClose()
     }
@@ -117,12 +128,19 @@ export default function StoryViewer({
   }, [storyIndex, stories.length, groupIndex, items.length])
 
   const goPrev = useCallback(() => {
-    setProgress(0)
-    if (storyIndex > 0) {
-      setStoryIndex((i) => i - 1)
-    } else if (groupIndex > 0) {
-      setGroupIndex((i) => i - 1)
-      setStoryIndex(0) // Will show first story of prev group
+    if (storyIndex > 0 || groupIndex > 0) {
+      setTransitionDir('left')
+      setTransitioning(true)
+      setTimeout(() => {
+        setProgress(0)
+        if (storyIndex > 0) {
+          setStoryIndex((i) => i - 1)
+        } else if (groupIndex > 0) {
+          setGroupIndex((i) => i - 1)
+          setStoryIndex(0)
+        }
+        setTransitioning(false)
+      }, 150)
     }
   }, [storyIndex, groupIndex])
 
@@ -307,7 +325,7 @@ export default function StoryViewer({
         </div>
       )}
 
-      {/* Content area (tap zones + visible nav buttons) */}
+      {/* Content area (tap zones + visible nav arrows + transition) */}
       <div
         className="flex-1 flex flex-col mx-2 mb-2 overflow-hidden rounded-lg relative"
         style={{ background: currentStory.text_bg_color || 'var(--story-palette-1)' }}
@@ -324,38 +342,70 @@ export default function StoryViewer({
         }}
         onTouchMove={handleTouchMove}
       >
-        <StoryContent
-          story={currentStory}
-          isOwn={isOwn}
-        />
+        {/* Story content with slide transition */}
+        <div
+          style={{
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            transition: 'transform 0.15s ease-out, opacity 0.15s ease-out',
+            transform: transitioning
+              ? `translateX(${transitionDir === 'right' ? '-12%' : '12%'}) scale(0.96)`
+              : 'translateX(0) scale(1)',
+            opacity: transitioning ? 0 : 1,
+          }}
+        >
+          <StoryContent
+            story={currentStory}
+            isOwn={isOwn}
+          />
+        </div>
 
-        {/* Prev button — only when there's a previous story or group */}
+        {/* Prev arrow — Instagram style: small chevron, subtle bg */}
         {(storyIndex > 0 || groupIndex > 0) && (
           <button
             type="button"
             aria-label="Previous story"
             onClick={(e) => { e.stopPropagation(); goPrev() }}
-            className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center rounded-full touch-manipulation"
-            style={{ background: 'rgba(0,0,0,0.30)', WebkitTapHighlightColor: 'transparent' }}
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center rounded-full touch-manipulation active:scale-90 transition-transform"
+            style={{
+              width: '28px',
+              height: '28px',
+              background: 'rgba(255,255,255,0.25)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+              WebkitTapHighlightColor: 'transparent',
+              boxShadow: '0 1px 4px rgba(0,0,0,0.15)',
+            }}
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M15 18l-6-6 6-6" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
         )}
 
-        {/* Next button — always shown */}
-        <button
-          type="button"
-          aria-label="Next story"
-          onClick={(e) => { e.stopPropagation(); goNext() }}
-          className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center rounded-full touch-manipulation"
-          style={{ background: 'rgba(0,0,0,0.30)', WebkitTapHighlightColor: 'transparent' }}
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M9 18l6-6-6-6" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </button>
+        {/* Next arrow — Instagram style */}
+        {(storyIndex < stories.length - 1 || groupIndex < items.length - 1) && (
+          <button
+            type="button"
+            aria-label="Next story"
+            onClick={(e) => { e.stopPropagation(); goNext() }}
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center rounded-full touch-manipulation active:scale-90 transition-transform"
+            style={{
+              width: '28px',
+              height: '28px',
+              background: 'rgba(255,255,255,0.25)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+              WebkitTapHighlightColor: 'transparent',
+              boxShadow: '0 1px 4px rgba(0,0,0,0.15)',
+            }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M9 18l6-6-6-6" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+        )}
       </div>
 
       {/* Footer */}
