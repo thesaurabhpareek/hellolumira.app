@@ -84,41 +84,10 @@ export default function ProfileCompletionSection({
     }
   }
 
-  // When all basic setup steps are done, show a minimal collapsed state
+  // When all steps are done, hide the section entirely — it served its purpose.
+  // Profile completion gamification continues via ProfileCompletionCard.
   if (allDone) {
-    return (
-      <div
-        className="lumira-card mb-4"
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px',
-          padding: '14px 16px',
-        }}
-      >
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style={{ flexShrink: 0 }}>
-          <circle cx="9" cy="9" r="9" fill="#22C55E" />
-          <path d="M5 9l3 3 5-5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-        <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-slate)', margin: 0 }}>
-          Getting Started
-        </p>
-        <span
-          style={{
-            marginLeft: 'auto',
-            fontSize: '12px',
-            fontWeight: 600,
-            color: '#15803D',
-            background: '#F0FDF4',
-            border: '1px solid #BBF7D0',
-            padding: '3px 10px',
-            borderRadius: '100px',
-          }}
-        >
-          Done ✓
-        </span>
-      </div>
-    )
+    return null
   }
 
   return (
