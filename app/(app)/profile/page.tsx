@@ -709,6 +709,21 @@ export default async function ProfilePage() {
             year: 'numeric',
           })}
         </p>
+
+        {/* Made with love */}
+        <p
+          style={{
+            textAlign: 'center',
+            fontSize: '11px',
+            color: 'var(--color-muted)',
+            marginTop: '12px',
+            lineHeight: 1.7,
+            opacity: 0.7,
+          }}
+        >
+          Made with ❤️ in Silicon Valley, California<br />
+          by parents, for parents around the world
+        </p>
       </div>
     </div>
   )

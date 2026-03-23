@@ -326,6 +326,12 @@ export default function LandingPage() {
                 ))}
               </nav>
 
+              {/* Made with love */}
+              <p style={{ fontSize: 12, color: SAND_500, margin: 0, textAlign: 'center', lineHeight: 1.7 }}>
+                Made with ❤️ in Silicon Valley, California<br />
+                by parents, for parents around the world
+              </p>
+
               {/* Copyright — SAND_500 (#706D67) gives ~4.6:1 on white footer, passing AA at 12px */}
               <p style={{ fontSize: 12, color: SAND_500, margin: 0, textAlign: 'center' }}>
                 &copy; {new Date().getFullYear()} Lumira. All rights reserved.
