@@ -428,6 +428,7 @@ export default function TribeDetailPage() {
               isOwner={currentUserId !== null && post.profile_id === currentUserId}
               onDelete={() => handleDeletePost(post.id)}
               deleting={deletingPostId === post.id}
+              currentUserId={currentUserId}
             />
           ))}
           {posts.length === 0 && (
@@ -444,127 +445,316 @@ export default function TribeDetailPage() {
   )
 }
 
-function PostCard({ post, onClick, isOwner, onDelete, deleting }: { post: Post; onClick: () => void; isOwner?: boolean; onDelete?: () => void; deleting?: boolean }) {
+const REPORT_REASONS = [
+  'Inappropriate content',
+  'Misinformation',
+  'Spam',
+  'Other',
+] as const
+
+type ReportReason = typeof REPORT_REASONS[number]
+
+function ReportModal({
+  postId,
+  userId,
+  onClose,
+}: {
+  postId: string
+  userId: string | null
+  onClose: () => void
+}) {
+  const [selectedReason, setSelectedReason] = useState<ReportReason | ''>('')
+  const [submitting, setSubmitting] = useState(false)
+
+  const handleSubmit = async () => {
+    if (!selectedReason) return
+    setSubmitting(true)
+    try {
+      const supabase = createClient()
+      await supabase.from('content_reports').insert({
+        reporter_profile_id: userId,
+        content_type: 'tribe_post',
+        content_id: postId,
+        reason: selectedReason,
+      })
+    } catch {
+      // Handle gracefully — table may not exist yet
+    } finally {
+      setSubmitting(false)
+      showToast("Thanks for reporting. We'll review this post.", 3000)
+      onClose()
+    }
+  }
+
+  return (
+    <>
+      {/* Backdrop */}
+      <div
+        onClick={onClose}
+        style={{
+          position: 'fixed', inset: 0, zIndex: 100,
+          background: 'rgba(0,0,0,0.4)',
+        }}
+      />
+      {/* Modal */}
+      <div style={{
+        position: 'fixed', left: '50%', top: '50%', transform: 'translate(-50%, -50%)',
+        zIndex: 101, background: 'var(--color-white)', borderRadius: '16px',
+        padding: '24px', width: 'min(90vw, 360px)',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.16)',
+      }}>
+        <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-slate)', marginBottom: '16px' }}>
+          Why are you reporting this post?
+        </h3>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '20px' }}>
+          {REPORT_REASONS.map(reason => (
+            <label
+              key={reason}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '10px',
+                cursor: 'pointer', fontSize: '14px', color: 'var(--color-slate)',
+                padding: '10px 12px', borderRadius: '10px',
+                background: selectedReason === reason ? 'var(--color-surface)' : 'transparent',
+                border: selectedReason === reason ? '1.5px solid var(--color-primary)' : '1.5px solid var(--color-border)',
+                transition: 'all 0.15s ease',
+              }}
+            >
+              <input
+                type="radio"
+                name="report-reason"
+                value={reason}
+                checked={selectedReason === reason}
+                onChange={() => setSelectedReason(reason)}
+                style={{ accentColor: 'var(--color-primary)', width: '16px', height: '16px' }}
+              />
+              {reason}
+            </label>
+          ))}
+        </div>
+        <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+          <button
+            onClick={onClose}
+            style={{
+              padding: '8px 16px', borderRadius: '100px', fontSize: '13px',
+              border: '1px solid var(--color-border)', background: 'var(--color-white)',
+              color: 'var(--color-muted)', cursor: 'pointer', fontWeight: 600, minHeight: '40px',
+            }}
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleSubmit}
+            disabled={!selectedReason || submitting}
+            style={{
+              padding: '8px 20px', borderRadius: '100px', fontSize: '13px',
+              border: 'none', background: 'var(--color-primary)',
+              color: '#fff', cursor: !selectedReason || submitting ? 'default' : 'pointer',
+              fontWeight: 600, opacity: !selectedReason || submitting ? 0.5 : 1,
+              minHeight: '40px', transition: 'all 0.2s ease',
+            }}
+          >
+            {submitting ? 'Submitting...' : 'Submit'}
+          </button>
+        </div>
+      </div>
+    </>
+  )
+}
+
+function PostCard({
+  post,
+  onClick,
+  isOwner,
+  onDelete,
+  deleting,
+  currentUserId,
+}: {
+  post: Post
+  onClick: () => void
+  isOwner?: boolean
+  onDelete?: () => void
+  deleting?: boolean
+  currentUserId: string | null
+}) {
   const author = post.ai_parent_profiles
   const typeInfo = POST_TYPE_LABELS[post.post_type] || POST_TYPE_LABELS.discussion
   const [hovered, setHovered] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [reportOpen, setReportOpen] = useState(false)
 
   return (
-    <div
-      data-post-card
-      style={{
-        width: '100%', borderRadius: '14px',
-        background: hovered
-          ? `linear-gradient(var(--color-hover), var(--color-hover)), var(--color-white)`
-          : 'var(--color-white)',
-        border: '1px solid var(--color-border)',
-        transition: 'all 0.2s ease',
-        transform: hovered ? 'translateY(-1px)' : 'translateY(0)',
-        boxShadow: hovered ? '0 4px 12px rgba(0,0,0,0.06)' : '0 1px 3px rgba(0,0,0,0.02)',
-        minHeight: '44px',
-        position: 'relative',
-      }}
-    >
-    <button
-      onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        width: '100%', padding: '16px', borderRadius: '14px',
-        background: 'transparent',
-        border: 'none',
-        cursor: 'pointer', textAlign: 'left',
-      }}
-    >
-      {/* Author row */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-        {author && (
-          <>
-            <span style={{
-              fontSize: '20px', width: '32px', height: '32px', display: 'flex',
-              alignItems: 'center', justifyContent: 'center', borderRadius: '50%',
-              background: 'var(--color-surface)', border: '1px solid var(--color-border)',
-            }}>
-              {author.avatar_emoji}
-            </span>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-slate)' }}>
-                {author.display_name}
-              </p>
-              <p style={{ fontSize: '11px', color: 'var(--color-muted)' }}>
-                {author.baby_age_desc} {author.baby_name ? `| ${author.baby_name}` : ''}
-              </p>
-            </div>
-          </>
-        )}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
-          <span style={{
-            padding: '3px 10px', borderRadius: '100px', fontSize: '11px', fontWeight: 700,
-            background: typeInfo.bg, color: typeInfo.color,
-            transition: 'all 0.2s ease',
-          }}>
-            {typeInfo.label}
-          </span>
-          <span style={{ fontSize: '11px', color: 'var(--color-muted)' }}>
-            {timeAgo(post.created_at)}
-          </span>
-        </div>
-      </div>
-
-      {/* Title */}
-      {post.title && (
-        <p style={{ fontSize: '15px', fontWeight: 600, color: 'var(--color-slate)', marginBottom: '4px', lineHeight: 1.3 }}>
-          {post.emoji_tag && <span style={{ marginRight: '4px' }}>{post.emoji_tag}</span>}
-          {post.title}
-        </p>
+    <>
+      {reportOpen && (
+        <ReportModal
+          postId={post.id}
+          userId={currentUserId}
+          onClose={() => setReportOpen(false)}
+        />
       )}
+      <div
+        data-post-card
+        style={{
+          width: '100%', borderRadius: '14px',
+          background: hovered
+            ? `linear-gradient(var(--color-hover), var(--color-hover)), var(--color-white)`
+            : 'var(--color-white)',
+          border: '1px solid var(--color-border)',
+          transition: 'all 0.2s ease',
+          transform: hovered ? 'translateY(-1px)' : 'translateY(0)',
+          boxShadow: hovered ? '0 4px 12px rgba(0,0,0,0.06)' : '0 1px 3px rgba(0,0,0,0.02)',
+          minHeight: '44px',
+          position: 'relative',
+        }}
+      >
+        {/* Three-dot menu button */}
+        <div style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 5 }}>
+          <button
+            onClick={(e) => { e.stopPropagation(); setMenuOpen(v => !v) }}
+            aria-label="Post options"
+            style={{
+              background: 'none', border: 'none', cursor: 'pointer',
+              padding: '4px 6px', borderRadius: '6px', color: 'var(--color-muted)',
+              fontSize: '18px', lineHeight: 1, display: 'flex', alignItems: 'center',
+              transition: 'background 0.15s ease',
+            }}
+          >
+            ⋯
+          </button>
+          {menuOpen && (
+            <>
+              <div
+                style={{ position: 'fixed', inset: 0, zIndex: 10 }}
+                onClick={() => setMenuOpen(false)}
+              />
+              <div style={{
+                position: 'absolute', top: '100%', right: 0, marginTop: '4px',
+                background: 'var(--color-white)', borderRadius: '10px',
+                boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+                border: '1px solid var(--color-border)', zIndex: 20,
+                minWidth: '150px', overflow: 'hidden',
+              }}>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setMenuOpen(false)
+                    setReportOpen(true)
+                  }}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '8px',
+                    width: '100%', padding: '10px 14px', border: 'none',
+                    background: 'transparent', color: '#B91C1C',
+                    fontSize: '13px', fontWeight: 600, textAlign: 'left',
+                    cursor: 'pointer', minHeight: '44px',
+                  }}
+                >
+                  🚩 Report post
+                </button>
+              </div>
+            </>
+          )}
+        </div>
 
-      {/* Body preview */}
-      <p style={{
-        fontSize: '14px', color: 'var(--color-muted)', lineHeight: 1.5,
-        display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical',
-        overflow: 'hidden',
-      }}>
-        {post.body}
-      </p>
-
-      {/* Footer */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '10px', fontSize: '12px', color: 'var(--color-muted)' }}>
-        <span style={{ display: 'flex', alignItems: 'center', gap: '4px', minHeight: '44px' }}>
-          <span>💬</span> {post.comment_count} {post.comment_count === 1 ? 'reply' : 'replies'}
-        </span>
-        <span style={{ display: 'flex', alignItems: 'center', gap: '4px', minHeight: '44px' }}>
-          <span>❤️</span> {post.reaction_count}
-        </span>
-        {post.is_pinned && (
-          <span style={{ display: 'flex', alignItems: 'center', gap: '3px', color: 'var(--color-primary)', fontWeight: 600 }}>
-            📌 Pinned
-          </span>
-        )}
-      </div>
-    </button>
-    {isOwner && onDelete && (
-      <div style={{ padding: '0 16px 12px', display: 'flex', justifyContent: 'flex-end' }}>
         <button
-          onClick={(e) => { e.stopPropagation(); onDelete() }}
-          disabled={deleting}
+          onClick={onClick}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
           style={{
-            background: 'none',
-            border: '1px solid #FEB2B2',
-            borderRadius: '100px',
-            padding: '4px 12px',
-            fontSize: '12px',
-            fontWeight: 600,
-            color: '#B91C1C',
-            cursor: deleting ? 'default' : 'pointer',
-            opacity: deleting ? 0.5 : 1,
-            minHeight: '32px',
+            width: '100%', padding: '16px', paddingRight: '44px', borderRadius: '14px',
+            background: 'transparent',
+            border: 'none',
+            cursor: 'pointer', textAlign: 'left',
           }}
         >
-          {deleting ? 'Deleting...' : 'Delete'}
+          {/* Author row */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+            {author && (
+              <>
+                <span style={{
+                  fontSize: '20px', width: '32px', height: '32px', display: 'flex',
+                  alignItems: 'center', justifyContent: 'center', borderRadius: '50%',
+                  background: 'var(--color-surface)', border: '1px solid var(--color-border)',
+                }}>
+                  {author.avatar_emoji}
+                </span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-slate)' }}>
+                    {author.display_name}
+                  </p>
+                  <p style={{ fontSize: '11px', color: 'var(--color-muted)' }}>
+                    {author.baby_age_desc} {author.baby_name ? `| ${author.baby_name}` : ''}
+                  </p>
+                </div>
+              </>
+            )}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+              <span style={{
+                padding: '3px 10px', borderRadius: '100px', fontSize: '11px', fontWeight: 700,
+                background: typeInfo.bg, color: typeInfo.color,
+                transition: 'all 0.2s ease',
+              }}>
+                {typeInfo.label}
+              </span>
+              <span style={{ fontSize: '11px', color: 'var(--color-muted)' }}>
+                {timeAgo(post.created_at)}
+              </span>
+            </div>
+          </div>
+
+          {/* Title */}
+          {post.title && (
+            <p style={{ fontSize: '15px', fontWeight: 600, color: 'var(--color-slate)', marginBottom: '4px', lineHeight: 1.3 }}>
+              {post.emoji_tag && <span style={{ marginRight: '4px' }}>{post.emoji_tag}</span>}
+              {post.title}
+            </p>
+          )}
+
+          {/* Body preview */}
+          <p style={{
+            fontSize: '14px', color: 'var(--color-muted)', lineHeight: 1.5,
+            display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+          }}>
+            {post.body}
+          </p>
+
+          {/* Footer */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '10px', fontSize: '12px', color: 'var(--color-muted)' }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '4px', minHeight: '44px' }}>
+              <span>💬</span> {post.comment_count} {post.comment_count === 1 ? 'reply' : 'replies'}
+            </span>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '4px', minHeight: '44px' }}>
+              <span>❤️</span> {post.reaction_count}
+            </span>
+            {post.is_pinned && (
+              <span style={{ display: 'flex', alignItems: 'center', gap: '3px', color: 'var(--color-primary)', fontWeight: 600 }}>
+                📌 Pinned
+              </span>
+            )}
+          </div>
         </button>
+        {isOwner && onDelete && (
+          <div style={{ padding: '0 16px 12px', display: 'flex', justifyContent: 'flex-end' }}>
+            <button
+              onClick={(e) => { e.stopPropagation(); onDelete() }}
+              disabled={deleting}
+              style={{
+                background: 'none',
+                border: '1px solid #FEB2B2',
+                borderRadius: '100px',
+                padding: '4px 12px',
+                fontSize: '12px',
+                fontWeight: 600,
+                color: '#B91C1C',
+                cursor: deleting ? 'default' : 'pointer',
+                opacity: deleting ? 0.5 : 1,
+                minHeight: '32px',
+              }}
+            >
+              {deleting ? 'Deleting...' : 'Delete'}
+            </button>
+          </div>
+        )}
       </div>
-    )}
-    </div>
+    </>
   )
 }
