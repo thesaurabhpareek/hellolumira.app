@@ -17,7 +17,6 @@ import DailyQuestionCard from '@/components/app/DailyQuestionCard'
 import QuizCard from '@/components/app/QuizCard'
 import UpcomingMilestonesCard from '@/components/app/UpcomingMilestonesCard'
 import SeedsBalancePill from '@/components/app/SeedsBalancePill'
-import ThemeToggleButton from '@/components/app/ThemeToggleButton'
 import BugReportButton from '@/components/app/BugReportButton'
 import StageHeroCard from '@/components/app/StageHeroCard'
 import StoryStrip from '@/components/app/stories/StoryStrip'
@@ -255,7 +254,6 @@ export default async function HomePage() {
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
           <GreetingHeader firstName={profile.first_name} />
           <div style={{ flexShrink: 0, marginTop: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <ThemeToggleButton />
             <SeedsBalancePill balance={profile.seeds_balance ?? 0} />
           </div>
         </div>
