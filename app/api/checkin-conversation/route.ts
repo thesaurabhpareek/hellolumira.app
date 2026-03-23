@@ -52,6 +52,7 @@ interface CheckinRequest {
   message: string
   is_opening: boolean
   conversation_so_far: ConversationMessage[]
+  client_hour?: number // Local hour (0-23) from browser — server runs UTC
 }
 
 export async function POST(request: NextRequest) {
@@ -91,7 +92,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: true, message: convArrayError }, { status: 400, headers: SECURITY_HEADERS })
     }
 
-    const { baby_id, profile_id, stage, is_opening, conversation_so_far } = body
+    const { baby_id, profile_id, stage, is_opening, conversation_so_far, client_hour } = body
     // Sanitize message: trim and enforce max length
     const message = body.message ? sanitizeForPrompt(body.message.trim().slice(0, 5000)) : ''
 
@@ -158,7 +159,7 @@ export async function POST(request: NextRequest) {
 
     const userMessage = is_opening
       ? (() => {
-          const tod = getTimeOfDay()
+          const tod = getTimeOfDay(typeof client_hour === 'number' ? client_hour : undefined)
           const mappedStage = (stage === 'postpartum' ? 'infant' : stage) as 'pregnancy' | 'infant' | 'toddler'
           const angle = pickOpenerAngle(mappedStage, tod.label)
           return `Start the daily check-in with ${profileData.first_name}. Stage: ${stage}. Time: ${tod.display}.\n\nConversation angle for this session: ${angle}\n\nDo NOT mention the angle directly — just let it guide your opening question naturally. Be warm and personal.`

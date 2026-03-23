@@ -165,8 +165,12 @@ function formatAgeDisplay(name: string, ageInWeeks: number, ageInMonths: number)
  * Returns a labelled time-of-day bucket based on the current hour.
  * Used for contextual greetings and check-in openers.
  */
-export function getTimeOfDay() {
-  const h = new Date().getHours()
+export function getTimeOfDay(clientHour?: number) {
+  // Use clientHour from request payload when available — server runs UTC
+  // so new Date().getHours() would be wrong for non-UTC users (e.g. PST = UTC-8)
+  const h = typeof clientHour === 'number' && clientHour >= 0 && clientHour <= 23
+    ? clientHour
+    : new Date().getHours()
   if (h >= 5 && h < 9) return { label: 'early_morning' as const, display: 'Early morning' }
   if (h >= 9 && h < 12) return { label: 'late_morning' as const, display: 'Morning' }
   if (h >= 12 && h < 17) return { label: 'afternoon' as const, display: 'Afternoon' }
@@ -181,8 +185,10 @@ export function getTimeOfDay() {
  * @param babyName - Display name of the baby, or null for default.
  * @returns A friendly opening question string.
  */
-export function getCheckinOpener(stage: Stage, babyName: string | null): string {
-  const h = new Date().getHours()
+export function getCheckinOpener(stage: Stage, babyName: string | null, clientHour?: number): string {
+  const h = typeof clientHour === 'number' && clientHour >= 0 && clientHour <= 23
+    ? clientHour
+    : new Date().getHours()
   const name = babyName || 'your baby'
   if (stage === 'planning') {
     if (h >= 5 && h < 12) return 'Good morning! How are you feeling about your journey today?'

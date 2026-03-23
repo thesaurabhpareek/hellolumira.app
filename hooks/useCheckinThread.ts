@@ -71,6 +71,9 @@ export function useCheckinThread(
           message,
           is_opening,
           conversation_so_far: conversationLog,
+          // Send client's local hour so server uses correct time-of-day
+          // instead of UTC (which would make PST users always appear as "late night")
+          client_hour: new Date().getHours(),
         }),
       })
       if (!res.ok) throw new Error('API error')
