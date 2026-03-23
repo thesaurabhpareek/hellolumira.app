@@ -676,6 +676,7 @@ function getStageTips(stage: Stage, weekOrMonth: number, babyName: string | null
   }
 
   if (stage === 'infant') {
+    // weekOrMonth here is in weeks for infants
     if (weekOrMonth <= 4) return [
       { icon: '\uD83D\uDECC', text: `${name === 'baby' ? 'Baby' : name} may sleep 14\u201317 hours a day in short bursts \u2014 that\u2019s normal.` },
       { icon: '\uD83C\uDF7C', text: 'Feed on demand. Look for hunger cues like rooting or lip-smacking.' },
@@ -686,10 +687,20 @@ function getStageTips(stage: Stage, weekOrMonth: number, babyName: string | null
       { icon: '\uD83D\uDE0A', text: 'Social smiles usually appear around 6\u20138 weeks \u2014 keep talking and making faces.' },
       { icon: '\uD83C\uDF19', text: 'Longer sleep stretches may start soon. A bedtime routine helps.' },
     ]
-    return [
+    if (weekOrMonth <= 26) return [ // 3-6 months
       { icon: '\uD83E\uDD61', text: 'Around 6 months, you can start introducing solid foods alongside milk.' },
-      { icon: '\uD83E\uDDD1', text: `${name === 'baby' ? 'Baby' : name} is becoming more curious \u2014 baby-proof any accessible areas.` },
-      { icon: '\uD83D\uDDE3\uFE0F', text: 'Babbling is early language. Respond to it like a conversation.' },
+      { icon: '\uD83D\uDE4B', text: `${name === 'baby' ? 'Baby' : name} may start rolling over \u2014 never leave them unattended on elevated surfaces.` },
+      { icon: '\uD83D\uDDE3\uFE0F', text: 'Babbling is early language. Respond to it like a real conversation.' },
+    ]
+    if (weekOrMonth <= 39) return [ // 6-9 months
+      { icon: '\uD83E\uDDD1', text: `${name === 'baby' ? 'Baby' : name} is becoming more mobile \u2014 time to baby-proof accessible areas.` },
+      { icon: '\uD83E\uDD61', text: 'Offer a variety of textures and flavours. Messy eating is learning.' },
+      { icon: '\uD83D\uDC4B', text: 'Waving, clapping, and pointing usually emerge around this age.' },
+    ]
+    return [ // 9-12+ months
+      { icon: '\uD83D\uDEB6', text: `${name === 'baby' ? 'Baby' : name} may be cruising or taking first steps soon \u2014 every child has their own timeline.` },
+      { icon: '\uD83C\uDF4E', text: 'Self-feeding with finger foods builds independence and fine motor skills.' },
+      { icon: '\uD83D\uDCD6', text: 'Point and name objects throughout the day \u2014 vocabulary is building fast now.' },
     ]
   }
 

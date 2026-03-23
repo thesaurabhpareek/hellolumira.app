@@ -179,14 +179,16 @@ function medicalDisclaimer(): string {
  * Wraps email body content in the standard Lumira email chrome: header with
  * logo, content area, and a fully compliant footer with legal links.
  *
- * @param content   - Inner HTML body content (already escaped where needed).
- * @param preheader - Preview text shown in inbox (40-90 chars).
+ * @param content        - Inner HTML body content (already escaped where needed).
+ * @param preheader      - Preview text shown in inbox (40-90 chars).
  * @param recipientEmail - The recipient's email address for the footer disclosure.
+ * @param securityEmail  - When true, replaces unsubscribe link with security notice.
  */
 export function emailWrapper(
   content: string,
   preheader: string,
-  recipientEmail: string = '{{email}}'
+  recipientEmail: string = '{{email}}',
+  securityEmail: boolean = false
 ): string {
   return `<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -209,10 +211,19 @@ export function emailWrapper(
       .email-container{width:100%!important;max-width:100%!important}
       .fluid{max-width:100%!important;height:auto!important}
       .stack-column{display:block!important;width:100%!important}
+      .email-body-padding{padding:16px!important}
+      h1{font-size:20px!important}
+      .cta-btn{width:100%!important;max-width:100%!important;display:block!important}
+    }
+    @media (prefers-color-scheme:dark){
+      .email-bg{background-color:#1a1a1a!important}
+      .email-card{background-color:#2a2a2a!important;color:#f0f0f0!important}
+      .text-muted{color:#9CA3AF!important}
+      .text-body{color:#e0e0e0!important}
     }
   </style>
 </head>
-<body style="margin:0;padding:0;background-color:${COLORS.sand0};font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;color:${COLORS.slate};">
+<body style="margin:0;padding:0;background-color:${COLORS.sand0};font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;color:${COLORS.slate};" class="email-bg">
 
   <!-- Preheader (hidden preview text) -->
   <div style="display:none;font-size:1px;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;mso-hide:all;">
@@ -245,7 +256,7 @@ export function emailWrapper(
 
           <!-- Body card -->
           <tr>
-            <td style="background:${COLORS.white};border-radius:16px;padding:44px 40px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+            <td class="email-card email-body-padding" style="background:${COLORS.white};border-radius:16px;padding:44px 40px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
               ${content}
             </td>
           </tr>
@@ -279,19 +290,33 @@ export function emailWrapper(
                       &nbsp;&middot;&nbsp;
                       <a href="${LINKS.privacy}" style="color:${COLORS.mutedLight};text-decoration:underline;">Privacy Policy</a>
                       &nbsp;&middot;&nbsp;
-                      <a href="${LINKS.unsubscribe}" style="color:${COLORS.mutedLight};text-decoration:underline;">Unsubscribe</a>
+                      ${securityEmail
+                        ? `<span style="color:${COLORS.mutedLight};">Unsubscribe</span>`
+                        : `<a href="${LINKS.unsubscribe}" style="color:${COLORS.mutedLight};text-decoration:underline;">Unsubscribe</a>`}
                     </p>
+
+                    ${securityEmail
+                      ? `<!-- Security email unsubscribe notice -->
+                    <p style="margin:0 0 12px 0;font-size:11px;color:#B0B0AC;text-align:center;line-height:1.5;font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;">
+                      This security notification cannot be unsubscribed as it is required to protect your account.
+                    </p>`
+                      : ''}
 
                     <!-- Medical disclaimer -->
                     <p style="margin:0 0 12px 0;font-size:11px;color:#B0B0AC;text-align:center;line-height:1.5;font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;">
-                      Lumira provides informational support only and is not a substitute for professional medical advice.
+                      Lumira provides informational support only and is not a substitute for professional medical advice, diagnosis, or treatment.
+                    </p>
+
+                    <!-- Physical address (CAN-SPAM / GDPR required) -->
+                    <p style="margin:0 0 12px 0;font-size:11px;color:#B0B0AC;text-align:center;line-height:1.5;font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;">
+                      Lumira Inc. &middot; [PLACEHOLDER &mdash; add company address]
                     </p>
 
                     <!-- Sent-to disclosure -->
                     <!-- NOTE: The Supabase auth magic link email template also needs this updated
                          in the Supabase dashboard > Authentication > Email Templates > Magic Link -->
                     <p style="margin:0 0 8px 0;font-size:11px;color:#B0B0AC;text-align:center;font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;">
-                      This email was sent to ${recipientEmail}. Received this without requesting it? Someone may have entered your email by mistake. Contact us at <a href="mailto:support@hellolumira.app" style="color:#B0B0AC;text-decoration:underline;">support@hellolumira.app</a> &mdash; and protect your account by enabling Face ID sign-in in Settings.
+                      This email was sent to ${recipientEmail}. Received this without requesting it? Contact us at <a href="mailto:support@hellolumira.app" style="color:#B0B0AC;text-decoration:underline;">support@hellolumira.app</a>
                     </p>
 
                     <!-- Copyright -->
@@ -919,58 +944,71 @@ export function passkeyEnrolledEmail({
   firstName,
   deviceHint,
   manageUrl,
+  email = '{{email}}',
 }: {
   firstName: string
   deviceHint: string
   manageUrl: string
+  email?: string
 }): EmailTemplate {
-  const subject = `Face ID sign-in is on for your Lumira account`
-  const preheader = `You can now sign in to Lumira with just a look.`
+  const subject = `Face ID sign-in is now active on your Lumira account`
+  const preheader = `You're all set — next time, just look at your phone. No email needed.`
 
   const safeName = escapeHtml(firstName)
   const safeDevice = escapeHtml(deviceHint)
-  const safeManageUrl = manageUrl
 
   const content = `
-    <!-- Checkmark icon -->
+    <!-- Success icon -->
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:0 auto 24px auto;">
       <tr>
-        <td align="center" style="width:56px;height:56px;background:#EBF5F4;border-radius:50%;">
-          <span style="font-size:28px;line-height:56px;display:block;">&#10003;</span>
+        <td align="center" style="width:64px;height:64px;background:#EBF5F4;border-radius:50%;">
+          <span style="font-size:32px;line-height:64px;display:block;">&#128274;</span>
         </td>
       </tr>
     </table>
 
-    <h1 style="margin:0 0 16px 0;font-size:24px;font-weight:700;color:${COLORS.slate};font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;line-height:1.3;text-align:center;">
-      Face ID sign-in is on
+    <h1 style="margin:0 0 8px 0;font-size:24px;font-weight:700;color:${COLORS.slate};font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;line-height:1.3;text-align:center;">
+      You&rsquo;re all set, ${safeName} &#128274;
     </h1>
 
-    <p style="margin:0 0 20px 0;font-size:16px;line-height:1.6;color:${COLORS.slate};">
-      Hi ${safeName}, you just added a passkey on <strong>${safeDevice}</strong>. Next time you open Lumira, just look at your phone &mdash; no email needed.
+    <p style="margin:0 0 24px 0;font-size:16px;line-height:1.6;color:${COLORS.slate};text-align:center;">
+      Face ID sign-in is now active on <strong>${safeDevice}</strong>.<br>
+      Next time you open Lumira, just look at your phone.
     </p>
 
-    <!-- Privacy info box -->
+    <!-- Device detail box -->
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:0 0 24px 0;">
       <tr>
-        <td style="padding:16px 20px;background:#EBF5F4;border-radius:12px;border-left:4px solid ${COLORS.sage500};">
+        <td style="padding:16px 20px;background:${COLORS.sand100};border-radius:12px;border-left:4px solid ${COLORS.sage500};">
+          <p style="margin:0 0 4px 0;font-size:12px;font-weight:600;color:${COLORS.muted};text-transform:uppercase;letter-spacing:0.5px;">Passkey added on</p>
+          <p style="margin:0;font-size:16px;font-weight:600;color:${COLORS.slate};">${safeDevice}</p>
+        </td>
+      </tr>
+    </table>
+
+    <!-- Privacy reassurance box -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:0 0 24px 0;">
+      <tr>
+        <td style="padding:16px 20px;background:#EBF5F4;border-radius:12px;">
+          <p style="margin:0 0 6px 0;font-size:13px;font-weight:600;color:${COLORS.sage500};">&#128274; Your privacy is protected</p>
           <p style="margin:0;font-size:14px;line-height:1.6;color:${COLORS.slate};">
-            <strong>Your biometric data never leaves your device.</strong> Nothing is shared with Lumira or Apple.
+            Your biometric data <strong>never leaves your device</strong>. Nothing is shared with Lumira, Apple, or anyone else. Only a secure cryptographic key is stored.
           </p>
         </td>
       </tr>
     </table>
 
-    ${ctaButton('Manage your passkeys', safeManageUrl)}
+    ${ctaButton('Manage your passkeys', manageUrl)}
 
-    <p style="margin:24px 0 0 0;font-size:13px;color:${COLORS.muted};text-align:center;line-height:1.6;">
-      If this wasn&rsquo;t you, <a href="${safeManageUrl}" style="color:${COLORS.muted};text-decoration:underline;">remove this passkey immediately</a>.
+    <p style="margin:16px 0 0 0;font-size:13px;color:${COLORS.muted};text-align:center;line-height:1.6;">
+      Didn&rsquo;t set this up? <a href="${manageUrl}" style="color:${COLORS.muted};text-decoration:underline;">Remove this passkey immediately</a> and contact us at <a href="mailto:support@hellolumira.app" style="color:${COLORS.muted};text-decoration:underline;">support@hellolumira.app</a>.
     </p>
   `
 
   return {
     subject,
     preheader,
-    html: emailWrapper(content, preheader),
+    html: emailWrapper(content, preheader, email, true),
   }
 }
 
@@ -984,20 +1022,21 @@ export function passkeyNewDeviceAlertEmail({
   ipSubnet,
   enrolledAt,
   revokeUrl,
+  email = '{{email}}',
 }: {
   firstName: string
   deviceHint: string
   ipSubnet: string
   enrolledAt: string
   revokeUrl: string
+  email?: string
 }): EmailTemplate {
-  const subject = `A new sign-in method was added to your Lumira account`
-  const preheader = `Face ID sign-in was set up on ${deviceHint}.`
+  const subject = `Security alert: A new passkey was added to your Lumira account`
+  const preheader = `Face ID sign-in was set up on ${deviceHint}. If this wasn't you, act now.`
 
   const safeName = escapeHtml(firstName)
   const safeDevice = escapeHtml(deviceHint)
   const safeIp = escapeHtml(ipSubnet)
-  const safeRevokeUrl = revokeUrl
 
   let formattedDate = enrolledAt
   try {
@@ -1011,38 +1050,38 @@ export function passkeyNewDeviceAlertEmail({
   }
 
   const content = `
-    <h1 style="margin:0 0 16px 0;font-size:24px;font-weight:700;color:${COLORS.slate};font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;line-height:1.3;">
+    <h1 style="margin:0 0 8px 0;font-size:24px;font-weight:700;color:${COLORS.slate};font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;line-height:1.3;">
       New sign-in method added
     </h1>
 
-    <p style="margin:0 0 20px 0;font-size:16px;line-height:1.6;color:${COLORS.slate};">
-      Hi ${safeName}, Face ID sign-in was just set up on <strong>${safeDevice}</strong>.
+    <p style="margin:0 0 24px 0;font-size:16px;line-height:1.6;color:${COLORS.slate};">
+      Hi ${safeName}, Face ID sign-in (passkey) was just set up on <strong>${safeDevice}</strong>. Review the details below.
     </p>
 
-    <!-- Details box -->
+    <!-- Event details box -->
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:0 0 24px 0;">
       <tr>
-        <td style="padding:20px;background:${COLORS.sand100};border-radius:12px;">
-          <p style="margin:0 0 8px 0;font-size:13px;font-weight:600;color:${COLORS.muted};text-transform:uppercase;letter-spacing:0.5px;">
+        <td style="padding:20px;background:${COLORS.sand100};border-radius:12px;border:1px solid ${COLORS.border};">
+          <p style="margin:0 0 12px 0;font-size:12px;font-weight:600;color:${COLORS.muted};text-transform:uppercase;letter-spacing:0.5px;">
             Event details
           </p>
           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
             <tr>
-              <td style="padding:6px 0;border-bottom:1px solid ${COLORS.border};">
-                <span style="font-size:14px;color:${COLORS.muted};display:inline-block;width:80px;">Device</span>
-                <span style="font-size:14px;color:${COLORS.slate};font-weight:500;">${safeDevice}</span>
+              <td style="padding:8px 0;border-bottom:1px solid ${COLORS.border};">
+                <span style="font-size:13px;color:${COLORS.muted};display:inline-block;min-width:80px;">Device</span>
+                <span style="font-size:14px;color:${COLORS.slate};font-weight:600;">${safeDevice}</span>
               </td>
             </tr>
             <tr>
-              <td style="padding:6px 0;border-bottom:1px solid ${COLORS.border};">
-                <span style="font-size:14px;color:${COLORS.muted};display:inline-block;width:80px;">Added</span>
-                <span style="font-size:14px;color:${COLORS.slate};font-weight:500;">${escapeHtml(formattedDate)}</span>
+              <td style="padding:8px 0;border-bottom:1px solid ${COLORS.border};">
+                <span style="font-size:13px;color:${COLORS.muted};display:inline-block;min-width:80px;">Added</span>
+                <span style="font-size:14px;color:${COLORS.slate};font-weight:600;">${escapeHtml(formattedDate)}</span>
               </td>
             </tr>
             <tr>
-              <td style="padding:6px 0;">
-                <span style="font-size:14px;color:${COLORS.muted};display:inline-block;width:80px;">Network</span>
-                <span style="font-size:14px;color:${COLORS.slate};font-weight:500;">${safeIp}</span>
+              <td style="padding:8px 0;">
+                <span style="font-size:13px;color:${COLORS.muted};display:inline-block;min-width:80px;">Network</span>
+                <span style="font-size:14px;color:${COLORS.slate};font-weight:600;">${safeIp}</span>
               </td>
             </tr>
           </table>
@@ -1050,39 +1089,41 @@ export function passkeyNewDeviceAlertEmail({
       </tr>
     </table>
 
-    <!-- All good section -->
-    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:0 0 16px 0;">
+    <!-- Two-tone: If it was you -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:0 0 12px 0;">
       <tr>
-        <td style="padding:14px 16px;background:#EBF5F4;border-radius:10px;">
+        <td style="padding:16px 20px;background:#EBF5F4;border-radius:10px;border-left:4px solid ${COLORS.sage500};">
+          <p style="margin:0 0 4px 0;font-size:14px;font-weight:700;color:${COLORS.sage600};">&#10003; If that was you</p>
           <p style="margin:0;font-size:14px;line-height:1.6;color:${COLORS.slate};">
-            <strong style="color:${COLORS.sage500};">If that was you</strong> &mdash; you&rsquo;re all set. Nothing to do.
+            You&rsquo;re all set. Nothing to do &mdash; enjoy faster sign-in.
           </p>
         </td>
       </tr>
     </table>
 
-    <!-- Warning section -->
-    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:0 0 8px 0;">
+    <!-- Two-tone: If it wasn't you -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:0 0 24px 0;">
       <tr>
-        <td style="padding:14px 16px;background:#FEF3CD;border-radius:10px;border-left:4px solid #C4844E;">
+        <td style="padding:16px 20px;background:#FEF3CD;border-radius:10px;border-left:4px solid #C4844E;">
+          <p style="margin:0 0 4px 0;font-size:14px;font-weight:700;color:#9B6B3A;">&#9888; If that wasn&rsquo;t you</p>
           <p style="margin:0;font-size:14px;line-height:1.6;color:${COLORS.slate};">
-            <strong style="color:#9B6B3A;">If that wasn&rsquo;t you</strong>, remove it immediately using the button below.
+            Someone may have access to your account. Remove this passkey immediately using the button below, then change your account settings.
           </p>
         </td>
       </tr>
     </table>
 
-    ${warningButton('Remove this passkey', safeRevokeUrl)}
+    ${warningButton('Remove this passkey', revokeUrl)}
 
     <p style="margin:0;font-size:12px;color:${COLORS.mutedLight};text-align:center;line-height:1.6;">
-      This security alert is sent for every new passkey added. It cannot be unsubscribed.
+      This security alert is sent for every new passkey added and cannot be unsubscribed.
     </p>
   `
 
   return {
     subject,
     preheader,
-    html: emailWrapper(content, preheader),
+    html: emailWrapper(content, preheader, email, true),
   }
 }
 
