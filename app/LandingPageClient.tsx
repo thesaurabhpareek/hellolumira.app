@@ -21,8 +21,8 @@ type PainPoint = { quote: string; answer: string }
 
 const COPY: Record<Stage, { headline: string; sub: string }> = {
   planning: {
-    headline: 'Planning a baby is one of the biggest decisions you\u2019ll ever make. You shouldn\u2019t have to figure it out alone.',
-    sub: 'Lumira helps you understand your body, prepare your health, and navigate the emotional side of trying to conceive \u2014 with guidance grounded in real evidence, not noise.',
+    headline: 'Growing your family starts long before a positive test. You shouldn\u2019t have to carry the waiting, the wondering, and the hoping quietly.',
+    sub: 'Whether you\u2019re just starting to think about it or you\u2019ve been trying for months, Lumira helps you understand your body, make sense of conflicting advice, and hold space for how big \u2014 and how quietly lonely \u2014 this journey can feel.',
   },
   pregnancy: {
     headline: 'Every week brings new questions, new worries, and new wonder. You shouldn\u2019t have to navigate it alone.',
@@ -30,31 +30,69 @@ const COPY: Record<Stage, { headline: string; sub: string }> = {
   },
   infant: {
     headline: 'New baby, new questions \u2014 every single week. You don\u2019t have to figure them out alone.',
-    sub: 'Age-matched guidance for every week of your little one\u2019s first year \u2014 sleep, feeding, development milestones, and the questions you didn\u2019t even know to ask.',
+    sub: 'Age-matched guidance for every week of your little one\u2019s first year \u2014 so you always know what\u2019s normal, what\u2019s worth a call, and what questions you didn\u2019t even know to ask yet.',
   },
 }
 
-const PAIN_POINTS: PainPoint[] = [
-  {
-    quote: 'Something feels off and I can\u2019t explain it.',
-    answer: 'Lumira gives you space to talk it through \u2014 calmly and without judgment.',
-  },
-  {
-    quote: 'Is this normal, or should I be worried?',
-    answer: 'Age-matched guides with clear answers, grounded in real clinical guidelines.',
-  },
-  {
-    quote: 'Everyone\u2019s asking about the baby. Nobody\u2019s asking about me.',
-    answer: 'Lumira makes space for how you\u2019re doing, too. Every single day.',
-  },
-  {
-    quote: 'My family says one thing. My doctor says another. I love them both.',
-    answer: 'Lumira is culturally aware \u2014 helping you honor your roots while staying grounded in current evidence. No judgment on either side.',
-  },
-]
+const PAIN_POINTS: Record<Stage, PainPoint[]> = {
+  planning: [
+    {
+      quote: 'I\u2019ve been tracking everything for months. I don\u2019t know if something\u2019s wrong or if I just need to be patient.',
+      answer: 'Lumira helps you make sense of your patterns \u2014 and know when it\u2019s worth talking to your doctor.',
+    },
+    {
+      quote: 'Everyone around me seems to be getting pregnant so easily. I can\u2019t talk about this with anyone.',
+      answer: 'Lumira gives you a private space to work through it \u2014 without having to explain yourself first.',
+    },
+    {
+      quote: 'There\u2019s so much advice and none of it agrees. I don\u2019t know where to start.',
+      answer: 'Lumira filters out the noise and gives you guidance that actually matches where you are.',
+    },
+    {
+      quote: 'My mom had kids differently. My doctor says something else. I\u2019m trying to figure out what\u2019s right for us.',
+      answer: 'Lumira helps you honor what feels right for your family while staying grounded in what the evidence actually says.',
+    },
+  ],
+  pregnancy: [
+    {
+      quote: 'Something doesn\u2019t feel right and I don\u2019t know if it\u2019s worth calling about.',
+      answer: 'Lumira helps you think it through \u2014 so you know when to wait, and when to make the call.',
+    },
+    {
+      quote: 'I have an appointment in three weeks and I can never remember my questions when I\u2019m actually there.',
+      answer: 'Lumira helps you notice what matters and keep track \u2014 so your appointments actually work for you.',
+    },
+    {
+      quote: 'Everyone\u2019s excited about the baby. Nobody\u2019s asking how I\u2019m holding up.',
+      answer: 'Lumira checks in on you. Not just your symptoms \u2014 you.',
+    },
+    {
+      quote: 'My mum had a completely different pregnancy experience. My doctor says something different. I\u2019m somewhere in the middle.',
+      answer: 'Lumira helps you honor your family\u2019s wisdom while staying grounded in what the evidence actually says. No judgment on either side.',
+    },
+  ],
+  infant: [
+    {
+      quote: 'She\u2019s been crying for two hours and I\u2019ve tried everything. I don\u2019t know if this is normal.',
+      answer: 'Lumira gives you age-matched answers for this exact week \u2014 so you know what\u2019s typical and what\u2019s worth a call.',
+    },
+    {
+      quote: 'I haven\u2019t slept more than three hours in a row. I\u2019m not sure I\u2019m okay.',
+      answer: 'Lumira makes space for how you\u2019re doing, not just how the baby is doing. You matter here too.',
+    },
+    {
+      quote: 'He\u2019s not hitting the milestone the app says he should. I don\u2019t know whether to worry or ignore it.',
+      answer: 'Development isn\u2019t a checklist. Lumira helps you understand what\u2019s a real range and when it\u2019s worth bringing up.',
+    },
+    {
+      quote: 'My family says one thing. My doctor says another. I love them both.',
+      answer: 'Lumira helps you honor what feels right for your family while staying grounded in what the evidence actually says.',
+    },
+  ],
+}
 
 const HOW_IT_WORKS = [
-  { num: '1', text: 'Tell Lumira about your pregnancy or your baby. Two minutes, no forms, no overwhelm.' },
+  { num: '1', text: 'Tell Lumira where you are \u2014 planning, expecting, or already a parent. Two minutes, no forms, no overwhelm.' },
   { num: '2', text: 'Lumira checks in with you each day \u2014 an AI-powered conversation, not another thing to log.' },
   { num: '3', text: 'Lumira helps you notice things that are easy to overlook \u2014 so you can bring them up with your care team.' },
 ]
@@ -190,7 +228,7 @@ export default function LandingPage() {
                   onMouseDown={e  => (e.currentTarget.style.transform = 'scale(0.98)')}
                   onMouseUp={e    => (e.currentTarget.style.transform = 'scale(1)')}
                 >
-                  Start for free — no download needed
+                  Get your first check-in — free, no download needed
                 </a>
                 <p style={{ fontSize: 13, color: SAND_400, margin: 0 }}>Opens right in your browser. Ready in under two minutes.</p>
                 <p style={{ fontSize: 12, color: SAND_400, margin: 0 }}>Free to start &middot; No credit card required</p>
@@ -214,7 +252,7 @@ export default function LandingPage() {
               Common worries we help with
             </h2>
             <div className="lp-pain-grid">
-              {PAIN_POINTS.map((point, i) => (
+              {PAIN_POINTS[stage].map((point, i) => (
                 <div key={i} className="lp-pain-card">
                   <p style={{ fontSize: 16, fontWeight: 600, color: SLATE, margin: '0 0 8px', lineHeight: 1.4, fontStyle: 'italic' }}>
                     &ldquo;{point.quote}&rdquo;
