@@ -97,6 +97,7 @@ export default function ContentPage() {
   const [userWeekOrMonth, setUserWeekOrMonth] = useState<number | null>(null)
   const [activeCategory, setActiveCategory] = useState<Category | 'all'>('all')
   const [expandedId, setExpandedId] = useState<string | null>(null)
+  const [searchQuery, setSearchQuery] = useState('')
   const [error, setError] = useState<string | null>(null)
 
   const supabase = useMemo(() => createClient(), [])
@@ -378,6 +379,54 @@ export default function ContentPage() {
           ))}
         </div>
 
+        {/* ── Search Bar ─────────────────────────────────────────────── */}
+        {!loading && !error && articles.length > 0 && (
+          <div style={{ position: 'relative', marginBottom: '12px' }}>
+            <svg
+              width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="var(--color-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+              style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}
+            >
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search articles..."
+              style={{
+                width: '100%',
+                padding: '12px 14px 12px 40px',
+                borderRadius: 'var(--radius-md)',
+                border: '1.5px solid var(--color-border)',
+                background: 'var(--color-card)',
+                fontSize: '14px',
+                color: 'var(--color-slate)',
+                outline: 'none',
+                fontFamily: 'inherit',
+                minHeight: '44px',
+              }}
+              onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-primary)' }}
+              onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--color-border)' }}
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                style={{
+                  position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)',
+                  background: 'var(--color-border)', border: 'none', borderRadius: '50%',
+                  width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  cursor: 'pointer', fontSize: '12px', color: 'var(--color-muted)', lineHeight: 1,
+                }}
+                aria-label="Clear search"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+        )}
+
         {/* ── Article Count ───────────────────────────────────────────── */}
         {!loading && !error && (
           <p
@@ -388,7 +437,12 @@ export default function ContentPage() {
               fontWeight: 500,
             }}
           >
-            {articles.length} article{articles.length !== 1 ? 's' : ''}
+            {searchQuery
+              ? `${articles.filter(a => {
+                  const q = searchQuery.toLowerCase()
+                  return a.title.toLowerCase().includes(q) || (a.subtitle || '').toLowerCase().includes(q) || (a.tags || []).some(t => t.toLowerCase().includes(q))
+                }).length} result${articles.filter(a => { const q = searchQuery.toLowerCase(); return a.title.toLowerCase().includes(q) || (a.subtitle || '').toLowerCase().includes(q) || (a.tags || []).some(t => t.toLowerCase().includes(q)) }).length !== 1 ? 's' : ''} for "${searchQuery}"`
+              : `${articles.length} article${articles.length !== 1 ? 's' : ''}`}
           </p>
         )}
 
@@ -505,7 +559,11 @@ export default function ContentPage() {
           <div
             style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}
           >
-            {articles.map((article) => {
+            {articles.filter((a) => {
+              if (!searchQuery) return true
+              const q = searchQuery.toLowerCase()
+              return a.title.toLowerCase().includes(q) || (a.subtitle || '').toLowerCase().includes(q) || (a.tags || []).some(t => t.toLowerCase().includes(q))
+            }).map((article) => {
               const isExpanded = expandedId === article.id
               const color = categoryColors[article.category] || '#3D8178'
               // Show "For you" if article is cross-stage (matched via target_stages, not primary stage)

@@ -1241,7 +1241,7 @@ export function passkeySuspendedEmail({
   firstName,
   deviceHint,
   supportUrl,
-  settingsUrl,
+  settingsUrl: _settingsUrl,
   email = '{{email}}',
 }: {
   firstName: string
