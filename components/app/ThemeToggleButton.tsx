@@ -17,7 +17,8 @@ export default function ThemeToggleButton() {
         width: '36px',
         height: '36px',
         borderRadius: '50%',
-        background: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.04)',
+        background: isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.06)',
+        boxShadow: '0 0 0 1px rgba(128,128,128,0.12)',
         border: 'none',
         cursor: 'pointer',
         padding: 0,
@@ -39,7 +40,7 @@ export default function ThemeToggleButton() {
           <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
         </svg>
       ) : (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-slate)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
         </svg>
       )}
