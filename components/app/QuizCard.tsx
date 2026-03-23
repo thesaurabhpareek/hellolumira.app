@@ -87,7 +87,7 @@ export default function QuizCard({
   }
 
   return (
-    <div className="bg-white border border-border rounded-lg p-5 mb-4">
+    <div className="bg-[var(--color-white)] border border-border rounded-lg p-5 mb-4">
       {/* Label */}
       <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-[0.8px] mb-3">
         🧠 QUICK QUIZ

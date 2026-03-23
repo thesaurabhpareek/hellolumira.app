@@ -334,7 +334,7 @@ export default function ChatThreadView({
       {/* Bottom input — pinned at the bottom of the flex container */}
       <div
         ref={inputBarRef}
-        className="shrink-0 bg-white border-t border-border px-4 py-3 z-50"
+        className="shrink-0 bg-[var(--color-white)] border-t border-border px-4 py-3 z-50"
       >
         <div className="content-width mx-auto flex gap-[10px] items-end">
           <textarea

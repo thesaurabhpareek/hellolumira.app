@@ -3,7 +3,7 @@ export default function HelpLoading() {
     <div
       style={{
         minHeight: '100%',
-        background: '#FAFAF8',
+        background: 'var(--color-surface)',
         paddingBottom: '24px',
       }}
     >
@@ -14,7 +14,7 @@ export default function HelpLoading() {
             height: '28px',
             width: '55%',
             borderRadius: '8px',
-            background: '#F0F0EE',
+            background: 'var(--color-skeleton)',
             marginBottom: '20px',
             animation: 'pulse 1.5s ease-in-out infinite',
           }}
@@ -25,7 +25,7 @@ export default function HelpLoading() {
           style={{
             height: '48px',
             borderRadius: '14px',
-            background: '#F0F0EE',
+            background: 'var(--color-skeleton)',
             marginBottom: '24px',
             animation: 'pulse 1.5s ease-in-out infinite',
           }}
@@ -37,7 +37,7 @@ export default function HelpLoading() {
             height: '14px',
             width: '40%',
             borderRadius: '6px',
-            background: '#F0F0EE',
+            background: 'var(--color-skeleton)',
             marginBottom: '12px',
             animation: 'pulse 1.5s ease-in-out infinite',
           }}
@@ -50,7 +50,7 @@ export default function HelpLoading() {
             style={{
               height: '48px',
               borderRadius: '0',
-              background: '#F0F0EE',
+              background: 'var(--color-skeleton)',
               marginBottom: '1px',
               animation: 'pulse 1.5s ease-in-out infinite',
             }}

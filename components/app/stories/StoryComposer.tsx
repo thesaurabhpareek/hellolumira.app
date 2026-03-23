@@ -241,7 +241,7 @@ export default function StoryComposer({
         {/* Picker sheet */}
         <div
           ref={sheetRef}
-          className={`relative w-full max-w-[430px] bg-white rounded-t-2xl flex flex-col safe-bottom ${
+          className={`relative w-full max-w-[430px] bg-[var(--color-white)] rounded-t-2xl flex flex-col safe-bottom ${
             closing ? 'animate-story-sheet-down' : 'animate-story-sheet-up'
           }`}
           onClick={(e) => e.stopPropagation()}
@@ -302,7 +302,7 @@ export default function StoryComposer({
 
       {/* Full creation container — constrained to mobile viewport */}
       <div
-        className="relative w-full max-w-[430px] h-[100dvh] max-h-[100dvh] mx-auto bg-white flex flex-col animate-story-create-in overflow-hidden"
+        className="relative w-full max-w-[430px] h-[100dvh] max-h-[100dvh] mx-auto bg-[var(--color-white)] flex flex-col animate-story-create-in overflow-hidden"
         style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}
       >
         {/* Top bar */}

@@ -27,7 +27,7 @@ export default function WellbeingPrompt({ onDismiss }: Props) {
       }}
     >
       <div
-        className="content-width w-full animate-fade-in bg-white rounded-[20px] px-6"
+        className="content-width w-full animate-fade-in bg-[var(--color-white)] rounded-[20px] px-6"
         style={{ padding: '28px 24px' }}
       >
         {/* Lumira avatar */}

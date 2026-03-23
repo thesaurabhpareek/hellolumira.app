@@ -54,7 +54,7 @@ export default function ArticleInsightCard({
   const IconComp = CATEGORY_ICON_COMPONENTS[category] ?? BookIcon
 
   return (
-    <div className="bg-white border border-border rounded-lg p-5 mb-4">
+    <div className="bg-[var(--color-white)] border border-border rounded-lg p-5 mb-4">
       {/* Section label */}
       <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-[0.8px] mb-3">
         <span className="inline-flex items-center gap-1">

@@ -20,7 +20,7 @@ export default function CheckinError({
         alignItems: 'center',
         justifyContent: 'center',
         minHeight: '100%',
-        backgroundColor: '#FAFAF8',
+        backgroundColor: 'var(--color-surface)',
         padding: '1rem',
       }}
     >
@@ -36,7 +36,7 @@ export default function CheckinError({
           style={{
             fontSize: '1.125rem',
             fontWeight: 600,
-            color: '#3D8178',
+            color: 'var(--color-primary)',
             marginBottom: '0.75rem',
           }}
         >
@@ -45,7 +45,7 @@ export default function CheckinError({
         <p
           style={{
             fontSize: '0.9rem',
-            color: '#6B7280',
+            color: 'var(--color-muted)',
             marginBottom: '1.5rem',
             lineHeight: 1.5,
           }}
@@ -57,8 +57,8 @@ export default function CheckinError({
             onClick={reset}
             style={{
               padding: '0.625rem 1.25rem',
-              backgroundColor: '#3D8178',
-              color: '#FFFFFF',
+              backgroundColor: 'var(--color-primary)',
+              color: 'var(--color-white)',
               border: 'none',
               borderRadius: '0.5rem',
               fontSize: '0.9rem',
@@ -73,8 +73,8 @@ export default function CheckinError({
             style={{
               padding: '0.625rem 1.25rem',
               backgroundColor: 'transparent',
-              color: '#3D8178',
-              border: '1px solid #3D8178',
+              color: 'var(--color-primary)',
+              border: '1px solid var(--color-primary)',
               borderRadius: '0.5rem',
               fontSize: '0.9rem',
               fontWeight: 500,

@@ -5,7 +5,7 @@ import { Suspense } from 'react'
 import LandingPageClient from './LandingPageClient'
 
 function LandingPageFallback() {
-  return <div style={{ backgroundColor: '#FAFAF8', minHeight: '100dvh' }} />
+  return <div style={{ backgroundColor: 'var(--color-surface)', minHeight: '100dvh' }} />
 }
 
 export default function Page() {

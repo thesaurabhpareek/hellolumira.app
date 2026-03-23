@@ -88,7 +88,7 @@ export default function EmergencyOverlay({ message, actionUrl, onAcknowledge }: 
           ref={callButtonRef}
           href={callUrl}
           aria-label="Call emergency services now"
-          className="flex items-center justify-center w-full h-14 bg-white font-bold text-[17px] no-underline mb-3"
+          className="flex items-center justify-center w-full h-14 bg-[var(--color-white)] font-bold text-[17px] no-underline mb-3"
           style={{
             color: '#7C1F1F',
             borderRadius: '18px',

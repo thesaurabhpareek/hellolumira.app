@@ -117,7 +117,7 @@ function NotificationRow({
           className="text-sm leading-[1.4] mb-0.5"
           style={{
             fontWeight: notification.is_read ? 500 : 600,
-            color: '#2D3748',
+            color: 'var(--color-slate)',
           }}
         >
           {notification.title}
@@ -212,7 +212,7 @@ export function NotificationPanel({
         role="dialog"
         aria-label="Notifications"
         aria-modal="true"
-        className="absolute top-full right-0 mt-1 z-[200] bg-white flex flex-col overflow-hidden"
+        className="absolute top-full right-0 mt-1 z-[200] bg-[var(--color-white)] flex flex-col overflow-hidden"
         style={{
           width: 'min(400px, calc(100vw - 24px))',
           maxHeight: '70vh',
@@ -225,7 +225,7 @@ export function NotificationPanel({
       >
         {/* Arrow / caret pointing up toward the bell */}
         <div
-          className="absolute right-[18px] w-3 h-3 bg-white z-[1]"
+          className="absolute right-[18px] w-3 h-3 bg-[var(--color-white)] z-[1]"
           style={{
             top: '-6px',
             border: `1px solid ${SAND_100}`,
@@ -238,7 +238,7 @@ export function NotificationPanel({
 
         {/* Header */}
         <div
-          className="flex items-center justify-between relative z-[2] bg-white"
+          className="flex items-center justify-between relative z-[2] bg-[var(--color-white)]"
           style={{
             padding: '14px 16px 10px',
             borderBottom: `1px solid ${SAND_100}`,
@@ -246,7 +246,7 @@ export function NotificationPanel({
         >
           <h2
             className="text-[17px] font-bold m-0"
-            style={{ color: '#2D3748', letterSpacing: '-0.2px' }}
+            style={{ color: 'var(--color-slate)', letterSpacing: '-0.2px' }}
           >
             Notifications
           </h2>
@@ -311,7 +311,7 @@ export function NotificationPanel({
               <div className="text-[28px] mb-[10px]">
                 &#x2728;
               </div>
-              <div className="text-[15px] font-semibold mb-1" style={{ color: '#2D3748' }}>
+              <div className="text-[15px] font-semibold mb-1" style={{ color: 'var(--color-slate)' }}>
                 You&apos;re all caught up
               </div>
               <div className="text-[13px]" style={{ color: SAND_500 }}>

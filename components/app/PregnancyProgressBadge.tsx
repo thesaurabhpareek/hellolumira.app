@@ -31,7 +31,7 @@ export default function PregnancyProgressBadge({ week, trimester, dueDate }: Pro
   const weeksRemaining = Math.max(0, 40 - week)
 
   return (
-    <div className="bg-white border border-border rounded-lg px-5 py-4 mb-4">
+    <div className="bg-[var(--color-white)] border border-border rounded-lg px-5 py-4 mb-4">
       {/* Header row */}
       <div className="flex items-center justify-between mb-3">
         <div>

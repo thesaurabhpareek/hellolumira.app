@@ -48,7 +48,7 @@ export default function BadgeCelebration({ badgeName, badgeEmoji, onDismiss }: B
 
       {/* Badge card */}
       <div
-        className="fixed z-[200] bg-white rounded-[20px] px-10 py-8 text-center shadow-[0_20px_60px_rgba(0,0,0,0.2)] max-w-[300px] w-[90%] transition-all duration-300"
+        className="fixed z-[200] bg-[var(--color-white)] rounded-[20px] px-10 py-8 text-center shadow-[0_20px_60px_rgba(0,0,0,0.2)] max-w-[300px] w-[90%] transition-all duration-300"
         style={{
           top: '50%',
           left: '50%',

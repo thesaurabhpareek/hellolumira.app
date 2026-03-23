@@ -146,7 +146,7 @@ export default function PremiumHeader({
               className="premium-header__back press-scale"
               aria-label={`Go back: ${backLabel}`}
             >
-              <ArrowLeftIcon size={20} color="#3D8178" />
+              <ArrowLeftIcon size={20} color="var(--color-primary)" />
               <span className="premium-header__back-label">{backLabel}</span>
             </button>
           ) : isRootTab && !title ? (
@@ -167,7 +167,7 @@ export default function PremiumHeader({
               className="premium-header__search-btn press-scale"
               aria-label="Open search"
             >
-              <SearchIcon size={20} color="#718096" />
+              <SearchIcon size={20} color="var(--color-muted)" />
             </button>
           )}
           {rightActions}

@@ -47,8 +47,8 @@ const tabs: TabItem[] = [
   { label: 'Me',      href: '/profile', icon: UserIcon,   iconFilled: UserIconFilled },
 ]
 
-const ACTIVE_COLOR   = '#3D8178'
-const INACTIVE_COLOR = '#9CA3AF'
+const ACTIVE_COLOR   = 'var(--color-primary)'
+const INACTIVE_COLOR = 'var(--color-muted)'
 
 /* ── Component ─────────────────────────────────────────────────────────────── */
 

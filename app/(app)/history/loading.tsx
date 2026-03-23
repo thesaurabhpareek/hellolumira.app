@@ -3,7 +3,7 @@ export default function HistoryLoading() {
     <div
       style={{
         minHeight: '100%',
-        background: '#FAFAF8',
+        background: 'var(--color-surface)',
         paddingBottom: '32px',
       }}
     >
@@ -14,7 +14,7 @@ export default function HistoryLoading() {
             height: '28px',
             width: '40%',
             borderRadius: '8px',
-            background: '#F0F0EE',
+            background: 'var(--color-skeleton)',
             marginBottom: '8px',
             animation: 'pulse 1.5s ease-in-out infinite',
           }}
@@ -24,7 +24,7 @@ export default function HistoryLoading() {
             height: '18px',
             width: '55%',
             borderRadius: '6px',
-            background: '#F0F0EE',
+            background: 'var(--color-skeleton)',
             marginBottom: '24px',
             animation: 'pulse 1.5s ease-in-out infinite',
           }}
@@ -37,7 +37,7 @@ export default function HistoryLoading() {
             style={{
               height: '80px',
               borderRadius: '12px',
-              background: '#F0F0EE',
+              background: 'var(--color-skeleton)',
               marginBottom: '12px',
               animation: 'pulse 1.5s ease-in-out infinite',
               animationDelay: `${i * 0.1}s`,

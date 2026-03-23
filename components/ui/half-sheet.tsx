@@ -680,7 +680,7 @@ export function HalfSheet({
                   fontWeight: 600,
                   lineHeight: '22px',
                   letterSpacing: -0.085,
-                  color: '#2D3748',
+                  color: 'var(--color-slate)',
                   margin: 0,
                 }}
               >
@@ -692,7 +692,7 @@ export function HalfSheet({
                 style={{
                   fontSize: 15,
                   lineHeight: '20px',
-                  color: '#718096',
+                  color: 'var(--color-muted)',
                   margin: 0,
                   marginTop: 2,
                 }}

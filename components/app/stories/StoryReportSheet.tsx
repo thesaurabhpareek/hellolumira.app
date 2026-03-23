@@ -65,7 +65,7 @@ export default function StoryReportSheet({
 
       {/* Sheet */}
       <div
-        className="relative w-full bg-white rounded-t-2xl animate-story-sheet-up safe-bottom"
+        className="relative w-full bg-[var(--color-white)] rounded-t-2xl animate-story-sheet-up safe-bottom"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Handle */}

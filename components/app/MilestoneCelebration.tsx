@@ -172,7 +172,7 @@ export default function MilestoneCelebration({
       {/* Celebration card */}
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-white text-center relative z-[1] w-full"
+        className="bg-[var(--color-white)] text-center relative z-[1] w-full"
         style={{
           borderRadius: '20px',
           padding: '32px 28px',

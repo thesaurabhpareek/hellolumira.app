@@ -39,7 +39,7 @@ export default function TribePeekCard({ posts }: { posts: TribePostPreview[] }) 
   if (!posts.length) return null
 
   return (
-    <div className="bg-white border border-border rounded-lg p-5 mb-4">
+    <div className="bg-[var(--color-white)] border border-border rounded-lg p-5 mb-4">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-[0.8px]">

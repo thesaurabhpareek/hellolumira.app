@@ -68,7 +68,7 @@ export default function StoryViewersList({
 
       {/* Sheet */}
       <div
-        className="relative w-full max-h-[60vh] bg-white rounded-t-2xl animate-story-sheet-up safe-bottom"
+        className="relative w-full max-h-[60vh] bg-[var(--color-white)] rounded-t-2xl animate-story-sheet-up safe-bottom"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Handle */}

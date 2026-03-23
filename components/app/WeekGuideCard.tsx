@@ -425,13 +425,13 @@ function FocusThisWeek({
         {items.length > 1 && currentIndex > 0 && (
           <button
             onClick={goPrev}
-            className="absolute left-[-10px] top-1/2 -translate-y-1/2 w-[30px] h-[30px] rounded-full bg-white border border-border cursor-pointer flex items-center justify-center shadow-[0_1px_6px_rgba(0,0,0,0.08)] text-base text-foreground p-0"
+            className="absolute left-[-10px] top-1/2 -translate-y-1/2 w-[30px] h-[30px] rounded-full bg-[var(--color-white)] border border-border cursor-pointer flex items-center justify-center shadow-[0_1px_6px_rgba(0,0,0,0.08)] text-base text-foreground p-0"
           >‹</button>
         )}
         {items.length > 1 && currentIndex < items.length - 1 && (
           <button
             onClick={goNext}
-            className="absolute right-[-10px] top-1/2 -translate-y-1/2 w-[30px] h-[30px] rounded-full bg-white border border-border cursor-pointer flex items-center justify-center shadow-[0_1px_6px_rgba(0,0,0,0.08)] text-base text-foreground p-0"
+            className="absolute right-[-10px] top-1/2 -translate-y-1/2 w-[30px] h-[30px] rounded-full bg-[var(--color-white)] border border-border cursor-pointer flex items-center justify-center shadow-[0_1px_6px_rgba(0,0,0,0.08)] text-base text-foreground p-0"
           >›</button>
         )}
       </div>

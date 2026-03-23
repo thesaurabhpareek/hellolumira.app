@@ -13,6 +13,8 @@ import { usePathname } from 'next/navigation'
 import PremiumBottomNav from './PremiumBottomNav'
 import PremiumHeader from './PremiumHeader'
 import PageTransition from './PageTransition'
+import ThemeToggleButton from './ThemeToggleButton'
+import { NotificationBell } from './NotificationBell'
 import type { Profile, BabyProfile } from '@/types/app'
 
 interface Props {
@@ -45,14 +47,17 @@ export default function AppShell({ children, profile, baby }: Props) {
   }
 
   return (
-    <div className="h-dvh bg-white flex flex-col font-sans overflow-hidden">
+    <div className="h-dvh bg-[var(--color-white)] flex flex-col font-sans overflow-hidden">
 
       {/* -- Header -- */}
       <PremiumHeader
         title={getPageTitle()}
         showBack={isSubPage}
         backLabel="Back"
-      />
+      >
+        <ThemeToggleButton />
+        <NotificationBell />
+      </PremiumHeader>
 
       {/* -- Main content -- */}
       <main

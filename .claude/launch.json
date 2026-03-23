@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "lumira-dev",
-      "runtimeExecutable": "/private/tmp/node-v20.18.0-darwin-arm64/bin/npx",
-      "runtimeArgs": ["next", "dev"],
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
       "port": 3000
     }
   ]

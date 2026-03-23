@@ -31,8 +31,8 @@ export default function LegalHubPage() {
         ))}
       </div>
 
-      <div style={{ marginTop: '48px', paddingTop: '24px', borderTop: '1px solid #E2E8F0' }}>
-        <h2 style={{ fontSize: '16px', fontWeight: 600, color: '#2D3748', marginBottom: '12px' }}>
+      <div style={{ marginTop: '48px', paddingTop: '24px', borderTop: '1px solid var(--color-border)' }}>
+        <h2 style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-slate)', marginBottom: '12px' }}>
           DMCA &amp; Copyright
         </h2>
         <div className="legal-body">

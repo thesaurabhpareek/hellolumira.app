@@ -154,7 +154,7 @@ export default function UpcomingMilestonesCard({ babyId, babyName }: Props) {
 
       {/* Upcoming milestones card */}
       {upcoming.length > 0 && (
-        <div className="bg-white border border-border rounded-lg p-5 mb-4">
+        <div className="bg-[var(--color-white)] border border-border rounded-lg p-5 mb-4">
           <p className="text-[13px] font-bold text-muted-foreground uppercase tracking-[0.5px] mb-[14px]">
             Upcoming milestones
           </p>

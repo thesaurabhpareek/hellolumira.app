@@ -144,7 +144,7 @@ export default function SuggestedPromptsRow({
         <button
           key={i}
           onClick={() => onSelect(prompt.message)}
-          className="p-[14px_16px] text-sm font-medium leading-[1.4] rounded-lg bg-white border border-border text-foreground cursor-pointer text-left transition-all duration-150 ease-out min-h-[64px] flex items-center"
+          className="p-[14px_16px] text-sm font-medium leading-[1.4] rounded-lg bg-[var(--color-white)] border border-border text-foreground cursor-pointer text-left transition-all duration-150 ease-out min-h-[64px] flex items-center"
           style={{
             touchAction: 'manipulation',
             WebkitTapHighlightColor: 'transparent',

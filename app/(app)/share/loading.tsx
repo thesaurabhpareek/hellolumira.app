@@ -3,7 +3,7 @@ export default function ShareLoading() {
     <div
       style={{
         minHeight: '100%',
-        background: '#FAFAF8',
+        background: 'var(--color-surface)',
         paddingBottom: '24px',
       }}
     >
@@ -14,7 +14,7 @@ export default function ShareLoading() {
             height: '28px',
             width: '45%',
             borderRadius: '8px',
-            background: '#F0F0EE',
+            background: 'var(--color-skeleton)',
             marginBottom: '24px',
             animation: 'pulse 1.5s ease-in-out infinite',
           }}
@@ -25,7 +25,7 @@ export default function ShareLoading() {
           style={{
             height: '160px',
             borderRadius: '14px',
-            background: '#F0F0EE',
+            background: 'var(--color-skeleton)',
             marginBottom: '24px',
             animation: 'pulse 1.5s ease-in-out infinite',
           }}
@@ -36,7 +36,7 @@ export default function ShareLoading() {
           style={{
             height: '48px',
             borderRadius: '14px',
-            background: '#F0F0EE',
+            background: 'var(--color-skeleton)',
             marginBottom: '24px',
             animation: 'pulse 1.5s ease-in-out infinite',
           }}
@@ -49,7 +49,7 @@ export default function ShareLoading() {
             style={{
               height: '48px',
               borderRadius: '14px',
-              background: '#F0F0EE',
+              background: 'var(--color-skeleton)',
               marginBottom: '10px',
               animation: 'pulse 1.5s ease-in-out infinite',
             }}

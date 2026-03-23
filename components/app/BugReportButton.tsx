@@ -215,7 +215,7 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
         >
           <div
             ref={modalRef}
-            className="bg-white w-full overflow-y-auto"
+            className="bg-[var(--color-white)] w-full overflow-y-auto"
             style={{
               borderRadius: '20px 20px 12px 12px',
               maxWidth: '440px',
@@ -298,7 +298,7 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
                   autoFocus
-                  className="w-full rounded-md text-[15px] text-foreground bg-white outline-none mb-3 min-h-[48px]"
+                  className="w-full rounded-md text-[15px] text-foreground bg-[var(--color-white)] outline-none mb-3 min-h-[48px]"
                   style={{
                     padding: '12px 16px',
                     border: '1.5px solid var(--color-border)',
@@ -312,7 +312,7 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   rows={4}
-                  className="w-full rounded-md text-[15px] text-foreground bg-white outline-none resize-y leading-[1.5] mb-4"
+                  className="w-full rounded-md text-[15px] text-foreground bg-[var(--color-white)] outline-none resize-y leading-[1.5] mb-4"
                   style={{
                     padding: '12px 16px',
                     border: '1.5px solid var(--color-border)',
