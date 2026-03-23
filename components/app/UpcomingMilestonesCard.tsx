@@ -134,7 +134,7 @@ export default function UpcomingMilestonesCard({ babyId, babyName }: Props) {
       {countdown && !celebration && (
         <div
           className="border-[1.5px] border-accent rounded-lg p-4 mb-4 flex items-center gap-3"
-          style={{ background: 'linear-gradient(135deg, var(--color-accent-light), #FFF7ED)' }}
+          style={{ background: 'var(--color-accent-light)' }}
         >
           <span className="text-[28px] leading-none shrink-0">
             {countdown.days <= 3 ? '✨' : '🎉'}

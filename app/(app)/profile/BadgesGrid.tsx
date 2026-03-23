@@ -263,7 +263,7 @@ export default function BadgesGrid({ badges, earnedIds, newBadgeId }: BadgesGrid
                 marginBottom: '14px',
               }}
             >
-              {earnedIds.includes(selectedBadge.id) ? 'Earned' : 'Locked'}
+              {earnedIds.includes(selectedBadge.id) ? 'Earned ✓' : 'Not earned yet'}
             </span>
 
             {/* Description */}
@@ -272,27 +272,60 @@ export default function BadgesGrid({ badges, earnedIds, newBadgeId }: BadgesGrid
                 fontSize: '14px',
                 color: 'var(--color-muted)',
                 lineHeight: 1.6,
-                marginBottom: '6px',
+                marginBottom: '12px',
               }}
             >
               {selectedBadge.description}
             </p>
 
-            {/* How to earn */}
-            <p
-              style={{
-                fontSize: '13px',
-                fontWeight: 600,
-                color: earnedIds.includes(selectedBadge.id) ? 'var(--color-primary)' : 'var(--color-accent)',
-                marginBottom: '16px',
-              }}
-            >
-              {earnedIds.includes(selectedBadge.id)
-                ? `+${selectedBadge.points} points earned!`
-                : `How to earn: ${selectedBadge.criteria}`}
-            </p>
+            {earnedIds.includes(selectedBadge.id) ? (
+              /* Points earned — shown only for earned badges */
+              <p
+                style={{
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  color: 'var(--color-primary)',
+                  marginBottom: '16px',
+                }}
+              >
+                +{selectedBadge.points} points earned!
+              </p>
+            ) : (
+              /* How to earn — shown only for unearned badges */
+              <div
+                style={{
+                  background: 'var(--color-accent-light)',
+                  borderRadius: '10px',
+                  padding: '10px 14px',
+                  marginBottom: '16px',
+                  textAlign: 'left',
+                }}
+              >
+                <p
+                  style={{
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    color: 'var(--color-accent)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.4px',
+                    marginBottom: '4px',
+                  }}
+                >
+                  How to earn
+                </p>
+                <p
+                  style={{
+                    fontSize: '13px',
+                    color: 'var(--color-slate)',
+                    lineHeight: 1.5,
+                  }}
+                >
+                  {selectedBadge.criteria}
+                </p>
+              </div>
+            )}
 
-            {/* Action CTA for locked badges */}
+            {/* Action CTA for unearned badges */}
             {!earnedIds.includes(selectedBadge.id) && BADGE_ACTIONS[selectedBadge.id] && (
               <a
                 href={BADGE_ACTIONS[selectedBadge.id].href}
