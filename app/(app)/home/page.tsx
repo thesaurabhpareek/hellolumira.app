@@ -70,12 +70,14 @@ export default async function HomePage() {
         : (ageInfo.age_in_months ?? 1)),
   }
 
-  // Fetch checkin, articles, and tribe data in parallel (all depend on baby)
+  // Fetch checkin, articles, tribe data, and concern follow-ups in parallel (all depend on baby)
   const today = new Date().toISOString().split('T')[0]
+  const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
   const [
     { data: checkinData },
     { data: articleRows },
     { data: tribeRows },
+    { data: upcomingFollowUps },
   ] = await Promise.all([
     supabase
       .from('daily_checkins')
@@ -105,10 +107,22 @@ export default async function HomePage() {
       .or(`stage_filter.eq.${baby.stage},stage_filter.eq.any,stage_filter.is.null`)
       .eq('is_active', true)
       .limit(5),
+
+    // Fetch concern sessions with a follow-up due within 24 hours
+    supabase
+      .from('concern_sessions')
+      .select('id, concern_text, follow_up_due, resolved_at')
+      .eq('profile_id', user.id)
+      .is('resolved_at', null)
+      .lte('follow_up_due', tomorrow)
+      .not('follow_up_due', 'is', null)
+      .order('follow_up_due', { ascending: true })
+      .limit(1),
   ])
 
   const recentCheckins = (checkinData as DailyCheckin[] | null) ?? []
   const todayCheckin = recentCheckins.find(c => c.checkin_date === today) ?? null
+  const upcomingFollowUp = upcomingFollowUps?.[0] ?? null
 
   // Pick the most relevant article (closest to current week/month, rotate daily)
   let featuredArticle: ArticleInsightProps | null = null
@@ -255,6 +269,32 @@ export default async function HomePage() {
         >
           {getAgeSubtitle(baby, ageInfo)}
         </p>
+
+        {/* ── Concern follow-up reminder ── */}
+        {upcomingFollowUp && (
+          <div style={{
+            background: 'var(--color-primary-light)',
+            border: '1.5px solid var(--color-primary-mid)',
+            borderRadius: '16px',
+            padding: '16px',
+            marginBottom: '16px',
+          }}>
+            <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-primary)', marginBottom: '4px' }}>
+              💬 Follow-up reminder
+            </p>
+            <p style={{ fontSize: '14px', color: 'var(--color-slate)', marginBottom: '12px' }}>
+              You had a concern about &ldquo;{upcomingFollowUp.concern_text?.slice(0, 80)}...&rdquo; — how is it going now?
+            </p>
+            <Link href="/talk" style={{
+              fontSize: '13px',
+              fontWeight: 600,
+              color: 'var(--color-primary)',
+              textDecoration: 'none',
+            }}>
+              Check in with Lumira &rarr;
+            </Link>
+          </div>
+        )}
 
         {/* ── Story strip ── */}
         <StoryStrip />
