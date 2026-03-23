@@ -245,7 +245,7 @@ export default async function HomePage() {
         display: 'flex',
         flexDirection: 'column',
         background: 'var(--color-surface)',
-        paddingBottom: '160px',
+        paddingBottom: '24px',
       }}
     >
       <div className="content-width mx-auto px-4 pt-6">
@@ -374,6 +374,37 @@ export default async function HomePage() {
             </p>
           </div>
         )}
+
+        {/* ── Inline CTA buttons ── */}
+        <div style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
+          <Link
+            href={baby.stage === 'planning' ? '/chat' : '/checkin'}
+            className="btn-primary"
+            style={{ flex: 1, fontSize: '14px' }}
+          >
+            {baby.stage === 'planning' ? 'Talk to Lumira \u2192' : 'Check in \u2192'}
+          </Link>
+          <Link
+            href={baby.stage === 'planning' ? '/content' : '/concern'}
+            style={{
+              flex: 1,
+              height: '52px',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 'var(--radius-md)',
+              border: '1.5px solid var(--color-border)',
+              background: 'var(--color-card)',
+              color: 'var(--color-slate)',
+              fontSize: '14px',
+              fontWeight: 600,
+              textDecoration: 'none',
+              transition: 'all 0.15s ease',
+            }}
+          >
+            {baby.stage === 'planning' ? 'Browse articles \u2192' : 'Something\u2019s on my mind \u2192'}
+          </Link>
+        </div>
 
         {/* ── Quick action cards ── */}
         <div
@@ -519,51 +550,6 @@ export default async function HomePage() {
         <ShareCard />
       </div>
 
-      {/* ── Bottom sticky bar ── */}
-      <div
-        style={{
-          position: 'fixed',
-          bottom: 'calc(56px + max(0px, env(safe-area-inset-bottom)))',
-          left: 0,
-          right: 0,
-          background: 'var(--color-surface)',
-          borderTop: '1px solid var(--color-border)',
-          padding: '10px 16px',
-          zIndex: 50,
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-        }}
-      >
-        <div className="content-width mx-auto" style={{ display: 'flex', gap: '12px' }}>
-          <Link
-            href={baby.stage === 'planning' ? '/chat' : '/checkin'}
-            className="btn-primary"
-            style={{ flex: 1, fontSize: '14px' }}
-          >
-            {baby.stage === 'planning' ? 'Talk to Lumira \u2192' : 'Check in \u2192'}
-          </Link>
-          <Link
-            href={baby.stage === 'planning' ? '/content' : '/concern'}
-            style={{
-              flex: 1,
-              height: '52px',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: 'var(--radius-md)',
-              border: '1.5px solid var(--color-border)',
-              background: 'var(--color-card)',
-              color: 'var(--color-slate)',
-              fontSize: '14px',
-              fontWeight: 600,
-              textDecoration: 'none',
-              transition: 'all 0.15s ease',
-            }}
-          >
-            {baby.stage === 'planning' ? 'Browse articles \u2192' : 'Something\u2019s on my mind \u2192'}
-          </Link>
-        </div>
-      </div>
 
       {/* Bug report floating button */}
       <BugReportButton userEmail={user.email} userName={profile.first_name} />
