@@ -326,7 +326,7 @@ export default function CheckinThread({ profile, baby, existingCheckin, prefill 
 
   return (
     <div
-      className="flex flex-col h-full"
+      className="flex flex-col flex-1 min-h-0"
       style={{ background: 'var(--color-surface)' }}
     >
       {/* Prefill toast from email link */}
@@ -453,6 +453,7 @@ export default function CheckinThread({ profile, baby, existingCheckin, prefill 
       <div
         ref={inputBarRef}
         className="shrink-0 bg-[var(--color-white)] border-t border-border px-4 py-3 z-50"
+        style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}
       >
         <div className="content-width mx-auto flex gap-[10px] items-end">
           <textarea
