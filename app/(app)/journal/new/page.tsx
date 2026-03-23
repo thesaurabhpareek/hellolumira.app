@@ -42,11 +42,22 @@ export default function NewJournalEntryPage() {
 
     try {
       await attempt()
+      // Award seeds for writing a journal entry (fire-and-forget; ignore already-awarded)
+      void fetch('/api/seeds/award', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason: 'journal_entry' }),
+      }).catch(() => {})
       router.push('/home')
     } catch {
       try {
         await new Promise((r) => setTimeout(r, 1000))
         await attempt()
+        void fetch('/api/seeds/award', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ reason: 'journal_entry' }),
+        }).catch(() => {})
         router.push('/home')
       } catch (err) {
         setError(

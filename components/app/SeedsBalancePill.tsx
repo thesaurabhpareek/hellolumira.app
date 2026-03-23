@@ -1,25 +1,78 @@
 // components/app/SeedsBalancePill.tsx — Small pill showing seeds balance
 // Animates with bounce + glow + floating "+N" when seeds are awarded
-// v1.1.0 — Migrated inline styles → Tailwind classes
+// v1.2.0 — Added Supabase realtime subscription so balance updates without a page reload
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
+import { createClient } from '@/lib/supabase/client'
 import { triggerCoinBounce } from '@/lib/animations'
 
 interface SeedsBalancePillProps {
+  /** Server-rendered initial value. Realtime subscription will update it live. */
   balance: number
 }
 
 export default function SeedsBalancePill({ balance }: SeedsBalancePillProps) {
   const pillRef = useRef<HTMLAnchorElement>(null)
   const prevBalanceRef = useRef(balance)
+  const [liveBalance, setLiveBalance] = useState(balance)
   const [displayBalance, setDisplayBalance] = useState(balance)
 
+  // Keep liveBalance in sync when the server re-renders with a new prop
+  useEffect(() => {
+    setLiveBalance(balance)
+  }, [balance])
+
+  // Realtime: subscribe to the authenticated user's seeds_balance column
+  useEffect(() => {
+    const supabase = createClient()
+    let userId: string | null = null
+
+    const subscribe = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+      userId = user.id
+
+      const channel = supabase
+        .channel('seeds-balance')
+        .on(
+          'postgres_changes',
+          {
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'profiles',
+            filter: `id=eq.${userId}`,
+          },
+          (payload) => {
+            const newBalance = (payload.new as { seeds_balance?: number }).seeds_balance
+            if (typeof newBalance === 'number') {
+              setLiveBalance(newBalance)
+            }
+          }
+        )
+        .subscribe()
+
+      return channel
+    }
+
+    let channelRef: ReturnType<typeof supabase.channel> | null = null
+    subscribe().then((ch) => {
+      if (ch) channelRef = ch
+    })
+
+    return () => {
+      if (channelRef) {
+        supabase.removeChannel(channelRef)
+      }
+    }
+  }, [])
+
+  // Animate counter whenever liveBalance changes
   useEffect(() => {
     const prev = prevBalanceRef.current
-    const diff = balance - prev
-    prevBalanceRef.current = balance
+    const diff = liveBalance - prev
+    prevBalanceRef.current = liveBalance
 
     if (diff > 0 && pillRef.current) {
       triggerCoinBounce(pillRef.current, diff)
@@ -34,9 +87,9 @@ export default function SeedsBalancePill({ balance }: SeedsBalancePillProps) {
       }
       requestAnimationFrame(tick)
     } else {
-      setDisplayBalance(balance)
+      setDisplayBalance(liveBalance)
     }
-  }, [balance])
+  }, [liveBalance])
 
   return (
     <Link
