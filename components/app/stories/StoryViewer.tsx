@@ -307,9 +307,10 @@ export default function StoryViewer({
         </div>
       )}
 
-      {/* Content area (tap zones) */}
+      {/* Content area (tap zones + visible nav buttons) */}
       <div
-        className="flex-1 flex flex-col mx-2 mb-2 overflow-hidden rounded-lg"
+        className="flex-1 flex flex-col mx-2 mb-2 overflow-hidden rounded-lg relative"
+        style={{ background: currentStory.text_bg_color || 'var(--story-palette-1)' }}
         onClick={handleTapZone}
         onMouseDown={handlePressStart}
         onMouseUp={handlePressEnd}
@@ -327,6 +328,34 @@ export default function StoryViewer({
           story={currentStory}
           isOwn={isOwn}
         />
+
+        {/* Prev button — only when there's a previous story or group */}
+        {(storyIndex > 0 || groupIndex > 0) && (
+          <button
+            type="button"
+            aria-label="Previous story"
+            onClick={(e) => { e.stopPropagation(); goPrev() }}
+            className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center rounded-full touch-manipulation"
+            style={{ background: 'rgba(0,0,0,0.30)', WebkitTapHighlightColor: 'transparent' }}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M15 18l-6-6 6-6" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+        )}
+
+        {/* Next button — always shown */}
+        <button
+          type="button"
+          aria-label="Next story"
+          onClick={(e) => { e.stopPropagation(); goNext() }}
+          className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center rounded-full touch-manipulation"
+          style={{ background: 'rgba(0,0,0,0.30)', WebkitTapHighlightColor: 'transparent' }}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M9 18l6-6-6-6" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
       </div>
 
       {/* Footer */}
