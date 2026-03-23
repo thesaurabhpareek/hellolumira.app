@@ -3,7 +3,7 @@
  * @description POST /api/seeds/award — Awards seeds to the authenticated user.
  *   This endpoint is for CLIENT-SIDE callers (browser fetch with cookies).
  *   Server-side API routes should use `awardSeeds()` from `@/lib/seeds` directly.
- * @version 2.0.0
+ * @version 3.0.0
  * @since March 2026
  */
 
@@ -16,8 +16,8 @@ import { awardSeeds } from '@/lib/seeds'
 
 /**
  * SECURITY: Only these reasons can be claimed from the client side.
- * Server-side routes (checkin, quiz, tribe posts) call awardSeeds() directly
- * and can use any reason. This prevents users from farming seeds via the API.
+ * Server-side routes (checkin, quiz, tribe posts, story react/reply) call awardSeeds()
+ * directly and can use any reason. This prevents users from farming seeds via the API.
  */
 const CLIENT_ALLOWED_REASONS = new Set([
   'first_share',
@@ -26,10 +26,14 @@ const CLIENT_ALLOWED_REASONS = new Set([
   'complete_profile',
   'profile_field_completion',
   'journal_entry',
+  'log_concern',
+  'react_to_story',
+  'reply_to_story',
 ])
 
 interface AwardRequest {
   reason: string
+  metadata?: Record<string, unknown>
 }
 
 export async function POST(request: NextRequest) {
@@ -82,15 +86,29 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    return NextResponse.json({
-      success: true,
-      already_awarded: result.already_awarded,
-      amount: result.amount,
-      reason,
-      message: result.already_awarded
-        ? 'Seeds already awarded for this action'
-        : `+${result.amount} seeds earned!`,
-    })
+    // Fetch updated balance to return to caller
+    let newBalance = 0
+    if (!result.already_awarded) {
+      const { data: profileRow } = await supabase
+        .from('profiles')
+        .select('seeds_balance')
+        .eq('id', user.id)
+        .single()
+      newBalance = (profileRow as { seeds_balance?: number } | null)?.seeds_balance ?? 0
+    }
+
+    return NextResponse.json(
+      {
+        awarded: !result.already_awarded,
+        amount: result.amount,
+        new_balance: newBalance,
+        reason,
+        message: result.already_awarded
+          ? 'Seeds already awarded for this action'
+          : `+${result.amount} seeds earned!`,
+      },
+      { headers: SECURITY_HEADERS }
+    )
   } catch (err) {
     console.error('[seeds/award] Error:', err)
     return NextResponse.json(

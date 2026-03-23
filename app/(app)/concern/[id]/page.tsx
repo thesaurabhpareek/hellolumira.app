@@ -142,11 +142,23 @@ export default function ConcernFlowPage() {
 
     try {
       const data = await attempt()
+      // Award seeds for logging a concern (fire-and-forget; deduped daily)
+      void fetch('/api/seeds/award', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason: 'log_concern' }),
+      }).catch(() => {})
       router.push(`/concern/${concernId}/summary?session=${data.session_id}`)
     } catch {
       try {
         await new Promise((r) => setTimeout(r, 1000))
         const data = await attempt()
+        // Award seeds for logging a concern (fire-and-forget; deduped daily)
+        void fetch('/api/seeds/award', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ reason: 'log_concern' }),
+        }).catch(() => {})
         router.push(`/concern/${concernId}/summary?session=${data.session_id}`)
       } catch {
         setError("The summary isn't ready yet — tap to try again.")

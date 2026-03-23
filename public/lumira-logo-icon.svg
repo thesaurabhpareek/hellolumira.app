@@ -1,0 +1,6 @@
+<svg viewBox="0 0 512 576" xmlns="http://www.w3.org/2000/svg">
+  <!-- Lumira logo icon: arch + amber dot -->
+  <!-- Scaled from 32x36 viewBox to 512x576 (16x) for high resolution -->
+  <circle cx="256" cy="96" r="88" fill="#C4844E" />
+  <path d="M 32,544 C 32,192 480,192 480,544" fill="none" stroke="#3D8178" stroke-width="44.8" stroke-linecap="round" />
+</svg>

@@ -1,12 +1,12 @@
 // components/app/SeedsBalancePill.tsx — Small pill showing seeds balance
 // Animates with bounce + glow + floating "+N" when seeds are awarded
-// v1.2.0 — Added Supabase realtime subscription so balance updates without a page reload
+// v2.0.0 — Added toast notification when new seeds land via realtime
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
-import { triggerCoinBounce } from '@/lib/animations'
+import { triggerCoinBounce, showToast } from '@/lib/animations'
 
 interface SeedsBalancePillProps {
   /** Server-rendered initial value. Realtime subscription will update it live. */
@@ -18,6 +18,8 @@ export default function SeedsBalancePill({ balance }: SeedsBalancePillProps) {
   const prevBalanceRef = useRef(balance)
   const [liveBalance, setLiveBalance] = useState(balance)
   const [displayBalance, setDisplayBalance] = useState(balance)
+  // Track whether this is the initial mount so we don't toast on first render
+  const isMountedRef = useRef(false)
 
   // Keep liveBalance in sync when the server re-renders with a new prop
   useEffect(() => {
@@ -26,6 +28,7 @@ export default function SeedsBalancePill({ balance }: SeedsBalancePillProps) {
 
   // Realtime: subscribe to the authenticated user's seeds_balance column
   useEffect(() => {
+    isMountedRef.current = true
     const supabase = createClient()
     let userId: string | null = null
 
@@ -68,7 +71,7 @@ export default function SeedsBalancePill({ balance }: SeedsBalancePillProps) {
     }
   }, [])
 
-  // Animate counter whenever liveBalance changes
+  // Animate counter + show toast whenever liveBalance increases
   useEffect(() => {
     const prev = prevBalanceRef.current
     const diff = liveBalance - prev
@@ -76,6 +79,11 @@ export default function SeedsBalancePill({ balance }: SeedsBalancePillProps) {
 
     if (diff > 0 && pillRef.current) {
       triggerCoinBounce(pillRef.current, diff)
+
+      // Show a brief toast (only after initial mount, not on first render)
+      if (isMountedRef.current) {
+        showToast(`🌱 +${diff} seed${diff === 1 ? '' : 's'} earned!`, 2000)
+      }
 
       const start = performance.now()
       const duration = 300

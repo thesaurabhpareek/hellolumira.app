@@ -231,18 +231,28 @@ export async function POST(request: NextRequest) {
       await supabase.from('daily_checkins').insert(upsertData)
     }
 
-    // Update checkin streak (fire-and-forget)
+    // Update checkin streak, then award streak milestone bonuses if applicable
     supabase.rpc('update_checkin_streak', { p_profile_id: profile_id }).then(({ data: newStreak, error: streakErr }) => {
       if (streakErr) {
         console.error('[checkin-conversation] Failed to update streak:', streakErr.message)
       } else {
         console.log(`[checkin-conversation] Streak updated to ${newStreak} for ${profile_id}`)
+        // Award one-time streak milestone bonuses (deduped by ONE_TIME_REASONS logic)
+        if (newStreak === 7) {
+          void awardSeeds(profile_id, 'streak_7_days').catch(() => {})
+        } else if (newStreak === 30) {
+          void awardSeeds(profile_id, 'streak_30_days').catch(() => {})
+        }
       }
     })
 
-    // Award seeds directly (no HTTP roundtrip needed)
+    // Award daily check-in seeds
     void awardSeeds(profile_id, 'daily_checkin').catch(() => {})
-    void awardSeeds(profile_id, 'daily_streak_bonus').catch(() => {})
+
+    // Award first-ever check-in bonus (one-time, deduped)
+    if (!profileData.first_checkin_complete) {
+      void awardSeeds(profile_id, 'first_checkin').catch(() => {})
+    }
 
     // Check and award badges (fire-and-forget)
     fetch(new URL('/api/badges/check', request.url).toString(), {

@@ -9,6 +9,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { SECURITY_HEADERS } from '@/lib/utils'
 import { isValidUUID } from '@/lib/validation'
+import { awardSeeds } from '@/lib/seeds'
 
 const ALLOWED_EMOJIS = ['❤️', '😊', '🙌', '😮', '💙', '🌙'] as const
 
@@ -102,6 +103,11 @@ export async function POST(
       const { data: storyData } = await supabase.from('stories').select('reaction_count').eq('id', storyId).single()
       await supabase.from('stories').update({ reaction_count: (storyData?.reaction_count ?? 0) + 1 }).eq('id', storyId)
       action = 'added'
+    }
+
+    // Award seeds for reacting to a story (only when adding, not removing; deduped daily)
+    if (action === 'added') {
+      void awardSeeds(user.id, 'react_to_story').catch(() => {})
     }
 
     return NextResponse.json({ action, emoji }, { headers: SECURITY_HEADERS })

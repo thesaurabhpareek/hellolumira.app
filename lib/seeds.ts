@@ -3,46 +3,36 @@
  * @description Server-side seed awarding logic. Call directly from any API route
  *   without needing HTTP roundtrips or auth cookie forwarding.
  *   Deduplicates by (profile_id, reason, reference_date).
- * @version 1.1.0
+ * @version 2.0.0
  * @since March 2026
  */
 
 /*
  * ============================================================
- * SEEDS GAMIFICATION REQUIREMENTS
+ * SEEDS GAMIFICATION — canonical amounts (see docs/SEEDS-PRD.md)
  * ============================================================
  *
- * EARNING OPPORTUNITIES
- * ---------------------
- * Daily actions (once per calendar day per user):
- *   daily_checkin           +5 seeds/day   Complete the daily check-in conversation
- *   log_concern             +3 seeds/day   Log a new concern
- *   read_article            +2 seeds/day   Read a content article (once per article per day)
- *   complete_quiz           +3 seeds/day   Complete the daily quiz
- *   post_in_tribe           +4 seeds/day   Create a post in any tribe
- *   comment_in_tribe        +2 seeds/day   Comment on a tribe post
- *   journal_entry           +3 seeds/day   Write a journal entry
- *   daily_streak_bonus      +2 seeds/day   Bonus awarded alongside check-in when streak >= 7 days
+ * DAILY ACTIONS (once per calendar day per user):
+ *   daily_checkin           +5 seeds    Complete the daily check-in
+ *   log_concern             +10 seeds   Log a concern via the concern flow
+ *   read_article            +3 seeds    Read a content article
+ *   complete_quiz           +10 seeds   Complete the daily quiz question
+ *   post_in_tribe           +10 seeds   Create a post in any tribe
+ *   comment_in_tribe        +5 seeds    Comment on a tribe post
+ *   react_to_story          +2 seeds    React to a story (first per day)
+ *   reply_to_story          +5 seeds    Reply to a story
+ *   journal_entry           +3 seeds    Write a journal entry
  *
- * One-time actions (awarded once, ever):
- *   complete_profile        +10 seeds      Fill out profile basics
- *   invite_partner          +15 seeds      Send a partner invite
- *   first_share             +5 seeds       First in-app share action
- *   profile_field_completion +5 seeds/field Fill individual profile fields (capped per field)
+ * STREAK MILESTONE BONUSES (one-time, keyed as one-time reasons):
+ *   streak_7_days           +25 seeds   Reach a 7-day streak
+ *   streak_30_days          +100 seeds  Reach a 30-day streak
  *
- * SPENDING OPPORTUNITIES (planned, not yet implemented)
- * -----------------------------------------------------
- *   Unlock premium article collection    50 seeds
- *   Unlock custom avatar frame           30 seeds
- *   Priority "Lumira Expert" response    20 seeds
- *   Unlock "Super Parent" tribe flair   100 seeds
- *   Redeem for partner discount code    200 seeds
- *
- * VISIBILITY IMPROVEMENTS NEEDED
- * --------------------------------
- *   - Toast notification showing seeds earned after each action (+N seeds 🌱)
- *   - Seeds history page listing recent seed_transactions
- *   - Optional: leaderboard among tribe members
+ * ONE-TIME ACTIONS (awarded once, ever):
+ *   first_checkin           +25 seeds   Complete the very first check-in
+ *   complete_profile        +50 seeds   Fill all core enrichment fields
+ *   invite_partner          +20 seeds   Send a partner invite
+ *   first_share             +5 seeds    First in-app share
+ *   profile_field_completion +5 seeds   Fill an individual profile field
  *
  * IMPLEMENTATION NOTES
  * --------------------
@@ -59,22 +49,36 @@ import { createServiceClient } from '@/lib/supabase/server'
 
 /** Seed reward amounts by reason */
 export const SEED_REWARDS: Record<string, number> = {
+  // Daily actions
   daily_checkin: 5,
-  log_concern: 3,
-  read_article: 2,
-  complete_quiz: 3,
-  post_in_tribe: 4,
-  comment_in_tribe: 2,
+  log_concern: 10,
+  read_article: 3,
+  complete_quiz: 10,
+  post_in_tribe: 10,
+  comment_in_tribe: 5,
+  react_to_story: 2,
+  reply_to_story: 5,
   journal_entry: 3,
-  complete_profile: 10,
-  invite_partner: 15,
-  daily_streak_bonus: 2,
+  // Streak milestone bonuses (one-time)
+  streak_7_days: 25,
+  streak_30_days: 100,
+  // One-time actions
+  first_checkin: 25,
+  complete_profile: 50,
+  invite_partner: 20,
   first_share: 5,
   profile_field_completion: 5, // variable amount — overridden by API route
 }
 
 /** One-time reasons — only awarded once ever (not per-day) */
-const ONE_TIME_REASONS = new Set(['complete_profile', 'invite_partner', 'first_share'])
+const ONE_TIME_REASONS = new Set([
+  'first_checkin',
+  'complete_profile',
+  'invite_partner',
+  'first_share',
+  'streak_7_days',
+  'streak_30_days',
+])
 
 export interface AwardResult {
   success: boolean
@@ -86,13 +90,18 @@ export interface AwardResult {
 /**
  * Award seeds to a user. Safe to call multiple times — deduplicates via DB unique index.
  * Works from any server context (no auth cookies needed).
+ *
+ * @param profileId - The user's profile UUID
+ * @param reason    - A key from SEED_REWARDS
+ * @param amount    - Optional override (used for profile_field_completion with variable amounts)
  */
 export async function awardSeeds(
   profileId: string,
-  reason: string
+  reason: string,
+  amount?: number
 ): Promise<AwardResult> {
-  const amount = SEED_REWARDS[reason]
-  if (!amount) {
+  const rewardAmount = amount ?? SEED_REWARDS[reason]
+  if (!rewardAmount) {
     console.warn(`[seeds] Unknown reward reason: ${reason}`)
     return { success: false, already_awarded: false, amount: 0, reason }
   }
@@ -110,7 +119,7 @@ export async function awardSeeds(
       .from('seed_transactions')
       .insert({
         profile_id: profileId,
-        amount,
+        amount: rewardAmount,
         reason,
         reference_date: referenceDate,
       })
@@ -127,7 +136,7 @@ export async function awardSeeds(
     // Atomically increment balance via RPC
     const { error: rpcError } = await serviceClient.rpc('increment_seeds_balance', {
       p_profile_id: profileId,
-      p_amount: amount,
+      p_amount: rewardAmount,
     })
 
     if (rpcError) {
@@ -142,14 +151,14 @@ export async function awardSeeds(
       const current = (profileRow as { seeds_balance?: number } | null)?.seeds_balance ?? 0
       const { error: updateError } = await serviceClient
         .from('profiles')
-        .update({ seeds_balance: current + amount })
+        .update({ seeds_balance: current + rewardAmount })
         .eq('id', profileId)
       if (updateError) {
         console.error(`[seeds] Fallback UPDATE also failed:`, updateError.message)
       }
     }
 
-    return { success: true, already_awarded: false, amount, reason }
+    return { success: true, already_awarded: false, amount: rewardAmount, reason }
   } catch (err) {
     console.error(`[seeds] Error awarding ${reason}:`, err)
     return { success: false, already_awarded: false, amount: 0, reason }

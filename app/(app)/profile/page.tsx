@@ -11,7 +11,8 @@ import ProfileCompletionCard from './ProfileCompletionCard'
 import BadgesGrid from './BadgesGrid'
 import AvatarPicker, { AvatarCircle } from './AvatarPicker'
 import BadgeChecker from './BadgeChecker'
-import { ArrowLeftIcon, SeedIcon, ChevronRightIcon, SettingsIcon, ShieldIcon, ShareIcon, EditIcon } from '@/components/icons'
+import SeedsDisplay from '@/components/app/gamification/SeedsDisplay'
+import { ArrowLeftIcon, ChevronRightIcon, SettingsIcon, ShieldIcon, ShareIcon, EditIcon } from '@/components/icons'
 import type { Profile, BabyProfile } from '@/types/app'
 
 export default async function ProfilePage() {
@@ -262,8 +263,9 @@ export default async function ProfilePage() {
             </p>
           </div>
 
-          {/* Seeds balance pill */}
-          <div
+          {/* Seeds balance — compact pill linking to history */}
+          <Link
+            href="/profile/seeds"
             style={{
               display: 'flex',
               flexDirection: 'column',
@@ -272,14 +274,16 @@ export default async function ProfilePage() {
               borderRadius: '14px',
               background: 'var(--color-accent-light)',
               flexShrink: 0,
+              textDecoration: 'none',
             }}
           >
-            <SeedIcon size={20} color="var(--color-accent)" />
+            <span style={{ fontSize: '20px', lineHeight: 1 }}>🌱</span>
             <span
               style={{
                 fontSize: '16px',
                 fontWeight: 700,
                 color: 'var(--color-accent)',
+                fontVariantNumeric: 'tabular-nums',
               }}
             >
               {seedsBalance}
@@ -294,7 +298,7 @@ export default async function ProfilePage() {
             >
               Seeds
             </span>
-          </div>
+          </Link>
         </div>
 
         {/* Bio */}
@@ -314,6 +318,11 @@ export default async function ProfilePage() {
             </p>
           </div>
         )}
+
+        {/* Seeds display — full card with level + progress bar */}
+        <Link href="/profile/seeds" style={{ display: 'block', textDecoration: 'none', marginBottom: '16px' }}>
+          <SeedsDisplay balance={seedsBalance} showLevel celebrateOnMount={false} />
+        </Link>
 
         {/* Stats row */}
         <div

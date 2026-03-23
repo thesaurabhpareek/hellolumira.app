@@ -9,6 +9,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { SECURITY_HEADERS } from '@/lib/utils'
 import { isValidUUID, sanitizeString } from '@/lib/validation'
+import { awardSeeds } from '@/lib/seeds'
 
 export async function POST(
   request: NextRequest,
@@ -72,6 +73,9 @@ export async function POST(
     // Increment reply_count on stories
     const { data: storyData } = await supabase.from('stories').select('reply_count').eq('id', storyId).single()
     await supabase.from('stories').update({ reply_count: (storyData?.reply_count ?? 0) + 1 }).eq('id', storyId)
+
+    // Award seeds for replying to a story (fire-and-forget; deduped daily)
+    void awardSeeds(user.id, 'reply_to_story').catch(() => {})
 
     return NextResponse.json({ reply }, { status: 201, headers: SECURITY_HEADERS })
   } catch (err) {
