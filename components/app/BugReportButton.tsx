@@ -101,13 +101,13 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
 
   return (
     <>
-      {/* Simple absolute-positioned button inside AppShell */}
+      {/* Fixed feedback button — bottom right, above nav */}
       <button
         aria-label="Send feedback"
         onClick={() => setIsOpen(true)}
         style={{
-          position: 'absolute',
-          right: '12px',
+          position: 'fixed',
+          right: 'max(12px, calc((100vw - 480px) / 2 + 12px))',
           bottom: 'calc(70px + max(0px, env(safe-area-inset-bottom)))',
           width: '40px',
           height: '40px',
