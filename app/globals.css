@@ -287,6 +287,9 @@
     /* ── Skeleton loading ── */
     --color-skeleton: #F0F0EE;
     --color-skeleton-shimmer: #E8E6E1;
+
+    /* ── Hover state background ── */
+    --color-hover: rgba(0, 0, 0, 0.03);
   }
 
   .dark {
@@ -364,6 +367,9 @@
     --color-green-light: #0F2A1D;
     --color-skeleton: #2A2826;
     --color-skeleton-shimmer: #343230;
+
+    /* ── Hover state background ── */
+    --color-hover: rgba(255, 255, 255, 0.06);
   }
 
   /* ── Theme transition (applied momentarily during toggle) ── */
@@ -660,6 +666,11 @@
     text-decoration: none;
   }
   .btn-ghost:hover { background: var(--color-surface); border-color: var(--color-primary-mid); color: var(--color-primary); }
+
+  /* Secondary/outline button — inline style pattern used in home bottom bar */
+  /* Dark mode: var(--color-white) already maps to #1C1A17 via the .dark override */
+  /* So bg-white inline buttons automatically get the dark surface. */
+  /* The sticky bar secondary button uses var(--color-white) already — no extra fix needed. */
 
   /* Safe area padding for iOS */
   .safe-bottom { padding-bottom: max(16px, env(safe-area-inset-bottom)); }

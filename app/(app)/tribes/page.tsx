@@ -421,7 +421,10 @@ function TribeCard({
       onMouseLeave={() => setHovered(false)}
       style={{
         display: 'flex', alignItems: 'flex-start', gap: '14px', width: '100%',
-        padding: '14px 16px', background: hovered ? '#FBF9F6' : 'var(--color-white)',
+        padding: '14px 16px',
+        background: hovered
+          ? `linear-gradient(var(--color-hover), var(--color-hover)), var(--color-white)`
+          : 'var(--color-white)',
         border: isMember ? '1px solid var(--color-border)' : '1px dashed var(--color-border)',
         borderRadius: '14px', cursor: 'pointer', textAlign: 'left',
         transition: 'all 0.2s ease', position: 'relative',

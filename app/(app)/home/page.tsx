@@ -17,6 +17,7 @@ import DailyQuestionCard from '@/components/app/DailyQuestionCard'
 import QuizCard from '@/components/app/QuizCard'
 import UpcomingMilestonesCard from '@/components/app/UpcomingMilestonesCard'
 import SeedsBalancePill from '@/components/app/SeedsBalancePill'
+import ThemeToggleButton from '@/components/app/ThemeToggleButton'
 import BugReportButton from '@/components/app/BugReportButton'
 import StageHeroCard from '@/components/app/StageHeroCard'
 import StoryStrip from '@/components/app/stories/StoryStrip'
@@ -229,10 +230,11 @@ export default async function HomePage() {
     >
       <div className="content-width mx-auto px-4 pt-6">
 
-        {/* ── Greeting + Seeds pill ── */}
+        {/* ── Greeting + Seeds pill + theme toggle ── */}
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
           <GreetingHeader firstName={profile.first_name} />
-          <div style={{ flexShrink: 0, marginTop: '4px' }}>
+          <div style={{ flexShrink: 0, marginTop: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <ThemeToggleButton />
             <SeedsBalancePill balance={profile.seeds_balance ?? 0} />
           </div>
         </div>
@@ -279,7 +281,7 @@ export default async function HomePage() {
           >
             <div
               style={{
-                background: 'linear-gradient(135deg, var(--color-primary), #4A9A8F)',
+                background: 'linear-gradient(135deg, var(--color-primary), var(--sage-400))',
                 borderRadius: 'var(--radius-lg)',
                 padding: '20px',
                 color: '#FFFFFF',
@@ -355,11 +357,11 @@ export default async function HomePage() {
           />
           <QuickAction
             href="/concern"
-            icon={<EditIcon size={24} color="#B91C1C" />}
+            icon={<EditIcon size={24} color="var(--color-red)" />}
             label="Log a concern"
-            bgColor="#FEF3F2"
-            borderColor="#FECACA"
-            textColor="#B91C1C"
+            bgColor="var(--error-bg)"
+            borderColor="var(--error-border)"
+            textColor="var(--error-text)"
           />
         </div>
 

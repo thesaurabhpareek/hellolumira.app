@@ -318,7 +318,7 @@ export default function TribeDetailPage() {
                 display: 'flex',
                 alignItems: 'center',
                 transition: 'all 0.2s ease',
-                background: activeSort === option.key ? '#3D8178' : '#F2F0EC',
+                background: activeSort === option.key ? '#3D8178' : 'var(--color-white)',
                 color: activeSort === option.key ? '#FFFFFF' : 'var(--color-muted)',
               }}
             >
@@ -454,7 +454,9 @@ function PostCard({ post, onClick, isOwner, onDelete, deleting }: { post: Post; 
       data-post-card
       style={{
         width: '100%', borderRadius: '14px',
-        background: hovered ? '#FBF9F6' : 'var(--color-white)',
+        background: hovered
+          ? `linear-gradient(var(--color-hover), var(--color-hover)), var(--color-white)`
+          : 'var(--color-white)',
         border: '1px solid var(--color-border)',
         transition: 'all 0.2s ease',
         transform: hovered ? 'translateY(-1px)' : 'translateY(0)',
