@@ -1136,18 +1136,19 @@ export function passkeyRemovedEmail({
   deviceHint,
   removedAt,
   supportUrl,
+  email = '{{email}}',
 }: {
   firstName: string
   deviceHint: string
   removedAt: string
   supportUrl: string
+  email?: string
 }): EmailTemplate {
   const subject = `Passkey removed from your Lumira account`
-  const preheader = `Face ID sign-in was removed from ${deviceHint}.`
+  const preheader = `Face ID sign-in was removed from ${deviceHint}. You can still sign in with email.`
 
   const safeName = escapeHtml(firstName)
   const safeDevice = escapeHtml(deviceHint)
-  const safeSupportUrl = supportUrl
 
   let formattedDate = removedAt
   try {
@@ -1161,32 +1162,32 @@ export function passkeyRemovedEmail({
   }
 
   const content = `
-    <h1 style="margin:0 0 16px 0;font-size:24px;font-weight:700;color:${COLORS.slate};font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;line-height:1.3;">
+    <h1 style="margin:0 0 8px 0;font-size:24px;font-weight:700;color:${COLORS.slate};font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;line-height:1.3;">
       Passkey removed
     </h1>
 
-    <p style="margin:0 0 20px 0;font-size:16px;line-height:1.6;color:${COLORS.slate};">
-      Hi ${safeName}, the passkey on <strong>${safeDevice}</strong> has been removed from your Lumira account.
+    <p style="margin:0 0 24px 0;font-size:16px;line-height:1.6;color:${COLORS.slate};">
+      Hi ${safeName}, the Face ID passkey on <strong>${safeDevice}</strong> has been removed from your Lumira account.
     </p>
 
-    <!-- Details box -->
+    <!-- Event details box -->
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:0 0 24px 0;">
       <tr>
-        <td style="padding:20px;background:${COLORS.sand100};border-radius:12px;">
-          <p style="margin:0 0 8px 0;font-size:13px;font-weight:600;color:${COLORS.muted};text-transform:uppercase;letter-spacing:0.5px;">
+        <td style="padding:20px;background:${COLORS.sand100};border-radius:12px;border:1px solid ${COLORS.border};">
+          <p style="margin:0 0 12px 0;font-size:12px;font-weight:600;color:${COLORS.muted};text-transform:uppercase;letter-spacing:0.5px;">
             Event details
           </p>
           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
             <tr>
-              <td style="padding:6px 0;border-bottom:1px solid ${COLORS.border};">
-                <span style="font-size:14px;color:${COLORS.muted};display:inline-block;width:80px;">Device</span>
-                <span style="font-size:14px;color:${COLORS.slate};font-weight:500;">${safeDevice}</span>
+              <td style="padding:8px 0;border-bottom:1px solid ${COLORS.border};">
+                <span style="font-size:13px;color:${COLORS.muted};display:inline-block;min-width:80px;">Device</span>
+                <span style="font-size:14px;color:${COLORS.slate};font-weight:600;">${safeDevice}</span>
               </td>
             </tr>
             <tr>
-              <td style="padding:6px 0;">
-                <span style="font-size:14px;color:${COLORS.muted};display:inline-block;width:80px;">Removed</span>
-                <span style="font-size:14px;color:${COLORS.slate};font-weight:500;">${escapeHtml(formattedDate)}</span>
+              <td style="padding:8px 0;">
+                <span style="font-size:13px;color:${COLORS.muted};display:inline-block;min-width:80px;">Removed</span>
+                <span style="font-size:14px;color:${COLORS.slate};font-weight:600;">${escapeHtml(formattedDate)}</span>
               </td>
             </tr>
           </table>
@@ -1194,28 +1195,41 @@ export function passkeyRemovedEmail({
       </tr>
     </table>
 
-    <p style="margin:0 0 20px 0;font-size:15px;line-height:1.6;color:${COLORS.slate};">
-      You can still sign in with your email. You can add a new passkey anytime in <strong>Settings &rarr; Security</strong>.
-    </p>
-
-    <!-- Warning section -->
-    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:0 0 8px 0;">
+    <!-- Still accessible info -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:0 0 24px 0;">
       <tr>
-        <td style="padding:14px 16px;background:#FEF3CD;border-radius:10px;border-left:4px solid ${COLORS.terra400};">
+        <td style="padding:16px 20px;background:#EBF5F4;border-radius:10px;border-left:4px solid ${COLORS.sage500};">
+          <p style="margin:0 0 4px 0;font-size:13px;font-weight:600;color:${COLORS.sage600};">Your account is still accessible</p>
           <p style="margin:0;font-size:14px;line-height:1.6;color:${COLORS.slate};">
-            <strong style="color:#9B6B3A;">If you didn&rsquo;t do this</strong>, your account may be at risk. Contact us immediately.
+            You can still sign in with your email &mdash; just enter your address and we&rsquo;ll send you a link. You can re-add Face ID sign-in anytime in <strong>Settings &rarr; Security</strong>.
           </p>
         </td>
       </tr>
     </table>
 
-    ${ctaButton('Contact Support', safeSupportUrl)}
+    <!-- Warning section -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:0 0 24px 0;">
+      <tr>
+        <td style="padding:16px 20px;background:#FEF3CD;border-radius:10px;border-left:4px solid #C4844E;">
+          <p style="margin:0 0 4px 0;font-size:13px;font-weight:700;color:#9B6B3A;">&#9888; Didn&rsquo;t remove this yourself?</p>
+          <p style="margin:0;font-size:14px;line-height:1.6;color:${COLORS.slate};">
+            Your account may be at risk. Contact our support team immediately.
+          </p>
+        </td>
+      </tr>
+    </table>
+
+    ${ctaButton('Contact Support', supportUrl)}
+
+    <p style="margin:0;font-size:12px;color:${COLORS.mutedLight};text-align:center;line-height:1.6;">
+      This security notification cannot be unsubscribed as it is required to protect your account.
+    </p>
   `
 
   return {
     subject,
     preheader,
-    html: emailWrapper(content, preheader),
+    html: emailWrapper(content, preheader, email, true),
   }
 }
 
@@ -1228,65 +1242,94 @@ export function passkeySuspendedEmail({
   deviceHint,
   supportUrl,
   settingsUrl,
+  email = '{{email}}',
 }: {
   firstName: string
   deviceHint: string
   supportUrl: string
   settingsUrl: string
+  email?: string
 }): EmailTemplate {
-  const subject = `Unusual sign-in activity on your Lumira account`
-  const preheader = `Your passkey sign-in has been temporarily suspended.`
+  const subject = `Security notice: Unusual sign-in activity on your Lumira account`
+  const preheader = `Your passkey has been temporarily suspended. Your account is still accessible via email.`
 
   const safeName = escapeHtml(firstName)
   const safeDevice = escapeHtml(deviceHint)
-  const safeSupportUrl = supportUrl
-  const _safeSettingsUrl = settingsUrl
   const loginUrl = `${APP_URL}/login`
 
   const content = `
-    <!-- Security alert banner -->
+    <!-- Security notice banner -->
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:0 0 24px 0;">
       <tr>
-        <td style="padding:12px 16px;background:#FDECEC;border-radius:10px;border-left:4px solid #C0392B;text-align:center;">
-          <p style="margin:0;font-size:14px;font-weight:700;color:#C0392B;letter-spacing:0.5px;text-transform:uppercase;">
-            &#9888; Security Alert
+        <td style="padding:14px 16px;background:#FDECEC;border-radius:10px;border-left:4px solid #C0392B;text-align:center;">
+          <p style="margin:0;font-size:13px;font-weight:700;color:#C0392B;letter-spacing:0.8px;text-transform:uppercase;">
+            &#9888; Security Notice
           </p>
         </td>
       </tr>
     </table>
 
-    <h1 style="margin:0 0 16px 0;font-size:24px;font-weight:700;color:${COLORS.slate};font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;line-height:1.3;">
+    <h1 style="margin:0 0 8px 0;font-size:24px;font-weight:700;color:${COLORS.slate};font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;line-height:1.3;">
       Unusual sign-in activity detected
     </h1>
 
-    <p style="margin:0 0 20px 0;font-size:16px;line-height:1.6;color:${COLORS.slate};">
+    <p style="margin:0 0 24px 0;font-size:16px;line-height:1.6;color:${COLORS.slate};">
       Hi ${safeName}, we detected unusual activity with the passkey on <strong>${safeDevice}</strong>. As a precaution, we&rsquo;ve temporarily suspended that passkey.
     </p>
 
-    <!-- Action required box -->
+    <!-- Account still accessible -->
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:0 0 24px 0;">
       <tr>
-        <td style="padding:20px;background:#FEF3CD;border-radius:12px;border-left:4px solid ${COLORS.terra400};">
-          <p style="margin:0 0 12px 0;font-size:14px;font-weight:700;color:#9B6B3A;text-transform:uppercase;letter-spacing:0.5px;">
-            Action required
+        <td style="padding:16px 20px;background:#EBF5F4;border-radius:10px;border-left:4px solid ${COLORS.sage500};">
+          <p style="margin:0;font-size:14px;line-height:1.6;color:${COLORS.slate};">
+            <strong style="color:${COLORS.sage600};">Your account is still accessible.</strong> You can sign in with your email &mdash; just enter your address and we&rsquo;ll send you a link.
+          </p>
+        </td>
+      </tr>
+    </table>
+
+    <!-- Action required box with numbered steps -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:0 0 24px 0;">
+      <tr>
+        <td style="padding:20px;background:#FEF3CD;border-radius:12px;border-left:4px solid #C4844E;">
+          <p style="margin:0 0 16px 0;font-size:13px;font-weight:700;color:#9B6B3A;text-transform:uppercase;letter-spacing:0.5px;">
+            What to do next
           </p>
           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
             <tr>
-              <td style="padding:6px 0;">
-                <span style="font-size:14px;color:${COLORS.slate};font-weight:600;">1.</span>
-                <span style="font-size:14px;color:${COLORS.slate};margin-left:8px;">Sign in with your magic link (email)</span>
+              <td style="padding:8px 0;border-bottom:1px solid rgba(196,132,78,0.2);">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+                  <tr>
+                    <td style="width:28px;vertical-align:top;">
+                      <span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:#C4844E;color:#fff;font-size:12px;font-weight:700;line-height:22px;text-align:center;">1</span>
+                    </td>
+                    <td style="padding-left:10px;font-size:14px;color:${COLORS.slate};line-height:1.5;">Sign in with your email link (below)</td>
+                  </tr>
+                </table>
               </td>
             </tr>
             <tr>
-              <td style="padding:6px 0;">
-                <span style="font-size:14px;color:${COLORS.slate};font-weight:600;">2.</span>
-                <span style="font-size:14px;color:${COLORS.slate};margin-left:8px;">Go to <strong>Settings &rarr; Security</strong></span>
+              <td style="padding:8px 0;border-bottom:1px solid rgba(196,132,78,0.2);">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+                  <tr>
+                    <td style="width:28px;vertical-align:top;">
+                      <span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:#C4844E;color:#fff;font-size:12px;font-weight:700;line-height:22px;text-align:center;">2</span>
+                    </td>
+                    <td style="padding-left:10px;font-size:14px;color:${COLORS.slate};line-height:1.5;">Go to <strong>Settings &rarr; Security</strong></td>
+                  </tr>
+                </table>
               </td>
             </tr>
             <tr>
-              <td style="padding:6px 0;">
-                <span style="font-size:14px;color:${COLORS.slate};font-weight:600;">3.</span>
-                <span style="font-size:14px;color:${COLORS.slate};margin-left:8px;">Remove the affected passkey and add a new one</span>
+              <td style="padding:8px 0;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+                  <tr>
+                    <td style="width:28px;vertical-align:top;">
+                      <span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:#C4844E;color:#fff;font-size:12px;font-weight:700;line-height:22px;text-align:center;">3</span>
+                    </td>
+                    <td style="padding-left:10px;font-size:14px;color:${COLORS.slate};line-height:1.5;">Remove the suspended passkey and set up a new one</td>
+                  </tr>
+                </table>
               </td>
             </tr>
           </table>
@@ -1296,15 +1339,16 @@ export function passkeySuspendedEmail({
 
     ${ctaButton('Sign in with email', loginUrl)}
 
-    <p style="margin:8px 0 24px 0;font-size:14px;line-height:1.6;color:${COLORS.slate};text-align:center;">
-      If you didn&rsquo;t cause this, contact our security team immediately:
+    <p style="margin:8px 0 16px 0;font-size:14px;line-height:1.6;color:${COLORS.slate};text-align:center;">
+      Didn&rsquo;t cause this? Contact our security team immediately:
     </p>
 
-    <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:0 auto 32px auto;">
+    <!-- Secondary CTA: Contact Support (outlined) -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:0 auto 24px auto;">
       <tr>
-        <td align="center" style="border-radius:14px;background:${COLORS.sand100};border:2px solid ${COLORS.border};">
-          <a href="${safeSupportUrl}" target="_blank"
-             style="background:${COLORS.sand100};color:${COLORS.slate};font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;font-size:15px;font-weight:600;line-height:1.2;text-decoration:none;display:inline-block;padding:14px 28px;border-radius:12px;box-sizing:border-box;">
+        <td align="center" style="border-radius:8px;border:2px solid ${COLORS.border};">
+          <a href="${supportUrl}" target="_blank"
+             style="background:${COLORS.white};color:${COLORS.slate};font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;font-size:15px;font-weight:600;line-height:1.2;text-decoration:none;display:inline-block;padding:14px 28px;border-radius:6px;box-sizing:border-box;min-height:48px;">
             Contact Support
           </a>
         </td>
@@ -1312,15 +1356,14 @@ export function passkeySuspendedEmail({
     </table>
 
     <p style="margin:0;font-size:12px;color:${COLORS.mutedLight};text-align:center;line-height:1.6;">
-      This is an automated security alert. If you have questions, contact
-      <a href="mailto:support@hellolumira.app" style="color:${COLORS.mutedLight};text-decoration:underline;">support@hellolumira.app</a>
+      This is an automated security alert. Questions? <a href="mailto:support@hellolumira.app" style="color:${COLORS.mutedLight};text-decoration:underline;">support@hellolumira.app</a>
     </p>
   `
 
   return {
     subject,
     preheader,
-    html: emailWrapper(content, preheader),
+    html: emailWrapper(content, preheader, email, true),
   }
 }
 
@@ -1331,49 +1374,77 @@ export function passkeySuspendedEmail({
 export function passkeyRecoveryNudgeEmail({
   firstName,
   enrollUrl,
+  email = '{{email}}',
 }: {
   firstName: string
   enrollUrl: string
+  email?: string
 }): EmailTemplate {
   const subject = `Set up Face ID on your new device`
-  const preheader = `Re-add Face ID sign-in so you can skip the email next time.`
+  const preheader = `Re-add Face ID sign-in so you can skip the email wait next time.`
 
   const safeName = escapeHtml(firstName)
-  const safeEnrollUrl = enrollUrl
 
   const content = `
-    <h1 style="margin:0 0 16px 0;font-size:24px;font-weight:700;color:${COLORS.slate};font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;line-height:1.3;">
+    <!-- Friendly icon -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:0 auto 24px auto;">
+      <tr>
+        <td align="center" style="width:64px;height:64px;background:#EBF5F4;border-radius:50%;">
+          <span style="font-size:32px;line-height:64px;display:block;">&#128241;</span>
+        </td>
+      </tr>
+    </table>
+
+    <h1 style="margin:0 0 8px 0;font-size:24px;font-weight:700;color:${COLORS.slate};font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;line-height:1.3;text-align:center;">
       Want to skip the email next time?
     </h1>
 
-    <p style="margin:0 0 20px 0;font-size:16px;line-height:1.6;color:${COLORS.slate};">
-      Hi ${safeName}, looks like you&rsquo;re signing in with your email &mdash; which always works! If you have a new phone, you can re-add Face ID sign-in in under a minute.
+    <p style="margin:0 0 24px 0;font-size:16px;line-height:1.6;color:${COLORS.slate};">
+      Hi ${safeName}, looks like you&rsquo;re signing in with your email &mdash; which always works. If you have a new phone, you can re-add Face ID sign-in in under a minute.
     </p>
 
-    <!-- Steps -->
+    <!-- Step-by-step guide with numbered circles -->
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:0 0 24px 0;">
       <tr>
         <td style="padding:20px;background:${COLORS.sand100};border-radius:12px;">
-          <p style="margin:0 0 12px 0;font-size:14px;font-weight:600;color:${COLORS.muted};text-transform:uppercase;letter-spacing:0.5px;">
+          <p style="margin:0 0 16px 0;font-size:12px;font-weight:600;color:${COLORS.muted};text-transform:uppercase;letter-spacing:0.5px;">
             3 simple steps
           </p>
           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
             <tr>
-              <td style="padding:8px 0;border-bottom:1px solid ${COLORS.border};">
-                <span style="font-size:14px;color:${COLORS.sage500};font-weight:700;margin-right:10px;">1.</span>
-                <span style="font-size:15px;color:${COLORS.slate};">Open Lumira on your phone</span>
+              <td style="padding:10px 0;border-bottom:1px solid ${COLORS.border};">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+                  <tr>
+                    <td style="width:30px;vertical-align:middle;">
+                      <span style="display:inline-block;width:24px;height:24px;border-radius:50%;background:${COLORS.sage500};color:#fff;font-size:12px;font-weight:700;line-height:24px;text-align:center;">1</span>
+                    </td>
+                    <td style="padding-left:12px;font-size:15px;color:${COLORS.slate};line-height:1.5;">Open Lumira on your phone</td>
+                  </tr>
+                </table>
               </td>
             </tr>
             <tr>
-              <td style="padding:8px 0;border-bottom:1px solid ${COLORS.border};">
-                <span style="font-size:14px;color:${COLORS.sage500};font-weight:700;margin-right:10px;">2.</span>
-                <span style="font-size:15px;color:${COLORS.slate};">Go to <strong>Settings &rarr; Sign-in &amp; Security</strong></span>
+              <td style="padding:10px 0;border-bottom:1px solid ${COLORS.border};">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+                  <tr>
+                    <td style="width:30px;vertical-align:middle;">
+                      <span style="display:inline-block;width:24px;height:24px;border-radius:50%;background:${COLORS.sage500};color:#fff;font-size:12px;font-weight:700;line-height:24px;text-align:center;">2</span>
+                    </td>
+                    <td style="padding-left:12px;font-size:15px;color:${COLORS.slate};line-height:1.5;">Go to <strong>Settings &rarr; Sign-in &amp; Security</strong></td>
+                  </tr>
+                </table>
               </td>
             </tr>
             <tr>
-              <td style="padding:8px 0;">
-                <span style="font-size:14px;color:${COLORS.sage500};font-weight:700;margin-right:10px;">3.</span>
-                <span style="font-size:15px;color:${COLORS.slate};">Tap <strong>&ldquo;Add Face ID sign-in&rdquo;</strong></span>
+              <td style="padding:10px 0;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+                  <tr>
+                    <td style="width:30px;vertical-align:middle;">
+                      <span style="display:inline-block;width:24px;height:24px;border-radius:50%;background:${COLORS.sage500};color:#fff;font-size:12px;font-weight:700;line-height:24px;text-align:center;">3</span>
+                    </td>
+                    <td style="padding-left:12px;font-size:15px;color:${COLORS.slate};line-height:1.5;">Tap <strong>&ldquo;Add Face ID sign-in&rdquo;</strong></td>
+                  </tr>
+                </table>
               </td>
             </tr>
           </table>
@@ -1381,15 +1452,17 @@ export function passkeyRecoveryNudgeEmail({
       </tr>
     </table>
 
-    ${ctaButton('Go to Security Settings', safeEnrollUrl)}
+    ${ctaButton('Go to Security Settings', enrollUrl)}
 
-    ${mutedText('Or just keep using email \u2014 whatever works best for you.')}
+    <p style="margin:16px 0 0 0;font-size:14px;color:${COLORS.muted};text-align:center;line-height:1.6;">
+      Or keep signing in with email &mdash; totally fine too.
+    </p>
   `
 
   return {
     subject,
     preheader,
-    html: emailWrapper(content, preheader),
+    html: emailWrapper(content, preheader, email),
   }
 }
 
@@ -1400,46 +1473,68 @@ export function passkeyRecoveryNudgeEmail({
 export function passkeySetupNudgeEmail({
   firstName,
   enrollUrl,
+  email = '{{email}}',
 }: {
   firstName: string
   enrollUrl: string
+  email?: string
 }): EmailTemplate {
-  const subject = `Skip the email next time you open Lumira`
-  const preheader = `Set up Face ID sign-in in under a minute.`
+  const subject = `Skip the email wait — sign in to Lumira with Face ID`
+  const preheader = `Set up Face ID sign-in in under 30 seconds. No more hunting for the link.`
 
   const safeName = escapeHtml(firstName)
-  const safeEnrollUrl = enrollUrl
 
   const content = `
-    <h1 style="margin:0 0 16px 0;font-size:24px;font-weight:700;color:${COLORS.slate};font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;line-height:1.3;">
+    <h1 style="margin:0 0 8px 0;font-size:24px;font-weight:700;color:${COLORS.slate};font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;line-height:1.3;">
       Unlock Lumira with one tap
     </h1>
 
-    <p style="margin:0 0 20px 0;font-size:16px;line-height:1.6;color:${COLORS.slate};">
-      Hi ${safeName}, tired of hunting for the sign-in email? There&rsquo;s a faster way.
+    <p style="margin:0 0 24px 0;font-size:16px;line-height:1.6;color:${COLORS.slate};">
+      Hi ${safeName}, tired of hunting for the sign-in email? There&rsquo;s a faster way &mdash; and it takes less than 30 seconds to set up.
     </p>
 
-    <!-- Benefit bullets -->
+    <!-- Three benefit pills -->
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:0 0 24px 0;">
       <tr>
-        <td style="padding:20px;background:${COLORS.sand100};border-radius:12px;">
+        <td>
           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
             <tr>
-              <td style="padding:8px 0;border-bottom:1px solid ${COLORS.border};">
-                <span style="color:${COLORS.sage500};font-weight:700;margin-right:10px;">&#10003;</span>
-                <span style="font-size:15px;color:${COLORS.slate};">No waiting for an email</span>
+              <td style="padding:4px;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                  <tr>
+                    <td style="padding:14px 16px;background:#EBF5F4;border-radius:10px;text-align:center;">
+                      <p style="margin:0 0 4px 0;font-size:20px;">&#9203;</p>
+                      <p style="margin:0;font-size:13px;font-weight:700;color:${COLORS.sage600};">No email wait</p>
+                      <p style="margin:4px 0 0 0;font-size:12px;color:${COLORS.muted};line-height:1.4;">Open the app &amp; sign in instantly</p>
+                    </td>
+                  </tr>
+                </table>
               </td>
             </tr>
             <tr>
-              <td style="padding:8px 0;border-bottom:1px solid ${COLORS.border};">
-                <span style="color:${COLORS.sage500};font-weight:700;margin-right:10px;">&#10003;</span>
-                <span style="font-size:15px;color:${COLORS.slate};">No expired links</span>
+              <td style="padding:4px;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                  <tr>
+                    <td style="padding:14px 16px;background:#EBF5F4;border-radius:10px;text-align:center;">
+                      <p style="margin:0 0 4px 0;font-size:20px;">&#128683;</p>
+                      <p style="margin:0;font-size:13px;font-weight:700;color:${COLORS.sage600};">No expired links</p>
+                      <p style="margin:4px 0 0 0;font-size:12px;color:${COLORS.muted};line-height:1.4;">Links expire — Face ID never does</p>
+                    </td>
+                  </tr>
+                </table>
               </td>
             </tr>
             <tr>
-              <td style="padding:8px 0;">
-                <span style="color:${COLORS.sage500};font-weight:700;margin-right:10px;">&#10003;</span>
-                <span style="font-size:15px;color:${COLORS.slate};">Just Face ID &mdash; even at 3am</span>
+              <td style="padding:4px;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                  <tr>
+                    <td style="padding:14px 16px;background:#EBF5F4;border-radius:10px;text-align:center;">
+                      <p style="margin:0 0 4px 0;font-size:20px;">&#9889;</p>
+                      <p style="margin:0;font-size:13px;font-weight:700;color:${COLORS.sage600};">One tap</p>
+                      <p style="margin:4px 0 0 0;font-size:12px;color:${COLORS.muted};line-height:1.4;">Even at 3am, half-asleep</p>
+                    </td>
+                  </tr>
+                </table>
               </td>
             </tr>
           </table>
@@ -1447,18 +1542,28 @@ export function passkeySetupNudgeEmail({
       </tr>
     </table>
 
-    <p style="margin:0 0 24px 0;font-size:15px;line-height:1.6;color:${COLORS.slate};">
-      Works on all your Apple devices automatically. Set it up once, use it everywhere.
+    <!-- iCloud sync benefit -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:0 0 24px 0;">
+      <tr>
+        <td style="padding:16px 20px;background:${COLORS.sand100};border-radius:12px;border-left:4px solid ${COLORS.terra400};">
+          <p style="margin:0 0 4px 0;font-size:13px;font-weight:600;color:${COLORS.terra400};">&#63743; iCloud Keychain sync</p>
+          <p style="margin:0;font-size:14px;line-height:1.6;color:${COLORS.slate};">
+            Set it up once and it works on all your Apple devices automatically &mdash; iPhone, iPad, Mac. No extra steps.
+          </p>
+        </td>
+      </tr>
+    </table>
+
+    ${ctaButton('Set up Face ID sign-in', enrollUrl)}
+
+    <p style="margin:16px 0 0 0;font-size:14px;color:${COLORS.muted};text-align:center;line-height:1.6;">
+      Takes less than 30 seconds. Your biometric data never leaves your device.
     </p>
-
-    ${ctaButton('Set up Face ID sign-in', safeEnrollUrl)}
-
-    ${mutedText('Takes less than 30 seconds. Nothing is shared with Lumira or Apple.')}
   `
 
   return {
     subject,
     preheader,
-    html: emailWrapper(content, preheader),
+    html: emailWrapper(content, preheader, email),
   }
 }
