@@ -190,6 +190,12 @@
 
 ## P3 — Nice-to-Have (Backlog)
 
+### BUG-05 · Dark mode toggle appears twice
+- **Reported by:** User (visual review)
+- **Issue:** The dark mode toggle is duplicated — shows up two times on screen. Only one should remain, in the top navigation bar.
+- **Fix:** Find all placements of the dark mode toggle component across layout/nav files and remove the duplicate instance, keeping only the one in the top nav.
+- **Effort:** S (< 1 hour)
+
 ### BUG-04 · Low contrast text — unreadable on multiple home page cards
 - **Reported by:** User (visual review)
 - **Example:** "TODAY'S REFLECTION" card — prompt text (e.g. "What's one thing that's going really well...") is illegible against the card background
