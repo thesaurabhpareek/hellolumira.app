@@ -241,6 +241,95 @@ describe('useChatThread', () => {
     expect(result.current.error).toBe("I'm having trouble connecting right now. Your conversation is saved — tap to try again.")
   }, 10000)
 
+  // ── Error status codes — Fix 6 regressions ──
+
+  it('shows service-unavailable message on 503 response', async () => {
+    mockFetch.mockImplementation(() =>
+      Promise.resolve({ ok: false, status: 503 })
+    )
+    const { result } = renderHook(() => useChatThread())
+
+    await act(async () => {
+      await result.current.send(SEND_PARAMS)
+    })
+
+    await waitFor(() => {
+      expect(result.current.error).toBeTruthy()
+    })
+    expect(result.current.error).toContain('temporarily unavailable')
+    expect(result.current.error).not.toContain("I'm having trouble connecting")
+  }, 10000)
+
+  it('shows rate-limit message on 429 response', async () => {
+    mockFetch.mockImplementation(() =>
+      Promise.resolve({ ok: false, status: 429 })
+    )
+    const { result } = renderHook(() => useChatThread())
+
+    await act(async () => {
+      await result.current.send(SEND_PARAMS)
+    })
+
+    await waitFor(() => {
+      expect(result.current.error).toBeTruthy()
+    })
+    expect(result.current.error).toContain('too quickly')
+    expect(result.current.error).not.toContain('temporarily unavailable')
+  }, 10000)
+
+  it('shows generic connectivity message for non-503/429 errors', async () => {
+    mockFetch.mockImplementation(() =>
+      Promise.resolve({ ok: false, status: 500 })
+    )
+    const { result } = renderHook(() => useChatThread())
+
+    await act(async () => {
+      await result.current.send(SEND_PARAMS)
+    })
+
+    await waitFor(() => {
+      expect(result.current.error).toBeTruthy()
+    })
+    expect(result.current.error).toContain("I'm having trouble connecting")
+    expect(result.current.error).not.toContain('temporarily unavailable')
+    expect(result.current.error).not.toContain('too quickly')
+  }, 10000)
+
+  it('attaches error message as an assistant message in the thread', async () => {
+    mockFetch.mockImplementation(() =>
+      Promise.resolve({ ok: false, status: 503 })
+    )
+    const { result } = renderHook(() => useChatThread())
+
+    await act(async () => {
+      await result.current.send(SEND_PARAMS)
+    })
+
+    await waitFor(() => {
+      expect(result.current.messages.length).toBeGreaterThanOrEqual(2)
+    })
+    // user message + error assistant message
+    const lastMsg = result.current.messages[result.current.messages.length - 1]
+    expect(lastMsg.role).toBe('assistant')
+    expect(lastMsg.content).toContain('temporarily unavailable')
+  }, 10000)
+
+  it('shows session-expired message on 401 response', async () => {
+    mockFetch.mockImplementation(() =>
+      Promise.resolve({ ok: false, status: 401 })
+    )
+    const { result } = renderHook(() => useChatThread())
+
+    await act(async () => {
+      await result.current.send(SEND_PARAMS)
+    })
+
+    await waitFor(() => {
+      expect(result.current.error).toBeTruthy()
+    })
+    expect(result.current.error).toContain('Session expired')
+  }, 10000)
+
   // ── setMessages ──
 
   it('allows setting messages externally', () => {

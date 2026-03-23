@@ -152,7 +152,7 @@ function WarmMessage() {
  * ══════════════════════════════════════════════════════════ */
 export function HomeSkeleton() {
   return (
-    <div style={{ minHeight: '100%', background: 'var(--color-surface, #FAFAF8)', paddingBottom: 120 }}>
+    <div style={{ flex: 1, minHeight: 0, background: 'var(--color-surface, #FAFAF8)', paddingBottom: 120, overflowY: 'auto' }}>
       <div className="content-width mx-auto px-4 pt-6 skeleton-pulse">
         {/* Sprout + warm message */}
         <SproutAnimation />
@@ -227,7 +227,7 @@ export function HomeSkeleton() {
  * ══════════════════════════════════════════════════════════ */
 export function ContentSkeleton() {
   return (
-    <div style={{ minHeight: '100%', background: 'var(--color-surface, #FAFAF8)', paddingBottom: 24 }}>
+    <div style={{ flex: 1, minHeight: 0, background: 'var(--color-surface, #FAFAF8)', paddingBottom: 24, overflowY: 'auto' }}>
       <div className="content-width mx-auto px-4 pt-6 skeleton-pulse">
         <div className="skeleton-stagger">
           {/* Back + title */}
@@ -274,7 +274,7 @@ export function ContentSkeleton() {
  * ══════════════════════════════════════════════════════════ */
 export function ChatSkeleton() {
   return (
-    <div style={{ minHeight: '100%', background: 'var(--color-surface, #FAFAF8)', paddingBottom: 24 }}>
+    <div style={{ flex: 1, minHeight: 0, background: 'var(--color-surface, #FAFAF8)', paddingBottom: 24, overflowY: 'auto' }}>
       <div className="content-width mx-auto px-4 pt-6 skeleton-pulse">
         <div className="skeleton-stagger">
           {/* Header */}
@@ -324,7 +324,7 @@ export function ChatSkeleton() {
  * ══════════════════════════════════════════════════════════ */
 export function TribesSkeleton() {
   return (
-    <div style={{ minHeight: '100%', background: 'var(--color-surface, #FAFAF8)', paddingBottom: 24 }}>
+    <div style={{ flex: 1, minHeight: 0, background: 'var(--color-surface, #FAFAF8)', paddingBottom: 24, overflowY: 'auto' }}>
       <div className="content-width mx-auto px-4 pt-6 skeleton-pulse">
         <div className="skeleton-stagger">
           {/* Header */}
@@ -377,7 +377,7 @@ export function TribesSkeleton() {
  * ══════════════════════════════════════════════════════════ */
 export function CheckinSkeleton() {
   return (
-    <div style={{ minHeight: '100%', background: 'var(--color-surface, #FAFAF8)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+    <div style={{ flex: 1, minHeight: 0, background: 'var(--color-surface, #FAFAF8)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
       <div className="skeleton-pulse" style={{ maxWidth: 420, width: '100%', textAlign: 'center' }}>
         <div className="skeleton-stagger">
           {/* Illustration placeholder */}
@@ -405,7 +405,7 @@ export function CheckinSkeleton() {
  * ══════════════════════════════════════════════════════════ */
 export function ProfileSkeleton() {
   return (
-    <div style={{ minHeight: '100%', background: 'var(--color-surface, #FAFAF8)', paddingBottom: 24 }}>
+    <div style={{ flex: 1, minHeight: 0, background: 'var(--color-surface, #FAFAF8)', paddingBottom: 24, overflowY: 'auto' }}>
       <div className="content-width mx-auto px-4 pt-6 skeleton-pulse">
         <div className="skeleton-stagger">
           {/* Avatar + name */}
@@ -445,7 +445,7 @@ export function ProfileSkeleton() {
  * ══════════════════════════════════════════════════════════ */
 export function AppSkeleton() {
   return (
-    <div style={{ minHeight: '100%', background: 'var(--color-surface, #FAFAF8)', paddingBottom: 24 }}>
+    <div style={{ flex: 1, minHeight: 0, background: 'var(--color-surface, #FAFAF8)', paddingBottom: 24, overflowY: 'auto' }}>
       <div className="content-width mx-auto px-4 pt-6 skeleton-pulse">
         <div className="skeleton-stagger">
           <S style={{ height: 24, width: '48%', borderRadius: 8, marginBottom: 8 }} />

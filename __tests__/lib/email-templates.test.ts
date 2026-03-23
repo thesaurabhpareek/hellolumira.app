@@ -545,3 +545,40 @@ describe('FROM_ADDRESS format', () => {
     expect(typeof sendEmail).toBe('function')
   })
 })
+
+// ---------------------------------------------------------------------------
+// Regression tests for Fix 5 — Email template font and footer copy
+// ---------------------------------------------------------------------------
+
+describe('emailWrapper — Fix 5 regressions', () => {
+  it('logo section does NOT use Plus Jakarta Sans as the font-family', () => {
+    const html = emailWrapper('<p>Test content</p>', 'Preview', 'user@example.com')
+    // The logo <p> element (28px "Lumira" wordmark) must use Helvetica first,
+    // not Plus Jakarta Sans. Verifies the fix: font-family on the logo was
+    // changed from 'Plus Jakarta Sans',... to Helvetica,Arial,...
+    const logoMatch = html.match(/<p[^>]*font-size:28px[^>]*>[\s\S]*?<\/p>/)
+    expect(logoMatch).not.toBeNull()
+    const logoPTag = logoMatch![0]
+    // Should NOT list Plus Jakarta Sans in the font-family of the logo element
+    expect(logoPTag).not.toContain('Plus Jakarta Sans')
+    // Should use Helvetica as primary fallback font for the logo
+    expect(logoPTag).toContain('Helvetica')
+  })
+
+  it('footer does NOT contain the old "If you didn\'t request" phrasing', () => {
+    const html = emailWrapper('<p>Test</p>', 'Preview', 'user@example.com')
+    expect(html).not.toContain("If you didn't request")
+    expect(html).not.toContain("If you did not request")
+  })
+
+  it('footer DOES contain the replacement "Received this by mistake" phrasing', () => {
+    const html = emailWrapper('<p>Test</p>', 'Preview', 'user@example.com')
+    expect(html).toContain('Received this by mistake')
+    expect(html).toContain('your account is safe')
+  })
+
+  it('footer disclaimer includes recipient email address', () => {
+    const html = emailWrapper('<p>Test</p>', 'Preview', 'test@lumira.app')
+    expect(html).toContain('test@lumira.app')
+  })
+})

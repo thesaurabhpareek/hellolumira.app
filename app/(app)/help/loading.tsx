@@ -2,7 +2,9 @@ export default function HelpLoading() {
   return (
     <div
       style={{
-        minHeight: '100%',
+        flex: 1,
+        minHeight: 0,
+        overflowY: 'auto',
         background: 'var(--color-surface)',
         paddingBottom: '24px',
       }}

@@ -108,7 +108,7 @@ export default function PageTransition({ children, mode }: Props) {
   return (
     <div
       ref={contentRef}
-      className={`page-transition ${transitionClass}`}
+      className={`page-transition flex-1 flex flex-col min-h-0 ${transitionClass}`}
     >
       {children}
     </div>
