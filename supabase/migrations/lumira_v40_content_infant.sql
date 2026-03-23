@@ -1,2368 +1,2132 @@
--- Lumira v40: Infant Stage Content (2–12 months / weeks 8–52)
--- 50 articles covering development, sleep, feeding/solids, health, play, and parent wellbeing
--- Medical disclaimer included in every article body
--- Sources: AAP, WHO, NHS, CDC
+-- ============================================================
+-- Lumira v40: Infant Content Library (Months 2-12)
+-- 50 articles covering development, feeding, sleep, health
+-- ============================================================
+
+INSERT INTO public.content_articles (stage, week_or_month, title, subtitle, body, category, reading_time_minutes, tags, medically_reviewed, culturally_sensitive, author) VALUES
 
 -- ============================================================
 -- DEVELOPMENT MILESTONES
 -- ============================================================
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'milestones',
-  'Your 2–3 Month Old: Social Smiles, Cooing, and Tracking',
-  $$## What to Expect at 2–3 Months
+(
+  'infant', 8,
+  'Your 2-Month-Old: Social Smiling and Tracking Objects',
+  'Watch your baby light up the room — and start to follow the world with their eyes',
+  '## The First Real Smile
 
-Between weeks 8 and 12, your baby transforms from a sleepy newborn into a socially aware little person. These weeks are often described by parents as "the magic moment" — and for good reason.
+Around 6-8 weeks, something magical happens: your baby smiles at you — and means it. Unlike the reflex smiles of the newborn weeks (often mistaken for gas), the social smile is a deliberate response to your face, voice, and presence. It is one of the most rewarding moments in early parenting, and for good reason: it marks the beginning of genuine social connection.
 
-**Social Smiling**
+## What''s Happening in the Brain
 
-The first real, intentional smile — known as a social smile — typically appears between 6 and 8 weeks. Unlike the reflex smiles of the newborn period, these smiles are directed at you. Your baby is learning that faces are interesting, safe, and rewarding. Smile back, talk, and let the exchange go back and forth.
+At 2 months, your baby''s visual cortex is developing rapidly. They can now focus clearly on objects 20-30 cm away — roughly the distance from your face when you hold them. Their brain is learning to process faces as distinct and meaningful patterns, which is why your face is so endlessly fascinating to them.
 
-**Cooing and Early Vocalisation**
+Social smiling is also the first sign of **reciprocal communication**. When you smile back, lean in, and speak softly, you''re teaching your baby that their expressions have power — that the world responds to them. This is the very foundation of emotional intelligence.
 
-Around 8–12 weeks, most babies begin making soft cooing or gurgling sounds. These are your baby's first attempts at conversation. Respond warmly and give them time to "talk" back — this turn-taking is the foundation of language development.
+## Object Tracking
 
-**Visual Tracking**
+Around the same time, you''ll notice your baby beginning to **track moving objects** with their eyes. Hold a brightly coloured toy about 30 cm from their face and move it slowly from side to side — a 2-month-old will follow it with smooth, sustained gaze rather than the jerky, inconsistent eye movements of the newborn period.
 
-Your baby''s vision is sharpening. By 3 months, most babies can track a moving object across their full field of vision and will turn their head to follow sounds and faces. Hold a toy or your face about 20–30 cm away and move it slowly side to side.
+This visual tracking is an early sign of developing **oculomotor control** — the coordination of the muscles that move the eyes. It also reflects improved attention span: your baby can now sustain focus for several seconds at a time.
 
-**How to Support Development**
+## What You Can Do
 
-- Spend time face-to-face at feeding and changing times
-- Narrate what you are doing ("Now I''m putting on your nappy — there we go!")
-- Use a variety of facial expressions and tones of voice
-- Give supervised tummy time daily to build neck and shoulder strength
+- **Talk to your baby constantly.** Narrate your day, sing songs, read aloud. The content doesn''t matter — the rhythm, tone, and responsiveness do.
+- **Make eye contact during feeds.** Whether breastfeeding or bottle-feeding, face-to-face time during calm moments builds connection.
+- **Use a black-and-white toy or book.** High-contrast patterns are easiest for developing eyes to process and hold attention.
+- **Respond to their vocalisations.** When your baby coos or gurgles, pause and respond as if having a conversation. This back-and-forth is called **serve and return** and it builds neural pathways for language.
+- **Let them look at your face.** You are genuinely the most interesting thing in their world right now.
 
-**When to Mention to Your Doctor**
+## When to Check In With Your Doctor
 
-If by 12 weeks your baby is not making eye contact, not responding to your face or voice, or not producing any cooing sounds, mention this at your next check-up.
+Most babies smile responsively by 8 weeks, though some take a little longer. If your baby is not smiling by 12 weeks, or if they are not making eye contact by 3 months, mention this at your next health check. These are not causes for panic — but they are worth discussing.
 
-*This article is for informational purposes only and does not constitute medical advice. Always consult your healthcare provider with concerns about your baby''s development.*$$,
-  8,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'NHS UK', 'Zero to Three'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-milestones-2-3-months-smiling-cooing-tracking'
-) ON CONFLICT (slug) DO NOTHING;
+## The Bigger Picture
 
--- ---------------------------------------------------------------
+The social smile and visual tracking are not just cute — they are your baby''s first active contributions to the parent-child relationship. Every time you respond warmly, you''re reinforcing their sense of safety and connection. Enjoy this stage. The conversations are just getting started.',
+  'milestones', 5,
+  ARRAY['2 months', 'social smile', 'tracking', 'visual development', 'milestones'],
+  true, true, 'Lumira Health Team'
+),
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'milestones',
-  'Your 4–5 Month Old: Rolling, Hand Discovery, and Laughing',
-  $$## Weeks 16–20: Big Motor and Social Leaps
+(
+  'infant', 17,
+  'Your 4-Month-Old: Rolling, Reaching, and Belly Laughs',
+  'A month of movement, curiosity, and the sound you''ve been waiting for',
+  '## The 4-Month Burst
 
-The 4–5 month window is packed with exciting firsts. Your baby is growing stronger, more curious, and far more fun to be around.
+Four months is often described by parents as a turning point. Your baby has emerged from the fog of the newborn phase — sleep-wake cycles are more predictable, feeds are more efficient, and your baby is increasingly alert, playful, and interactive. This month brings a trio of exciting developments: rolling, reaching, and laughter.
 
-**Rolling Over**
+## Rolling Over
 
-Most babies begin rolling from tummy to back first, around 4 months, followed by back to tummy closer to 5 months. Rolling is a sign of growing core and arm strength. Always supervise floor time and never leave your baby unattended on a raised surface — rolling can happen suddenly and unexpectedly.
+Most babies begin rolling from tummy to back somewhere between 3 and 5 months. Rolling back to tummy usually follows a few weeks later. Rolling is a significant gross motor milestone because it requires coordinated use of core muscles, neck strength (built through all that tummy time), and the ability to shift weight deliberately.
 
-**Hand Discovery**
+**What to do:** Continue offering supervised tummy time every day. As your baby gets stronger, you''ll notice them pushing up on their arms more confidently — this is the precursor to rolling. Never leave your baby unattended on a changing table or elevated surface; rolling can happen suddenly.
 
-Watch your baby stare at their own hands in fascination. They are figuring out that those things at the end of their arms are actually theirs and under their control. Expect lots of hand-to-mouth action, batting at dangling toys, and attempts to grasp objects placed near them.
+## Reaching and Grasping
 
-**Laughing**
+At 4 months, babies begin to reach purposefully toward objects that interest them. Their **palmar grasp** — the whole-hand grip — becomes more deliberate, and they start to bring objects to their mouth to explore them. This mouthing is not just cute; it is a primary way babies gather sensory information at this age.
 
-The first proper belly laugh is one of parenthood''s great joys. Gentle tickles, funny faces, and silly sounds are all likely triggers. Laughter is a social milestone — it shows your baby trusts you and feels safe enough to express delight.
+Offer toys that are easy to hold: soft rings, textured rattles, and crinkle toys work well. At this stage, your baby cannot yet let go of objects voluntarily — that comes around 6-7 months.
 
-**Supporting Development**
+## The First Laugh
 
-- Offer age-appropriate rattles and soft toys to encourage reaching and grasping
-- Continue daily tummy time — aim for 20–30 minutes spread across the day
-- Play peek-a-boo to build anticipation and joy
-- Read board books with high-contrast images
+Few experiences match the first time your baby laughs. It is usually triggered by physical sensations — a gentle raspberry on the tummy, being lifted in the air, a funny noise — and it sounds nothing like anything they''ve made before. The laugh signals that your baby''s **social brain** is deepening: they are starting to anticipate, to find things amusing, to share joy.
 
-**A Note on Variation**
+**Lean into it.** Repeat whatever made them laugh. Watch how they start to anticipate it — leaning in, holding their breath, breaking into a smile before you''ve even done the thing. This is early humour.
 
-All babies develop at their own pace. Rolling can appear anywhere from 3 to 6 months and still be entirely typical. If you have concerns, your health visitor or GP is your best first point of contact.
+## Language and Communication
 
-*This article is for informational purposes only and does not constitute medical advice. Always consult your healthcare provider with concerns about your baby''s development.*$$,
-  16,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'NHS UK', 'CDC Developmental Milestones'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-milestones-4-5-months-rolling-hands-laughing'
-) ON CONFLICT (slug) DO NOTHING;
+Four-month-olds are enthusiastic vocalisers. You''ll hear a growing range of sounds — vowel combinations like "ooh" and "aah," along with consonant-vowel pairs beginning to emerge. Hold conversations: let your baby finish their "sentence" before you respond, and mirror their expressions. This **serve-and-return** interaction is one of the most powerful brain-building activities you can offer.
 
--- ---------------------------------------------------------------
+## Watch For
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'milestones',
-  'Your 5–6 Month Old: Sitting with Support, Babbling, and Object Permanence',
-  $$## Weeks 20–24: A World Opening Up
+- Consistent response to sounds and voices
+- Bringing hands to midline (holding them together in front of their body)
+- Showing interest in faces and objects
 
-At 5–6 months, your baby is becoming aware that the world is a rich, interesting place — and they want to explore it.
+If your baby is not making any sounds, not smiling, or not showing interest in objects or faces by 4 months, raise this with your GP or health visitor.',
+  'milestones', 5,
+  ARRAY['4 months', 'rolling', 'reaching', 'laughing', 'gross motor', 'milestones'],
+  true, true, 'Lumira Health Team'
+),
 
-**Sitting with Support**
+(
+  'infant', 26,
+  'Your 6-Month-Old: Sitting, Babbling, and Recognising Faces',
+  'Halfway through the first year — and your baby is becoming their own little person',
+  '## Six Months: A New Chapter
 
-Most babies can sit with support from a caregiver or cushions around 5 months. Their back and core muscles are still developing, so they will wobble. By 6 months, many babies begin to tripod sit — leaning forward on their hands for balance. Avoid propping them in a seated position for long periods before they are ready, as this can interrupt natural motor sequencing.
+Six months marks the halfway point of the first year, and it feels like it. Your baby is likely unrecognisable from the sleepy newborn who came home just six months ago. They have opinions. They have preferences. They have a sense of humour. And they are working hard on three major skills: sitting independently, babbling, and knowing who they know.
 
-**Babbling**
+## Sitting Up
 
-Those early coos evolve into consonant-vowel combinations: "ba," "ma," "da." This babbling is your baby practising the sounds of your language. Respond as if they''re saying something meaningful — because to them, they are. This back-and-forth is a vital precursor to real words.
+Most babies achieve **independent sitting** somewhere between 4 and 8 months, with the average around 6 months. At first, your baby will use a "tripod" position — leaning forward with one or both hands on the floor for support. Over the coming weeks, they''ll lift their hands, straighten their back, and sit confidently unsupported.
 
-**The Beginning of Object Permanence**
+**What helps:** Let your baby practise sitting on the floor with cushions around them for safety. Avoid propping them in seats for extended periods — they need the freedom to topple and adjust, which is how their core muscles develop. Sitting also opens up a new world of play: both hands are now free to explore.
 
-Before now, "out of sight" was truly "out of mind." Around 5–6 months, babies begin to understand that objects continue to exist even when they can''t see them. You may notice your baby looking for a toy that has rolled away or reaching for your face when you briefly cover it. This is a significant cognitive leap.
+## Babbling Begins
 
-**What You Can Do**
+Around 6 months, babbling shifts from simple vowel sounds to **consonant-vowel combinations**: "ba," "da," "ma," "ga." You''ll hear these sounds repeated — "bababa," "dadada" — as your baby practises the mechanics of speech. This reduplication (repeating syllables) is a normal and important step.
 
-- Play simple hiding games — hide a toy under a cloth and watch them search
-- Sit on the floor and play together, supporting their emerging seated position
-- Narrate and respond to every babble and sound
-- Offer different textures, shapes, and sizes of safe objects to explore
+Babbling is not random. Babies who are exposed to more language babble more, and in more varied ways. Talk to your baby, read to them, sing — and **respond to their babbles** as if they are meaningful, because in an important sense, they are.
 
-*This article is for informational purposes only and does not constitute medical advice. Always consult your healthcare provider with concerns about your baby''s development.*$$,
-  20,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'Zero to Three', 'NHS UK'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-milestones-5-6-months-sitting-babbling-object-permanence'
-) ON CONFLICT (slug) DO NOTHING;
+## Face Recognition
 
--- ---------------------------------------------------------------
+By 6 months, your baby can reliably distinguish between familiar and unfamiliar faces, and between the faces of different people they know well. They will light up at the sight of a parent, sibling, or regular caregiver — and may become wary or sober-faced with strangers. This is sometimes called **stranger wariness** and it is a normal developmental step, not a problem to be fixed.
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'milestones',
-  'Your 6–8 Month Old: Independent Sitting, Stranger Anxiety, and Reaching',
-  $$## Weeks 24–32: Building Independence and Social Awareness
+## Emotional Complexity
 
-The 6–8 month period brings both exciting independence and some new emotional complexity.
+Six-month-olds have a richer emotional repertoire than ever. They show clear joy, frustration, curiosity, and even early signs of **empathy** — they may become distressed if they see another person crying. Their emotions are expressed physically: excitement shows as whole-body wriggling, dissatisfaction as arching and fussing.
 
-**Sitting Independently**
+## Ready for Solids?
 
-By 6–7 months, most babies can sit without support for short periods. By 8 months, many sit confidently and can pivot to reach toys around them. This frees their hands for exploration and marks a major shift in how they interact with the world.
+Six months is also the recommended age to begin introducing solid foods alongside breast milk or formula. Signs of readiness include: sitting with minimal support, showing interest in food, and loss of the tongue-thrust reflex. See our dedicated articles on starting solids, first foods, and baby-led weaning for full guidance.',
+  'milestones', 5,
+  ARRAY['6 months', 'sitting', 'babbling', 'face recognition', 'milestones', 'development'],
+  true, true, 'Lumira Health Team'
+),
 
-**Stranger Anxiety**
+(
+  'infant', 34,
+  'Your 8-Month-Old: Crawling, Object Permanence, and Separation Anxiety',
+  'Mobility, memory, and a new clinginess — understanding your baby''s big developmental leaps',
+  '## On the Move
 
-If your easy-going baby suddenly cries when a relative reaches for them, this is completely normal. Stranger anxiety emerges because your baby now recognises you as their safe base — and everyone else is potentially uncertain. Handle it with empathy: give your baby time to warm up and don''t force interactions.
+Eight months is often the start of real mobility. While some babies skip crawling altogether and go straight to cruising or walking, most develop some form of floor locomotion around now — whether that''s a classic hands-and-knees crawl, a commando belly crawl, a bottom shuffle, or their own creative variation. All of these are valid, and all involve significant neurological and muscular coordination.
 
-**Reaching, Grabbing, and Transferring**
+**Encourage crawling** by placing interesting objects just out of reach, getting on the floor yourself, and ensuring your baby has plenty of time on a safe, firm surface. Avoid extended time in bouncers, walkers, or jumperoos — these can delay the development of the core strength and coordination needed for crawling and walking.
 
-Babies at this stage love to grab everything within reach. They are also learning to pass objects from hand to hand, a skill called transferring. Offer safe household items — a wooden spoon, a small Tupperware — alongside proper toys.
+## Object Permanence
 
-**What to Encourage**
+One of the most significant cognitive milestones of this period is the development of **object permanence** — the understanding that objects (and people) continue to exist even when they''re out of sight.
 
-- Floor play with a variety of textures and shapes
-- Social time with familiar people to gently broaden their comfort zone
-- Singing and repetitive games like "round and round the garden"
-- Begin reading simple board books with few words and bold images
+Before this milestone, when you left the room, you truly ceased to exist in your baby''s mind. Now, they know you are somewhere — and they want you back.
 
-**Signs to Discuss with Your GP**
+You can watch object permanence developing in real time: hide a toy under a cloth while your baby watches, then see if they lift the cloth to find it. A few weeks ago, they wouldn''t have bothered. Now, they will.
 
-If your baby is not sitting with support by 9 months, not reaching for objects, or showing no social interaction, raise this at your next appointment.
+## Separation Anxiety
 
-*This article is for informational purposes only and does not constitute medical advice. Always consult your healthcare provider with concerns about your baby''s development.*$$,
-  24,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'NHS UK', 'CDC Developmental Milestones'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-milestones-6-8-months-sitting-stranger-anxiety-reaching'
-) ON CONFLICT (slug) DO NOTHING;
+Object permanence is the cognitive engine behind **separation anxiety** — and it peaks between 8 and 18 months. Your baby now understands that you exist when you leave, but they do not yet understand *when* you will return. This uncertainty is genuinely distressing.
 
--- ---------------------------------------------------------------
+**This is completely normal** and reflects healthy attachment, not a parenting problem. Strategies that help:
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'milestones',
-  'Your 8–10 Month Old: Crawling, Pulling to Stand, and Pincer Grip',
-  $$## Weeks 32–40: On the Move
+- **Consistent goodbye rituals.** A brief, warm, predictable goodbye is better than sneaking away.
+- **Peek-a-boo.** This classic game teaches the lesson of object permanence in a safe, playful context: you disappear and come back.
+- **Short separations with familiar caregivers.** Building confidence that you always return takes time and repetition.
 
-Eight to ten months is when many babies shift from stationary to mobile — and your home will never be the same.
+## Other 8-Month Developments
 
-**Crawling — in All Its Variations**
+- **Pincer grasp emerging:** Your baby is starting to use thumb and forefinger to pick up small objects — a major fine motor leap.
+- **Imitating actions:** Clapping, waving, shaking their head.
+- **Understanding "no":** They may not comply, but they understand the concept.
+- **More complex babbling:** Mixing consonants — "badadaga" type strings.',
+  'milestones', 5,
+  ARRAY['8 months', 'crawling', 'object permanence', 'separation anxiety', 'milestones'],
+  true, true, 'Lumira Health Team'
+),
 
-Not all babies crawl in the classic hands-and-knees style. Some shuffle on their bottom, some commando crawl on their belly, others roll everywhere. All of these are valid ways to get around. What matters is that your baby is finding a way to move purposefully through space.
+(
+  'infant', 43,
+  'Your 10-Month-Old: Pulling to Stand and First Words Emerging',
+  'Vertical ambitions and the words that will change everything',
+  '## The Drive to Stand
 
-**Pulling to Stand**
+Sometime around 9-10 months, your baby will discover that they can pull themselves upright using furniture, your legs, or anything solid enough to grip. This is called **pulling to stand**, and it is a major gross motor milestone that requires significant core strength, leg strength, and balance — all developed gradually through months of floor play and movement.
 
-As soon as your baby discovers they can pull up on furniture, they will do it constantly. Expect plenty of wobbles and tumbles — this is part of how they learn. Ensure furniture is stable and that there are no sharp edges at head height.
+Once standing, your baby will **cruise** — stepping sideways while holding onto furniture. This is the bridge between standing and independent walking.
 
-**The Pincer Grip**
+**What helps:** Sturdy, low furniture at the right height. Coffee tables, ottomans, and sofas are ideal for cruising. Ensure anything they might grab is stable and won''t tip over. Barefoot is best for developing foot strength and proprioception (body awareness); if socks are needed, use non-slip soles.
 
-Watch for your baby using their thumb and index finger together to pick up small objects. This usually begins around 9 months and is a significant fine motor milestone. It also means small objects become a serious choking hazard — now is the time to get the floor very clean.
+## First Words on the Horizon
 
-**Encouraging Development**
+Between 9 and 12 months, many babies produce their **first intentional word** — a sound consistently used to refer to a specific person, object, or action. Common firsts include "mama," "dada," "baba," "more," "no," and the name of a pet or sibling.
 
-- Create a safe, padded play space for free exploration
-- Offer finger foods of appropriate size (soft pea-sized pieces) to practise the pincer grip
-- Stack cups and simple containers encourage cause-and-effect learning
-- Walk with your baby holding both your hands to build confidence
+At 10 months, you may be in the run-up to this milestone. Your baby''s babbling is becoming increasingly **variegated** (mixing different consonants and vowels) and **jargon** is emerging — long strings of babble with the intonation patterns of real speech, as if they''re having a full conversation in a language only they know.
 
-**Baby-Proofing Reminder**
+## What Supports Language Development
 
-With mobility comes risk. Stair gates, cabinet locks, and socket covers should all be in place by now.
+- **Name things constantly.** Every object, action, and person. "That''s the spoon. You''re holding the spoon."
+- **Read together every day.** Point to pictures, name them, vary your voice.
+- **Respond to their communication.** Eye contact, mirroring, answering — even before they have words.
+- **Limit background TV.** Ambient screen noise fills the air but doesn''t build language the way face-to-face communication does.
 
-*This article is for informational purposes only and does not constitute medical advice. Always consult your healthcare provider with concerns about your baby''s development.*$$,
-  32,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'NHS UK', 'Zero to Three'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-milestones-8-10-months-crawling-pulling-pincer'
-) ON CONFLICT (slug) DO NOTHING;
+## Cognitive and Social Development
 
--- ---------------------------------------------------------------
+Ten-month-olds are highly socially aware. They understand simple instructions ("wave bye-bye," "where''s the dog?"), play simple games with turn-taking, and show a growing sense of humour — deliberately doing things for a reaction. They also point, which is a crucial communicative gesture that precedes and supports language development.
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'milestones',
-  'Your 10–12 Month Old: Cruising, First Words, Waving, and Pointing',
-  $$## Weeks 40–48: The Edge of Toddlerhood
+**Joint attention** — sharing focus on an object or event by looking back and forth between it and you — is flourishing now. When your baby points at something and looks at you to share their interest, celebrate it: this is sophisticated social cognition.',
+  'milestones', 5,
+  ARRAY['10 months', 'pulling to stand', 'first words', 'cruising', 'language', 'milestones'],
+  true, true, 'Lumira Health Team'
+),
 
-The final stretch of infancy brings a flurry of communication and motor milestones that hint at the toddler just around the corner.
+(
+  'infant', 52,
+  'Your 12-Month-Old: Walking, First Real Words, and Growing Autonomy',
+  'One year in — celebrating everything your baby has become',
+  '## One Whole Year
 
-**Cruising**
+Your baby is one year old. Take a moment with that. In twelve months, a helpless newborn has become a walking, communicating, laughing, opinionated little human with preferences, jokes, and a very clear sense of who they want to be around. The transformation is genuinely extraordinary.
 
-Cruising is walking while holding on to furniture for support. Your baby may have started pulling to stand at 8–9 months; now they are beginning to side-step along the sofa. This builds the strength and balance needed for independent walking, which most babies achieve somewhere between 9 and 15 months.
+## Walking
 
-**First Words**
+Many babies take their **first independent steps** around their first birthday, though the normal range is wide: 9-15 months is considered typical. Do not be concerned if your baby is not walking at 12 months — cruising and standing confidently are strong signs that walking is coming.
 
-Around 10–12 months, many babies produce their first recognisable words — "mama," "dada," "more," "no." A word at this stage means your baby uses it consistently to refer to something specific. Continue to narrate your day, read aloud, and respond enthusiastically to every attempt at communication.
+First steps are typically wide-footed, arms out for balance, with a characteristic toddler swagger. Falls are constant and normal. **Floors matter:** soft carpet or grass is kinder than hard tile for early walkers. Bare feet develop strength and balance best. If you do use shoes, choose flexible-soled ones that bend easily.
 
-**Waving Bye-Bye**
+## First Real Words
 
-Social gestures like waving emerge as your baby imitates what they see you do. Wave hello and goodbye consistently, and your baby will soon wave back — a delightful sign of shared attention and social understanding.
+By 12 months, most babies have **2-6 words** they use consistently and intentionally — words that reliably refer to specific things. These are distinct from babble. "Mama," "dada," "more," "no," "dog," "ball" — the vocabulary at this stage is typically nouns and social words.
 
-**Pointing**
+If your baby has no words at 12 months, mention it at their one-year check-up. It does not necessarily indicate a problem, but it''s worth monitoring closely.
 
-Pointing is one of the most important milestones of the first year. When your baby points at something and looks at you — they are sharing their attention with you. This is called joint attention and it underpins language, social connection, and learning.
+## The Drive for Autonomy
 
-**What to Watch For**
+One of the most noticeable shifts at 12 months is your baby''s growing sense of **self-directed will**. They want to feed themselves. They want to choose what they play with. They want to go where they want to go. They push back — with arching, fussing, or a very clear "no."
 
-By 12 months, most babies wave, point, and say at least one or two words. If these are not present, discuss with your GP or health visitor — early support makes a significant difference.
+This is healthy. Autonomy is the foundation of confidence. Support it by:
 
-*This article is for informational purposes only and does not constitute medical advice. Always consult your healthcare provider with concerns about your baby''s development.*$$,
-  40,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'NHS UK', 'CDC Developmental Milestones'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-milestones-10-12-months-cruising-first-words-waving-pointing'
-) ON CONFLICT (slug) DO NOTHING;
+- **Offering choices** between two acceptable options.
+- **Following their lead** in play — let them direct the activity.
+- **Allowing safe exploration** rather than constant redirection.
 
--- ---------------------------------------------------------------
+## Separation Anxiety: Still Present
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'development',
-  'Red Flags in Infant Development — When to Bring Up Concerns',
-  $$## Knowing When to Ask
+Separation anxiety often peaks around 12-18 months. Your one-year-old may be more clingy than ever, even as they''re also more independent. This is not a contradiction — it is the push-pull of healthy development. They need a secure base to launch from.
 
-Every baby develops at their own pace, and there is a wide range of "typical." But there are certain signs that warrant a conversation with your GP or health visitor — not because something is definitely wrong, but because early support, when needed, is always better than waiting.
+## What to Expect at the One-Year Check
 
-**Red Flags by Age**
-
-**By 3 months:**
-- Not making eye contact or responding to faces
-- No smiling or social response
-- Not reacting to loud sounds
-
-**By 6 months:**
-- Not reaching for objects
-- No babbling or cooing
-- Not laughing or making squealing sounds
-- Does not seem to recognise familiar faces
-
-**By 9 months:**
-- Not sitting with support
-- No back-and-forth gestures or sounds
-- Not responding to their own name
-
-**By 12 months:**
-- No waving, pointing, or other gestures
-- No words at all
-- Not following simple directions
-- Loss of any previously acquired skill (always urgent)
-
-**How to Bring It Up**
-
-You don''t need a specific reason to raise a concern — "I''ve noticed X and wanted to check in" is enough. Trust your instincts. Parents are often the first to sense that something is different, and clinicians take parental concern seriously.
-
-**What Happens Next**
-
-Raising a concern does not automatically mean there is a problem. It may lead to a referral for assessment, watchful waiting with a follow-up, or reassurance. Either way, you will have more information — and that is always better.
-
-*This article is for informational purposes only and does not constitute medical advice. Always consult your healthcare provider with concerns about your baby''s development.*$$,
-  24,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'NHS UK', 'CDC ''Learn the Signs. Act Early.'''],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-development-red-flags-when-to-seek-help'
-) ON CONFLICT (slug) DO NOTHING;
-
--- ---------------------------------------------------------------
-
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'development',
-  'Fine Motor Skills — How to Encourage Hand and Finger Development',
-  $$## Small Hands, Big Learning
-
-Fine motor skills refer to the small, precise movements of the hands and fingers. In infancy, these skills develop rapidly and lay the groundwork for feeding, writing, and self-care in later years.
-
-**The Progression**
-
-- **3–4 months**: Swiping and batting at objects
-- **4–5 months**: Grasping objects placed in the palm (palmar grasp)
-- **6–7 months**: Transferring objects from hand to hand
-- **8–9 months**: Raking objects toward themselves
-- **9–10 months**: Emerging pincer grip (thumb and index finger)
-- **11–12 months**: Refined pincer grip; poking with one finger; stacking
-
-**How to Encourage Fine Motor Development**
-
-- Offer a variety of safe objects of different shapes, textures, and sizes
-- Let your baby self-feed finger foods — messy but invaluable for hand control
-- Provide stacking cups, shape sorters, and pop-up toys
-- Encourage water play and sand play when age-appropriate
-- Let them press buttons, turn pages of board books, and explore musical toys
-
-**Why It Matters**
-
-Fine motor development is closely linked to cognitive development. When a baby manipulates an object — turning it, mouthing it, banging it — they are building understanding of the physical world. The hands are, in many ways, the brain''s primary research tool in the first year.
-
-**When to Talk to Your Doctor**
-
-If your baby is not grasping objects by 5 months, not transferring between hands by 7 months, or not developing any pincer grip by 12 months, raise this with your health visitor or GP.
-
-*This article is for informational purposes only and does not constitute medical advice. Always consult your healthcare provider with concerns about your baby''s development.*$$,
-  16,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'NHS UK', 'Zero to Three'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-development-fine-motor-skills-hands-fingers'
-) ON CONFLICT (slug) DO NOTHING;
-
--- ---------------------------------------------------------------
-
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'development',
-  'Gross Motor Skills — From Rolling to Walking Readiness',
-  $$## The Big Movements of the First Year
-
-Gross motor skills involve the large muscle groups — the core, arms, and legs — and underpin every physical milestone of infancy, from rolling to cruising toward first steps.
-
-**The Typical Sequence**
-
-- **3–4 months**: Head control improves; pushes up on arms during tummy time
-- **4–5 months**: Rolls tummy to back
-- **5–6 months**: Rolls back to tummy; begins to bear weight on legs when held standing
-- **6–7 months**: Sits with support; tripod sits
-- **7–8 months**: Sits independently; starts to lunge forward
-- **8–9 months**: Crawling begins (in any style); pulls to stand
-- **9–10 months**: Cruising along furniture
-- **10–15 months**: First independent steps
-
-**Tummy Time Is the Foundation**
-
-Supervised tummy time, ideally started from birth, builds the neck, shoulder, and core strength that underpins every subsequent gross motor milestone. Aim for short, frequent sessions spread throughout the day.
-
-**How to Support Gross Motor Growth**
-
-- Give maximum floor time and minimum time in bouncers, swings, and car seats when not travelling
-- Never use a baby walker — they delay gross motor development and are a serious safety risk
-- Let your baby practise pulling to stand and cruising without immediately "rescuing" them from wobbles
-- Swimming and water play are excellent for building strength and body awareness
-
-**Normal Variation**
-
-Not all babies crawl before they walk — some go straight to cruising. The sequence matters more than the exact timing.
-
-*This article is for informational purposes only and does not constitute medical advice. Always consult your healthcare provider with concerns about your baby''s development.*$$,
-  16,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'NHS UK', 'CDC Developmental Milestones'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-development-gross-motor-rolling-to-walking'
-) ON CONFLICT (slug) DO NOTHING;
+Your one-year health check will typically assess: walking/mobility, language, social development, feeding (transition to cow''s milk and family foods is now appropriate), and vaccinations. Come with any questions you''ve been storing up.',
+  'milestones', 6,
+  ARRAY['12 months', 'first birthday', 'walking', 'first words', 'autonomy', 'milestones'],
+  true, true, 'Lumira Health Team'
+),
 
 -- ============================================================
--- INFANT SLEEP
+-- FEEDING
 -- ============================================================
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'sleep',
-  'The 4-Month Sleep Regression — What Causes It and How to Survive It',
-  $$## Why Sleep Suddenly Gets Harder
+(
+  'infant', 13,
+  'Breastfeeding After 3 Months: Supply, Patterns, and What Changes',
+  'Breastfeeding gets easier — here''s what to expect as you settle into it',
+  '## The Third Month Shift
 
-Just when you thought you were turning a corner, your baby starts waking every hour. Welcome to the 4-month sleep regression — arguably the most disruptive sleep shift of the entire first year.
+Many breastfeeding parents report that around 6-12 weeks, something shifts. Feeds become shorter and more efficient. Breasts feel softer and less engorged. The baby seems more settled. And then panic sets in: *Is my supply dropping? Is something wrong?*
 
-**What Is Actually Happening**
+In almost every case, the answer is no. What you are experiencing is your supply **regulating** — moving from the early phase of overproduction to a more precise, demand-led system. Your body has learned exactly how much milk your baby needs and is making that amount efficiently, without excess. Softer breasts are not empty breasts.
 
-Around 3.5–4 months, your baby''s sleep architecture permanently matures. Newborns cycle between light and deep sleep quite simply. After this developmental shift, they cycle through multiple sleep stages — just like adults — including a light stage where they partially rouse between sleep cycles. Adults roll over and fall back asleep unconsciously. Babies, who haven''t yet learned to resettle independently, wake fully and call for you.
+## How Supply Works at 3+ Months
 
-**Signs You''re In It**
+Breast milk supply is governed by a principle called **supply and demand**. The more frequently and thoroughly the breast is emptied, the more milk is produced. By 3 months, your body has calibrated to your baby''s patterns.
 
-- Dramatic increase in night wakings (possibly every 45–90 minutes)
-- Short naps (the infamous 30–45 minute "catnap")
-- Increased fussiness and clinginess during the day
-- Baby seems tired but fights sleep
+Signs of adequate supply:
+- **6+ wet nappies per day**
+- **Consistent weight gain** (tracked at health visitor appointments)
+- **Baby seems satisfied** after most feeds
+- **Dirty nappies** are still occurring (though frequency naturally decreases after 6 weeks in breastfed babies)
 
-**How to Respond**
+## Feeding Patterns at 3-6 Months
 
-There is no way to prevent this regression — it is developmental, not a problem you caused. However, how you respond can shape what comes next:
+You may notice your baby feeding **less frequently** than in the early weeks — perhaps every 2.5-4 hours rather than every 1.5-2 hours. This is normal. Feeds become more efficient as your baby gets stronger and your milk flows more readily.
 
-- **Introduce a bedtime routine** if you haven''t already — bath, feed, wind-down, bed
-- **Put baby down drowsy but awake** when you can, to begin building independent sleep associations
-- **Keep the room dark and use white noise** to smooth the transitions between sleep cycles
+However, **cluster feeding** may still occur around growth spurts (typically at 3 months, 4 months, and 6 months) — sudden periods of very frequent feeding that boost supply to meet increased demand.
 
-**Will It End?**
+## Common Concerns
 
-Yes — typically within 2–6 weeks. For some families it resolves on its own; others choose to use this window to begin more formal sleep shaping.
+**"My baby feeds for only 5 minutes — is that enough?"** By 3+ months, many babies become highly efficient feeders. A 5-minute feed can deliver the same amount as a 20-minute feed in the early weeks. Watch output, not duration.
 
-*This article is for informational purposes only and does not constitute medical advice. Always consult your healthcare provider with concerns about your baby''s sleep.*$$,
-  16,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'NHS UK', 'Sleep Foundation'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-4-month-regression'
-) ON CONFLICT (slug) DO NOTHING;
+**"My baby keeps pulling off and getting frustrated."** This is often a **let-down issue** — either a fast let-down (causing gulping and pulling away) or a slow let-down (causing impatience). Laid-back breastfeeding positions can help with fast let-down; breast compression during feeding can help with slow.
 
--- ---------------------------------------------------------------
+**"I''m thinking about introducing a bottle."** This is a personal choice. From 4-6 weeks, most breastfed babies can take a bottle without affecting breastfeeding, though some show preference. A bottle of expressed breast milk given by another caregiver can be a valuable option for returning to work or sharing nighttime feeds.',
+  'feeding', 5,
+  ARRAY['breastfeeding', '3 months', 'milk supply', 'feeding patterns', 'breastfeeding support'],
+  true, true, 'Lumira Health Team'
+),
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'sleep',
-  'Sleep Training Methods Compared — CIO, Ferber, Chair, Fading, and Pick-Up-Put-Down',
-  $$## Choosing an Approach That Works for Your Family
+(
+  'infant', 13,
+  'Formula Feeding: Types, Preparation, and How Much Your Baby Needs',
+  'Everything you need to know about formula feeding with confidence',
+  '## Choosing a Formula
 
-Sleep training is one of the most debated topics in parenting. The good news: multiple methods are supported by evidence, and choosing the right one is about fit for your family — not a moral judgement.
+Walking down the formula aisle for the first time is overwhelming. Here is what actually matters:
 
-**Cry-It-Out (Extinction)**
-Baby is placed in the cot awake and left to fall asleep without parental intervention. Research consistently shows this is safe and effective. It is not for every family emotionally, but there is no evidence it causes harm.
+**First infant formula** (Stage 1) is suitable from birth and can continue throughout the first year. Despite marketing language, there is no evidence that moving to "Stage 2" or "Follow-on" formula (marketed from 6 months) offers any benefit over continuing with Stage 1.
 
-**Ferber Method (Graduated Extinction)**
-Parents check in at increasing intervals (e.g., 3, 5, 10 minutes) without picking the baby up, offering brief reassurance. Widely used and well-studied. Often leads to results within 5–7 nights.
+**Hypoallergenic formulas** (partially or extensively hydrolysed) are recommended for babies with confirmed or suspected cow''s milk protein allergy. These require a GP referral in some countries and should not be self-prescribed.
 
-**Chair Method (Sleep Lady Shuffle)**
-A parent sits in a chair next to the cot, gradually moving further away over 1–2 weeks. More parental presence, slower results, but gentler for families not comfortable with more crying.
+**Soy formula** is not routinely recommended for infants under 6 months and should only be used on medical advice.
 
-**Fading / Parental Presence Fading**
-Gradual withdrawal of whatever the current sleep association is — whether feeding, rocking, or patting. Very slow and gentle; requires consistency over several weeks.
+The difference between brands is largely marketing. All infant formulas sold in the UK, EU, and Australia must meet strict nutritional standards. Generic and supermarket-own formulas meet the same requirements as premium brands.
 
-**Pick-Up-Put-Down (PUPD)**
-Baby is placed down awake; if they cry, parent picks up to calm, then puts back down. Can be effective but is often stimulating for older babies who become more awake with each pick-up.
+## Preparation — Getting It Right
 
-**What All Methods Share**
+Incorrect formula preparation is a significant source of infant illness. Always:
 
-Regardless of method: a consistent bedtime routine, an age-appropriate schedule, and parental consistency are more predictive of success than the specific technique.
+1. **Wash your hands** thoroughly before preparing a feed.
+2. **Sterilise all equipment** — bottles, teats, and measuring tools.
+3. **Boil fresh water** and allow it to cool to no less than 70°C (this kills potential bacteria in the formula powder). Do not use water that has been boiled multiple times.
+4. **Add the correct number of scoops** — level, not heaped. Do not add extra formula thinking it will be more nutritious; it can be dangerous.
+5. **Cool quickly** by holding the bottle under cold running water, then test on your wrist.
+6. **Use within 2 hours** or discard. Never reheat a partially used bottle.
 
-**When to Begin**
+## How Much Is Enough?
 
-Most sleep consultants and paediatricians suggest no formal sleep training before 4–6 months. Always discuss with your health provider first.
+A general guide is **150-200 ml per kg of body weight per day** in the early months, divided across feeds. A 4 kg baby needs approximately 600-800 ml per day. By 6 months, most formula-fed babies take 5-7 feeds of around 180-240 ml.
 
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.*$$,
-  16,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'Sleep Foundation', 'Mindell et al. (2006) Sleep'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-training-methods-compared'
-) ON CONFLICT (slug) DO NOTHING;
+Watch your baby''s cues — hunger signals (rooting, sucking hands, fussiness) and fullness signals (turning away, slowing down, relaxing hands). Avoid pressuring your baby to finish a bottle if they signal they are done.',
+  'feeding', 5,
+  ARRAY['formula feeding', 'formula preparation', 'bottle feeding', 'infant formula', 'feeding amounts'],
+  true, true, 'Lumira Health Team'
+),
 
--- ---------------------------------------------------------------
+(
+  'infant', 17,
+  'Combination Feeding: Breast and Bottle Together',
+  'How to mix breastfeeding and formula — and make it work for your family',
+  '## What Is Combination Feeding?
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'sleep',
-  'Nap Transitions — From 4 Naps to 3 to 2',
-  $$## How Daytime Sleep Evolves in the First Year
+Combination feeding means giving your baby both breast milk and infant formula. This might mean:
 
-Daytime sleep changes dramatically across the first year. Understanding these transitions helps you avoid over-tiredness and the night-waking that comes with it.
+- Breastfeeding during the day and formula at night
+- Breastfeeding for some feeds and offering expressed breast milk or formula in a bottle for others
+- Gradually increasing formula as breastfeeding reduces
+- Using formula as a top-up after breastfeeding
 
-**The 4-to-3 Nap Transition (Around 3–4 Months)**
+There is no single right way. Combination feeding is a valid choice for a wide range of reasons: low supply, returning to work, wanting to share feeding, health reasons, or simply preference.
 
-Newborns nap frequently throughout the day. Around 3–4 months, most babies consolidate to 3 naps: a morning nap, an afternoon nap, and a short late-afternoon catnap. Signs it''s time: the fourth nap is a battle, bedtime is being pushed late, or night sleep is improving.
+## Impact on Breast Milk Supply
 
-**The 3-to-2 Nap Transition (Around 6–8 Months)**
+The most important thing to understand about combination feeding is that **breast milk supply follows demand**. Every formula feed that replaces a breastfeed is a signal to your body to produce slightly less milk. This is not a problem if you intend to reduce breastfeeding — but it means that combination feeding can gradually shift toward formula-led feeding over time, which may or may not be your intention.
 
-The late-afternoon catnap disappears. This is often the trickiest transition because it creates a longer awake window in the afternoon — and an overtired baby by bedtime. During the transition, bring bedtime temporarily earlier (6–6:30pm) to compensate.
+If you want to maintain breastfeeding while also giving formula:
+- **Breastfeed first**, then offer formula as a top-up
+- **Pump if you are skipping a feed** to protect supply
+- **Introduce formula gradually**, one feed at a time
 
-Signs of readiness for 2 naps:
-- Consistently fighting the third nap
-- Two naps are long and restorative
-- Total daytime sleep is 2.5–3.5 hours on two naps
+## Introducing a Bottle to a Breastfed Baby
 
-**The 2-to-1 Transition (Around 12–18 Months)**
+Some breastfed babies take a bottle readily; others resist. Tips that help:
+- **Offer when not ravenously hungry** — a slightly hungry but calm baby is more open to trying
+- **Have someone other than the breastfeeding parent offer the bottle** initially
+- **Try different teats** — slow-flow, widened neck, or angled teats can help
+- **Pace feeding** — hold the bottle horizontally and allow frequent pauses, mimicking breastfeeding
 
-This one usually happens in the toddler stage. At 12 months, most babies still need two naps, though some ready-early babies begin moving to one around 12 months.
+## Emotional Aspects
 
-**General Nap Principles**
+Combination feeding can bring complicated feelings. If you had wanted to exclusively breastfeed and could not, you may feel guilt or grief. These feelings are valid and common. Feeding your baby — however it happens — is the goal. Seek support from a lactation consultant or breastfeeding group if you''d like help optimising your breastfeeding before reaching for formula.',
+  'feeding', 5,
+  ARRAY['combination feeding', 'breastfeeding', 'formula', 'bottle feeding', 'mixed feeding'],
+  true, true, 'Lumira Health Team'
+),
 
-- Watch for tired cues rather than watching the clock
-- Keep the sleep environment consistent (dark room, white noise)
-- Avoid naps too close to bedtime — aim for bedtime 1.5–2 hours after the last nap ends
+(
+  'infant', 26,
+  'Starting Solids at 6 Months: Signs of Readiness',
+  'How to know when your baby is ready to begin their food journey',
+  '## When to Start
 
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.*$$,
-  16,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'Huckleberry Sleep', 'Taking Cara Babies'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-nap-transitions-4-to-2'
-) ON CONFLICT (slug) DO NOTHING;
+The NHS, WHO, and most major paediatric bodies recommend introducing solid foods at around **6 months**. Starting before 4 months is strongly advised against. Between 4 and 6 months is sometimes appropriate in specific circumstances on medical advice.
 
--- ---------------------------------------------------------------
+Why 6 months? By this age, most babies have:
+- The **gut maturity** to process foods other than milk
+- The **immune readiness** to handle diverse food antigens
+- The **physical development** needed to eat safely
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'sleep',
-  'The 8–10 Month Sleep Regression — Separation Anxiety and Night Waking',
-  $$## Why Sleep Gets Hard Again at 8–10 Months
+## The Three Signs of Readiness
 
-Just as you settled into a rhythm, the 8–10 month regression arrives. This one is driven by a perfect storm of developmental change.
+These three signs need to be present **together** — not individually:
 
-**What''s Behind It**
+**1. Sitting with minimal support and holding their head steady**
+Your baby needs to be upright and stable to eat safely. A baby who slumps cannot manage food. They do not need to sit completely independently — some support is fine — but they must be able to hold their head upright and control it.
 
-- **Separation anxiety**: Your baby now fully understands object permanence — meaning they know you exist even when you''re not there. And they want you. Badly. This is cognitively sophisticated behaviour, not manipulation.
-- **Motor development**: Crawling, pulling to stand, cruising — major gross motor leaps often disrupt sleep as the brain consolidates new skills overnight.
-- **New awareness**: Your baby''s world is expanding rapidly. There is a lot to process.
+**2. Coordination to pick up food and bring it to their mouth**
+This is a sign that the hand-eye-mouth coordination needed for eating is developing. Your baby should be able to reach for and grasp objects intentionally.
 
-**What It Looks Like**
+**3. Loss of the tongue-thrust reflex**
+Young babies automatically push food out of their mouth with their tongue — a protective reflex. By 6 months, most babies have lost this reflex and can move food to the back of their mouth. You can test this by offering a soft piece of food: does it get immediately pushed out, or can they manage it?
 
-- Increased night waking after a period of better sleep
-- Difficulty settling at bedtime — crying when you leave the room
-- Early morning waking
-- Separation distress at nap time
+## What Are NOT Signs of Readiness
 
-**How to Respond**
+- Waking more at night (almost always unrelated to hunger in this context)
+- Watching you eat with interest (normal from around 4 months, not a definitive indicator)
+- Seeming hungrier than usual (growth spurts cause this, not food readiness)
+- Being a certain weight
 
-- **Maintain your sleep routine** — consistency is the antidote to anxiety
-- **Brief, boring check-ins** reassure without reinforcing waking
-- **Practise separation during the day** — short periods out of sight, with a warm return, build trust
-- **Avoid creating new sleep associations** that you are not happy to maintain long-term (e.g., bringing baby into bed if that''s not your plan)
+## Starting Safely
 
-**Duration**
+Begin with **single foods**, one at a time, introducing new ones every 1-3 days. This allows you to spot any reactions. Offer food at a calm time of day when your baby is not overtired or ravenously hungry. Expect mess, rejection, and very small amounts — this is normal. Milk (breast or formula) remains the primary source of nutrition until at least 12 months.',
+  'feeding', 5,
+  ARRAY['starting solids', '6 months', 'weaning', 'first foods', 'readiness signs'],
+  true, true, 'Lumira Health Team'
+),
 
-Most regressions at this age last 2–6 weeks. Keeping your routine intact is the single most helpful thing you can do.
+(
+  'infant', 26,
+  'Baby-Led Weaning vs Purées: Which Approach Is Right for You?',
+  'Understanding the two main approaches to introducing solid foods — and why it doesn''t have to be either/or',
+  '## Two Approaches, One Goal
 
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.*$$,
-  32,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'Sleep Foundation', 'NHS UK'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-8-10-month-regression-separation-anxiety'
-) ON CONFLICT (slug) DO NOTHING;
+When it comes to introducing solid foods, parents often encounter two camps: **baby-led weaning (BLW)** and **traditional spoon-fed purées**. Both have vocal advocates and research to support them. The good news: the evidence does not clearly favour one over the other for most babies, and many families use a combination.
 
--- ---------------------------------------------------------------
+## Baby-Led Weaning
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'sleep',
-  'Moving Baby to Their Own Room — When and How to Make the Transition',
-  $$## Room-Sharing to Independent Sleep
+BLW means offering soft, appropriately sized pieces of real food from the start and allowing your baby to self-feed at their own pace. No purées, no spoon-feeding — your baby leads entirely.
 
-Current safe sleep guidelines from the AAP recommend room-sharing (but not bed-sharing) for at least the first 6 months, and ideally the first year. When you''re ready to move your baby to their own room, the transition can go smoothly with the right approach.
+**Potential benefits:**
+- Supports self-regulation of intake — babies stop when full
+- Exposes babies to varied textures from the start
+- Develops fine motor skills through self-feeding
+- Encourages family mealtimes and shared food
+- Can reduce parental anxiety around "getting enough in"
 
-**When Is the Right Time?**
+**Considerations:**
+- Requires readiness for self-feeding (6 months+, good sitting and grasp)
+- Messier and more unpredictable
+- Requires careful attention to appropriate food sizes and textures to reduce choking risk
+- Iron-rich foods need deliberate inclusion
 
-There is no single "right" time. Many families move their baby between 6 and 9 months. Some wait until 12 months. Consider:
-- Is your baby waking more because they can hear/smell you?
-- Are you sleeping worse because of their normal sleep sounds?
-- Do you feel ready?
+## Purées
 
-**Making the Transition**
+Spoon-feeding purées is the traditional approach, beginning with smooth single-food purées and gradually moving to lumpier textures.
 
-1. **Start with the nap**: Put your baby down for one nap a day in their own room first, so the space feels familiar.
-2. **Keep the routine identical**: Same bath, feed, songs, wind-down — just a different room.
-3. **Use a monitor**: A video monitor helps you trust the space without needing to physically check.
-4. **Match the sleep environment**: Same white noise machine, same room temperature, same dark conditions.
-5. **Expect a few rough nights**: Any environmental change can temporarily disrupt sleep. Stay consistent.
+**Potential benefits:**
+- Easier to ensure iron-rich foods are eaten
+- More predictable intake, especially helpful for parents who are anxious about quantities
+- Works well for babies who are not yet fully ready for finger foods
 
-**Safe Sleep in Their Own Room**
+**Considerations:**
+- Can delay exposure to textures if smooth purées are maintained too long
+- May not support self-regulation as effectively if babies are encouraged to finish jars
 
-- Firm, flat sleep surface — approved cot or Moses basket
-- No loose bedding, pillows, or soft toys in the sleep space
-- Room temperature 16–20°C
-- Continue placing baby on their back to sleep
+## The Evidence
 
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.*$$,
-  16,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP) Safe Sleep Guidelines', 'NHS UK', 'The Lullaby Trust'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-moving-baby-own-room'
-) ON CONFLICT (slug) DO NOTHING;
+Research suggests both methods result in similar outcomes for growth, nutrition, and feeding behaviour when done well. The **most important factors** are: offering a variety of foods, including iron-rich options, introducing allergens, and maintaining a positive, pressure-free feeding environment.
 
--- ---------------------------------------------------------------
+## A Combined Approach
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'sleep',
-  'Teething and Sleep — Managing Night Waking During Teething',
-  $$## When Sore Gums Disrupt the Night
+Many families find that offering **some finger foods alongside some spoon-fed foods** gives the best of both worlds. There is no rule that says you must choose one method.',
+  'feeding', 5,
+  ARRAY['baby-led weaning', 'purees', 'starting solids', 'weaning approach', 'finger foods'],
+  true, true, 'Lumira Health Team'
+),
 
-Teething typically begins between 4 and 7 months, though some babies teethe earlier or later. The discomfort — which peaks in the 1–2 days before and after a tooth breaks through — can interfere with sleep.
+(
+  'infant', 26,
+  'First Foods: What to Introduce and When',
+  'A practical guide to your baby''s first tastes — starting simple, building variety',
+  '## The First Week
 
-**How Teething Disrupts Sleep**
+Begin with **one food at a time** — a single vegetable, fruit, or iron-rich food — for the first 1-3 days before introducing the next. This allows you to identify any reactions.
 
-Gum pressure and pain are typically worse at night when there are fewer distractions. You may notice your baby:
-- Waking more frequently than usual
-- Difficult to settle back to sleep
-- Drooling more, chewing on hands, or fussier than normal during the day
+**Good first foods:**
+- Soft cooked vegetables: sweet potato, carrot, butternut squash, parsnip, broccoli
+- Soft fruits: banana, avocado, cooked pear or apple
+- Iron-rich options: puréed meat (chicken, lamb), mashed lentils or beans, fortified baby cereal
 
-**What Actually Helps**
+Start with **small amounts** — a teaspoon or a few soft pieces. Expect most of it to end up on the floor, face, or high chair. This is normal and fine; the goal in these early weeks is exploration, not nutrition.
 
-- **Cold teething rings** (not frozen — too hard for gums): Chill in the fridge, not the freezer
-- **Gentle gum massage** with a clean finger before bed
-- **Infant paracetamol or ibuprofen** at the appropriate age and dose, if your baby is clearly in pain — discuss with your pharmacist or GP first
-- **Extra comfort** at night — brief reassurance without creating new long-term habits
+## Building Variety (Weeks 2-8)
 
-**What Doesn''t Help**
+After the first week of single foods, you can begin combining flavours and introducing new ingredients more quickly. Aim to **offer a wide variety** across the colour spectrum — different vegetables, proteins, grains, and fruits.
 
-- Teething gels containing lidocaine — not recommended for infants due to safety concerns
-- Amber teething necklaces — these pose a choking and strangulation risk and have no evidence of effectiveness
+Introduce **stronger flavours** early: garlic, ginger, mild spices, bitter greens. Babies exposed to a wide range of flavours in the weaning period tend to be more accepting eaters later.
 
-**Keeping Perspective**
+**Avoid until 12 months:**
+- Honey (risk of botulism)
+- Whole cow''s milk as a drink (fine in cooking)
+- Added salt or sugar
+- Unpasteurised cheese
+- Raw or lightly cooked eggs (cooked whole egg is fine)
+- Whole nuts (choking hazard — nut butters are fine)
+- Certain fish: shark, swordfish, marlin (high mercury)
 
-Teething discomfort is real but temporary. Most teeth cause disruption for only a day or two each. Once the tooth is through, sleep usually returns to its previous pattern.
+## Textures Over Time
 
-*This article is for informational purposes only and does not constitute medical advice. Always consult your healthcare provider before giving any medication to your baby.*$$,
-  24,
-  true,
-  ARRAY['NHS UK', 'American Academy of Pediatrics (AAP)', 'Oral Health Foundation'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-teething-night-waking'
-) ON CONFLICT (slug) DO NOTHING;
+- **6-7 months:** Smooth purées or very soft mashed foods; soft finger food pieces
+- **7-9 months:** Lumpier mashes, minced meat, soft pieces of the same foods you''re eating
+- **9-12 months:** Mostly the same as family food, chopped into appropriate sizes
+- **12 months+:** Family food with minor adaptations
 
--- ---------------------------------------------------------------
+Progress through textures at a pace that suits your baby — moving toward lumpier textures by 9 months is important for developing oral motor skills.',
+  'feeding', 5,
+  ARRAY['first foods', 'starting solids', 'weaning foods', 'baby food', 'nutrition'],
+  true, true, 'Lumira Health Team'
+),
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'sleep',
-  'Early Waking — Why Babies Wake at 5am and What to Do',
-  $$## The Dawn Chorus Problem
+(
+  'infant', 26,
+  'Introducing Allergens: The New Guidance',
+  'Why early allergen introduction is now recommended — and how to do it safely',
+  '## The Science Has Changed
 
-A baby who reliably wakes at 5am regardless of what time they went to bed is one of the most common — and exhausting — infant sleep complaints.
+For years, parents were advised to delay introducing common allergens — peanuts, egg, wheat — until after 12 months, in the hope that this would prevent allergies. The evidence now shows the **opposite is true**. Early, repeated introduction of allergenic foods during weaning is associated with **lower rates of food allergy**.
 
-**Why It Happens**
+This shift is based on landmark research, including the **LEAP study** (Learning Early About Peanut Allergy), which found that early introduction of peanut reduced the risk of peanut allergy by up to 80% in high-risk infants.
 
-Sleep is governed by two forces: sleep pressure (how tired you are) and circadian rhythm (your body clock). In the early morning hours, sleep pressure is low and the circadian clock is signalling "time to wake." At this point, even a slight disturbance — light, sound, a brief partial waking — can tip a baby into full wakefulness.
+## When to Introduce
 
-**Common Causes of Early Waking**
+The current guidance from BSACI, NHS, and most international bodies recommends introducing all common allergens from **around 6 months** — when solids are first introduced — rather than waiting.
 
-- **Too much light in the morning**: Even small amounts of dawn light can trigger waking. Blackout blinds are often transformative.
-- **Overtiredness**: Counterintuitively, a baby who goes to bed too late or naps too little often wakes earlier.
-- **Too-early bedtime for their age**: Rare, but some babies genuinely need a later bedtime.
-- **Hunger**: Common in younger babies or those going through growth spurts.
-- **Developmental phase**: Early waking often clusters around developmental leaps.
+The 14 major allergens include:
+- Peanuts and tree nuts
+- Egg
+- Cow''s milk (as food — yoghurt, cheese)
+- Wheat and gluten
+- Soy
+- Fish and shellfish
+- Sesame
 
-**What to Try**
+## How to Introduce Safely
 
-1. Install true blackout blinds
-2. Add white noise to mask early morning sounds
-3. Review wake windows and nap schedule — is your baby overtired?
-4. If they are 6+ months, resist immediately rushing in — give them 5–10 minutes to see if they resettle
-5. Try a "dream feed" in older babies to top up overnight calories
+- **Start with small amounts** on the tip of a spoon.
+- **Introduce one allergen at a time**, not on the same day.
+- **Do it at home** during the day, not at a childminder''s or nursery, so you can monitor your baby.
+- **Choose a time when your baby is well** — not during illness or if they have bad eczema flares.
+- **Wait and watch** for 20-30 minutes after the first taste.
 
-**Realistic Expectations**
+Mild reactions to watch for: redness or hives around the mouth (often from contact), watery eyes, sneezing. These may or may not indicate an allergy.
 
-Some babies are biologically early risers. Before 6am is a reasonable goal. 5am may simply be their natural wake time.
+**Signs of a serious reaction (seek emergency help immediately):**
+- Swelling of the lips, tongue, or throat
+- Difficulty breathing or swallowing
+- Sudden extreme pallor or limpness
+- Vomiting combined with any of the above
 
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.*$$,
-  12,
-  true,
-  ARRAY['Sleep Foundation', 'NHS UK', 'American Academy of Pediatrics (AAP)'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-early-waking-5am'
-) ON CONFLICT (slug) DO NOTHING;
+## High-Risk Babies
 
--- ---------------------------------------------------------------
+Babies with **severe eczema** or **existing egg allergy** are at higher risk of peanut allergy and should be discussed with a GP or allergy specialist before peanut introduction. In many cases, these babies benefit from supervised introduction.',
+  'feeding', 5,
+  ARRAY['allergen introduction', 'food allergy', 'weaning', 'peanut allergy', 'LEAP study'],
+  true, true, 'Lumira Health Team'
+),
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'sleep',
-  'Building a Sleep Routine — Bath, Book, Feed, Bed',
-  $$## Why Routine Is Your Sleep Superpower
+(
+  'infant', 30,
+  'Iron-Rich Foods for Babies: Why It Matters and What to Offer',
+  'Iron is the most critical nutrient in the second half of infancy — here''s how to get enough',
+  '## Why Iron Is So Important
 
-A consistent bedtime routine is one of the most evidence-backed tools for improving infant sleep. It works by signalling to your baby''s developing brain that sleep is coming — helping them transition from the stimulation of the day to the stillness of the night.
+Babies are born with iron stores from pregnancy — but these stores begin to deplete around **4-6 months**. Breast milk contains very little iron (though what it contains is highly absorbable). By 6 months, your baby genuinely needs iron from food.
 
-**When to Start**
+**Iron deficiency in infancy is linked to:**
+- Impaired cognitive development and learning
+- Fatigue and poor growth
+- Increased susceptibility to infection
 
-You can introduce a simple routine from as early as 6–8 weeks. It does not need to be elaborate. Consistency matters far more than length or complexity.
+Iron deficiency anaemia is one of the most common nutritional deficiencies in young children worldwide, and it is largely preventable.
 
-**A Simple Template**
+## The Best Sources of Iron for Babies
 
-1. **Bath** (or a warm wash if not a bath night): Warm water is naturally calming and signals the shift to sleep mode. A warm bath has been shown to lower core body temperature slightly — a biological cue for sleep.
-2. **Massage or lotion**: Skin-to-skin touch and a few minutes of gentle massage can reduce cortisol and support relaxation.
-3. **Feed** (breast or bottle): A comfortable, calm feed as part of the routine — but ideally not the very last thing before they go into the cot, to avoid a feed-to-sleep association.
-4. **Book or song**: Reading aloud or singing the same song each night creates a powerful sleep cue. Your baby does not need to understand the words for this to work.
-5. **Bed**: Into the cot, drowsy but not fully asleep, with a consistent phrase: "Night night, I love you."
+**Haem iron (from meat — most absorbable):**
+- Red meat: lamb, beef, pork
+- Poultry: chicken, turkey (dark meat especially)
+- Oily fish: sardines, salmon
 
-**Keep It the Same**
-
-The order matters more than the individual elements. Same order, same room, same cues, every night. Your baby''s brain will begin to anticipate sleep at the first step.
-
-**Expect It to Take Time**
-
-A routine typically takes 2–3 weeks of consistency before you see reliable results. Keep going.
-
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.*$$,
-  12,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'NHS UK', 'National Sleep Foundation'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-sleep-building-bedtime-routine'
-) ON CONFLICT (slug) DO NOTHING;
-
--- ============================================================
--- INFANT FEEDING — INTRODUCING SOLIDS
--- ============================================================
-
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'feeding',
-  'When to Start Solid Foods — Signs of Readiness and WHO Guidance',
-  $$## The Right Time to Begin
-
-Starting solid foods is one of the most anticipated milestones of the first year. Getting the timing right matters for both nutrition and safety.
-
-**What the Guidelines Say**
-
-The World Health Organization (WHO) recommends exclusive breastfeeding for the first 6 months, followed by the introduction of complementary foods alongside continued breastfeeding. The NHS and AAP align with starting solids at around 6 months — not before 17 weeks (4 months) under any circumstances.
-
-**Signs of Developmental Readiness**
-
-Age alone is not sufficient. Look for all three of these signs together:
-
-1. **Sitting with support and holding their head steady**: Your baby needs to be able to hold their head upright and stable to eat safely.
-2. **Loss of the tongue-thrust reflex**: Younger babies automatically push food out of their mouths. When this reflex fades, they can move food to the back of the mouth and swallow.
-3. **Interest in food**: Watching you eat, reaching for your food, or opening their mouth when food approaches.
-
-**What Is Not a Sign of Readiness**
-
-- Waking more at night (this is developmental, not hunger-driven)
-- Chewing fists (this is normal infant behaviour)
-- Seeming unsatisfied after milk feeds (growth spurts mimic this)
-
-**Starting Before 6 Months**
-
-Some babies, particularly those born prematurely, may need adjusted guidance. Always consult your GP or health visitor before starting solids before 6 months.
-
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before introducing solid foods.*$$,
-  24,
-  true,
-  ARRAY['World Health Organization (WHO)', 'NHS UK', 'American Academy of Pediatrics (AAP)'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-feeding-when-to-start-solids'
-) ON CONFLICT (slug) DO NOTHING;
-
--- ---------------------------------------------------------------
-
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'feeding',
-  'Baby-Led Weaning Explained — Approach, First Foods, and Gagging vs Choking',
-  $$## What Is Baby-Led Weaning?
-
-Baby-led weaning (BLW) is an approach to introducing solids that skips purees and goes straight to soft, appropriately sized whole foods that your baby can pick up and self-feed. The philosophy is that babies who can sit and are developmentally ready to eat can also self-regulate how much they eat and explore food at their own pace.
-
-**The Principles**
-
-- Baby feeds themselves from the start — no spoon-feeding purees
-- Food is offered in strips or chunks that can be held in the fist (initially)
-- Milk remains the primary nutrition source for the first few months of weaning
-- Family mealtimes are shared experiences
-
-**Good First BLW Foods**
-
-- Soft-cooked broccoli florets (held by the stalk)
-- Steamed carrot sticks (cooked until easily squished between fingers)
-- Avocado in long strips
-- Banana strips
-- Toast fingers with a thin scrape of nut butter
-- Soft-cooked pasta
-
-**Gagging vs Choking — Understanding the Difference**
-
-Gagging is normal and protective. It is your baby''s reflex moving food forward from the back of their mouth. Gagging looks dramatic — retching, red face, watery eyes — but baby recovers quickly and without intervention. Choking is silent, occurs when the airway is blocked, and requires immediate action.
-
-BLW babies gag frequently at first; this is how they learn. The gag reflex is positioned further forward in infants than adults, making it highly effective.
-
-**Who BLW May Not Suit**
-
-Babies with certain swallowing difficulties, premature babies, or babies with motor delays may need a different approach. Discuss with your health visitor or GP.
-
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before introducing solid foods.*$$,
-  24,
-  true,
-  ARRAY['Rapley & Murkett — Baby-Led Weaning', 'NHS UK', 'American Academy of Pediatrics (AAP)'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-feeding-baby-led-weaning-explained'
-) ON CONFLICT (slug) DO NOTHING;
-
--- ---------------------------------------------------------------
-
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'feeding',
-  'Traditional Purees — How to Start, Textures, and Progression',
-  $$## Starting with Spoon-Fed Purees
-
-Puree-based weaning has been the traditional approach to introducing solids for decades. When done well, it is safe, nutritious, and can be a lovely bonding experience.
-
-**Starting Out**
-
-Begin with single-ingredient, smooth purees at around 6 months. Offer a small amount — a teaspoon or two — once a day, at a time when your baby is alert and neither ravenously hungry nor full. The first goal is exploration, not nutrition.
-
-**Good First Purees**
-
-- Sweet potato
-- Butternut squash
-- Carrot
-- Parsnip
-- Apple or pear (cooked)
-- Avocado (no cooking needed — just mash)
-
-**The Texture Progression**
-
-Moving through textures is as important as introducing new foods. A baby who stays on smooth purees too long can have difficulty accepting lumps later.
-
-- **6 months**: Smooth, runny purees
-- **7 months**: Thicker purees with some soft lumps
-- **8–9 months**: Mashed and minced textures; soft finger foods alongside
-- **10–12 months**: Chopped family foods; largely finger feeding
-
-**Tips for Success**
-
-- Offer new foods 3–5 times before concluding your baby dislikes it — repeated exposure is key
-- Avoid adding salt, sugar, or honey to any baby food
-- Batch cook and freeze in ice cube trays for convenience
-- Let your baby touch and smell food even if they do not eat it — sensory exploration matters
-
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before introducing solid foods.*$$,
-  24,
-  true,
-  ARRAY['NHS UK Start4Life', 'American Academy of Pediatrics (AAP)', 'First Steps Nutrition Trust'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-feeding-traditional-purees-how-to-start'
-) ON CONFLICT (slug) DO NOTHING;
-
--- ---------------------------------------------------------------
-
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'feeding',
-  'The Combination Approach — Mixing BLW and Purees',
-  $$## The Best of Both Worlds
-
-You do not have to choose between baby-led weaning and purees. A combination approach — also called "modified baby-led weaning" — is what most families end up doing naturally, and it is entirely supported by current evidence.
-
-**What It Looks Like**
-
-- Offer some soft finger foods for your baby to self-feed (BLW style)
-- Also offer some spoon-fed purees or mashes
-- Allow your baby to take the spoon and explore it themselves
-- Let them set the pace — no pressure to finish any amount
-
-**Why It Works**
-
-- Finger foods build chewing skills, motor development, and autonomy
-- Purees allow you to pack in more iron-rich or nutrient-dense foods easily
-- It suits families where time or food preparation varies
-- It accommodates babies who are keen self-feeders alongside those who need more time
-
-**Practical Tips**
-
-- Offer a loaded spoon and let your baby bring it to their mouth themselves when they are ready
-- Serve finger food and puree at the same meal
-- Avoid using spoon-feeding as a way to get large amounts of food in quickly — follow your baby''s cues
-- As your baby''s skills grow, shift the balance more toward finger foods and family textures
-
-**The Evidence**
-
-Research comparing BLW, traditional weaning, and combination approaches shows no significant differences in outcomes when food safety practices are followed. The best approach is the one that works for your family and your baby.
-
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before introducing solid foods.*$$,
-  24,
-  true,
-  ARRAY['NHS UK', 'Rapley & Murkett — Baby-Led Weaning', 'Cameron et al. (2015) BMJ Open'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-feeding-combination-blw-purees'
-) ON CONFLICT (slug) DO NOTHING;
-
--- ---------------------------------------------------------------
-
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'nutrition',
-  'First Foods for Baby — What to Offer and in What Order',
-  $$## Getting Started with Real Food
-
-The order in which you introduce foods matters less than you might think — variety and iron are the key priorities. Here is a practical guide to the first weeks of weaning.
-
-**Priority 1: Iron-Rich Foods**
-
-Babies are born with iron stores that start to deplete around 6 months. Breast milk is low in iron, so introducing iron-rich foods early is essential. Start with:
-- Pureed or minced meat and poultry (beef, chicken, lamb)
-- Cooked and pureed lentils, chickpeas, and beans
-- Fortified infant cereals (mixed with milk, not water)
-
-**Priority 2: Vegetables**
-
-Offering vegetables before fruit helps develop a preference for less sweet foods. Try:
-- Broccoli, cauliflower, courgette, peas
-- Carrot, sweet potato, butternut squash
-- Spinach blended into a puree
-
-**Priority 3: Fruit, Grains, and Dairy-Based Foods**
-
-Fruit, soft-cooked grains, and full-fat plain yoghurt can all be introduced in the first few weeks. Full-fat cow''s milk can be used in cooking and mixed into food from 6 months, though it should not replace breast or formula milk as a drink until 12 months.
-
-**A Suggested First Two Weeks**
-
-- Days 1–3: Sweet potato or carrot puree
-- Days 4–6: Pureed lentils or beef
-- Days 7–9: Broccoli or peas
-- Days 10–12: Soft fruit (pear or banana)
-- Days 13–14: Combine two foods already accepted
-
-**Key Reminder**
-
-Introduce new foods one at a time, with 2–3 days between each new food, so you can identify any reactions.
-
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before introducing solid foods.*$$,
-  24,
-  true,
-  ARRAY['NHS UK Start4Life', 'First Steps Nutrition Trust', 'American Academy of Pediatrics (AAP)'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-nutrition-first-foods-what-to-offer'
-) ON CONFLICT (slug) DO NOTHING;
-
--- ---------------------------------------------------------------
-
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'feeding',
-  'Allergen Introduction — The 8 Major Allergens, When and How',
-  $$## Early Introduction Reduces Allergy Risk
-
-Current evidence strongly supports introducing the major food allergens early — around 6 months — rather than avoiding them. The LEAP study (Learning Early About Peanut Allergy) demonstrated that early introduction of peanuts significantly reduces the risk of peanut allergy.
-
-**The 8 Major Allergens**
-
-1. Peanuts
-2. Tree nuts (cashews, walnuts, almonds, etc.)
-3. Cow''s milk
-4. Egg
-5. Wheat
-6. Soy
-7. Fish
-8. Shellfish
-
-**How to Introduce Each Allergen**
-
-- Introduce one new allergen at a time, on a day when you are at home and can observe your baby
-- Offer a small amount first, then wait 10–15 minutes before giving more
-- If tolerated, continue offering that allergen regularly (2–3 times per week) to maintain tolerance
-- Do not introduce a new allergen on the same day as another new allergen
-
-**Signs of an Allergic Reaction**
-
-Mild: rash, hives, mild swelling around the mouth
-Severe (anaphylaxis — call 999/911 immediately): difficulty breathing, significant swelling of lips/tongue/throat, baby becomes pale or floppy
-
-**Higher-Risk Babies**
-
-Babies with severe eczema or a known food allergy may need specialist guidance before allergen introduction. Discuss with your GP or allergy team.
-
-**Peanuts Specifically**
-
-Offer as smooth peanut butter thinned with milk or water — never whole peanuts, which are a choking hazard.
-
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before introducing allergens if your baby has eczema or known allergies.*$$,
-  24,
-  true,
-  ARRAY['LEAP Study (Du Toit et al. 2015)', 'American Academy of Pediatrics (AAP)', 'NHS UK', 'Anaphylaxis UK'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-feeding-allergen-introduction'
-) ON CONFLICT (slug) DO NOTHING;
-
--- ---------------------------------------------------------------
-
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'safety',
-  'Gagging vs Choking — Understanding the Difference',
-  $$## Two Very Different Things
-
-One of the biggest fears parents have about introducing solid foods — especially finger foods — is choking. Understanding the difference between gagging and choking is essential for staying calm and responding correctly.
-
-**Gagging**
-
-Gagging is a normal, protective reflex. It moves food forward in the mouth and prevents it from reaching the airway. In babies, the gag reflex is positioned further forward on the tongue than in adults — making it an excellent safety mechanism.
-
-What gagging looks like:
-- Retching or heaving sounds
-- Red face
-- Watery eyes
-- May spit food out or cough dramatically
-- Baby recovers quickly and without help
-
-**What to do**: Stay calm. Don''t reach into the mouth or pat the baby''s back. Let the reflex do its job.
-
-**Choking**
-
-Choking occurs when something partially or fully blocks the airway. It is silent — because if the airway is blocked, no air (and no sound) can pass through.
-
-What choking looks like:
-- Sudden silence after eating
-- Baby cannot cry or cough
-- Face turns blue or pale
-- Distressed, panicked expression
-
-**What to do**: Act immediately. Lay baby face-down on your forearm, supporting the head. Give up to 5 back blows between the shoulder blades. If unsuccessful, turn face-up and give up to 5 chest thrusts. Call emergency services (999/911).
-
-**Reducing Choking Risk**
-
-- Always supervise mealtimes
-- Never give whole grapes, cherry tomatoes, whole nuts, hard raw vegetables, or large chunks of meat
-- Sit your baby upright — never reclined — during eating
-- Learn infant first aid before starting weaning
-
-*This article is for informational purposes only. Learning infant first aid from a qualified instructor is strongly recommended.*$$,
-  24,
-  true,
-  ARRAY['NHS UK', 'St John Ambulance', 'American Academy of Pediatrics (AAP)'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-safety-gagging-vs-choking'
-) ON CONFLICT (slug) DO NOTHING;
-
--- ---------------------------------------------------------------
-
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'nutrition',
-  'Iron-Rich Foods for Babies — Why Iron Is Critical at 6 Months',
-  $$## The Iron Gap
-
-Iron is one of the most important nutrients in your baby''s diet during the second half of the first year — and one of the most commonly under-provided.
-
-**Why 6 Months Is the Critical Point**
-
-Babies are born with iron stores accumulated during pregnancy. These stores begin to deplete around 4–6 months. At the same time, breast milk — while perfectly balanced for early infancy — is naturally low in iron. Formula is iron-fortified, but as solids replace milk, ensuring iron from food becomes essential.
-
-Iron deficiency in infancy is associated with impaired cognitive development, poor growth, and reduced immunity. The good news: it is very preventable with the right foods.
-
-**Best Dietary Sources of Iron**
-
-*Haem iron (most easily absorbed):*
-- Red meat (beef, lamb) — pureed or minced
-- Chicken and turkey — especially dark meat
-- Oily fish like salmon and sardines
-
-*Non-haem iron (plant-based — less easily absorbed):*
+**Non-haem iron (from plant foods — less absorbable but still valuable):**
 - Lentils, chickpeas, kidney beans
-- Tofu
-- Dark leafy greens (spinach, kale)
-- Fortified infant cereals
+- Dark green vegetables: spinach, kale, broccoli
+- Fortified baby cereals
+- Tofu and tempeh
+- Dried fruit: apricots, figs, prunes (in small amounts due to sugar)
 
-**The Vitamin C Trick**
+## Boosting Iron Absorption
 
-Non-haem iron absorption increases significantly when eaten alongside vitamin C. Pair lentils with tomato sauce, or offer a small amount of orange or mango alongside plant-based iron sources.
+**Vitamin C dramatically increases absorption of non-haem iron.** Offer iron-rich plant foods alongside:
+- Tomato
+- Pepper
+- Citrus or fruit purée
+- Broccoli (which contains both)
 
-**How Much Iron Does a Baby Need?**
+**Calcium inhibits iron absorption.** Avoid giving cow''s milk alongside iron-rich meals (note: yoghurt in small amounts with food is different from a large milk drink alongside meals).
 
-Around 8mg per day at 7–12 months. Aim to include an iron-rich food at least twice a day once weaning is established.
+## Practical Tips
 
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider or dietitian with questions about your baby''s nutrition.*$$,
-  24,
-  true,
-  ARRAY['NHS UK', 'First Steps Nutrition Trust', 'American Academy of Pediatrics (AAP)', 'WHO'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-nutrition-iron-rich-foods-6-months'
-) ON CONFLICT (slug) DO NOTHING;
-
--- ---------------------------------------------------------------
+- Offer a **meat-based meal** at least once a day if your baby eats meat.
+- For **vegetarian or vegan babies**, iron planning requires more deliberate attention — speak with your health visitor or dietitian.
+- Offer **vitamin C-rich foods** at every meal containing plant iron.
+- Avoid giving **tea** to babies and toddlers — tannins in tea significantly reduce iron absorption.',
+  'nutrition', 5,
+  ARRAY['iron', 'baby nutrition', 'iron-rich foods', 'weaning', 'anaemia prevention'],
+  true, true, 'Lumira Health Team'
+),
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'feeding',
-  'Finger Foods Progression — From Soft to Lumpy to Family Foods',
-  $$## Building Texture Confidence
+(
+  'infant', 30,
+  'Gagging vs Choking: Knowing the Difference',
+  'Understanding your baby''s natural gag reflex — and when to act',
+  '## Two Very Different Things
 
-Progressing through textures is one of the most important — and most often skipped — steps in weaning. Babies who stay on smooth purees too long often struggle to accept lumps and family foods, a pattern that can persist into toddlerhood.
+The single most anxiety-provoking aspect of introducing solid foods — especially for parents choosing baby-led weaning — is the fear of choking. Understanding the difference between **gagging** and **choking** is essential for keeping calm and keeping your baby safe.
 
-**The Texture Ladder**
+## Gagging
 
-**6–7 months:**
-- Soft, dissolvable finger foods: puffed rice snacks, soft-cooked broccoli florets, avocado strips, banana
-- Let baby explore with their hands even if little makes it to their mouth
+Gagging is a **normal, protective reflex**. It is your baby''s body doing exactly what it should. The gag reflex in infants is positioned further forward on the tongue than in adults, making it very sensitive and easily triggered. When a piece of food goes slightly too far back, the gag reflex kicks in:
 
-**7–8 months:**
-- Thicker mashes and soft lumps alongside finger foods
-- Toast fingers, soft-cooked pasta, soft cheese cubes
-- Encourage the pincer grip to develop
+- Your baby will make retching sounds, their face may go red, their eyes may water
+- They may drool or vomit slightly
+- The food will be moved forward and out of the throat
+- Your baby will recover quickly and often continue eating
 
-**9–10 months:**
-- More complex textures: minced meat, flaked fish, grated cheese, small soft pieces
-- Loaded spoons baby can self-feed
-- Mini rice cakes, small pieces of omelette
+**What to do:** Stay calm. Do not put your fingers in their mouth. Do not pat their back. Watch and wait. Your calm face reassures your baby that everything is okay.
 
-**10–12 months:**
-- Chopped versions of family meals (before adding salt or seasoning)
-- Soft-cooked vegetables in pieces, pasta pieces, soft bread
-- Transition toward eating what the family eats
+Gagging becomes less frequent as your baby develops better oral motor coordination — typically by 8-9 months.
 
-**Why This Matters**
+## Choking
 
-Texture exposure is time-sensitive. Research suggests that babies who are not exposed to textured food by 9–10 months are significantly more likely to develop feeding difficulties. Move forward even if it''s messy and imperfect.
+Choking is an **airway obstruction**. It is a genuine emergency. Signs:
 
-**Making Mealtimes Positive**
+- **Silent** — no crying or coughing, or very weak coughing
+- Skin turning **blue** around the lips
+- Unable to breathe, make sound, or cough effectively
+- Obvious distress with no sound
 
-Never force food, pressure your baby to eat more, or react negatively to rejection. A calm, exploratory mealtime environment supports long-term healthy eating attitudes.
+**What to do:** Act immediately. Give up to **5 back blows** (heel of your hand, between shoulder blades, with baby face-down over your arm, head lower than chest). If ineffective, give up to **5 chest thrusts** (two fingers on breastbone, one finger''s width below nipple line). Alternate until the object clears or emergency services arrive.
 
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.*$$,
-  24,
-  true,
-  ARRAY['NHS UK Start4Life', 'First Steps Nutrition Trust', 'Coulthard et al. (2009) Maternal & Child Nutrition'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-feeding-finger-foods-progression'
-) ON CONFLICT (slug) DO NOTHING;
+**Learn infant first aid before starting solids.** Many local organisations and the Red Cross offer short courses. It is one of the most valuable things you can do.
 
--- ---------------------------------------------------------------
+## Reducing Choking Risk
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'feeding',
-  'Managing a Baby Who Refuses Solids',
-  $$## When Weaning Doesn''t Go to Plan
+- Never leave your baby unattended while eating
+- Always have baby sitting upright
+- Avoid round, firm foods: whole grapes, whole cherry tomatoes, whole blueberries, large chunks of hard raw fruit or vegetable, whole nuts, hard cheese cubes
+- Cut round foods in half or quarters lengthwise
+- Cook vegetables until soft',
+  'safety', 5,
+  ARRAY['gagging', 'choking', 'baby safety', 'weaning', 'infant first aid'],
+  true, true, 'Lumira Health Team'
+),
 
-Most babies take to solids enthusiastically within a few weeks of starting. But some babies push food away, clamp their mouths shut, gag on everything, or simply show no interest. This is more common than you might think, and it rarely reflects anything you''re doing wrong.
+(
+  'infant', 34,
+  'Finger Foods at 8+ Months: Building Confidence and Independence',
+  'How to introduce finger foods safely and why they matter for development',
+  '## Why Finger Foods Matter
 
-**Common Reasons for Solid Food Refusal**
+By 8-9 months, even babies who started on purées benefit greatly from being offered finger foods. Finger feeding is not just about nutrition — it develops:
 
-- **Not ready yet**: If you started before 6 months, wait a week and try again
-- **A bad experience**: Gagging that frightened baby, being pushed to eat more than they wanted
-- **Illness or teething**: Temporarily reduced appetite is normal when unwell or teething
-- **Texture sensitivity**: Some babies tolerate purees but not lumps, or vice versa
-- **Too full of milk**: If baby fills up on a big milk feed just before solids, they won''t be interested
+- **Fine motor skills** (pincer grasp, hand-eye coordination)
+- **Oral motor skills** (munching, chewing patterns that support speech)
+- **Self-regulation** (knowing when to take the next bite, when to stop)
+- **Autonomy and confidence** around food
 
-**What to Try**
+Babies who are kept on smooth purées past 9 months are more likely to have difficulty accepting lumpy textures and a narrower food range later.
 
-- Offer solids when baby is happy and alert — not tired or hungry
-- Eat together and let baby see you enjoying food
-- Offer the same food 10–15 times before deciding they dislike it
-- Try different textures — some babies prefer finger foods to spoons
-- Make mealtimes pressure-free: offer food, let them explore, remove it without fuss if refused
-- Reduce the milk feed preceding the solid meal slightly
+## Appropriate Textures at 8+ Months
 
-**When to Seek Help**
+Finger foods at this age should be **soft enough to squash between your thumb and forefinger** — that is the benchmark. Examples:
 
-If your baby is still consistently refusing all solids by 8–9 months, is losing weight, or if mealtimes are highly stressful for the whole family, speak to your health visitor or GP. A paediatric dietitian or feeding therapist can make a significant difference.
+- Soft cooked broccoli florets (held by the stalk)
+- Steamed carrot sticks
+- Ripe banana chunks (not slippery slices — quarters work better)
+- Soft toast fingers with a thin spread of nut butter, avocado, or hummus
+- Scrambled egg
+- Soft cooked pasta shapes
+- Small pieces of tender meat or fish (checked carefully for bones)
+- Well-cooked chunks of potato or sweet potato
 
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.*$$,
-  24,
-  true,
-  ARRAY['NHS UK', 'First Steps Nutrition Trust', 'American Academy of Pediatrics (AAP)'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-feeding-baby-refuses-solids'
-) ON CONFLICT (slug) DO NOTHING;
-
--- ---------------------------------------------------------------
-
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'safety',
-  'Foods to Avoid Under 12 Months — Honey, Salt, Sugar, and More',
-  $$## What Stays Off the Menu in Year One
-
-Some foods are unsafe or inappropriate for babies under 12 months. Knowing what to avoid keeps your baby safe and sets healthy habits from the start.
-
-**Honey (Avoid Until 12 Months)**
-
-Honey can contain Clostridium botulinum spores, which can cause infant botulism — a rare but potentially life-threatening illness. A baby''s gut is not yet mature enough to prevent the spores from germinating. This applies to all forms of honey, including "organic" or "raw" honey, and to foods cooked or baked with honey.
-
-**Added Salt**
-
-Babies'' kidneys cannot process significant amounts of sodium. Do not add salt to any food you prepare for your baby, and avoid processed foods, stock cubes, sauces, and ready meals that are high in salt.
-
-**Added Sugar**
-
-There is no nutritional need for added sugar in infancy. Avoiding it helps protect developing teeth and prevents early habituation to very sweet flavours. Avoid biscuits, cakes, sweets, sugary yoghurts, and fruit juices.
-
-**Whole Nuts and Hard Raw Vegetables**
-
-These are choking hazards. Nuts should be offered as smooth nut butter only. Raw carrots, apple pieces, and celery should be cooked until soft.
-
-**Whole Cow''s Milk as a Drink**
-
-Cow''s milk can be used in cooking and mixed into foods from 6 months. However, it should not replace breast milk or formula as the main drink until 12 months, as it is low in iron and does not meet a baby''s overall nutritional needs.
-
-**Unpasteurised Cheeses and Raw Shellfish**
-
-These carry a risk of foodborne illness. Stick to pasteurised cheeses (including hard cheeses and full-fat cream cheese) and fully cooked seafood.
-
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.*$$,
-  24,
-  true,
-  ARRAY['NHS UK', 'American Academy of Pediatrics (AAP)', 'Food Standards Agency'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-safety-foods-to-avoid-under-12-months'
-) ON CONFLICT (slug) DO NOTHING;
-
--- ---------------------------------------------------------------
-
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'feeding',
-  'Baby Water and Drinks — When to Introduce and How Much',
-  $$## Hydration in the First Year
-
-In the first year, milk — breast milk or formula — provides virtually all of your baby''s hydration. Understanding when and how to introduce water and other drinks prevents both dehydration and over-hydration.
-
-**Under 6 Months**
-
-Babies under 6 months do not need water. Breast milk and formula provide all the fluid they need. Giving water to young babies can actually interfere with milk intake and, in large amounts, cause a dangerous drop in sodium levels (hyponatraemia).
-
-**6–12 Months: Introducing Sips of Water**
-
-Once you begin solids, you can offer small sips of water from an open cup or free-flow sippy cup at mealtimes. Start with just a few sips — the goal at this stage is familiarisation and beginning to develop drinking-from-a-cup skills, not replacing milk feeds.
-
-How much: There is no strict amount — let your baby guide you. A few tablespoons to a small cup at mealtimes is typical.
-
-**What to Use**
-
-In the UK, tap water is safe for babies over 6 months. Before 6 months (if water is needed for formula), water should be boiled and cooled. Bottled water is not recommended for regular use as it can be high in sodium or sulfate.
-
-**Drinks to Avoid Under 12 Months**
-
-- Fruit juice — high in sugar, low in nutrition, bad for emerging teeth
-- Squash and flavoured drinks
-- Tea or coffee — tannins interfere with iron absorption
-- Plant-based milks as the main drink (oat, almond, etc.)
-
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.*$$,
-  24,
-  true,
-  ARRAY['NHS UK', 'American Academy of Pediatrics (AAP)', 'UNICEF Baby Friendly Initiative'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-feeding-water-and-drinks'
-) ON CONFLICT (slug) DO NOTHING;
-
--- ---------------------------------------------------------------
-
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'feeding',
-  'Breastfeeding Alongside Solids — How to Balance Milk and Food',
-  $$## Milk Still Matters
-
-When you begin introducing solid foods around 6 months, it is important to understand that milk — breast milk or formula — remains the primary source of nutrition for your baby well into the second half of the first year.
-
-**The Principle: Food Before One Is Just for Fun**
-
-This phrase (slightly simplified) captures an important truth: in the early weeks of weaning, the amount of food your baby actually eats is tiny. Solid foods are about exploration, texture, flavour exposure, and developing eating skills — not yet about replacing milk feeds.
-
-**How to Sequence Feeds**
-
-- Offer breast milk first, then solids — particularly in the first few months of weaning
-- As your baby''s solid intake grows (typically from around 8–9 months), you can begin to shift the balance
-- By 10–12 months, many breastfed babies are eating three small meals plus snacks and naturally reducing milk feeds
-
-**How Many Milk Feeds?**
-
-- 6–7 months: 5–6 breastfeeds or 500–600ml formula daily (solids are additional)
-- 8–9 months: 4–5 breastfeeds or 450–500ml formula
-- 10–12 months: 3–4 breastfeeds or 350–400ml formula
-
-These are approximate guides — follow your baby''s hunger and satiety cues.
-
-**Continuing to Breastfeed**
-
-The WHO recommends continued breastfeeding alongside complementary foods for two years or beyond. There is no nutritional or medical reason to stop breastfeeding at 12 months — the decision is entirely personal.
-
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider or lactation consultant with questions about breastfeeding.*$$,
-  24,
-  true,
-  ARRAY['World Health Organization (WHO)', 'NHS UK', 'UNICEF Baby Friendly Initiative', 'La Leche League'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-feeding-breastfeeding-alongside-solids'
-) ON CONFLICT (slug) DO NOTHING;
+## Shape and Size
+
+At 8-9 months, your baby is likely still developing their **pincer grasp** — they may grab with their whole fist and push food in. Cut food into **long thin pieces** (chip/baton shapes) that can be gripped in a fist with part sticking out. By 9-10 months, the pincer grasp improves and smaller pieces become manageable.
+
+## Making Mealtimes Positive
+
+- Sit with your baby and eat together whenever possible
+- Avoid hovering anxiously — your anxiety transfers
+- Expect and accept mess — it is part of sensory learning
+- Never force food or push baby''s hand toward their mouth
+- Offer a variety and allow refusal without pressure
+- End the meal calmly when your baby shows they are done',
+  'feeding', 4,
+  ARRAY['finger foods', '8 months', 'self-feeding', 'weaning', 'fine motor skills'],
+  true, true, 'Lumira Health Team'
+),
 
 -- ============================================================
--- INFANT HEALTH
+-- SLEEP
 -- ============================================================
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'health',
-  'Teething — Timeline, Symptoms, and What Actually Helps',
-  $$## The Truth About Teething
+(
+  'infant', 17,
+  'The 4-Month Sleep Regression: Why It Happens and How to Survive It',
+  'Your baby''s sleep has changed — and it''s actually a sign of a maturing brain',
+  '## What Is the 4-Month Sleep Regression?
 
-Teething is one of the most over-attributed causes of infant symptoms. While it is genuinely uncomfortable, understanding what teething does — and doesn''t — cause helps you respond appropriately.
+If your baby was sleeping in longer stretches and has suddenly reverted to waking every 1-2 hours, waking fully between sleep cycles, and becoming difficult to settle — you have likely hit the 4-month sleep regression.
 
-**The Teething Timeline**
+The good news: it is real, it is normal, and it is a sign of healthy neurological development. The difficult news: it is not a phase that simply passes on its own for most babies. Understanding why it happens is the key to deciding how to respond.
 
-Most babies cut their first tooth between 4 and 7 months, though anywhere from 3 to 12 months is within the normal range. A small number of babies are born with teeth; some don''t teethe until after their first birthday.
+## What Changes in the Brain
 
-Typical order:
-- Lower central incisors (bottom front) — 6–10 months
-- Upper central incisors (top front) — 8–12 months
-- Upper lateral incisors — 9–13 months
-- Lower lateral incisors — 10–16 months
-- First molars, canines, second molars — 13–24 months
+For the first 3 months of life, babies cycle through sleep stages differently from adults. They spend more time in light, active (REM) sleep, and their cycles are shorter.
 
-**Genuine Teething Symptoms**
+At around 4 months, your baby''s brain begins to **reorganise sleep architecture** to more closely resemble adult patterns — with distinct light sleep, deep sleep, and REM stages. This is permanent. Your baby''s sleep has changed for good.
 
-- Drooling (often beginning weeks before a tooth appears)
-- Chewing and gnawing on objects
-- Swollen, tender gum tissue
-- Mild irritability and disrupted sleep in the 1–2 days around tooth eruption
+The problem: **waking between sleep cycles** is normal (adults do it too, unconsciously), but babies who have been fed, rocked, or held to sleep have not yet learned to **link sleep cycles independently**. When they surface at the end of a cycle (every 40-45 minutes), they look for the conditions they fell asleep in — and if those conditions are not present (the breast, the arms, the motion), they fully wake and signal for help.
 
-**What Teething Does NOT Cause**
+## What This Means Practically
 
-High fever, diarrhoea, rashes, significant illness. These symptoms coincide with teething because babies teethe during the same period they encounter many viruses — but the virus (not the tooth) is the cause.
+This is an ideal window to consider introducing a **consistent sleep environment and some self-settling skills** — not necessarily full sleep training, but small steps toward independent settling:
 
-**What Actually Helps**
+- **A consistent bedtime routine** (bath, feed, book, dark room, white noise, down awake)
+- **A designated sleep space** used for most sleep
+- **Putting down drowsy but awake** — at least sometimes, to begin building the association between the cot and sleep
 
-- Cold teething rings (chilled, not frozen)
-- Gentle gum massage with a clean finger
-- Age-appropriate pain relief (infant paracetamol or ibuprofen) — discuss dose with your pharmacist
-- Extra cuddles and comfort
+## What Will Not Help
 
-**What to Avoid**
+- Waiting for it to pass on its own (it usually does not — it persists until the underlying settling issue is addressed)
+- Adding more sleep associations (feeding to sleep, rocking to sleep) — this can deepen the dependency
+- Comparing to other babies (enormous variation is normal)',
+  'sleep', 6,
+  ARRAY['4-month sleep regression', 'sleep regression', 'baby sleep', 'sleep training', 'night waking'],
+  true, true, 'Lumira Health Team'
+),
 
-- Teething gels with lidocaine or benzocaine (not safe for infants)
-- Amber teething necklaces (choking and strangulation risk)
+(
+  'infant', 26,
+  'Sleep at 6 Months: Longer Stretches Are Possible',
+  'Why 6 months is a good time to think about sleep — and what sustainable sleep can look like',
+  '## The 6-Month Sleep Landscape
 
-*This article is for informational purposes only. Consult your GP if your baby has a high fever or significant symptoms during teething.*$$,
-  24,
-  true,
-  ARRAY['NHS UK', 'American Academy of Pediatrics (AAP)', 'Oral Health Foundation'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-health-teething-timeline-symptoms'
-) ON CONFLICT (slug) DO NOTHING;
+By 6 months, several factors align to make more consolidated sleep more achievable:
 
--- ---------------------------------------------------------------
+- Your baby''s **circadian rhythm** is maturing (melatonin production is more established)
+- They can go **longer between feeds** — most 6-month-olds do not need to feed more than once or twice overnight, if at all, from a purely nutritional standpoint
+- They are **physically capable** of linking sleep cycles if they have learned to self-settle
+- **Solid foods** are beginning, which can support more even energy levels (though solids alone do not "fix" sleep)
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'health',
-  'Infant Vaccinations — The Schedule and Common Reactions',
-  $$## Protecting Your Baby from the Start
+## What Does Good Sleep Look Like at 6 Months?
 
-Vaccination is one of the most effective health interventions in human history. Understanding the schedule and what to expect helps you feel prepared and confident.
+There is wide variation in what is normal. Realistic expectations:
 
-**The UK Infant Vaccination Schedule (Summary)**
+- **10-12 hours overnight** (with 0-2 wake-ups)
+- **2-3 naps** (typically moving toward 2 naps around 6-8 months)
+- **Total sleep: 14-15 hours per 24 hours**
 
-- **8 weeks**: 6-in-1, MenB, Rotavirus
-- **12 weeks**: 6-in-1 (2nd), Rotavirus (2nd), PCV (pneumococcal)
-- **16 weeks**: 6-in-1 (3rd), MenB (2nd)
-- **12 months**: MMR (1st), MenC, Hib/MenC booster, MenB (3rd), PCV booster
+Some 6-month-olds sleep through consistently. Many do not. Both are within the range of normal.
 
-The 6-in-1 vaccine protects against diphtheria, tetanus, whooping cough, polio, Hib, and hepatitis B.
+## Supporting Better Sleep
 
-Note: Schedules vary by country. If you are outside the UK, consult your local health authority for the schedule that applies to you.
+**Bedtime routine:** A consistent, calming sequence of 20-30 minutes signals to the brain that sleep is coming. Consistency matters more than the specific activities.
 
-**Common and Expected Reactions**
+**Sleep environment:** Dark, cool (16-20°C), with white noise if helpful. The same environment every night (and for naps where possible).
 
-- Soreness, redness, or mild swelling at the injection site
-- Low-grade fever (especially after the MenB vaccine at 8 and 16 weeks)
-- Increased fussiness, sleepiness, or reduced appetite for 24–48 hours
+**Appropriate wake windows:** At 6 months, most babies can manage 2-2.5 hours of awake time before becoming overtired. An overtired baby is harder to settle and wakes more. Watch for tiredness cues: eye-rubbing, zoning out, decreased engagement.
 
-For MenB specifically, the NHS recommends giving infant paracetamol (at the correct dose) at the time of the vaccination to reduce fever risk — this is one situation where paracetamol is recommended proactively.
+**Feed-to-sleep association:** If your baby falls asleep feeding at every sleep, they will likely need to feed every time they wake between cycles. This is not harmful, but if overnight waking is frequent, you might consider gently working on this association.
 
-**When to Seek Medical Advice**
+## Is It Time to Sleep Train?
 
-- High fever (above 38°C in babies under 3 months; above 39°C in older babies)
-- Crying that is inconsolable for more than 3 hours
-- A significant allergic reaction (rare): hives, swelling, difficulty breathing — call 999 immediately
+Six months is when most sleep training methods become appropriate. See our articles on specific methods — from gradual retreat to more structured approaches — to find the right fit for your family. There is no obligation to sleep train, but if sleep deprivation is significantly affecting your wellbeing, it is worth exploring.',
+  'sleep', 5,
+  ARRAY['6 months', 'baby sleep', 'sleep training', 'night waking', 'sleep schedule'],
+  true, true, 'Lumira Health Team'
+),
 
-**Vaccine Safety**
+(
+  'infant', 37,
+  'The 8-9 Month Sleep Regression: Why It Happens Again',
+  'Just when sleep was improving — another regression. Here''s what''s driving it',
+  '## Another Regression?
 
-All vaccines on the UK schedule are rigorously tested for safety and efficacy before approval, and are continuously monitored. The risks of the diseases they prevent far outweigh the risks of vaccination.
+If your baby''s sleep had improved after 4-6 months and has now deteriorated again around 8-9 months, you are not imagining it. The 8-9 month regression is real, and it is driven by a perfect storm of developmental factors happening simultaneously.
 
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider with questions about your baby''s vaccination schedule.*$$,
-  8,
-  true,
-  ARRAY['NHS UK Vaccination Schedule', 'CDC', 'World Health Organization (WHO)', 'JCVI (UK)'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-health-vaccinations-schedule-reactions'
-) ON CONFLICT (slug) DO NOTHING;
+## What''s Driving It
 
--- ---------------------------------------------------------------
+**1. Developmental leaps:** Your baby is crawling, pulling to stand, discovering object permanence. The brain is working overtime processing and consolidating new motor and cognitive skills. This neurological activity disrupts sleep.
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'health',
-  'Ear Infections in Babies — Signs, Treatment, and Recurring Issues',
-  $$## A Common and Painful Problem
+**2. Separation anxiety:** Now that your baby understands you exist when you are not there, being separated from you at bedtime — or overnight — feels genuinely alarming. Separation anxiety peaks between 8 and 18 months.
 
-Ear infections (otitis media) are among the most common reasons babies and young children see a doctor. Understanding the signs helps you seek help at the right time.
+**3. Nap transition:** Around 8-9 months, many babies shift from three naps to two. This transition disrupts the 24-hour sleep schedule and can cause overtiredness or undertiredness at bedtime.
 
-**Why Babies Are Prone to Ear Infections**
+**4. Teething:** Many babies are cutting their first teeth between 6 and 10 months, adding physical discomfort to the mix.
 
-The Eustachian tube (which connects the middle ear to the back of the throat) is shorter and more horizontal in babies and young children than in adults. This makes it easier for bacteria or viruses from the upper respiratory tract to travel to the middle ear.
+## How Long Does It Last?
 
-**Signs of an Ear Infection**
+Typically **2-6 weeks**, though it varies. It is usually less disruptive than the 4-month regression because the underlying sleep architecture change has already happened.
 
-- Pulling, tugging, or batting at one or both ears
-- Increased crying and irritability, particularly when lying flat
-- Difficulty sleeping
-- Fever
-- Fluid draining from the ear
-- Reduced hearing or not responding normally to sounds
+## What Helps
 
-Note: Ear tugging alone is not a reliable sign — babies explore their ears from around 4 months. Look for it in combination with other symptoms.
+- **Maintain your routine** — consistency is your anchor when everything else is unpredictable
+- **Increase daytime connection** — extra closeness, physical play, and responsiveness during the day can reduce overnight separation anxiety
+- **Check the nap schedule** — if your baby is fighting bedtime, they may be ready to drop the third nap
+- **Respond consistently overnight** — whatever your approach, inconsistency makes things harder
+- **Be patient** — this will pass
 
-**Treatment**
+## What Makes It Worse
 
-- Many ear infections in babies resolve on their own within 2–3 days
-- Your GP may recommend a watch-and-wait approach or prescribe antibiotics depending on the baby''s age, severity of symptoms, and whether both ears are affected
-- Infant paracetamol or ibuprofen helps with pain and fever
-- Babies under 6 months with a suspected ear infection should always be seen by a doctor
+- Introducing lots of new sleep associations as a response (rocking, bringing into bed if that''s not your usual approach)
+- Inconsistent responses overnight
+- Missing wake windows and creating an overtired spiral',
+  'sleep', 5,
+  ARRAY['8-9 month sleep regression', 'sleep regression', 'baby sleep', 'separation anxiety', 'night waking'],
+  true, true, 'Lumira Health Team'
+),
 
-**Recurring Ear Infections**
+(
+  'infant', 26,
+  'Sleep Training Methods: An Overview and Comparison',
+  'From gradual to structured — understanding your options before you choose',
+  '## What Is Sleep Training?
 
-Some babies have repeated infections due to anatomy or persistent fluid in the middle ear (glue ear). If your baby has had 3 or more ear infections in 6 months, ask for a referral for further assessment. Grommets (ear tubes) are sometimes recommended in persistent cases.
+Sleep training refers to approaches that help babies learn to fall asleep independently and, as a result, sleep for longer stretches at night. It is not one single method — it is a category of approaches with a spectrum of parental involvement and response.
 
-*This article is for informational purposes only and does not constitute medical advice. Always consult your GP if you suspect an ear infection.*$$,
-  12,
-  true,
-  ARRAY['NHS UK', 'American Academy of Pediatrics (AAP)', 'NICE Guidelines'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-health-ear-infections'
-) ON CONFLICT (slug) DO NOTHING;
+Sleep training is generally recommended from **4-6 months** and above, once sleep architecture has matured and babies are developmentally capable of self-settling.
 
--- ---------------------------------------------------------------
+## The Methods — A Comparison
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'health',
-  'Eczema in Babies — Managing Dry, Itchy Skin',
-  $$## Understanding Infant Eczema
+### Extinction ("Cry It Out" or CIO)
+You put your baby down awake, leave the room, and do not return until morning (or a set time). Crying decreases significantly within 3-7 nights for most babies.
 
-Eczema (atopic dermatitis) is very common in infancy, affecting around 1 in 5 children in the UK. It causes dry, itchy, inflamed skin that can significantly disrupt sleep and comfort.
+**Evidence:** Well-researched. Multiple studies show no long-term harm to attachment, stress regulation, or emotional development when used from 6 months+. Fast results, but emotionally difficult for many parents.
 
-**What It Looks Like**
+### Ferber Method (Graduated Extinction)
+You put baby down awake, leave, return at set intervals (e.g., 3 min, 5 min, 10 min) to briefly reassure without picking up, then extend intervals each time. Does not eliminate crying, but parents are more involved.
 
-In babies, eczema most commonly appears on the cheeks, scalp, and forehead, and the fronts of knees and elbows. The skin may be red, dry, scaly, or weeping. Babies often rub or scratch the affected areas, especially at night.
+**Evidence:** Well-supported. Effective for most babies within 1-2 weeks.
 
-**What Causes It?**
+### Gradual Retreat (Camp It Out / Chair Method)
+You stay in the room, gradually moving further away over 10-14 nights until you are outside the door. Slower, but involves continuous parental presence.
 
-Eczema is caused by a combination of genetic factors and a skin barrier that doesn''t retain moisture effectively. It is not caused by poor hygiene, diet (in most cases), or anything parents have done wrong. It often runs in families alongside hay fever and asthma (the atopic triad).
+**Evidence:** Good. Lower crying levels but longer timeline. Well-suited for parents who struggle with hearing their baby cry.
 
-**Managing Eczema**
+### Pick Up/Put Down
+You pick your baby up when they cry, soothe them, then put them down again. Repeat as needed. Highly labour-intensive, works better for younger babies (4-6 months).
 
-**Emollients (moisturisers) are the foundation:**
-- Apply generously and frequently — at least twice daily and after every bath
-- Use prescribed or dermatologist-recommended emollients, not regular moisturisers which may contain fragrances and irritants
-- Pat skin dry gently after bathing, then apply emollient immediately
+### No-Cry Approaches
+Focus on very gradual removal of sleep associations over weeks or months — adjusting the feed-to-sleep association slowly, introducing a comfort object, shortening the time you take to feed back to sleep.
 
-**Bathing:**
-- Daily baths in lukewarm water, no longer than 5–10 minutes
-- Use a fragrance-free, soap-free wash
-- Avoid bubble baths and heavily fragranced products
+**Evidence:** Less studied, slower results, but low-stress option for families who are not in crisis.
 
-**Topical steroids:**
-- Prescribed topical corticosteroids are safe and effective when used as directed for flare-ups
-- Apply thinly to affected areas only, not preventatively
+## Choosing What''s Right for You
 
-**Triggers to avoid:**
-- Overheating (dress in layers)
-- Scratchy fabrics (choose 100% cotton)
-- Biological detergents and fabric softeners
+Consider your baby''s temperament, your own stress tolerance, your living situation (thin walls, other children), and how urgently you need improvement. There is no universally "best" method — the best method is one you can apply consistently.',
+  'sleep', 6,
+  ARRAY['sleep training', 'CIO', 'Ferber method', 'gradual retreat', 'baby sleep', 'sleep methods'],
+  true, true, 'Lumira Health Team'
+),
 
-**When to See Your GP**
+(
+  'infant', 30,
+  'The Gradual Retreat Method: A Gentle Approach to Independent Sleep',
+  'How to help your baby learn to self-settle while staying close — step by step',
+  '## What Is Gradual Retreat?
 
-If eczema is not controlled with regular emollient use, if there are signs of infection (weeping, crusting, or yellow discharge), or if your baby''s sleep is significantly affected, seek medical review.
+The gradual retreat method (also called the chair method or camp-it-out) involves **staying in the room** with your baby as they learn to fall asleep independently, then slowly reducing your presence over 10-14 nights. It is one of the most popular approaches for parents who want to support independent sleep without leaving their baby to cry alone.
 
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider for personalised eczema management.*$$,
-  4,
-  true,
-  ARRAY['NHS UK', 'National Eczema Society', 'NICE Guidelines', 'AAP'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-health-eczema-managing-dry-itchy-skin'
-) ON CONFLICT (slug) DO NOTHING;
+## How It Works — Step by Step
 
--- ---------------------------------------------------------------
+**Before you start:**
+- Establish a consistent bedtime routine (20-30 min)
+- Choose a start date when you can be consistent for 2 weeks
+- Ensure your baby is getting appropriate daytime sleep (overtired = harder to settle)
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'health',
-  'Baby Colds — When to Treat at Home vs Seek Help',
-  $$## Colds Are Common — But Not Always Simple
+**Nights 1-2:** Put baby down awake. Sit in a chair next to the cot. You may offer verbal reassurance ("it''s okay, I''m here") and occasional gentle touch, but do not pick up unless extremely distressed. Stay until baby is asleep.
 
-Babies can have up to 8–10 colds in their first year of life as their immune system encounters new viruses. Understanding when home care is enough — and when to seek help — is an essential skill for every parent.
+**Nights 3-4:** Move your chair to the middle of the room.
 
-**Typical Cold Symptoms**
+**Nights 5-6:** Move your chair to the doorway.
 
-- Runny or blocked nose (clear mucus turning yellow or green — this is normal and does not mean antibiotics are needed)
-- Mild fever
-- Sneezing
-- Reduced appetite
-- Disturbed sleep
-- Mild cough
+**Nights 7-8:** Sit just outside the room, visible through the doorway.
 
-Most colds last 7–10 days. The worst of the symptoms is usually days 2–4.
+**Nights 9+:** Move progressively further down the hallway.
 
-**Home Care**
+**By nights 12-14:** Most babies are settling without your presence.
 
-- Keep your baby hydrated — continue breastfeeding or bottle-feeding on demand
-- Use a saline nasal spray or drops to help clear a blocked nose before feeds
-- Elevate the head end of the mattress slightly (place a rolled towel under the mattress, not inside the cot)
-- Age-appropriate paracetamol or ibuprofen for fever or discomfort — follow dosing instructions carefully
-- Do not use over-the-counter cold and cough medicines for babies under 2 years
+## Night Wakings
 
-**When to Seek Medical Help**
+Apply the same approach to overnight wakings: return to your position from that stage and stay until they resettle. This is the most tiring part of the process. Some families choose to respond differently overnight until bedtime settling has improved.
 
-Call your GP or NHS 111 (or equivalent) if:
-- Your baby is under 3 months and has a fever above 38°C
-- Your baby is struggling to breathe — nostrils flaring, drawing in under the ribs, breathing very fast
-- Baby is unable to feed or becoming dehydrated (no wet nappies for 8+ hours, sunken fontanelle, dry mouth)
-- Symptoms worsen significantly after day 4–5
-- You are worried — always trust your instincts
+## Why It Works
 
-**When to Call 999**
+The gradual retreat works by **slowly changing the association** between your presence and sleep onset, rather than removing it abruptly. Your baby still has the security of knowing you are near, but is not relying on your active intervention to fall asleep.
 
-Bluish lips or fingertips, very laboured breathing, unresponsive or floppy — call emergency services immediately.
+## Who It Suits
 
-*This article is for informational purposes only and does not constitute medical advice. Always consult your healthcare provider if you are worried about your baby.*$$,
-  0,
-  true,
-  ARRAY['NHS UK', 'American Academy of Pediatrics (AAP)', 'NICE Guidelines'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-health-baby-colds-home-vs-seek-help'
-) ON CONFLICT (slug) DO NOTHING;
+- Parents who cannot tolerate sustained crying
+- Babies with higher attachment needs
+- Families where rapid methods feel too abrupt
 
--- ---------------------------------------------------------------
+## What to Expect
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'health',
-  'Constipation in Babies — Causes and Remedies',
-  $$## When Things Slow Down
+The early nights often involve significant crying — especially nights 2-4, before the pattern begins to establish. Resist the urge to go backwards (e.g., returning to picking up). Consistency is the key ingredient.',
+  'sleep', 5,
+  ARRAY['gradual retreat', 'sleep training', 'gentle sleep training', 'chair method', 'baby sleep'],
+  true, true, 'Lumira Health Team'
+),
 
-Constipation in babies can be confusing because what counts as "normal" varies widely. Understanding what to look for — and what to do — helps you respond confidently.
+(
+  'infant', 30,
+  'Cry-It-Out: What the Research Actually Says',
+  'Separating fact from fear when it comes to extinction-based sleep training',
+  '## The Controversy
 
-**Normal Bowel Patterns**
+Few parenting topics generate as much heat as "cry-it-out" (CIO) sleep training. For some parents, it is a pragmatic, evidence-based tool. For others, it feels incompatible with responsive parenting. Understanding what the research actually shows — rather than what social media claims — allows you to make an informed decision.
 
-Breastfed babies may poo multiple times a day or only once a week — both are normal, provided the stool is soft. Formula-fed babies typically poo 1–4 times a day. Once solids are introduced, most babies move to once or twice a day.
+## What Is CIO?
 
-**Signs of Constipation**
+In its strictest form, extinction-based sleep training means placing your baby in the cot awake at bedtime, leaving the room, and not returning until morning (or a defined time). Crying occurs — often significantly — in the first 2-3 nights, and typically decreases sharply by night 4-7.
 
-- Hard, dry, pellet-like stools
-- Straining or significant discomfort when passing stools
-- Stools less frequent than usual with associated distress
-- A hard, distended tummy
+There are modified versions (such as the Ferber method) that involve returning at timed intervals, which are sometimes also called CIO but technically involve parental contact.
 
-Note: straining without hard stools is not constipation — it is called infant dyschezia and resolves on its own.
+## What the Research Shows
 
-**Common Causes**
+Multiple well-designed studies have followed children who underwent extinction sleep training:
 
-- Switching from breast milk to formula (or changing formula)
-- Starting solid foods, particularly starchy foods (banana, rice, white bread)
-- Not enough fluid intake
-- Illness causing dehydration
+- **A 2012 study** (Price et al.) followed children for 5 years after sleep training and found **no differences** in behaviour, emotional health, parenting attachment, or stress markers compared to children who were not sleep trained.
+- **A 2016 randomised controlled trial** (Gradisar et al.) found that both graduated extinction and scheduled awakenings resulted in improved sleep with **no increase in cortisol** (a stress hormone) or negative effects on attachment.
+- Multiple studies show that **well-rested parents** have better emotional availability, lower rates of depression, and greater responsiveness to their children.
 
-**What Helps**
+## What the Research Does Not Show
 
-- **Hydration**: Increase fluid intake — breast milk on demand, or offer small sips of water in babies over 6 months
-- **Fruit juice**: 2–4oz of prune, pear, or apple juice diluted with water can help in babies over 6 months — discuss with your health visitor
-- **Dietary changes**: Offer more fruit and vegetables; reduce banana, rice, and white bread
-- **Bicycle legs**: Gentle movement of your baby''s legs in a cycling motion may stimulate the bowel
-- **Tummy massage**: Gentle clockwise circular massage of the abdomen
+- CIO causes long-term emotional harm — no high-quality evidence supports this
+- CIO damages the parent-child attachment — studies consistently find no effect
+- Babies "give up" on their parents — the reduction in crying is sleep learning, not despair
 
-**When to See Your GP**
+## Important Caveats
 
-If constipation persists more than 2 weeks, if your baby is in significant pain, if there is blood in the stool, or if a newborn baby (especially under 6 weeks) has not passed a stool, seek medical advice promptly.
+- Most research is on babies **6 months and older** — earlier is not well-studied
+- CIO in the context of **insecure attachment or parental mental illness** is less studied
+- Method alone is not sufficient — a consistent environment and routine matter
 
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.*$$,
-  12,
-  true,
-  ARRAY['NHS UK', 'American Academy of Pediatrics (AAP)', 'NICE Guidelines'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-health-constipation-causes-remedies'
-) ON CONFLICT (slug) DO NOTHING;
+The decision is personal. There is no right answer — only what works for your family.',
+  'sleep', 5,
+  ARRAY['cry-it-out', 'CIO', 'sleep training', 'extinction method', 'baby sleep research'],
+  true, true, 'Lumira Health Team'
+),
 
--- ---------------------------------------------------------------
+(
+  'infant', 17,
+  'Co-Sleeping: Safety, Benefits, and Alternatives',
+  'What you need to know if you choose to share sleep — and safer options if you don''t',
+  '## What Is Co-Sleeping?
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'health',
-  'Baby Rashes — Identifying Common Rashes',
-  $$## Not All Rashes Are the Same
+Co-sleeping is an umbrella term that includes:
+- **Bed-sharing:** Baby sleeps in the same bed as a parent
+- **Room-sharing:** Baby sleeps in the same room but in a separate sleep surface (cot, side-car crib)
 
-Rashes are extremely common in babies. Knowing how to identify the most frequent causes — and which ones need urgent attention — is genuinely useful knowledge for every parent.
+These two are very different in terms of safety profile.
 
-**Nappy Rash**
+## Room-Sharing: The Recommendation
 
-Red, sore skin in the nappy area. Almost all babies get it at some point. Caused by prolonged contact with wet or soiled nappies. Treatment: frequent nappy changes, barrier cream (zinc oxide), and nappy-free time where possible. See your GP if it does not improve, spreads, or looks infected.
+The NHS, AAP, and SIDS charities recommend **room-sharing without bed-sharing** for at least the first 6 months, ideally the first year. This means your baby sleeps in a cot, Moses basket, or bedside crib in your room. Room-sharing is associated with **reduced SIDS risk** and supports breastfeeding. It is not bed-sharing.
 
-**Heat Rash (Prickly Heat)**
+## Bed-Sharing: Understanding the Risks
 
-Tiny red bumps or blisters caused by overheating and blocked sweat glands. Appears on the neck, chest, or in skin folds. Resolves with cooling — remove layers and move to a cooler environment. No treatment needed.
+Bed-sharing is associated with **increased risk of accidental suffocation and SIDS**, particularly in certain conditions. The risk is significantly higher when:
 
-**Viral Rashes**
+- Either parent smokes (even outdoors — the risk persists)
+- Either parent has consumed alcohol or sedating medication
+- The baby is under 3 months old
+- The baby was premature or low birth weight
+- The mattress is soft, or there are pillows/duvets near the baby
 
-Many common baby viruses cause a rash as the illness passes. Roseola (high fever followed by a pink blotchy rash as fever resolves) is a classic example. These rashes are not harmful and require no treatment.
+If none of these risk factors apply, the risk of bed-sharing is lower — but still higher than a cot in the same room.
 
-**Allergic Rashes (Hives)**
+## The Safe Sleep Seven
 
-Raised, itchy welts that can appear suddenly — often triggered by food, medication, or contact with an irritant. Usually resolves within hours. If accompanied by swelling of the face, lips, or throat, or breathing difficulty, call 999.
+If you do choose to bed-share, organisations like La Leche League and UNICEF''s basis guidance outline conditions that reduce (but do not eliminate) risk: non-smoking parent, sober, breastfeeding, baby healthy and full-term, on a safe surface, with no soft bedding trapping baby.
 
-**Eczema**
+## Safer Alternatives
 
-Dry, itchy, red patches — commonly on the face, behind the knees, and in elbow creases. Chronic condition requiring ongoing moisturiser use. (See the dedicated eczema article for full guidance.)
+- **Bedside crib / side-car crib:** Attaches to your bed, baby has their own firm surface, you have easy access for night feeds.
+- **Sidecar arrangement:** A regular cot with one side removed, fastened securely to the adult bed.
+- These offer proximity and easy access without the risk profile of full bed-sharing.',
+  'sleep', 5,
+  ARRAY['co-sleeping', 'bed-sharing', 'room-sharing', 'SIDS', 'safe sleep'],
+  true, true, 'Lumira Health Team'
+),
 
-**The Glass Test**
+(
+  'infant', 30,
+  'Nap Transitions: From 3 Naps to 2, and 2 Naps to 1',
+  'When and how to adjust your baby''s daytime sleep schedule',
+  '## Why Nap Transitions Matter
 
-If your baby has a rash and is unwell, press a clear glass firmly against the rash. If the rash does not fade under pressure (non-blanching), call 999. This can be a sign of meningococcal disease.
+As babies grow, their sleep consolidates. The total amount of sleep they need decreases, and their ability to stay awake for longer stretches increases. This means the number of naps they need reduces — and getting the timing of these transitions right is important for overall sleep quality.
 
-*This article is for informational purposes only and does not constitute medical advice. Always seek urgent help for a non-blanching rash or a baby who is seriously unwell.*$$,
-  0,
-  true,
-  ARRAY['NHS UK', 'American Academy of Pediatrics (AAP)', 'British Association of Dermatologists'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-health-rashes-identifying-common-types'
-) ON CONFLICT (slug) DO NOTHING;
+## The 3-to-2 Nap Transition (Around 6-8 Months)
 
--- ---------------------------------------------------------------
+Most babies drop from three naps to two somewhere between **6 and 8 months**. Signs that it''s time:
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'health',
-  'Heat Rash, Cradle Cap, and Other Common Skin Conditions',
-  $$## Everyday Skin Issues in the First Months
+- Consistently fighting the third nap or taking a very long time to fall asleep for it
+- The third nap is pushing bedtime too late
+- Third nap happens so late it is affecting night sleep
 
-Several very common skin conditions appear in the first months of life and worry new parents unnecessarily. Most are harmless and self-resolving.
+**How to transition:**
+Move to two naps with slightly longer wake windows. At 6-8 months, the schedule looks roughly like:
+- Wake ~7am
+- Nap 1: ~9-9:30am (45-90 min)
+- Nap 2: ~1-2pm (45-90 min)
+- Bedtime: ~7-7:30pm
 
-**Cradle Cap (Seborrhoeic Dermatitis)**
+Expect some overtiredness during the transition — a temporary earlier bedtime can help.
 
-Yellowish, greasy, scaly patches on the scalp — sometimes extending to the eyebrows, behind the ears, or into the neck folds. Caused by overactive sebaceous (oil) glands and not related to hygiene. Very common in newborns and young babies.
+## The 2-to-1 Nap Transition (Around 12-18 Months)
 
-Management: Gently massage a small amount of baby oil or coconut oil into the scalp, leave for 15–30 minutes, then gently brush with a soft baby brush and wash off with baby shampoo. Do not pick the scales. Usually resolves by 12 months. Hydrocortisone cream may be prescribed for stubborn cases — speak to your GP.
+Most babies transition from two naps to one around **12-18 months** (average around 15 months). Early transitioners (12 months) may need a late-morning rest period even if they can''t settle.
 
-**Heat Rash**
+Signs it''s time:
+- Consistently refusing one of the two naps
+- One nap is very short (under 20 minutes) and they are not struggling
+- Bedtime is becoming very late
 
-Fine red bumps or tiny blisters in skin folds or on covered areas when baby is too warm. Resolve by cooling the environment, removing layers, and ensuring the skin is dry. No treatment required.
+**How to transition:**
+Move to a single midday nap (~12-1pm). Wake windows extend to 5-6 hours. Bedtime may temporarily need to be earlier (6-6:30pm) while the one-nap schedule establishes.
 
-**Milia**
+## The Bridge Nap
 
-Tiny white spots — usually on the nose and cheeks — caused by blocked keratin-filled pores. Completely harmless and resolve spontaneously within the first few weeks. Do not squeeze.
-
-**Baby Acne**
-
-Red or white pimple-like spots on the cheeks, nose, and forehead appearing in the first 2–4 weeks. Caused by maternal hormones. Resolves without treatment by 3 months. Wash gently with water — no creams needed.
-
-**Mongolian Blue Spots**
-
-Flat, blue-grey birthmarks — often on the lower back or buttocks — common in babies with darker skin tones. Completely benign and not associated with any medical condition. Usually fade by school age.
-
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider if you are unsure about any skin condition.*$$,
-  0,
-  true,
-  ARRAY['NHS UK', 'British Association of Dermatologists', 'American Academy of Pediatrics (AAP)'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-health-heat-rash-cradle-cap-skin-conditions'
-) ON CONFLICT (slug) DO NOTHING;
+During the 2-to-1 transition, an **early bedtime** on days when the morning nap is short or skipped can prevent an overtired cycle. A 6pm bedtime is not too early for a transitioning baby — and it will not cause earlier morning waking (counterintuitive but true for most babies).',
+  'sleep', 5,
+  ARRAY['nap transition', 'nap schedule', 'baby sleep', '3-to-2 naps', '2-to-1 naps'],
+  true, true, 'Lumira Health Team'
+),
 
 -- ============================================================
--- ACTIVITY AND PLAY
+-- HEALTH
 -- ============================================================
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'development',
-  'Why Play Matters — How Babies Learn Through Exploration',
-  $$## Play Is the Work of Infancy
+(
+  'infant', 26,
+  'Teething: Symptoms, Timeline, and Pain Relief',
+  'What''s normal, what''s not, and what actually helps',
+  '## When Do Teeth Arrive?
 
-When your baby bats a rattle, drops a spoon from the high chair, or splashes in the bath, they are not just passing time. They are conducting scientific experiments on how the world works.
+Teething typically begins between **4 and 10 months**, with the first tooth (usually a lower central incisor) appearing around **6 months** on average. However, the range is wide: some babies cut their first tooth at 3 months; others not until 12-14 months. Both extremes are normal.
 
-**How Babies Learn Through Play**
+By 12 months, most babies have 4-8 teeth (though 0-8 is within the range of normal).
 
-Play in infancy is multimodal — babies learn through touch, taste, sight, sound, and movement simultaneously. Every experience creates and strengthens neural connections. A baby mouthing a wooden block is learning about hardness, temperature, taste, and shape all at once.
+## Symptoms of Teething
 
-**Types of Play in Infancy**
+Teething symptoms are real but often over-attributed. True teething symptoms include:
 
-- **Sensory play**: Touching different textures, splashing, crumpling paper — all stimulate sensory processing
-- **Social play**: Peek-a-boo, face-to-face games, copying expressions — build emotional attunement and social understanding
-- **Object play**: Grasping, banging, dropping, and examining objects develop motor skills and early cause-and-effect understanding
-- **Physical play**: Rolling, crawling, climbing — build strength, coordination, and spatial awareness
+- **Drooling** — often excessive, which may cause a facial rash
+- **Gnawing and chewing** on anything within reach
+- **Gum swelling and tenderness**
+- **Increased fussiness** — especially in the 3-5 days around a tooth erupting
+- **Disturbed sleep** around active teething periods
+- **Pulling at ears** (due to referred jaw pain — check for ear infection separately)
 
-**You Are the Best Toy**
+## What Teething Does NOT Cause
 
-No piece of equipment or expensive toy replaces the learning that happens in responsive interaction with a caregiver. Your face, voice, and responsiveness are your baby''s most important developmental tools.
+Research consistently shows that teething does **not** cause:
+- Fever above 38°C
+- Diarrhoea
+- Significant respiratory symptoms
+- Prolonged illness
 
-**What Research Shows**
+If your baby has these symptoms coinciding with teething, investigate them separately — they are not caused by teething.
 
-Studies consistently show that play-based learning in early childhood produces better long-term outcomes in cognition, language, social skills, and emotional regulation than direct instruction. Unstructured, exploratory play matters.
+## What Actually Helps
 
-**Creating a Play-Friendly Environment**
+**Evidence-based relief:**
+- **Cold teething rings** (chilled in the fridge, not frozen — frozen can burn gums)
+- **Cold, damp flannel** to chew on
+- **Gentle gum massage** with a clean finger
+- **Chilled cucumber or carrot stick** (supervised, for babies on solids)
+- **Infant paracetamol or ibuprofen** (appropriate age and dose) — the most effective option for pain
 
-- Floor time is essential — get your baby out of equipment and onto a safe play mat
-- Rotate toys to maintain novelty and interest
-- Follow your baby''s lead — respond to what captures their attention
+**What to avoid:**
+- Teething gels containing lidocaine — not recommended for infants
+- Amber teething necklaces — no evidence of benefit, significant choking and strangulation risk
+- Homeopathic teething tablets — no evidence, some have been found to contain harmful substances
 
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider with questions about your baby''s development.*$$,
-  12,
-  true,
-  ARRAY['Zero to Three', 'American Academy of Pediatrics (AAP)', 'UNICEF Early Childhood Development'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-development-why-play-matters'
-) ON CONFLICT (slug) DO NOTHING;
+## Oral Hygiene
 
--- ---------------------------------------------------------------
+As soon as a tooth appears, start brushing twice daily with a smear of fluoride toothpaste. Use an age-appropriate soft toothbrush.',
+  'health', 4,
+  ARRAY['teething', 'baby teeth', 'pain relief', 'oral health', 'development'],
+  true, true, 'Lumira Health Team'
+),
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'wellness',
-  'Age-Appropriate Play Ideas: 3–6 Months',
-  $$## Playing with Your 3–6 Month Old
+(
+  'infant', 17,
+  'Common Infant Illnesses: Colds, Ear Infections, and What to Do',
+  'Your guide to the illnesses babies get most — and when to seek help',
+  '## Colds (Upper Respiratory Tract Infections)
 
-At this age, your baby is becoming more alert, more social, and increasingly interested in the world. Play at this stage supports sensory development, emerging motor skills, and the crucial social bond between you.
+Babies have no immunity to the rhinoviruses that cause colds and will typically have **6-8 colds in their first year**. This is normal and actually necessary — each cold builds immunity.
 
-**What Your Baby Can Do**
+**Symptoms:** Runny or blocked nose, mild fever, cough, reduced appetite, disturbed sleep, crankiness.
 
-- Track moving objects visually
-- Reach for and bat at objects
-- Respond to faces and voices with smiles and sounds
-- Bear weight on arms during tummy time
-- Begin to grasp objects placed in hand
+**Management:**
+- **Saline nasal drops and suction** to clear congestion before feeds and sleep
+- **Upright feeds** for congested babies
+- **Extra breast milk or formula** — do not restrict feeds
+- **Paracetamol or ibuprofen** for comfort if your baby seems distressed (check age guidelines)
 
-**Play Ideas**
+Cold medicines (decongestants, antihistamines) are **not recommended** for babies and toddlers — they do not work and can be harmful.
 
-**Face-to-face games**
-Make exaggerated facial expressions and give your baby time to respond. Copy their expressions back to them — they will be fascinated.
+**When to seek urgent help:** Breathing that looks like pulling in at the ribs or throat; persistent fever above 38°C in babies under 3 months (always); a baby who seems very unwell, floppy, or cannot be roused.
 
-**Sensory exploration**
-Offer safe objects of different textures: a soft cloth, a crinkly wrapper, a wooden ring. Let them grasp, mouth, and explore.
+## Ear Infections (Otitis Media)
 
-**Mirror play**
-Babies love looking at faces — including their own. A baby-safe mirror on the floor during tummy time provides great visual stimulation.
+Ear infections are common in infancy — the anatomy of a baby''s ear canal makes fluid accumulation and infection more likely.
 
-**Cause and effect**
-Shake a rattle, then hand it to your baby. They are beginning to understand that their actions cause things to happen.
+**Signs:** Fussiness, pulling or rubbing ear, fever, difficulty sleeping, crying during feeds (sucking pressure is painful).
 
-**Singing and rhymes**
-Action songs like "Incy Wincy Spider," "Row, Row, Row Your Boat," and "Round and Round the Garden" captivate babies at this age.
+**Note:** Many ear infections are viral and resolve on their own within 3-4 days. Your GP may adopt a "watch and wait" approach for mild cases, particularly in babies over 6 months.
 
-**Movement**
-Gentle bicycle legs, lifting their arms, and supported bouncing on your lap all delight babies at this stage and build body awareness.
+**When antibiotics are needed:** Babies under 6 months, persistent high fever, significant pain, or worsening symptoms after 48-72 hours.
 
-**What to Avoid**
+## When to Seek Help Any Time
 
-Avoid screen time (other than video calling with family) and avoid over-stimulating with too many toys at once. Simpler is usually better.
+- Your baby seems **very unwell** — beyond what you''d expect from a mild illness
+- **High-pitched cry** unlike their normal cry
+- **Rash that doesn''t fade** when a glass is pressed to it (meningitis sign)
+- **Difficulty breathing** beyond mild congestion
+- **Persistent fever** (>38°C in babies under 3 months; >39°C in older babies)
+- **No wet nappy in 8 hours** (dehydration)',
+  'health', 5,
+  ARRAY['colds', 'ear infection', 'common illnesses', 'infant health', 'when to see a doctor'],
+  true, true, 'Lumira Health Team'
+),
 
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider with questions about your baby''s development.*$$,
-  12,
-  true,
-  ARRAY['Zero to Three', 'NHS UK', 'American Academy of Pediatrics (AAP)'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-wellness-play-ideas-3-6-months'
-) ON CONFLICT (slug) DO NOTHING;
+(
+  'infant', 17,
+  'RSV and Bronchiolitis: What Every Parent Needs to Know',
+  'The most common reason babies under 12 months are admitted to hospital in winter',
+  '## What Is RSV?
 
--- ---------------------------------------------------------------
+Respiratory syncytial virus (RSV) is an extremely common virus that causes mild cold-like illness in older children and adults — but in babies under 12 months, particularly those under 6 months, it can cause **bronchiolitis**: inflammation of the small airways in the lungs.
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'wellness',
-  'Age-Appropriate Play Ideas: 6–9 Months',
-  $$## Playing with Your 6–9 Month Old
+Virtually all children have been infected with RSV by age 2, and reinfection is common throughout life. In most healthy babies over 3 months, RSV causes a manageable illness at home. However, in younger and more vulnerable babies, it can cause serious breathing difficulties requiring hospital admission.
 
-The 6–9 month window is exciting — your baby is more mobile, more communicative, and deeply curious. Play becomes richer and more interactive.
+## Symptoms of Bronchiolitis
 
-**What Your Baby Can Do Now**
+**Starts as:** Runny nose, mild cough, low-grade fever — indistinguishable from a cold.
 
-- Sit independently or with minimal support
-- Transfer objects between hands
-- Babble in consonant-vowel combinations
-- Show preference for familiar people
-- Begin to understand object permanence
-- Start crawling (in some form)
+**Worsens over days 2-4 to:** Persistent cough, fast breathing, a wheeze or crackle when breathing, difficulty feeding (too breathless to drink effectively), poor sleep.
 
-**Play Ideas**
+**At its worst:** Significant breathing difficulty, visible recession (ribs or throat pulling in during breaths), grunting with each breath, blue lips or fingernails.
 
-**Peek-a-boo and hiding games**
-Cover your face with your hands, then reveal yourself. Hide a toy under a cloth and let your baby find it. These games build object permanence and delight.
+## Managing at Home
 
-**Cause and effect toys**
-Pop-up toys, activity centres, and musical buttons that respond to pressing teach babies that their actions have consequences.
+Most cases of bronchiolitis are managed at home with:
+- **Frequent small feeds** — a very breathless baby may need feeding more often in smaller amounts
+- **Saline nasal drops and suction** before feeds
+- **Keeping the baby upright** as much as possible
+- **Paracetamol** for fever or discomfort (not ibuprofen in babies under 3 months)
 
-**Container play**
-Put objects into a container and tip them out. Repeat. And repeat. This simple game teaches in-and-out, full-and-empty, and object permanence all at once.
+Do not use decongestants, inhalers, or antibiotics unless specifically prescribed.
 
-**Physical exploration**
-With your baby sitting on the floor, roll a ball toward them, support them as they lunge forward. Encourage crawling by placing a toy just out of reach.
+## When to Go to A&E Immediately
 
-**Texture and sensory bins**
-A shallow tray of dried pasta, water beads (baby-safe versions), or fabric scraps gives endless sensory interest. Always supervise.
+- Breathing very fast or working visibly hard to breathe
+- Blue colour around lips
+- Very drowsy or difficult to rouse
+- Not feeding at all
 
-**Books**
-At this age, books are for chewing, banging, and exploring as much as reading. Board books with bright pictures and few words are perfect. Point to pictures and name them simply.
+## Prevention
 
-**Messy play**
-Finger painting with baby-safe paint or food (squished banana, avocado on a tray) is rich sensory experience and excellent fine motor development.
+- **Handwashing** is the single most effective prevention
+- Keep young babies away from people with colds in winter if possible
+- Breastfeeding offers some immune protection
+- A new maternal RSV vaccine is now available in some countries during pregnancy, offering protection to newborns',
+  'health', 5,
+  ARRAY['RSV', 'bronchiolitis', 'respiratory illness', 'infant health', 'breathing'],
+  true, true, 'Lumira Health Team'
+),
 
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.*$$,
-  24,
-  true,
-  ARRAY['Zero to Three', 'NHS UK', 'American Academy of Pediatrics (AAP)'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-wellness-play-ideas-6-9-months'
-) ON CONFLICT (slug) DO NOTHING;
+(
+  'infant', 17,
+  'Baby Eczema: Understanding and Managing Your Baby''s Skin',
+  'Eczema is common in infants — here''s how to manage it effectively',
+  '## What Is Eczema?
 
--- ---------------------------------------------------------------
+Atopic eczema (atopic dermatitis) is a **chronic inflammatory skin condition** that affects up to 1 in 5 children in the UK. It typically first appears in infancy, often between 3 and 6 months. It is not contagious, not caused by anything you did wrong, and in most cases significantly improves or resolves by mid-childhood.
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'wellness',
-  'Age-Appropriate Play Ideas: 9–12 Months',
-  $$## Playing with Your 9–12 Month Old
+Eczema involves a **defect in the skin barrier**, allowing moisture to escape and irritants and allergens to penetrate. This triggers an immune response — inflammation, itching, and redness.
 
-Your baby is now a purposeful, communicative, mobile little person. Play at this stage is active, social, and increasingly sophisticated.
+## What It Looks Like
 
-**What Your Baby Can Do**
+In babies, eczema typically appears on the **face, scalp, and outer limbs** — particularly the cheeks, forehead, and behind the knees and elbows. It looks red, dry, and sometimes weeping or crusted. It is **intensely itchy**, and babies will rub their faces and scratch at their skin, which can break the skin and cause infection.
 
-- Pull to stand and cruise along furniture
-- Use a refined pincer grip
-- Point at things that interest them
-- Wave bye-bye and play simple imitative games
-- Understand simple words and phrases
-- Begin to use 1–2 words intentionally
+## Management: The Core Three
 
-**Play Ideas**
+**1. Emollient (moisturiser) — apply liberally and often**
+This is the most important treatment. Use a thick, fragrance-free emollient (such as Diprobase, Epaderm, or similar) all over your baby''s body at least twice daily, and after every bath. Apply in the direction of hair growth (downward strokes).
 
-**Stacking and building**
-Stacking cups, blocks, and rings support fine motor skills, spatial reasoning, and the deeply satisfying crash when it all comes down.
+**2. Topical corticosteroids — use appropriately**
+When eczema flares (red, itchy, inflamed skin), a prescribed steroid cream is appropriate. Many parents are understandably anxious about steroids, but **used correctly, they are safe and effective**. Apply a thin layer to affected skin once or twice daily for the prescribed duration.
 
-**Shape sorters**
-These develop problem-solving, hand-eye coordination, and shape recognition. Start with simple 2–3 shape versions.
+**3. Avoid triggers**
+Common triggers include: overheating, sweating, certain fabrics (wool, synthetic), fragranced products, certain foods (in a minority of cases), and dry air. Keep your baby''s nails short to reduce damage from scratching.
 
-**Push-and-pull toys**
-Babies cruising and beginning to walk love push toys that move with them. Pull-along toys when they begin to walk independently.
+## When to See Your GP
 
-**Imitative play**
-At this age, babies love to copy you. Stir a pretend pot, talk on a toy phone, pat a doll. This is the beginning of symbolic play.
+If eczema is not controlled with regular emollient and prescribed steroids, if the skin becomes wet, weepy, and crusty (possible infection requiring antibiotics), or if your baby is clearly in significant discomfort, seek medical advice.',
+  'health', 5,
+  ARRAY['eczema', 'baby skin', 'atopic dermatitis', 'skin care', 'infant health'],
+  true, true, 'Lumira Health Team'
+),
 
-**Ball play**
-Roll a ball back and forth. Simple turn-taking, anticipation, and gross motor development all in one game.
+(
+  'infant', 26,
+  'Reflux in Older Babies: When It Persists Beyond the Newborn Stage',
+  'What to do when spitting up continues — and how to tell if it''s a problem',
+  '## Normal Reflux vs GORD
 
-**Water play**
-Bath time is a rich play environment — cups, small containers, rubber animals. You can also create a supervised water tray activity.
+Most babies spit up regularly in the first 4-6 months. This is because the **lower oesophageal sphincter** (the valve between the oesophagus and stomach) is immature and allows milk to flow back up.
 
-**Social games with action songs**
-"If You''re Happy and You Know It," "Head Shoulders Knees and Toes," and similar songs build body awareness, imitation, and joy.
+In most babies, this is **physiological reflux** — the technical term for the very common, uncomplicated "happy spitter." Symptoms: frequent spitting up, sometimes large amounts. What''s absent: pain, significant weight loss, respiratory symptoms, feeding refusal.
 
-**Reading**
-Point to pictures and name them. Encourage your baby to point. Ask "where is the dog?" — they will soon start to respond correctly.
+**GORD (gastro-oesophageal reflux disease)** is when reflux causes enough discomfort or complication to affect quality of life. This is less common than parents often fear — it occurs in a minority of refluxing infants.
 
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.*$$,
-  36,
-  true,
-  ARRAY['Zero to Three', 'NHS UK', 'American Academy of Pediatrics (AAP)'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-wellness-play-ideas-9-12-months'
-) ON CONFLICT (slug) DO NOTHING;
+## Reflux After 6 Months
 
--- ---------------------------------------------------------------
+For most babies, reflux improves significantly when they:
+- Begin sitting upright
+- Start solid foods (which are heavier and stay down better)
+- Begin to develop more control of the lower oesophageal sphincter
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'wellness',
-  'Screen Time Guidelines for Babies Under 12 Months',
-  $$## What the Evidence Says About Screens in the First Year
+If your baby''s reflux is **persisting or worsening after 6 months**, and is accompanied by signs of pain (arching, crying during and after feeds, significant feeding refusal), poor weight gain, or respiratory symptoms, see your GP.
 
-The guidance on screen time for very young children is clear and consistent: the WHO, AAP, and most major health organisations recommend avoiding recreational screen time for babies under 18–24 months, with the exception of video calling.
+## Signs That Warrant Medical Review
 
-**Why Screens Are Different for Babies**
+- Significant **feeding refusal** or distress during feeds
+- **Poor weight gain** or weight loss
+- **Blood** in vomit or stool
+- **Persistent coughing** or wheezing related to feeds
+- **Apnoea** (pausing breathing)
 
-Babies learn through responsive, two-way interaction. When you talk to your baby, you respond to their cues, adjust your pace, and engage in the back-and-forth that drives language and social development. Screens cannot do this. Even educational programming offers no benefit in this age group — babies under 2 cannot meaningfully learn language or concepts from a screen.
+## What Helps
 
-**The Exception: Video Calls**
+- Smaller, more frequent feeds (especially for formula-fed babies)
+- Keeping baby upright for 20-30 minutes after feeds
+- **Thickened formula** or thickening agents (on GP advice)
+- If cow''s milk protein allergy is suspected, a trial elimination of dairy from breastfeeding parent''s diet or hypoallergenic formula
+- **Medication** (alginate or PPIs) — only on medical advice, and only when reflux is causing genuine suffering',
+  'health', 5,
+  ARRAY['reflux', 'GORD', 'spitting up', 'baby health', 'feeding'],
+  true, true, 'Lumira Health Team'
+),
 
-Live video calling with a familiar person (grandparent, parent who is away) appears to be beneficial when the adult is responsive and engaging. This is interactive in a way that passive TV viewing is not.
+(
+  'infant', 8,
+  'Vaccination Schedule 2-12 Months: What to Expect and Why It Matters',
+  'A guide to the immunisations your baby will receive in the first year',
+  '## Why Vaccinations Matter
 
-**The Real Concern**
+Vaccines are among the most effective public health interventions in history. The diseases they protect against — whooping cough, meningitis, measles, and others — can be **life-threatening in infancy**. Babies are most vulnerable precisely because their immune systems are immature and they cannot fight these infections as older children and adults can.
 
-The risk isn''t primarily from the screen itself — it''s from what screen time displaces: conversation, play, movement, and sleep. A baby sitting in front of a screen is not being talked to, held, or allowed to explore.
+## The UK Vaccination Schedule (First Year)
 
-**Background TV**
+**8 weeks:**
+- 6-in-1 vaccine (diphtheria, tetanus, pertussis, polio, Hib, hepatitis B)
+- Rotavirus vaccine (oral)
+- MenB (meningococcal B)
 
-Research suggests that background television — even when a baby is "not watching" — disrupts the quality of parent-child interaction and reduces language input. It''s worth being mindful of this.
+**12 weeks:**
+- 6-in-1 (second dose)
+- Rotavirus (second dose)
+- Pneumococcal vaccine (PCV)
 
-**Practical Approach**
+**16 weeks:**
+- 6-in-1 (third dose)
+- MenB (second dose)
 
-- Avoid TV and videos as entertainment for your baby under 12 months
-- Keep mealtimes and feeding screen-free
-- Video calls with family are fine
-- Be curious, not guilty — this is about optimising, not catastrophising
+**12 months:**
+- Hib/MenC
+- MMR (measles, mumps, rubella)
+- PCV (booster)
+- MenB (booster)
 
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider with questions about your baby''s development.*$$,
-  0,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'World Health Organization (WHO)', 'NHS UK'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-wellness-screen-time-under-12-months'
-) ON CONFLICT (slug) DO NOTHING;
+*Note: Schedules vary by country. This reflects the current UK NHS schedule.*
 
--- ---------------------------------------------------------------
+## What to Expect After Vaccinations
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'development',
-  'Reading to Babies — Why It Matters Even Before They Understand',
-  $$## Books Before Words
+Common normal reactions:
+- **Tenderness, redness, or swelling** at the injection site
+- **Low-grade fever** (particularly after MenB vaccine)
+- **Fussiness and unsettled behaviour** for 24-48 hours
+- **Drowsiness** or, conversely, being unusually wakeful
 
-Reading to a baby who can''t yet understand a single word can feel a little absurd. But the research on reading aloud in infancy is unequivocal: it is one of the most powerful things you can do for your child''s development.
+**The MenB vaccine at 8 weeks** commonly causes a significant fever. The NHS recommends giving **infant paracetamol** (liquid, appropriate dose) at the time of vaccination and then 4-6 hourly for two further doses, even if your baby does not have a fever yet.
 
-**What Babies Gain from Being Read To**
+## Addressing Vaccine Hesitancy
 
-- **Language exposure**: Every word you read adds to the bank of language your baby''s brain is cataloguing. Long before they speak, they are building vocabulary.
-- **Listening and attention skills**: Following the rhythm and flow of language builds the listening circuits that underpin reading and communication.
-- **Bonding**: Being held and read to in a warm, calm moment is a powerful bonding experience that builds emotional security.
-- **A love of books**: Babies who are read to regularly grow up associating books with comfort, safety, and pleasure.
+Vaccine hesitancy is understandable — it comes from caring about your baby. The evidence on vaccine safety is among the most extensively studied in medicine. The benefits of vaccination vastly outweigh the risks. If you have concerns, talk to your GP or health visitor rather than social media.',
+  'health', 5,
+  ARRAY['vaccinations', 'immunisations', 'vaccine schedule', 'MenB', 'baby health'],
+  true, true, 'Lumira Health Team'
+),
 
-**What to Read**
+(
+  'infant', 13,
+  'When Your Baby Won''t Stop Crying: Colic and Other Causes',
+  'Understanding persistent infant crying — and finding strategies that help',
+  '## Defining Colic
 
-At 0–3 months: High-contrast black-and-white books or simple face illustrations. Your baby''s vision is still developing and contrast captures attention.
+**Colic** is typically defined as crying for more than 3 hours a day, more than 3 days a week, for more than 3 weeks, in an otherwise healthy, well-fed baby. It affects around 1 in 5 babies and almost always resolves by **3-4 months**.
 
-At 4–6 months: Books with bright colours, simple pictures, and repeated sounds or words.
+The cause of colic remains genuinely unclear. Leading theories include: gut immaturity, gas and digestive discomfort, overstimulation of the nervous system, and early microbiome development. It is **not caused by bad parenting**, and it does not predict a difficult child.
 
-At 6–9 months: Board books they can grab, mouth, and explore. Lift-the-flap books introduce a satisfying interactive element.
+## What to Try
 
-At 9–12 months: Simple stories with familiar words. Naming pictures. Books about daily routines.
+No single remedy works for all babies, but strategies that help many include:
 
-**How to Read**
+- **Motion:** Car rides, pram walks, rhythmic rocking, baby carrier wearing
+- **Sucking:** Dummy (pacifier) can be soothing if your baby accepts it
+- **White noise:** The sound of a running tap, washing machine, or white noise app
+- **Gentle tummy massage:** Clockwise strokes, bicycle leg movements
+- **Winding:** Gentle back patting or rubbing after feeds
+- **Feeding adjustment:** If breastfed, a short trial of dairy elimination from your diet (2 weeks); if formula-fed, discuss with GP before switching
+- **Carrying:** Some babies cry significantly less when carried for more of the day
 
-There is no wrong way. Use different voices, point at pictures, let your baby touch and turn pages, stop when they lose interest. Reading doesn''t need to mean sitting still — let it be interactive and playful.
+## What Doesn''t Work
 
-**Five Books a Day**
+- **Gripe water:** No good evidence
+- **Infacol/simethicone:** Evidence is weak; some babies seem to respond
+- **Probiotics:** Growing evidence (particularly Lactobacillus reuteri) for breastfed colicky babies; discuss with GP
 
-You don''t need to read whole stories — five minutes of shared book time across the day is beneficial. Build it into the bedtime routine, nappy changes, or quiet time after a feed.
+## Other Causes of Persistent Crying
 
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider with questions about your baby''s development.*$$,
-  0,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP) — Reach Out and Read', 'NHS UK', 'Booktrust UK'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-development-reading-to-babies'
-) ON CONFLICT (slug) DO NOTHING;
+Colic is a diagnosis of exclusion. Rule out:
+- **Hunger:** Check feeding is going well and baby is gaining weight
+- **Reflux / GORD:** Does crying occur specifically during or after feeds?
+- **Cow''s milk protein allergy:** Often accompanied by other symptoms
+- **Ear infection, UTI, or other illness**
+- **Hair tourniquet:** A hair wrapped around a finger or toe — always check
 
--- ---------------------------------------------------------------
+## Looking After Yourself
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'safety',
-  'Baby-Proofing Your Home — A Practical Room-by-Room Guide',
-  $$## When Your Baby Gets Mobile, Your Home Changes
+Caring for a colicky baby is genuinely exhausting. Put baby down in a safe place and take a break. Ask for help. The crying is not your fault, and you are not failing.',
+  'health', 5,
+  ARRAY['colic', 'infant crying', 'unsettled baby', 'baby health', 'purple crying'],
+  true, true, 'Lumira Health Team'
+),
 
-The moment your baby starts rolling, sitting, or crawling, the familiar landscape of your home becomes a series of hazards. Baby-proofing is not about eliminating all risk — it is about removing the most serious dangers.
+(
+  'infant', 26,
+  'Constipation in Formula-Fed Babies: Causes and Relief',
+  'What''s normal, what''s not, and how to help a straining baby',
+  '## What Is Normal?
 
-**General Principles**
+**Breastfed babies:** Bowel habits are highly variable and not a reliable indicator of constipation. Stool colour (yellow-mustard, green, brown) and consistency (seedy, soft, pasty) matter more than frequency. Many breastfed babies go days or even a week without a stool — this is normal if the stool, when it comes, is soft.
 
-- Get down to floor level and see your home from your baby''s perspective
-- Focus on the rooms where your baby spends most time
-- Install fixes before your baby reaches the relevant stage — it always happens faster than you expect
+**Formula-fed babies:** Typically have more regular stools, often 1-3 times per day. Stools are usually firmer than breastfed baby stools, and tend to be more brown or tan in colour.
 
-**Living Room**
+## True Constipation
 
-- Secure heavy furniture (bookshelves, TVs, chests) to the wall to prevent tip-over
-- Use corner and edge guards on coffee tables and hearths
-- Remove small objects, coins, and batteries from the floor — all serious choking hazards
-- Cover electrical sockets
-- Secure or hide trailing cables
+Constipation in babies is characterised by:
+- **Hard, pellet-like or very firm stools**
+- **Obvious straining and discomfort** that does not result in a stool
+- **Reduced frequency** combined with above
+- **Abdominal bloating**
 
-**Kitchen**
+Note: grunting and straining in newborns is often normal (they haven''t yet learned to relax the pelvic floor while bearing down — called **infant dyschezia**). If the resulting stool is soft, it''s not constipation.
 
-- Use cupboard locks on cabinets containing cleaning products, sharp objects, and plastic bags
-- Keep hot drinks well away from the edge of surfaces and never hold a hot drink while holding your baby
-- Install an oven guard if possible
-- Keep the dishwasher closed and cutlery stored safely
+## Causes
 
-**Stairs**
+Formula-fed babies are more prone to constipation because formula is harder to digest than breast milk. Other causes include: incorrect formula preparation (too concentrated), introducing solid foods, dehydration.
 
-- Install stair gates at the top and bottom before your baby can crawl — top gates must be fixed to the wall, not pressure-mounted
+## What Helps
 
-**Bathroom**
+- **Water:** Once solids are introduced, small sips of water between meals can help. Before 6 months, additional water is generally not needed for formula-fed babies.
+- **Dietary changes:** Once on solids, increase fruit (especially pears, prunes, peaches), vegetables, and high-fibre foods. "P" fruits are particularly helpful.
+- **Gentle movement:** Bicycle legs, tummy massage in a clockwise direction
+- **Warm baths:** Can relax the anal sphincter and ease discomfort
+- **GP assessment:** If home measures do not help, a GP can advise on glycerine suppositories or osmotic laxatives appropriate for babies
 
-- Never leave your baby unattended in or near water — even an inch of water is a drowning risk
-- Lock away all medications, razors, and cleaning products
-- Set your water heater to below 48°C to prevent scalds
+**Do not** give fruit juice to babies under 12 months to treat constipation without medical advice.',
+  'health', 4,
+  ARRAY['constipation', 'formula feeding', 'baby digestion', 'infant health', 'bowel movements'],
+  true, true, 'Lumira Health Team'
+),
 
-**Bedroom**
+(
+  'infant', 8,
+  'Baby''s First Fever: When to Worry and When to Watch',
+  'A practical guide to temperature in infants — and the red flags to know',
+  '## What Is a Fever?
 
-- Ensure the cot meets current safety standards — no loose parts, no drop sides
-- Remove all cot bumpers, pillows, and soft toys from the sleep space
+A fever is a **temperature of 38°C or above** measured with an accurate thermometer. Fever is a normal and healthy immune response — it signals that the body is fighting an infection. In itself, fever is not dangerous (except at very high temperatures sustained over long periods). What matters is the cause, and your baby''s overall condition.
 
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider or a certified childproofer if you have specific safety concerns.*$$,
-  24,
-  true,
-  ARRAY['NHS UK', 'Royal Society for the Prevention of Accidents (RoSPA)', 'American Academy of Pediatrics (AAP)'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-safety-baby-proofing-room-by-room'
-) ON CONFLICT (slug) DO NOTHING;
+## Taking Your Baby''s Temperature
+
+- **Digital thermometer in the armpit** is recommended for babies and young children (rectal is more accurate but rarely necessary outside hospital)
+- **Forehead strip thermometers** are unreliable — do not use them to make decisions
+- Take the temperature when you suspect fever, not constantly
+
+## When to Seek Help Urgently
+
+**Call 999 or go to A&E immediately if your baby:**
+- Has a **rash that does not fade when pressed** with a glass (possible meningococcal disease)
+- Has **difficulty breathing** or is working very hard to breathe
+- Is **unresponsive, limp, or difficult to rouse**
+- Has had a **seizure** (febrile convulsion)
+- Has **blue lips or fingernails**
+
+**Go to A&E or call your GP urgently if:**
+- Baby is **under 3 months with any fever** (38°C+) — always seek assessment
+- Baby is **3-6 months with fever above 39°C**
+- Baby has had fever for **more than 5 days**
+- You are **seriously worried** about your baby — trust your gut
+
+## Managing Fever at Home
+
+- **Dress baby lightly** — do not over-bundle
+- **Offer extra feeds** — keep them well hydrated
+- **Infant paracetamol or ibuprofen** (appropriate age and dosing) can reduce discomfort — you do not need to medicate every fever, only if baby seems uncomfortable
+- **Do not use cold baths or sponging** to bring temperature down — these are uncomfortable and ineffective
+- Monitor closely and reassess frequently',
+  'health', 5,
+  ARRAY['fever', 'baby temperature', 'infant illness', 'when to see a doctor', 'baby health'],
+  true, true, 'Lumira Health Team'
+),
+
+-- ============================================================
+-- DEVELOPMENT & PLAY
+-- ============================================================
+
+(
+  'infant', 13,
+  'Tummy Time: Why It Matters and How to Make It Work',
+  'Your guide to one of the most important daily activities for your baby''s development',
+  '## Why Tummy Time Is Essential
+
+Since the introduction of the "Back to Sleep" campaign in the 1990s (which dramatically reduced SIDS rates), babies spend far more time on their backs than previous generations. This is lifesaving — but it means tummy time has to be **intentional**, because babies no longer get it naturally through varied positioning.
+
+**Tummy time develops:**
+- **Neck and shoulder strength** (essential for sitting, crawling, and walking)
+- **Core muscle strength**
+- **Motor milestones** — rolling, reaching, crawling
+- **Prevention of positional plagiocephaly** (flat spots on the head)
+
+## How Much and How Often
+
+- **From birth:** Even tiny amounts count — a few minutes, several times a day
+- **By 2 months:** Aim for 20-30 minutes total daily
+- **By 4-6 months:** 40-60 minutes total daily, in multiple shorter sessions
+
+Always **supervised** — tummy time is only for when baby is awake and being watched.
+
+## What to Do If Your Baby Hates It
+
+Many babies protest tummy time — particularly if it is introduced later, or done in long stretches on a hard floor. Strategies:
+
+- **Tummy-to-tummy:** Lie back, place baby chest-to-chest on you. This is tummy time.
+- **Lap position:** Place baby face-down across your lap.
+- **Start small:** 2 minutes 5 times a day is better than 10 minutes of misery.
+- **Get on their level:** Lie in front of them, make faces, bring a mirror or high-contrast toy.
+- **Progress slowly:** Increase the duration as strength builds.
+- **Rolled towel under the chest:** A small rolled towel under the armpits can lift the chest slightly and make it easier.
+
+## Signs of Progress
+
+Around **3-4 months:** Pushing up on forearms, lifting the head to 45-90 degrees.
+Around **5-6 months:** Pushing up on extended arms, rolling from tummy to back.
+Around **7-9 months:** Crawling preparation — rocking on hands and knees.',
+  'development', 4,
+  ARRAY['tummy time', 'motor development', 'gross motor', 'plagiocephaly', 'infant development'],
+  true, true, 'Lumira Health Team'
+),
+
+(
+  'infant', 8,
+  'Language Development 0-12 Months: Your Baby''s Communication Journey',
+  'From first cries to first words — how language develops in the first year',
+  '## The First Year of Language
+
+Language development begins at birth — arguably before birth, as research shows newborns recognise the rhythm of their parent''s voice from prenatal exposure. The first year is a period of extraordinary linguistic learning, even before your baby says a single word.
+
+## Month by Month
+
+**0-2 months:** Crying is the primary communication. But within weeks, your baby is already distinguishing between the sounds of their home language and foreign languages. They respond to your voice — turning toward it, quieting.
+
+**2-3 months:** Cooing begins — soft, vowel-dominated sounds. First smiles signal that communication is becoming social, not just biological.
+
+**4-6 months:** Babbling emerges — consonant-vowel combinations ("ba," "da," "ma"). Your baby is practising the mouth movements required for speech. They tune in closely to your face and mouth when you speak.
+
+**6-9 months:** Babbling becomes more complex and variegated. "Jargon" emerges — long strings of babble with the rise and fall of real sentences. Your baby is learning prosody (the music of language) before they learn the words.
+
+**9-10 months:** Understanding accelerates. Your baby responds to their name, understands "no," and recognises familiar words ("dog," "milk," "daddy"). They begin pointing — a crucial communicative gesture.
+
+**10-12 months:** First words emerge — typically 1-5 words by 12 months. These are words used consistently and intentionally to refer to specific things.
+
+## What Supports Language Development
+
+**The most powerful thing you can do:** Talk. Narrate. Describe. Respond. Research consistently shows that babies who are talked to more have larger vocabularies, stronger reading skills, and better academic outcomes.
+
+- **Serve and return:** Respond to your baby''s vocalisations as if they''re meaningful.
+- **Name things:** "That''s the spoon. You''re holding the spoon."
+- **Read together:** Even in the early months — point to pictures, use varied voices.
+- **Limit passive screen time:** It does not build language the way face-to-face interaction does.',
+  'development', 5,
+  ARRAY['language development', 'communication', 'babbling', 'first words', 'infant development'],
+  true, true, 'Lumira Health Team'
+),
+
+(
+  'infant', 17,
+  'Sensory Play Ideas for 4-8 Months: Engaging Your Baby''s Developing Senses',
+  'Simple, research-backed activities that support your baby''s brain development',
+  '## Why Sensory Play Matters
+
+In the first year, babies learn primarily through their senses. Every texture, sound, smell, taste, and visual experience is a **neural event** — new synaptic connections forming as your baby encounters and processes the world. Sensory play is not frivolous; it is how babies build the foundational neural architecture for learning.
+
+At 4-8 months, your baby''s sensory systems are maturing rapidly. They can track objects smoothly, localise sounds, distinguish faces, and are beginning to reach and grasp — making this an ideal window for sensory exploration.
+
+## Ideas by Sense
+
+**Touch:**
+- Fabric sensory squares: a handful of different textures — velvet, corduroy, muslin, bubblewrap — to hold and explore
+- Water play in a shallow bowl (warm water, supervised)
+- Finger painting with baby-safe paint or yoghurt on a highchair tray
+- Ice wrapped in a cloth — the cold sensation is fascinating
+
+**Sound:**
+- Crinkle toys and foil for exploration
+- Shakers — a sealed container with dried pasta inside
+- Musical instruments: a small drum, a simple xylophone
+- Songs with repetition and actions: "Round and Round the Garden," "Pat-a-Cake"
+
+**Vision:**
+- Black-and-white high-contrast books (still engaging at this age)
+- Mirrors — babies this age are endlessly interested in their own reflection (they don''t yet recognise themselves, but the moving face is compelling)
+- A discovery bottle: a sealed clear bottle filled with glitter, oil, and water
+
+**Movement (vestibular and proprioceptive):**
+- Gentle bouncing, swaying
+- Tummy time on different surfaces — carpet, grass, a yoga mat
+- Baby yoga and gentle stretches
+
+## The Most Important Ingredient
+
+Your presence and responsiveness. Sensory play alongside a calm, engaged parent is neurologically richer than any toy.',
+  'development', 4,
+  ARRAY['sensory play', '4-8 months', 'play ideas', 'baby activities', 'development'],
+  true, true, 'Lumira Health Team'
+),
+
+(
+  'infant', 8,
+  'Reading to Your Baby: Why It Matters From Day One',
+  'Books are more powerful than you think — and it''s never too early to start',
+  '## Is It Worth Reading to a Baby Who Doesn''t Understand?
+
+Yes — emphatically, completely, yes. The evidence is overwhelming. Reading aloud to babies and young children is one of the **highest-impact activities** parents can provide for language development, cognitive development, and later literacy.
+
+And crucially: you do not need to wait until they understand the words.
+
+## What''s Happening When You Read
+
+When you read to your baby, you are:
+- **Exposing them to a wider vocabulary** than in everyday speech — books use more varied language than conversation
+- **Modelling prosody** — the music of language, the rise and fall of voice, the pause and emphasis
+- **Building phonological awareness** — the understanding that words are made of sounds, a direct predictor of reading ability
+- **Creating a shared ritual** of warmth and closeness — reading together builds positive associations with books and learning that persist
+
+Studies show that children who were read to from infancy have **larger vocabularies**, better reading skills at school age, and greater lifetime engagement with books.
+
+## How to Read with Babies at Different Ages
+
+**0-3 months:** Read anything. Your baby is listening to your voice, not the story. Simple rhyme and rhythm books are perfect.
+
+**3-6 months:** High-contrast picture books, board books with large simple images. Point to pictures and name them. Let your baby grab and mouth the book — this is appropriate.
+
+**6-9 months:** Books with textures, flaps, or interactive elements. Your baby will reach for the pages, help turn them, look at where you point.
+
+**9-12 months:** Start building a familiar repertoire. Repetition is not boring — it is how language is learned. Reading the same book ten times in a week is excellent practice.
+
+## Practical Tips
+
+- Build reading into a consistent time — before naps, at bedtime
+- Keep books within reach for baby to "choose"
+- Read with expression and engagement — your enthusiasm is contagious
+- It is fine to not finish the book — follow your baby''s lead',
+  'development', 4,
+  ARRAY['reading', 'books', 'language development', 'literacy', 'infant development'],
+  true, true, 'Lumira Health Team'
+),
+
+(
+  'infant', 17,
+  'Music and Your Baby''s Brain: The Science of Sound in Infancy',
+  'Why music is so powerful for infant development — and how to use it',
+  '## Babies Are Born Musical
+
+Humans are uniquely musical animals, and this musicality begins before birth. Newborns show a measurable preference for the music they heard in the womb. From birth, babies are sensitive to rhythm, pitch, and the emotional quality of music in ways that suggest deep neural architecture for musical processing.
+
+## What Music Does for the Developing Brain
+
+Research shows that musical engagement in infancy:
+
+- **Supports language development.** Music and language share neural pathways. The ability to discriminate musical pitches predicts phonological awareness (understanding of speech sounds), which is a strong predictor of reading. Songs and rhymes teach the rhythm of language.
+
+- **Supports emotional regulation.** Lullabies have been used across all human cultures to calm and soothe infants. Music activates the limbic system, regulating arousal and supporting the development of self-regulation.
+
+- **Supports social development.** Moving to music together — bouncing, dancing, clapping — is a form of **synchrony**: matching your timing and rhythm with another person. Synchrony strengthens social bonds.
+
+- **Builds pattern recognition and early mathematical thinking.** The beat, structure, and predictability of music develop pattern-recognition abilities that underpin mathematical reasoning.
+
+## What to Do
+
+- **Sing to your baby.** You do not need a good voice. Your voice is what they love most. Simple, repetitive songs with clear rhythm are ideal — nursery rhymes have earned their place.
+- **Move to music together.** Gentle bouncing, swaying, clapping games with older babies.
+- **Listen together.** A range of musical styles exposes developing ears to different pitches, rhythms, and structures.
+- **Make instruments.** A box of dried rice becomes a shaker. A wooden spoon on a pot becomes a drum.
+- **Music at mealtimes, play, and bedtime** becomes associated with those positive experiences.',
+  'development', 4,
+  ARRAY['music', 'brain development', 'language', 'lullabies', 'infant development'],
+  true, true, 'Lumira Health Team'
+),
+
+(
+  'infant', 17,
+  'Screen Time for Infants: The Guidelines and the Evidence',
+  'What the research says about screens in the first year — and a balanced perspective',
+  '## The Current Guidance
+
+**The NHS, WHO, AAP, and most major paediatric bodies recommend:**
+- **Under 18 months:** Avoid screen use, **except video calling** (FaceTime, video calls with family) — which involves real social interaction.
+- **18-24 months:** High-quality content only, with a caregiver watching alongside and talking about it.
+
+These are guidelines, not moral verdicts. They are based on the best available evidence about how infant brains develop.
+
+## Why Screens Are Different for Babies
+
+**Babies learn from contingent interaction** — interaction that responds in real time to what they do. Television, tablets, and videos do not respond to your baby; video calls do, which is why they''re treated differently.
+
+**Displacement matters more than content.** Even educational content provides less developmental benefit than the same time spent in face-to-face interaction, play, or being read to. The concern is not that screens are toxic — it''s that they displace more valuable activities.
+
+**Background TV** is associated with reduced parent-child verbal interaction even when the baby is not watching. It fragments the face-to-face interaction that builds language.
+
+## The Reality for Most Families
+
+Most families do use screens more than guidelines suggest — and their children are fine. Context matters enormously:
+
+- Is screen use **displacing face-to-face time** or supplementing it?
+- Are you **watching together** or using screens as a substitute?
+- Is your **baby the primary caregiver''s only company** and the TV on for parental wellbeing? That is understandable.
+
+## A Balanced Approach
+
+- Do not stress about occasional screen use — it is not damaging.
+- Be mindful of **background TV** and turn it off when interacting.
+- **Video calls** with grandparents and family are genuinely valuable.
+- When screens are on, **watch alongside and narrate** what you see.
+- Prioritise face-to-face time, reading, and play as the primary activities.',
+  'development', 4,
+  ARRAY['screen time', 'TV', 'technology', 'infant guidelines', 'development'],
+  true, true, 'Lumira Health Team'
+),
 
 -- ============================================================
 -- PARENT WELLBEING
 -- ============================================================
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'mental-health',
-  'Returning to Work After Maternity Leave — Emotional and Practical Preparation',
-  $$## One of Parenting''s Harder Transitions
+(
+  'infant', 39,
+  'Returning to Work After Maternity Leave: Preparing Emotionally and Practically',
+  'How to navigate one of the hardest transitions of early parenthood',
+  '## The Mixed Reality of Returning to Work
 
-Returning to work after maternity or parental leave is a significant transition — practically, emotionally, and identity-wise. Whether you are dreading it, looking forward to it, or feeling guilty about looking forward to it, your feelings are valid.
+Returning to work after maternity leave is rarely simple. For many women, it involves a tangle of contradictory feelings: relief at returning to professional identity, grief at leaving your baby, guilt about both, anxiety about childcare, and exhaustion from doing all of this on disrupted sleep.
 
-**The Emotional Reality**
+All of these feelings can coexist. None of them mean you are doing it wrong.
 
-Most parents experience a complex mix: relief, grief, guilt, excitement, and anxiety — sometimes simultaneously. You may worry about your baby''s wellbeing in your absence, wonder if your career has moved on without you, or feel uncertain about who you are now in a professional context.
+## The Practical Preparation
 
-All of this is normal. It does not mean you are making the wrong choice.
+**Start before you need to.** Finalising childcare arrangements should ideally happen before you go on leave, or in the early months. Good childcare has waiting lists.
 
-**Practical Preparation**
+**Settling-in period.** Most nurseries and childminders offer a settling-in programme — typically 2-4 sessions of increasing length with you present, then without you, before the full start date. Use this time. It helps your baby and you.
 
-- **Start the settling-in process early**: Most nurseries and childminders offer settling-in sessions. Begin 4–6 weeks before your return date so both you and your baby have time to adjust.
-- **Do a trial run**: Return to work for a day while your childcare is in place before your official start date — it gives you a chance to troubleshoot.
-- **Have a back-up plan for illness**: Babies get sick frequently in their first year in childcare. Know in advance who your back-up caregiver is.
-- **Communicate with your employer**: Discuss any flexibility needs — feeding breaks, part-time options, or a phased return — before you go back.
+**Trial runs.** Do a full day''s simulation a week before you return — including the commute — to work out what''s not working while you still have time to adjust.
 
-**If You Are Breastfeeding**
+**Feeding.** If you are breastfeeding and wish to continue, plan now. Most workplaces are legally required to provide facilities for expressing. Build your freezer supply 4-6 weeks before you return.
 
-You have a legal right to time and space to express milk at work in many countries. Practise pumping before returning so your supply is established.
+**The morning routine.** It will take longer than you think. Do it several times before your first day back.
 
-**Give Yourself Time**
+## The Emotional Reality
 
-Most parents report that after 4–6 weeks back at work, the transition feels much more manageable. The first week is usually the hardest.
+**The first drop-off is almost always the hardest.** Your baby may cry. You will almost certainly struggle. This is normal and does not mean you are making the wrong choice.
 
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider if you are struggling with anxiety or low mood around your return to work.*$$,
-  16,
-  true,
-  ARRAY['NHS UK', 'ACAS', 'Mind UK', 'Maternity Action'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-mental-health-returning-to-work'
-) ON CONFLICT (slug) DO NOTHING;
+**Settling takes time** — typically 2-4 weeks for a baby to feel secure in a new setting. It may be harder before it gets easier.
 
--- ---------------------------------------------------------------
+**Guilt is a sign of love, not failure.** But it is not always accurate. Children of working parents are not harmed by quality childcare — in many cases, they benefit from it.
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'mental-health',
-  'Childcare Options — Nursery, Childminder, Nanny, and Family',
-  $$## Finding the Right Childcare for Your Family
+**Give yourself a genuine transition period.** Be patient with yourself for the first 4-6 weeks. It gets easier for most families, though the timeline varies.',
+  'mental-health', 6,
+  ARRAY['returning to work', 'maternity leave', 'childcare', 'working parents', 'parent wellbeing'],
+  true, true, 'Lumira Health Team'
+),
 
-Choosing childcare is one of the biggest decisions of the first year. There is no universally "best" option — the right choice depends on your baby, your work pattern, your finances, and your values.
+(
+  'infant', 39,
+  'Choosing Childcare: Nursery vs Childminder vs Nanny',
+  'What to consider when choosing who will care for your baby',
+  '## The Main Options
 
-**Nursery (Day Care)**
+There is no universally superior form of childcare — the best choice depends on your family''s needs, finances, location, and your baby''s temperament.
 
-A group setting, usually registered and inspected by a regulatory body (Ofsted in England). Staff are shared between multiple children. Often the most affordable professional option; many offer subsidised places. Social exposure to other children is a benefit. Settings vary widely in quality — visit, ask questions, and review inspection reports.
+## Nursery / Day Nursery
 
-**Childminder**
+A group setting with multiple staff caring for children, typically organised by age groups. Usually operates 7am-6pm, 5 days a week.
 
-A registered carer who looks after a small number of children in their own home. Often offers a more home-like environment, smaller ratios, and more flexibility. Good for babies who settle better in quieter settings. Also regulated and inspectable.
+**Pros:**
+- Consistent, regulated setting
+- Socialisation with other children from an early age
+- Not dependent on a single person (if a staff member is ill, the setting continues)
+- Ofsted-inspected in the UK with published ratings
+- Often cheaper per hour than a nanny
 
-**Nanny**
+**Cons:**
+- Higher ratio of children to staff (for babies: 1:3)
+- Less individual attention than a childminder or nanny
+- More exposure to illness (especially in the first 6 months)
+- Less flexible — fees typically charged even when your child is absent
 
-A professional childcarer who comes to your home. Highest ratio of care (often 1:1 or 1:2). Most flexible for working hours. Significant employment responsibilities — you become an employer. Nanny-shares with another family can reduce costs.
+## Childminder
 
-**Au Pair**
+A registered individual who cares for children in their own home, alongside a small number of other children.
 
-Typically a young person from abroad who lives with your family and provides some childcare in exchange for accommodation and a stipend. Not trained carers — appropriate for supplementary care, not sole care for young babies.
+**Pros:**
+- Lower adult-to-child ratio than nursery
+- Home environment — often more relaxed
+- More flexible with hours in some cases
+- Ofsted-registered and inspected
+- Often has a natural mixed-age group
 
-**Family (Grandparents etc.)**
+**Cons:**
+- If childminder is ill or on holiday, you need a backup
+- Quality varies more than in larger settings (visit carefully)
+- Less structured than nursery
 
-Free or low-cost; familiar faces your baby already knows. Can be wonderful. Also requires clear communication about expectations, parenting differences, and boundaries.
+## Nanny
 
-**Questions to Ask Any Childcare Provider**
+A childcare professional who comes to your home.
 
-- What is your settling-in process?
-- What is your key person approach?
-- How do you handle sleep, feeding, and routines?
-- What is your staff turnover?
-- Can I visit unannounced?
+**Pros:**
+- Care in your own home — least disruption to baby
+- 1:1 (or close to) attention
+- Maximum flexibility in hours and sick days
+- You set the routine and standards
 
-*This article is for informational purposes only. Please consult relevant government resources for financial entitlements to childcare support in your country.*$$,
-  16,
-  true,
-  ARRAY['NHS UK', 'Gov.uk Childcare', 'Family and Childcare Trust', 'NDNA'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-mental-health-childcare-options'
-) ON CONFLICT (slug) DO NOTHING;
+**Cons:**
+- Significantly more expensive
+- You become an employer (PAYE, tax, employment law)
+- No built-in backup if nanny is ill
+- Less external oversight and regulation
 
--- ---------------------------------------------------------------
+## Questions to Ask at Any Setting
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'mental-health',
-  'The Identity Shift of Parenthood — Who Am I Now?',
-  $$## Matrescence and the Self You Are Becoming
+- Staff turnover rate and average tenure
+- Key worker arrangements (who is your baby''s primary carer?)
+- Approach to settling in
+- Communication with parents
+- Ratios and how they are maintained
+- What happens if my child is ill during the day?',
+  'wellness', 6,
+  ARRAY['childcare', 'nursery', 'childminder', 'nanny', 'returning to work'],
+  true, true, 'Lumira Health Team'
+),
 
-There is a word for the process of becoming a mother: matrescence. Coined by anthropologist Dana Raphael and recently popularised by developmental psychologist Aurelie Athan, it describes the profound physical, psychological, and social transformation that occurs when a person becomes a parent.
+(
+  'infant', 26,
+  'Your Postpartum Relationship: Reconnecting After Baby',
+  'How to tend to your partnership in the demanding first year',
+  '## What Happens to Relationships After a Baby
 
-It is, in some ways, as seismic as adolescence — and just as disorienting.
+Research consistently shows that relationship satisfaction **decreases after the birth of a child** for many couples — particularly in the first 12-18 months. This is not a sign of a failing relationship; it is a normal response to one of the most significant stressors two people can share.
 
-**What the Identity Shift Can Feel Like**
+The causes are predictable: sleep deprivation, changed identity, division of labour disputes, reduced intimacy, less time alone together, and the profound shift from being primarily partners to being primarily parents.
 
-- A sense of loss for the person you were before
-- Feeling like your previous identity (professional, social, physical) no longer fits
-- Uncertainty about who you are now, beyond "parent"
-- Resentment — and guilt about the resentment
-- Moments of profound love alongside boredom, frustration, and longing for your old life
+Knowing this is normal does not make it easier, but it does reduce the panic that comes from thinking something is specifically wrong with your relationship.
 
-All of these are normal. They do not mean you made a mistake or that you are a bad parent.
+## What Gets in the Way
 
-**What Research Shows**
+- **Exhaustion:** Hard to feel romantic or even kind when deeply sleep-deprived
+- **Unequal division of labour:** Resentment builds when one partner feels the load is unfair
+- **Changed intimacy:** Physical and emotional intimacy changes dramatically postpartum
+- **Communication breakdown:** Less time and energy for the conversations that maintain connection
+- **Different parenting styles:** Disagreements about approach emerge
 
-Brain imaging studies show measurable structural changes in the maternal brain during the transition to parenthood — particularly in areas governing social cognition, empathy, and threat detection. Your brain is literally reorganising itself around this new role.
+## What Helps
 
-**Finding Yourself in the New Self**
+**Talk about the practical before you argue about it.** Explicitly discuss the division of domestic and childcare work. Many couples assume the other person sees what they see and will do their fair share — they often do not, not because of bad faith but because of genuinely different perception.
 
-- Your pre-parent identity is not gone — it is integrating with something new
-- Protect some time and space that belongs to the person you are beyond parenting
-- Seek out other parents who are willing to speak honestly about their experience
-- Journaling, therapy, or honest conversations with a trusted person can help process the shift
+**Protect small amounts of connection.** You do not need weekly date nights (though they help if you can manage them). You need regular small moments of genuine attention to each other — a conversation without phones, a brief physical touch, noticing something.
 
-**When It Becomes Something More**
+**Say what you need.** Partners cannot read minds, and exhaustion makes sensitivity to cues harder. Direct, kind requests work better than hinting or expecting.
 
-If the loss of identity is accompanied by persistent low mood, inability to feel joy, or significant anxiety, speak to your GP. This may be more than identity adjustment — and support is available.
+**Seek support early.** If things feel seriously strained, couples therapy in the first year — rather than waiting until things break down — is genuinely effective.',
+  'relationships', 5,
+  ARRAY['relationships', 'postpartum', 'partnership', 'couples', 'new parents'],
+  true, true, 'Lumira Health Team'
+),
 
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider if you are struggling with your mental health.*$$,
-  12,
-  true,
-  ARRAY['Aurelie Athan — Matrescence Research', 'Hoekzema et al. (2017) Nature Neuroscience', 'Mind UK', 'PANDAS Foundation'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-mental-health-identity-shift-parenthood'
-) ON CONFLICT (slug) DO NOTHING;
+(
+  'infant', 26,
+  'Dads and Second Parents: Mental Health in the First Year',
+  'Paternal and partner mental health matters — and it''s more common than you think',
+  '## The Invisible Struggle
 
--- ---------------------------------------------------------------
+When we talk about parental mental health in the first year, we talk overwhelmingly about mothers. But **1 in 10 fathers** experience depression in the first year after birth — and the rate for anxiety is higher still. Second parents of all genders are affected. Yet they are rarely asked, rarely screened, and often feel they have no right to struggle.
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'relationships',
-  'Your Relationship at 6–12 Months — Reconnecting as a Couple',
-  $$## When the Baby Comes Between You
+This silence is costly. A parent''s mental health affects not only them, but their partner and their baby.
 
-Having a baby reshapes every relationship — including the one with your partner. The 6–12 month period is often when couples begin to feel the cumulative toll of sleep deprivation, reduced intimacy, divided attention, and the seismic shift in identity that parenthood brings.
+## Why Second Parents Are Vulnerable
 
-**What Commonly Happens**
+- **Sleep deprivation** affects everyone in the household
+- **Identity shift:** The transition to parenthood changes your sense of self, your relationships, and your daily life profoundly
+- **Feeling sidelined:** Many partners describe feeling excluded from the mother-baby dyad, especially if breastfeeding is established
+- **Returning to work:** Resuming a demanding job while running on no sleep, with a partner who is struggling
+- **Lack of social support:** New parent networks often centre on the primary caregiver
+- **Previous mental health history:** A risk factor that applies across genders
 
-- Less time for each other as individuals and as a couple
-- Different parenting styles surfacing and causing friction
-- Resentment around the division of domestic and childcare labour
-- Reduced physical and emotional intimacy
-- Feeling like co-parents rather than partners
+## Signs to Watch For
 
-All of this is normal. Relationship satisfaction typically dips in the first year after a baby — across almost all couples, regardless of how strong the relationship was before.
+- Persistent low mood or irritability lasting more than 2 weeks
+- Loss of interest in things you used to enjoy
+- Difficulty connecting with your baby or partner
+- Increased alcohol use or other avoidant behaviours
+- Feeling overwhelmed, numb, or like you are failing
 
-**What Helps**
+## What to Do
 
-**Name it without blame**: "I miss us" is a very different conversation than "you never pay attention to me." Start there.
+- **Tell your GP.** Paternal and partner postnatal depression is recognised and treatable. You are not overreacting.
+- **Talk to your partner** — not just as parents, but about your own experience
+- **Connect with other parents** in a similar position — the isolation of new parenthood is a significant factor
+- **Check in with yourself** with the same kindness you would offer a friend',
+  'mental-health', 5,
+  ARRAY['paternal mental health', 'dads', 'second parent', 'postnatal depression', 'parent wellbeing'],
+  true, true, 'Lumira Health Team'
+),
 
-**Divide fairly, not equally**: Fair doesn''t always mean 50/50. Have explicit conversations about who is doing what — assumptions breed resentment.
+(
+  'infant', 26,
+  'Mum Guilt: What It Is, Where It Comes From, and What to Do With It',
+  'One of the most common experiences in motherhood — and why it''s worth understanding',
+  '## What Is Mum Guilt?
 
-**Protect connection, however small**: A ten-minute conversation after the baby is in bed, without phones, matters more than a monthly date night you can''t manage.
+Mum guilt is the persistent, often irrational feeling that you are **not doing enough, not doing it right, or actively harming your child** through your choices and imperfections. It is extraordinarily common — studies suggest the majority of mothers experience it regularly — and it tends to peak in the first year, when everything feels high-stakes and uncertain.
 
-**Physical reconnection at your own pace**: Postnatal bodies need time to recover. Intimacy does not have to start with sex — rebuilding through non-sexual physical affection first is healthy and valid.
+It manifests in countless ways: guilt about formula feeding, guilt about going back to work, guilt about not going back to work, guilt about screen time, guilt about losing your temper, guilt about not enjoying every moment, guilt about whether you''re holding your baby too much or not enough.
 
-**Get support**: Couples counselling is not a sign of failure. Many therapists specialize in the transition to parenthood.
+## Where It Comes From
 
-**If Things Are Serious**
+**Unrealistic standards.** Motherhood is depicted — in media, in social media, in cultural narratives — through an impossibly idealised lens. The "good mother" is always patient, always present, always joyful. Real motherhood is none of these things, consistently.
 
-If you are experiencing domestic abuse, coercive control, or fear for your safety, contact a domestic abuse helpline. These patterns can escalate after the birth of a baby.
+**Social comparison.** Other parents, especially on social media, appear to be doing it better. They are not. They are curating.
 
-*This article is for informational purposes only and does not constitute medical advice. Please consult a qualified therapist or your healthcare provider for relationship or mental health support.*$$,
-  24,
-  true,
-  ARRAY['Gottman Institute', 'Relate UK', 'NHS UK', 'National Domestic Abuse Helpline'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-relationships-reconnecting-as-couple-6-12-months'
-) ON CONFLICT (slug) DO NOTHING;
+**High stakes with low certainty.** Parenting involves enormous responsibility with very little clear feedback. When you cannot know whether you''re getting it right, anxiety and guilt fill the vacuum.
 
--- ---------------------------------------------------------------
+**Cultural pressure.** Women are more subject to scrutiny and criticism for parenting choices than men. This is documented and real.
 
-INSERT INTO content_articles (stage, category, title, body, week_or_month, is_published, source_citations, medical_disclaimer, medically_reviewed, culturally_sensitive, slug)
-VALUES (
-  'infant',
-  'mental-health',
-  'Milestones Anxiety — Managing the Pressure to Hit Every Marker',
-  $$## When Milestones Become a Source of Dread
+## What To Do With It
 
-Developmental milestones exist as useful clinical screening tools. In the age of parenting apps, social media, and competitive parent groups, they have become something else: a league table that many parents feel their baby is constantly failing.
+**Notice it without being ruled by it.** Mum guilt is not the same as conscience. Conscience points to something genuinely worth changing. Mum guilt often points to an unrealistic standard.
 
-**The Problem with Milestone Culture**
+**Ask:** "Is this guilt pointing to a real problem, or to an impossible standard?"
 
-- Milestone ranges are wide — a skill listed at "6 months" may typically appear anywhere from 4 to 9 months
-- Social media amplifies early developers and creates a distorted picture of "average"
-- Comparisons between individual babies are largely meaningless — development is non-linear and domain-specific
-- Milestone anxiety causes parents to watch their babies anxiously rather than joyfully
+**Practice self-compassion.** Research by Kristin Neff and others shows that self-compassion — treating yourself with the same kindness you''d show a friend — leads to better outcomes, including better parenting, than self-criticism.
 
-**What Milestones Are Actually For**
+**Talk about it.** With other mothers. Honesty normalises reality.',
+  'mental-health', 5,
+  ARRAY['mum guilt', 'mental health', 'motherhood', 'self-compassion', 'parent wellbeing'],
+  true, true, 'Lumira Health Team'
+),
 
-Developmental milestones were designed as population-level screening tools. They help clinicians identify children who might benefit from early support. A baby who hasn''t rolled by a specific week is not failing — they are one data point that a clinician might choose to monitor.
+-- ============================================================
+-- SAFETY
+-- ============================================================
 
-**Holding Milestones Lightly**
+(
+  'infant', 34,
+  'Babyproofing for Crawlers: A Room-by-Room Safety Guide',
+  'Before your baby starts crawling, get ahead of the hazards',
+  '## The Crawling Window
 
-- Learn the milestones as background knowledge, not a performance target
-- Focus on the trajectory — is your baby developing, engaging, learning, and growing over time?
-- Celebrate your individual baby''s pace and personality rather than racing to the next milestone
+The shift from a stationary baby to a mobile one happens faster than most parents expect. One week your baby is happily lying where you put them; the next they are across the room. This is the moment when **home safety becomes urgent** — not something to think about "when the time comes," but something to do before it does.
 
-**When Concern Is Warranted**
+## Room-by-Room Guide
 
-There is a difference between milestone anxiety (worry about normal variation) and genuine concern (noticing a consistent gap or regression). If something truly feels off, trust your instincts and raise it with your GP — that is exactly what milestone awareness is for.
+**Living Room:**
+- Secure large furniture (bookshelves, TVs, cabinets) to the wall with anti-tip straps
+- Cover electrical outlets with socket covers
+- Move all small objects, remote controls, and coins to surfaces babies cannot reach
+- Use edge guards on coffee table corners
+- Secure cable ties around loose wires and electrical cords
+- Remove floor-level items: plants (many are toxic), decorative stones, candleholders
 
-**You Are Not Competing**
+**Kitchen:**
+- Install cabinet locks on all lower cupboards — especially those containing cleaning products
+- Keep cleaning products in high cupboards or behind locked doors (not just under the sink)
+- Stair gate to restrict kitchen access while cooking
+- Secure the bin with a lock or keep it inaccessible
+- Never leave your baby unattended in the kitchen
 
-Your baby is not in a race. Their worth — and yours as a parent — is not measured in weeks achieved.
+**Bathroom:**
+- Keep the bathroom door closed at all times — toilet locks are available
+- Store all medicines, razors, and toiletries out of reach
+- Never leave water in the bath — drowning risk
 
-*This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider with concerns about your baby''s development.*$$,
-  16,
-  true,
-  ARRAY['American Academy of Pediatrics (AAP)', 'Zero to Three', 'CDC ''Learn the Signs. Act Early.''', 'Mind UK'],
-  'This article is for informational purposes only and does not constitute medical advice. Please consult your healthcare provider before making any health decisions.',
-  true,
-  true,
-  'infant-mental-health-milestones-anxiety'
-) ON CONFLICT (slug) DO NOTHING;
+**Stairs:**
+- Fit stair gates at both top and bottom of all staircases
+- Top-of-stairs gates must be wall-mounted (not pressure-fit) — pressure-fit gates can be pushed out
+
+**Throughout the house:**
+- Window locks on all ground-floor and upper-floor windows
+- Door slam-stoppers or door pinch guards on all internal doors
+- Remove or secure tablecloths that could be pulled
+- Ensure all pot plants are non-toxic or out of reach
+
+## Priorities First
+
+If you cannot do everything at once, prioritise: stair gates, securing heavy furniture, removing small objects and coins, and locking away cleaning products.',
+  'safety', 5,
+  ARRAY['babyproofing', 'crawling', 'home safety', 'childproofing', 'infant safety'],
+  true, true, 'Lumira Health Team'
+),
+
+(
+  'infant', 17,
+  'Safe Play Spaces: Creating a Yes Space for Your Baby',
+  'Creating environments where your baby can explore freely and safely',
+  '## The Yes Space Concept
+
+A "yes space" is a designated area in your home — typically a room or gated section — where everything within reach is **safe, accessible, and baby-friendly**. In a yes space, the answer to most of your baby''s explorations is yes: yes, you can touch that, yes, you can reach that, yes, you can put that in your mouth.
+
+The benefits are significant:
+
+- Your baby gets **uninterrupted exploration time** without constant redirection
+- You can **step back** slightly and observe without hovering
+- Fewer "nos" preserve the word''s meaning for genuine hazards
+- Your baby develops **independence and confidence** in their own abilities
+
+## How to Create a Yes Space
+
+A playpen, a gated room, or a well-babyproofed living room can all serve this purpose. The space should:
+
+- Have a **firm but comfortable floor** — foam mats, carpet, or a rug
+- Contain only **age-appropriate toys and objects** — nothing small enough to be a choking hazard, nothing with sharp edges
+- Have **no electrical outlets, trailing cables, or heavy furniture** that could tip
+- Be large enough to allow movement — crawling, rolling, pulling to stand
+
+Stock it with: a mirror at floor level, soft books, wooden blocks, soft balls, rattles, a push-along toy, household objects of interest (a wooden spoon, a small pot, a soft cloth).
+
+## Supervision at Different Ages
+
+**0-4 months:** Your baby is largely where you put them, but always within sight or hearing.
+
+**4-8 months:** Mobility is developing — never leave a rolling or crawling baby on an elevated surface. Floor-level play in a safe space allows you to move around the room.
+
+**8-12 months:** Mobile babies need constant proximity. You do not need to hover directly over them, but you should always be in earshot and able to respond immediately.',
+  'safety', 4,
+  ARRAY['safe play', 'yes space', 'baby proofing', 'play space', 'infant safety'],
+  true, true, 'Lumira Health Team'
+),
+
+(
+  'infant', 17,
+  'Water Safety for Infants: Baths, Pools, and Open Water',
+  'Drowning is a leading cause of accidental death in young children — here''s how to prevent it',
+  '## The Uncomfortable Statistics
+
+Drowning is the **second leading cause of accidental death** in children under 5 in many countries. What makes this uniquely important is that drowning happens very quickly (in as little as 30 seconds), very silently (it looks nothing like the splashing, shouting drowning depicted in films), and in very small amounts of water (a baby can drown in a few centimetres).
+
+Prevention is almost entirely within parental control.
+
+## Bath Safety
+
+- **Never leave a baby unattended in the bath** — not even for a moment, not even to answer the door or phone. If you must leave, take the baby with you.
+- A baby bath seat is a **convenience, not a safety device** — it does not prevent drowning if your attention lapses.
+- Run cold water into the bath first, then hot, and test with your elbow before placing baby in.
+- **Recommended bath water temperature: 37-38°C** (body temperature).
+- Empty the bath immediately after use.
+
+## Baby Swimming
+
+Babies can attend swimming lessons from birth in most facilities. Baby swimming has benefits for water confidence and parent-child bonding. However:
+
+- **Being comfortable in water does not make a baby "drown-proof."** No baby is.
+- Always hold your baby securely in the water.
+- **Arm bands and seat floats are not life-saving devices** in pools.
+- After swimming, supervise carefully during nappy changes and while on pool sides.
+
+## Open Water
+
+- **Never leave babies unattended near open water** — garden ponds, paddling pools, rivers, lakes.
+- Garden ponds should be **completely covered or fenced** when babies are mobile.
+- **Empty paddling pools after each use** — never leave water standing.
+
+## If a Baby Is Found Unresponsive in Water
+
+Start CPR immediately and call 999. Cold water submersion, even for several minutes, does not always result in permanent harm — outcomes are better than for warm water. Do not give up.',
+  'safety', 5,
+  ARRAY['water safety', 'drowning prevention', 'bath safety', 'swimming', 'infant safety'],
+  true, true, 'Lumira Health Team'
+),
+
+(
+  'infant', 8,
+  'Car Seat Safety: Rear-Facing — Until When?',
+  'The evidence is clear — rear-facing is significantly safer for longer than most parents know',
+  '## Why Rear-Facing Is Safer
+
+In a frontal collision (the most common and most severe type), a rear-facing car seat distributes crash forces across the **entire back, neck, and head** — the strongest parts of a baby''s body. The shell of the seat moves with the baby, absorbing force.
+
+Forward-facing seats, by contrast, hold the child by a harness at the hips and shoulders. In a frontal crash, the body stops but the relatively heavy head continues forward — creating enormous force on the neck and spine.
+
+Research consistently shows that children in rear-facing seats are **significantly safer** in front and side crashes than those facing forward.
+
+## How Long to Keep Them Rear-Facing
+
+**Current recommendations:**
+- **UK and Europe (i-Size / ECE R129):** Mandatory rear-facing until 15 months. Most guidelines recommend rear-facing until at least **3-4 years**, or until your child reaches the maximum weight or height limit of their seat.
+- **USA (AAP):** Keep rear-facing as long as possible — until the child reaches the top height or weight limit allowed by the car seat manufacturer.
+
+The old "turn forward at 9 kg or 9 months" guidance is **outdated** and no longer recommended.
+
+## Types of Car Seat
+
+- **Infant carrier (Group 0+):** Rear-facing, typically from birth to around 12-13 kg. Portable.
+- **Extended rear-facing seat (Group 1 ERF / i-Size):** Rear-facing from birth to 18+ kg (approximately 3-4 years). Recommended as the safest option.
+- **Combination forward-facing seat:** Forward-facing from approximately 9 kg / 15 months.
+
+## Installation Matters as Much as the Seat
+
+An incorrectly fitted seat is not a safe seat. **Have your seat checked** by a certified car seat technician. Many retailers and motoring organisations offer free checking services.
+
+**Never use a car seat that has been in a significant collision.** Even if it looks undamaged, the structure may be compromised.',
+  'safety', 5,
+  ARRAY['car seat', 'rear-facing', 'road safety', 'infant safety', 'car travel'],
+  true, true, 'Lumira Health Team'
+),
+
+(
+  'infant', 17,
+  'Sun Safety for Babies Under 12 Months',
+  'Babies have uniquely vulnerable skin — here''s how to protect them',
+  '## Why Babies Need Extra Sun Protection
+
+Babies under 6 months have **thinner, more sensitive skin** with less melanin (the pigment that provides some UV protection). Their skin burns much more quickly than adult skin. Additionally, babies cannot regulate their body temperature as effectively as older children, making them more susceptible to **heat stroke and dehydration**.
+
+Babies under 6 months should **not use sunscreen** as their skin is too sensitive and their body-to-surface ratio means they absorb chemicals more readily. From 6 months, sunscreen is appropriate on exposed areas.
+
+## The Core Principles
+
+**Shade first.** The best sun protection for a baby is staying out of direct sunlight — particularly between **11am and 3pm** when UV is strongest.
+
+- Use a pram with a sun canopy, a UV-protective parasol, or a sun shade
+- Seek shade under trees, umbrellas, or buildings
+- Never cover a pram completely with a blanket or muslin — this dramatically increases temperature inside
+
+**Clothing.** Light, loose, long-sleeved clothing and a wide-brimmed hat protect without chemicals. Look for UPF-rated fabrics for days with prolonged sun exposure.
+
+**Never leave a baby in a parked car in warm weather** — temperatures inside rise dangerously within minutes.
+
+## Sunscreen From 6 Months
+
+- Use **SPF 50+ broad-spectrum** (UVA and UVB) sunscreen
+- Apply 20-30 minutes before sun exposure
+- Reapply every 2 hours and after swimming or sweating
+- Apply to all exposed areas including ears, back of neck, and tops of feet
+- **Mineral (zinc oxide / titanium dioxide) sunscreens** are gentler on baby skin and are the preferred option
+
+## Signs of Heat Stroke — Seek Emergency Help
+
+- Very high temperature with hot, dry skin (no longer sweating)
+- Drowsiness, confusion, or unresponsiveness
+- Rapid or weak pulse
+- Loss of consciousness',
+  'safety', 4,
+  ARRAY['sun safety', 'sunscreen', 'heat protection', 'baby skin', 'outdoor safety'],
+  true, true, 'Lumira Health Team'
+),
+
+(
+  'infant', 34,
+  'Choking Hazards: What to Keep Away From Babies',
+  'A practical guide to the objects and foods that pose choking risks to infants',
+  '## Why Infants Are Particularly at Risk
+
+Babies explore the world primarily through their mouths. Everything that enters their reach is likely to go into their mouth. At the same time, their **airway is narrow** (roughly the width of their little finger) and their ability to cough effectively to clear an obstruction is limited. This combination makes choking one of the leading causes of accidental injury in infancy.
+
+## The Size Rule
+
+Anything that can pass through a **toilet paper tube** is a potential choking hazard for babies and toddlers. If an object can fit entirely in a baby''s mouth, it can potentially block the airway.
+
+## Household Objects to Keep Away
+
+**Common culprits:**
+- Coins (especially common)
+- Batteries — button batteries are a **critical hazard**: they can cause severe chemical burns to the oesophagus within 2 hours of being swallowed. If you suspect a button battery has been swallowed, go to A&E immediately.
+- Small toys or toy parts (especially from older siblings'' toys)
+- Marbles, beads, and small balls
+- Pen caps and marker lids
+- Deflated or burst balloons — a major choking hazard
+- Safety pins
+- Small magnets — swallowing multiple magnets is a serious emergency
+- Nuts (whole)
+
+## Food Choking Hazards
+
+**High-risk foods for babies:**
+- Whole grapes (quarter lengthwise)
+- Whole cherry tomatoes (quarter)
+- Whole blueberries (offer squashed or halved)
+- Whole nuts
+- Hard raw vegetables and fruit (carrot sticks, apple slices) — offer cooked or grated
+- Large chunks of meat or cheese
+- Popcorn
+- Rice cakes broken into very small pieces (the dry texture can clump)
+
+## Preparation Reduces Risk
+
+- Cut round foods lengthwise into quarters
+- Cook vegetables until easily squashed between finger and thumb
+- Offer strips and batons rather than round chunks
+- Always supervise eating — sit with your baby every time they eat
+
+## Learn Infant First Aid
+
+The most important thing you can do is **learn what to do if a baby is choking**. A one-hour infant first aid course can equip you to act confidently in an emergency.',
+  'safety', 5,
+  ARRAY['choking hazards', 'infant safety', 'choking prevention', 'baby food safety', 'home safety'],
+  true, true, 'Lumira Health Team'
+);
