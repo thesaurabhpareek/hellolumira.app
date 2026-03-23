@@ -119,43 +119,76 @@ export default function ChatLanding({ profile, baby, threads }: Props) {
             </p>
           </div>
 
-          {hasThreads && (
-            <button
-              onClick={() => createNewThread()}
-              disabled={isCreating}
-              aria-label="Start new conversation"
-              style={{
-                width: '48px',
-                height: '48px',
-                borderRadius: 'var(--radius-md)',
-                background: 'var(--color-primary)',
-                border: 'none',
-                cursor: isCreating ? 'not-allowed' : 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0,
-                opacity: isCreating ? 0.5 : 1,
-                transition: 'opacity 0.15s ease',
-                touchAction: 'manipulation',
-                WebkitTapHighlightColor: 'transparent',
-              }}
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="white"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="12" y1="5" x2="12" y2="19" />
-                <line x1="5" y1="12" x2="19" y2="12" />
-              </svg>
-            </button>
-          )}
+        </div>
+
+        {/* New conversation input — always visible, like ChatGPT/iMessage */}
+        <div
+          style={{
+            marginBottom: '20px',
+            position: 'relative',
+          }}
+        >
+          <input
+            type="text"
+            placeholder={baby.stage === 'pregnancy'
+              ? `Ask about your pregnancy, ${profile.first_name}...`
+              : `Ask about ${baby.name || 'your baby'}...`}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && (e.target as HTMLInputElement).value.trim()) {
+                createNewThread((e.target as HTMLInputElement).value.trim())
+              }
+            }}
+            disabled={isCreating}
+            style={{
+              width: '100%',
+              padding: '14px 52px 14px 16px',
+              borderRadius: '14px',
+              border: '1.5px solid var(--color-border)',
+              background: 'var(--color-card)',
+              fontSize: '15px',
+              color: 'var(--color-slate)',
+              outline: 'none',
+              fontFamily: 'inherit',
+              minHeight: '52px',
+              transition: 'border-color 0.15s ease',
+            }}
+            onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-primary)' }}
+            onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--color-border)' }}
+          />
+          <button
+            onClick={() => {
+              const input = document.querySelector<HTMLInputElement>('input[placeholder*="Ask"]')
+              if (input?.value.trim()) {
+                createNewThread(input.value.trim())
+              } else {
+                createNewThread()
+              }
+            }}
+            disabled={isCreating}
+            aria-label="Start conversation"
+            style={{
+              position: 'absolute',
+              right: '6px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              width: '40px',
+              height: '40px',
+              borderRadius: '10px',
+              background: 'var(--color-primary)',
+              border: 'none',
+              cursor: isCreating ? 'not-allowed' : 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              opacity: isCreating ? 0.5 : 1,
+              transition: 'opacity 0.15s ease',
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13" />
+              <polygon points="22 2 15 22 11 13 2 9 22 2" />
+            </svg>
+          </button>
         </div>
 
         {/* Empty state with suggested prompts */}
@@ -207,15 +240,6 @@ export default function ChatLanding({ profile, baby, threads }: Props) {
               />
             </div>
 
-            {/* New thread button */}
-            <button
-              onClick={() => createNewThread()}
-              disabled={isCreating}
-              className="btn-primary"
-              style={{ marginTop: '8px' }}
-            >
-              {isCreating ? 'Starting...' : 'Start a conversation'}
-            </button>
           </div>
         )}
 

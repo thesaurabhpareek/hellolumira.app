@@ -335,22 +335,24 @@ export default async function HomePage() {
               }}
             >
               <p style={{ fontSize: '17px', fontWeight: 700, marginBottom: '6px' }}>
-                Start your first check-in
+                How are you today?
               </p>
               <p style={{ fontSize: '14px', opacity: 0.9, lineHeight: 1.5, marginBottom: '14px' }}>
-                It takes 2 minutes. Lumira learns your patterns over time to give you better, personalised guidance.
+                Take 2 minutes to check in. The more you share, the more personalised your guidance becomes.
               </p>
               <span
                 style={{
                   display: 'inline-block',
-                  padding: '8px 20px',
-                  background: 'rgba(255,255,255,0.2)',
+                  padding: '10px 24px',
+                  background: '#FFFFFF',
+                  color: '#2D5A4E',
                   borderRadius: 'var(--radius-md)',
                   fontSize: '14px',
-                  fontWeight: 600,
+                  fontWeight: 700,
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
                 }}
               >
-                Let&apos;s go &rarr;
+                Start now &rarr;
               </span>
             </div>
           </Link>
@@ -545,7 +547,7 @@ export default async function HomePage() {
               boxShadow: '0 2px 12px rgba(61, 129, 120, 0.3)',
             }}
           >
-            {baby.stage === 'planning' ? 'Talk to Lumira \u2192' : 'Check in \u2192'}
+            {baby.stage === 'planning' ? 'Talk to Lumira \u2192' : 'How am I doing? \u2192'}
           </Link>
           <Link
             href={baby.stage === 'planning' ? '/content' : '/concern'}
@@ -565,7 +567,7 @@ export default async function HomePage() {
               boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
             }}
           >
-            {baby.stage === 'planning' ? 'Browse articles \u2192' : 'Something\u2019s on my mind \u2192'}
+            {baby.stage === 'planning' ? 'Explore guides \u2192' : 'I need help \u2192'}
           </Link>
         </div>
       </div>
