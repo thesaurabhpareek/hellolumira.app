@@ -50,7 +50,7 @@ export default function AppShell({ children, profile, baby }: Props) {
   const isChatThread = pathname.startsWith('/chat/') && pathname !== '/chat'
 
   return (
-    <div data-appshell className="h-dvh bg-[var(--color-white)] flex flex-col font-sans overflow-hidden">
+    <div data-appshell className="h-dvh bg-[var(--color-white)] flex flex-col font-sans overflow-hidden relative">
 
       {/* -- Header -- */}
       <PremiumHeader
