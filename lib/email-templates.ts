@@ -291,7 +291,7 @@ export function emailWrapper(
                     <!-- NOTE: The Supabase auth magic link email template also needs this updated
                          in the Supabase dashboard > Authentication > Email Templates > Magic Link -->
                     <p style="margin:0 0 8px 0;font-size:11px;color:#B0B0AC;text-align:center;font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;">
-                      This email was sent to ${recipientEmail}. Received this by mistake? Simply ignore it &mdash; your account is safe.
+                      This email was sent to ${recipientEmail}. Received this without requesting it? Someone may have entered your email by mistake. Contact us at <a href="mailto:support@hellolumira.app" style="color:#B0B0AC;text-decoration:underline;">support@hellolumira.app</a> &mdash; and protect your account by enabling Face ID sign-in in Settings.
                     </p>
 
                     <!-- Copyright -->
@@ -890,5 +890,534 @@ export function partnerInviteEmail(
     subject,
     preheader,
     html: emailWrapper(content, preheader, inviteeEmail),
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Helper: warning / alert CTA button (red)
+// ---------------------------------------------------------------------------
+
+function warningButton(label: string, href: string): string {
+  return `
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:32px auto;">
+      <tr>
+        <td align="center" style="border-radius:14px;background:#C0392B;">
+          <a href="${href}" target="_blank"
+             style="background:#C0392B;color:${COLORS.white};font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;font-size:16px;font-weight:600;line-height:1.2;text-decoration:none;display:inline-block;padding:16px 32px;border-radius:14px;min-height:48px;box-sizing:border-box;">
+            ${label}
+          </a>
+        </td>
+      </tr>
+    </table>`
+}
+
+// ---------------------------------------------------------------------------
+// 9. Passkey Enrolled
+// ---------------------------------------------------------------------------
+
+export function passkeyEnrolledEmail({
+  firstName,
+  deviceHint,
+  manageUrl,
+}: {
+  firstName: string
+  deviceHint: string
+  manageUrl: string
+}): EmailTemplate {
+  const subject = `Face ID sign-in is on for your Lumira account`
+  const preheader = `You can now sign in to Lumira with just a look.`
+
+  const safeName = escapeHtml(firstName)
+  const safeDevice = escapeHtml(deviceHint)
+  const safeManageUrl = manageUrl
+
+  const content = `
+    <!-- Checkmark icon -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:0 auto 24px auto;">
+      <tr>
+        <td align="center" style="width:56px;height:56px;background:#EBF5F4;border-radius:50%;">
+          <span style="font-size:28px;line-height:56px;display:block;">&#10003;</span>
+        </td>
+      </tr>
+    </table>
+
+    <h1 style="margin:0 0 16px 0;font-size:24px;font-weight:700;color:${COLORS.slate};font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;line-height:1.3;text-align:center;">
+      Face ID sign-in is on
+    </h1>
+
+    <p style="margin:0 0 20px 0;font-size:16px;line-height:1.6;color:${COLORS.slate};">
+      Hi ${safeName}, you just added a passkey on <strong>${safeDevice}</strong>. Next time you open Lumira, just look at your phone &mdash; no email needed.
+    </p>
+
+    <!-- Privacy info box -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:0 0 24px 0;">
+      <tr>
+        <td style="padding:16px 20px;background:#EBF5F4;border-radius:12px;border-left:4px solid ${COLORS.sage500};">
+          <p style="margin:0;font-size:14px;line-height:1.6;color:${COLORS.slate};">
+            <strong>Your biometric data never leaves your device.</strong> Nothing is shared with Lumira or Apple.
+          </p>
+        </td>
+      </tr>
+    </table>
+
+    ${ctaButton('Manage your passkeys', safeManageUrl)}
+
+    <p style="margin:24px 0 0 0;font-size:13px;color:${COLORS.muted};text-align:center;line-height:1.6;">
+      If this wasn&rsquo;t you, <a href="${safeManageUrl}" style="color:${COLORS.muted};text-decoration:underline;">remove this passkey immediately</a>.
+    </p>
+  `
+
+  return {
+    subject,
+    preheader,
+    html: emailWrapper(content, preheader),
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 10. Passkey New Device Alert
+// ---------------------------------------------------------------------------
+
+export function passkeyNewDeviceAlertEmail({
+  firstName,
+  deviceHint,
+  ipSubnet,
+  enrolledAt,
+  revokeUrl,
+}: {
+  firstName: string
+  deviceHint: string
+  ipSubnet: string
+  enrolledAt: string
+  revokeUrl: string
+}): EmailTemplate {
+  const subject = `A new sign-in method was added to your Lumira account`
+  const preheader = `Face ID sign-in was set up on ${deviceHint}.`
+
+  const safeName = escapeHtml(firstName)
+  const safeDevice = escapeHtml(deviceHint)
+  const safeIp = escapeHtml(ipSubnet)
+  const safeRevokeUrl = revokeUrl
+
+  let formattedDate = enrolledAt
+  try {
+    formattedDate = new Date(enrolledAt).toLocaleString('en-US', {
+      dateStyle: 'long',
+      timeStyle: 'short',
+      timeZone: 'UTC',
+    }) + ' UTC'
+  } catch {
+    // keep raw string if parsing fails
+  }
+
+  const content = `
+    <h1 style="margin:0 0 16px 0;font-size:24px;font-weight:700;color:${COLORS.slate};font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;line-height:1.3;">
+      New sign-in method added
+    </h1>
+
+    <p style="margin:0 0 20px 0;font-size:16px;line-height:1.6;color:${COLORS.slate};">
+      Hi ${safeName}, Face ID sign-in was just set up on <strong>${safeDevice}</strong>.
+    </p>
+
+    <!-- Details box -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:0 0 24px 0;">
+      <tr>
+        <td style="padding:20px;background:${COLORS.sand100};border-radius:12px;">
+          <p style="margin:0 0 8px 0;font-size:13px;font-weight:600;color:${COLORS.muted};text-transform:uppercase;letter-spacing:0.5px;">
+            Event details
+          </p>
+          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+            <tr>
+              <td style="padding:6px 0;border-bottom:1px solid ${COLORS.border};">
+                <span style="font-size:14px;color:${COLORS.muted};display:inline-block;width:80px;">Device</span>
+                <span style="font-size:14px;color:${COLORS.slate};font-weight:500;">${safeDevice}</span>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:6px 0;border-bottom:1px solid ${COLORS.border};">
+                <span style="font-size:14px;color:${COLORS.muted};display:inline-block;width:80px;">Added</span>
+                <span style="font-size:14px;color:${COLORS.slate};font-weight:500;">${escapeHtml(formattedDate)}</span>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:6px 0;">
+                <span style="font-size:14px;color:${COLORS.muted};display:inline-block;width:80px;">Network</span>
+                <span style="font-size:14px;color:${COLORS.slate};font-weight:500;">${safeIp}</span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+
+    <!-- All good section -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:0 0 16px 0;">
+      <tr>
+        <td style="padding:14px 16px;background:#EBF5F4;border-radius:10px;">
+          <p style="margin:0;font-size:14px;line-height:1.6;color:${COLORS.slate};">
+            <strong style="color:${COLORS.sage500};">If that was you</strong> &mdash; you&rsquo;re all set. Nothing to do.
+          </p>
+        </td>
+      </tr>
+    </table>
+
+    <!-- Warning section -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:0 0 8px 0;">
+      <tr>
+        <td style="padding:14px 16px;background:#FEF3CD;border-radius:10px;border-left:4px solid #C4844E;">
+          <p style="margin:0;font-size:14px;line-height:1.6;color:${COLORS.slate};">
+            <strong style="color:#9B6B3A;">If that wasn&rsquo;t you</strong>, remove it immediately using the button below.
+          </p>
+        </td>
+      </tr>
+    </table>
+
+    ${warningButton('Remove this passkey', safeRevokeUrl)}
+
+    <p style="margin:0;font-size:12px;color:${COLORS.mutedLight};text-align:center;line-height:1.6;">
+      This security alert is sent for every new passkey added. It cannot be unsubscribed.
+    </p>
+  `
+
+  return {
+    subject,
+    preheader,
+    html: emailWrapper(content, preheader),
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 11. Passkey Removed
+// ---------------------------------------------------------------------------
+
+export function passkeyRemovedEmail({
+  firstName,
+  deviceHint,
+  removedAt,
+  supportUrl,
+}: {
+  firstName: string
+  deviceHint: string
+  removedAt: string
+  supportUrl: string
+}): EmailTemplate {
+  const subject = `Passkey removed from your Lumira account`
+  const preheader = `Face ID sign-in was removed from ${deviceHint}.`
+
+  const safeName = escapeHtml(firstName)
+  const safeDevice = escapeHtml(deviceHint)
+  const safeSupportUrl = supportUrl
+
+  let formattedDate = removedAt
+  try {
+    formattedDate = new Date(removedAt).toLocaleString('en-US', {
+      dateStyle: 'long',
+      timeStyle: 'short',
+      timeZone: 'UTC',
+    }) + ' UTC'
+  } catch {
+    // keep raw string if parsing fails
+  }
+
+  const content = `
+    <h1 style="margin:0 0 16px 0;font-size:24px;font-weight:700;color:${COLORS.slate};font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;line-height:1.3;">
+      Passkey removed
+    </h1>
+
+    <p style="margin:0 0 20px 0;font-size:16px;line-height:1.6;color:${COLORS.slate};">
+      Hi ${safeName}, the passkey on <strong>${safeDevice}</strong> has been removed from your Lumira account.
+    </p>
+
+    <!-- Details box -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:0 0 24px 0;">
+      <tr>
+        <td style="padding:20px;background:${COLORS.sand100};border-radius:12px;">
+          <p style="margin:0 0 8px 0;font-size:13px;font-weight:600;color:${COLORS.muted};text-transform:uppercase;letter-spacing:0.5px;">
+            Event details
+          </p>
+          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+            <tr>
+              <td style="padding:6px 0;border-bottom:1px solid ${COLORS.border};">
+                <span style="font-size:14px;color:${COLORS.muted};display:inline-block;width:80px;">Device</span>
+                <span style="font-size:14px;color:${COLORS.slate};font-weight:500;">${safeDevice}</span>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:6px 0;">
+                <span style="font-size:14px;color:${COLORS.muted};display:inline-block;width:80px;">Removed</span>
+                <span style="font-size:14px;color:${COLORS.slate};font-weight:500;">${escapeHtml(formattedDate)}</span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+
+    <p style="margin:0 0 20px 0;font-size:15px;line-height:1.6;color:${COLORS.slate};">
+      You can still sign in with your email. You can add a new passkey anytime in <strong>Settings &rarr; Security</strong>.
+    </p>
+
+    <!-- Warning section -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:0 0 8px 0;">
+      <tr>
+        <td style="padding:14px 16px;background:#FEF3CD;border-radius:10px;border-left:4px solid ${COLORS.terra400};">
+          <p style="margin:0;font-size:14px;line-height:1.6;color:${COLORS.slate};">
+            <strong style="color:#9B6B3A;">If you didn&rsquo;t do this</strong>, your account may be at risk. Contact us immediately.
+          </p>
+        </td>
+      </tr>
+    </table>
+
+    ${ctaButton('Contact Support', safeSupportUrl)}
+  `
+
+  return {
+    subject,
+    preheader,
+    html: emailWrapper(content, preheader),
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 12. Passkey Suspended
+// ---------------------------------------------------------------------------
+
+export function passkeySuspendedEmail({
+  firstName,
+  deviceHint,
+  supportUrl,
+  settingsUrl,
+}: {
+  firstName: string
+  deviceHint: string
+  supportUrl: string
+  settingsUrl: string
+}): EmailTemplate {
+  const subject = `Unusual sign-in activity on your Lumira account`
+  const preheader = `Your passkey sign-in has been temporarily suspended.`
+
+  const safeName = escapeHtml(firstName)
+  const safeDevice = escapeHtml(deviceHint)
+  const safeSupportUrl = supportUrl
+  const safeSettingsUrl = settingsUrl
+  const loginUrl = `${APP_URL}/login`
+
+  const content = `
+    <!-- Security alert banner -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:0 0 24px 0;">
+      <tr>
+        <td style="padding:12px 16px;background:#FDECEC;border-radius:10px;border-left:4px solid #C0392B;text-align:center;">
+          <p style="margin:0;font-size:14px;font-weight:700;color:#C0392B;letter-spacing:0.5px;text-transform:uppercase;">
+            &#9888; Security Alert
+          </p>
+        </td>
+      </tr>
+    </table>
+
+    <h1 style="margin:0 0 16px 0;font-size:24px;font-weight:700;color:${COLORS.slate};font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;line-height:1.3;">
+      Unusual sign-in activity detected
+    </h1>
+
+    <p style="margin:0 0 20px 0;font-size:16px;line-height:1.6;color:${COLORS.slate};">
+      Hi ${safeName}, we detected unusual activity with the passkey on <strong>${safeDevice}</strong>. As a precaution, we&rsquo;ve temporarily suspended that passkey.
+    </p>
+
+    <!-- Action required box -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:0 0 24px 0;">
+      <tr>
+        <td style="padding:20px;background:#FEF3CD;border-radius:12px;border-left:4px solid ${COLORS.terra400};">
+          <p style="margin:0 0 12px 0;font-size:14px;font-weight:700;color:#9B6B3A;text-transform:uppercase;letter-spacing:0.5px;">
+            Action required
+          </p>
+          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+            <tr>
+              <td style="padding:6px 0;">
+                <span style="font-size:14px;color:${COLORS.slate};font-weight:600;">1.</span>
+                <span style="font-size:14px;color:${COLORS.slate};margin-left:8px;">Sign in with your magic link (email)</span>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:6px 0;">
+                <span style="font-size:14px;color:${COLORS.slate};font-weight:600;">2.</span>
+                <span style="font-size:14px;color:${COLORS.slate};margin-left:8px;">Go to <strong>Settings &rarr; Security</strong></span>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:6px 0;">
+                <span style="font-size:14px;color:${COLORS.slate};font-weight:600;">3.</span>
+                <span style="font-size:14px;color:${COLORS.slate};margin-left:8px;">Remove the affected passkey and add a new one</span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+
+    ${ctaButton('Sign in with email', loginUrl)}
+
+    <p style="margin:8px 0 24px 0;font-size:14px;line-height:1.6;color:${COLORS.slate};text-align:center;">
+      If you didn&rsquo;t cause this, contact our security team immediately:
+    </p>
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:0 auto 32px auto;">
+      <tr>
+        <td align="center" style="border-radius:14px;background:${COLORS.sand100};border:2px solid ${COLORS.border};">
+          <a href="${safeSupportUrl}" target="_blank"
+             style="background:${COLORS.sand100};color:${COLORS.slate};font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;font-size:15px;font-weight:600;line-height:1.2;text-decoration:none;display:inline-block;padding:14px 28px;border-radius:12px;box-sizing:border-box;">
+            Contact Support
+          </a>
+        </td>
+      </tr>
+    </table>
+
+    <p style="margin:0;font-size:12px;color:${COLORS.mutedLight};text-align:center;line-height:1.6;">
+      This is an automated security alert. If you have questions, contact
+      <a href="mailto:support@hellolumira.app" style="color:${COLORS.mutedLight};text-decoration:underline;">support@hellolumira.app</a>
+    </p>
+  `
+
+  return {
+    subject,
+    preheader,
+    html: emailWrapper(content, preheader),
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 13. Passkey Recovery Nudge
+// ---------------------------------------------------------------------------
+
+export function passkeyRecoveryNudgeEmail({
+  firstName,
+  enrollUrl,
+}: {
+  firstName: string
+  enrollUrl: string
+}): EmailTemplate {
+  const subject = `Set up Face ID on your new device`
+  const preheader = `Re-add Face ID sign-in so you can skip the email next time.`
+
+  const safeName = escapeHtml(firstName)
+  const safeEnrollUrl = enrollUrl
+
+  const content = `
+    <h1 style="margin:0 0 16px 0;font-size:24px;font-weight:700;color:${COLORS.slate};font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;line-height:1.3;">
+      Want to skip the email next time?
+    </h1>
+
+    <p style="margin:0 0 20px 0;font-size:16px;line-height:1.6;color:${COLORS.slate};">
+      Hi ${safeName}, looks like you&rsquo;re signing in with your email &mdash; which always works! If you have a new phone, you can re-add Face ID sign-in in under a minute.
+    </p>
+
+    <!-- Steps -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:0 0 24px 0;">
+      <tr>
+        <td style="padding:20px;background:${COLORS.sand100};border-radius:12px;">
+          <p style="margin:0 0 12px 0;font-size:14px;font-weight:600;color:${COLORS.muted};text-transform:uppercase;letter-spacing:0.5px;">
+            3 simple steps
+          </p>
+          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+            <tr>
+              <td style="padding:8px 0;border-bottom:1px solid ${COLORS.border};">
+                <span style="font-size:14px;color:${COLORS.sage500};font-weight:700;margin-right:10px;">1.</span>
+                <span style="font-size:15px;color:${COLORS.slate};">Open Lumira on your phone</span>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0;border-bottom:1px solid ${COLORS.border};">
+                <span style="font-size:14px;color:${COLORS.sage500};font-weight:700;margin-right:10px;">2.</span>
+                <span style="font-size:15px;color:${COLORS.slate};">Go to <strong>Settings &rarr; Sign-in &amp; Security</strong></span>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0;">
+                <span style="font-size:14px;color:${COLORS.sage500};font-weight:700;margin-right:10px;">3.</span>
+                <span style="font-size:15px;color:${COLORS.slate};">Tap <strong>&ldquo;Add Face ID sign-in&rdquo;</strong></span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+
+    ${ctaButton('Go to Security Settings', safeEnrollUrl)}
+
+    ${mutedText('Or just keep using email \u2014 whatever works best for you.')}
+  `
+
+  return {
+    subject,
+    preheader,
+    html: emailWrapper(content, preheader),
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 14. Passkey Setup Nudge
+// ---------------------------------------------------------------------------
+
+export function passkeySetupNudgeEmail({
+  firstName,
+  enrollUrl,
+}: {
+  firstName: string
+  enrollUrl: string
+}): EmailTemplate {
+  const subject = `Skip the email next time you open Lumira`
+  const preheader = `Set up Face ID sign-in in under a minute.`
+
+  const safeName = escapeHtml(firstName)
+  const safeEnrollUrl = enrollUrl
+
+  const content = `
+    <h1 style="margin:0 0 16px 0;font-size:24px;font-weight:700;color:${COLORS.slate};font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;line-height:1.3;">
+      Unlock Lumira with one tap
+    </h1>
+
+    <p style="margin:0 0 20px 0;font-size:16px;line-height:1.6;color:${COLORS.slate};">
+      Hi ${safeName}, tired of hunting for the sign-in email? There&rsquo;s a faster way.
+    </p>
+
+    <!-- Benefit bullets -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:0 0 24px 0;">
+      <tr>
+        <td style="padding:20px;background:${COLORS.sand100};border-radius:12px;">
+          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+            <tr>
+              <td style="padding:8px 0;border-bottom:1px solid ${COLORS.border};">
+                <span style="color:${COLORS.sage500};font-weight:700;margin-right:10px;">&#10003;</span>
+                <span style="font-size:15px;color:${COLORS.slate};">No waiting for an email</span>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0;border-bottom:1px solid ${COLORS.border};">
+                <span style="color:${COLORS.sage500};font-weight:700;margin-right:10px;">&#10003;</span>
+                <span style="font-size:15px;color:${COLORS.slate};">No expired links</span>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0;">
+                <span style="color:${COLORS.sage500};font-weight:700;margin-right:10px;">&#10003;</span>
+                <span style="font-size:15px;color:${COLORS.slate};">Just Face ID &mdash; even at 3am</span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+
+    <p style="margin:0 0 24px 0;font-size:15px;line-height:1.6;color:${COLORS.slate};">
+      Works on all your Apple devices automatically. Set it up once, use it everywhere.
+    </p>
+
+    ${ctaButton('Set up Face ID sign-in', safeEnrollUrl)}
+
+    ${mutedText('Takes less than 30 seconds. Nothing is shared with Lumira or Apple.')}
+  `
+
+  return {
+    subject,
+    preheader,
+    html: emailWrapper(content, preheader),
   }
 }
