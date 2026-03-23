@@ -91,8 +91,8 @@ const CATEGORIES = [
 
 const BUTTON_SIZE = 44
 const EDGE_MARGIN = 8
-const IDLE_OPACITY = 0.35
-const ACTIVE_OPACITY = 0.85
+const IDLE_OPACITY = 0.45
+const ACTIVE_OPACITY = 0.9
 
 export default function BugReportButton({ userEmail, userName }: BugReportButtonProps) {
   const [isOpen, setIsOpen] = useState(false)
@@ -113,16 +113,27 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
   const modalRef = useRef<HTMLDivElement>(null)
   const idleTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  // Initialize position — right edge, 60% down
+  // Get the app container bounds (respects max-width constraint)
+  const getAppBounds = useCallback(() => {
+    // Find the AppShell container (h-dvh flex parent)
+    const appShell = document.querySelector('.h-dvh')
+    if (appShell) {
+      const rect = appShell.getBoundingClientRect()
+      return { left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom, width: rect.width, height: rect.height }
+    }
+    // Fallback to viewport
+    return { left: 0, right: window.innerWidth, top: 0, bottom: window.innerHeight, width: window.innerWidth, height: window.innerHeight }
+  }, [])
+
+  // Initialize position — right edge of app container, 60% down
   useEffect(() => {
-    const vw = window.innerWidth
-    const vh = window.innerHeight
+    const bounds = getAppBounds()
     setPos({
-      x: vw - BUTTON_SIZE - EDGE_MARGIN,
-      y: Math.round(vh * 0.6),
+      x: bounds.right - BUTTON_SIZE - EDGE_MARGIN,
+      y: Math.round(bounds.top + bounds.height * 0.6),
     })
     setMounted(true)
-  }, [])
+  }, [getAppBounds])
 
   // Fade to idle after 3s of no interaction
   const resetIdleTimer = useCallback(() => {
@@ -136,15 +147,16 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
     return () => { if (idleTimer.current) clearTimeout(idleTimer.current) }
   }, [resetIdleTimer])
 
-  // Snap to nearest edge
+  // Snap to nearest edge within app container
   const snapToEdge = useCallback((x: number, y: number) => {
-    const vw = window.innerWidth
-    const vh = window.innerHeight
+    const bounds = getAppBounds()
     const centerX = x + BUTTON_SIZE / 2
-    const snapX = centerX < vw / 2 ? EDGE_MARGIN : vw - BUTTON_SIZE - EDGE_MARGIN
-    const snapY = Math.max(EDGE_MARGIN + 60, Math.min(y, vh - BUTTON_SIZE - EDGE_MARGIN - 80))
+    const snapX = centerX < (bounds.left + bounds.width / 2)
+      ? bounds.left + EDGE_MARGIN
+      : bounds.right - BUTTON_SIZE - EDGE_MARGIN
+    const snapY = Math.max(bounds.top + EDGE_MARGIN + 60, Math.min(y, bounds.bottom - BUTTON_SIZE - EDGE_MARGIN - 80))
     return { x: snapX, y: snapY }
-  }, [])
+  }, [getAppBounds])
 
   // Touch handlers for drag
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
@@ -305,12 +317,12 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'rgba(120, 120, 128, 0.24)',
+          background: 'var(--feedback-btn-bg, rgba(120, 120, 128, 0.28))',
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
           boxShadow: dragging
-            ? '0 8px 32px rgba(0,0,0,0.2)'
-            : '0 2px 12px rgba(0,0,0,0.1)',
+            ? '0 8px 32px rgba(0,0,0,0.25)'
+            : '0 2px 12px rgba(0,0,0,0.08), 0 0 0 0.5px rgba(255,255,255,0.1)',
           opacity,
           transition: dragging
             ? 'box-shadow 0.15s ease'
@@ -321,15 +333,21 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
           userSelect: 'none',
         }}
       >
-        {/* Chat bubble icon — universally understood as "feedback" */}
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={{ opacity: 0.7 }}>
+        {/* Pencil-square icon — clearly "write feedback" without looking like chat */}
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style={{ opacity: 0.65 }}>
           <path
-            d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"
-            stroke="currentColor"
+            d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"
+            stroke="var(--feedback-icon-color, currentColor)"
             strokeWidth="1.8"
             strokeLinecap="round"
             strokeLinejoin="round"
-            style={{ color: 'var(--color-slate)' }}
+          />
+          <path
+            d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"
+            stroke="var(--feedback-icon-color, currentColor)"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </svg>
       </button>}
@@ -450,6 +468,15 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
       <style>{`
         @keyframes feedbackFadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes feedbackSlideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        :root {
+          --feedback-btn-bg: rgba(120, 120, 128, 0.22);
+          --feedback-icon-color: rgba(60, 60, 67, 0.6);
+        }
+        .dark, [data-theme="dark"] {
+          --feedback-btn-bg: rgba(180, 180, 190, 0.18);
+          --feedback-icon-color: rgba(235, 235, 245, 0.55);
+        }
       `}</style>
     </>
   )
