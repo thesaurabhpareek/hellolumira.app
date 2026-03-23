@@ -85,16 +85,18 @@ export default async function HomePage() {
       .order('checkin_date', { ascending: false })
       .limit(3),
 
-    // Fetch articles matched to user's stage, closest to their week/month
-    // For planning stage, also fetch pregnancy articles as relevant prep content
+    // Fetch articles matched to user's stage.
+    // Fetch a broad pool (no week ordering) so the in-memory proximity sort can
+    // find articles genuinely close to the user's current week/month.
+    // Previously this was ordered ascending + limit(10) which always returned
+    // the earliest (newborn) articles regardless of the user's actual age.
     supabase
       .from('content_articles')
       .select('id, title, subtitle, category, reading_time_minutes, tags, week_or_month, stage, applicable_stages')
       .or(baby.stage === 'planning'
         ? `stage.eq.planning,stage.eq.pregnancy,applicable_stages.cs.{${baby.stage}}`
         : `stage.eq.${baby.stage},applicable_stages.cs.{${baby.stage}}`)
-      .order('week_or_month', { ascending: true })
-      .limit(10),
+      .limit(200),
 
     // Fetch tribes for the user's stage
     supabase
@@ -108,18 +110,23 @@ export default async function HomePage() {
   const recentCheckins = (checkinData as DailyCheckin[] | null) ?? []
   const todayCheckin = recentCheckins.find(c => c.checkin_date === today) ?? null
 
-  // Pick the most relevant article (closest week/month, then rotate daily within ties)
+  // Pick the most relevant article (closest to current week/month, rotate daily)
   let featuredArticle: ArticleInsightProps | null = null
   if (articleRows?.length) {
     const currentWOM = guideKey.week_or_month
-    // Sort by proximity to current week/month, break ties with index
-    const sorted = [...articleRows].sort((a, b) => {
-      const da = Math.abs((a.week_or_month ?? 0) - currentWOM)
-      const db = Math.abs((b.week_or_month ?? 0) - currentWOM)
-      return da - db
+    // Score: penalise articles behind the user's age more than ahead
+    // (slight look-ahead is useful; outdated newborn content is not)
+    const scored = articleRows.map(a => {
+      const wom = a.week_or_month ?? 0
+      const delta = wom - currentWOM
+      // Articles up to 4 weeks/months ahead score as if they're at distance 0
+      // Articles behind score at full distance penalty
+      const dist = delta >= 0 && delta <= 4 ? 0 : Math.abs(delta)
+      return { article: a, dist }
     })
-    // Take the top-5 closest, rotate among them daily
-    const candidates = sorted.slice(0, 5)
+    scored.sort((a, b) => a.dist - b.dist)
+    // Take top-7 closest, rotate among them daily for freshness
+    const candidates = scored.slice(0, 7).map(s => s.article)
     const start = new Date(new Date().getFullYear(), 0, 0)
     const dayOfYear = Math.floor((Date.now() - start.getTime()) / 86_400_000)
     const picked = candidates[dayOfYear % candidates.length]
