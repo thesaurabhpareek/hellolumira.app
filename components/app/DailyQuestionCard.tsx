@@ -41,7 +41,7 @@ export default function DailyQuestionCard({ question, chatPrompt, babyId }: Prop
   }
 
   return (
-    <div className="bg-gradient-to-br from-[#F0FDF7] to-[#E6F4F1] border border-sage-200 rounded-lg p-5 mb-4">
+    <div className="bg-[var(--color-primary-light)] border border-[var(--color-primary-mid)] rounded-lg p-5 mb-4">
       {/* Label */}
       <p className="text-[11px] font-bold text-primary uppercase tracking-[0.8px] mb-3">
         <span className="inline-flex items-center gap-1">

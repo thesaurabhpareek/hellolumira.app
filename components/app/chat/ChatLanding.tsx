@@ -115,7 +115,7 @@ export default function ChatLanding({ profile, baby, threads }: Props) {
             <p style={{ fontSize: '13px', color: 'var(--color-muted)', marginTop: '2px' }}>
               {baby.stage === 'pregnancy'
                 ? 'What\'s on your mind today?'
-                : `How can I help with ${baby.name || 'your little one'} today?`}
+                : `How is ${baby.name || 'your little one'} doing today?`}
             </p>
           </div>
 

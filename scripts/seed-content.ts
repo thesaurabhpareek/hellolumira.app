@@ -113,6 +113,13 @@ const AI_PROFILES = {
 // For initial seeding, we use a well-known UUID. If your DB has FK constraints
 // on stories.profile_id -> auth.users(id), you will need to create this user
 // in Supabase Auth first, or relax the constraint for system content.
+//
+// NOTE: For diverse multi-persona stories, prefer using the SQL migration
+// supabase/migrations/lumira_v46_seed_stories.sql which uses
+// SET session_replication_role = 'replica' to bypass the auth.users FK
+// and inserts 8 diverse AI persona profile rows (c0000000-...-0001 through -0008)
+// with distinct stories. That approach shows multiple circles in the story strip
+// rather than collapsing all content under one "parent" profile.
 
 const SYSTEM_PROFILE_ID = process.env.LUMIRA_SYSTEM_PROFILE_ID || '00000000-0000-0000-0000-000000000001'
 

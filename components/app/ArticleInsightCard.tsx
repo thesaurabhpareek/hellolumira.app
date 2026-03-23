@@ -10,12 +10,14 @@ import type React from 'react'
 import Link from 'next/link'
 import { BookIcon, SeedIcon, HeartIcon, ShieldIcon, LeafIcon, ClockIcon } from '@/components/icons'
 
+// Backgrounds and borders use rgba so they remain visible on both light and dark surfaces.
+// Text colors are vivid accent tones that read on both --color-white (light) and #1C1A17 (dark).
 const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string }> = {
-  nutrition:       { bg: '#FEF9EC', text: '#92400E', border: '#FDE68A' },
-  development:     { bg: '#EEF2FF', text: '#3730A3', border: '#C7D2FE' },
-  wellness:        { bg: '#F0FDF4', text: '#166534', border: '#BBF7D0' },
-  safety:          { bg: '#FFF7ED', text: '#9A3412', border: '#FDBA74' },
-  'mental-health': { bg: '#FDF4FF', text: '#6B21A8', border: '#E9D5FF' },
+  nutrition:       { bg: 'rgba(214,158,46,0.10)',  text: '#B7791F', border: 'rgba(214,158,46,0.30)' },
+  development:     { bg: 'rgba(99,102,241,0.10)',  text: '#6366F1', border: 'rgba(99,102,241,0.30)' },
+  wellness:        { bg: 'rgba(56,161,105,0.10)',  text: '#38A169', border: 'rgba(56,161,105,0.30)' },
+  safety:          { bg: 'rgba(229,62,62,0.10)',   text: '#E53E3E', border: 'rgba(229,62,62,0.30)'  },
+  'mental-health': { bg: 'rgba(159,122,234,0.10)', text: '#9F7AEA', border: 'rgba(159,122,234,0.30)' },
 }
 
 const CATEGORY_LABELS: Record<string, string> = {

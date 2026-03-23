@@ -63,18 +63,18 @@ export default function QuizCard({
     if (i === answerIndex) {
       return {
         ...base,
-        background: '#F0FDF4',
-        borderColor: '#22C55E',
-        color: '#15803D',
+        background: 'var(--success-bg)',
+        borderColor: 'var(--success-border)',
+        color: 'var(--success-text)',
         fontWeight: 600,
       }
     }
     if (i === selected) {
       return {
         ...base,
-        background: '#FEF2F2',
-        borderColor: '#F87171',
-        color: '#B91C1C',
+        background: 'var(--error-bg)',
+        borderColor: 'var(--error-border)',
+        color: 'var(--error-text)',
       }
     }
     return {
@@ -150,13 +150,13 @@ export default function QuizCard({
           className="animate-fade-in mt-4 rounded-md"
           style={{
             padding: '14px 16px',
-            background: isCorrect ? '#F0FDF4' : '#FFF7ED',
-            border: `1px solid ${isCorrect ? '#BBF7D0' : '#FED7AA'}`,
+            background: isCorrect ? 'var(--success-bg)' : 'var(--warning-bg)',
+            border: `1px solid ${isCorrect ? 'var(--success-border)' : 'var(--warning-border)'}`,
           }}
         >
           <p
             className="text-[13px] font-bold mb-[6px]"
-            style={{ color: isCorrect ? '#15803D' : '#9A3412' }}
+            style={{ color: isCorrect ? 'var(--success-text)' : 'var(--warning-text)' }}
           >
             {isCorrect ? '✓ Correct!' : `✕ Not quite — the answer is: ${options[answerIndex]}`}
           </p>
