@@ -2,10 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/server'
 import { verifyAuthenticationResponse } from '@/lib/webauthn'
 import { sendPasskeySuspendedAlertEmail } from '@/lib/passkey-email'
-
-// Rate limit: max 10 authentication attempts per IP per 5 minutes
-const AUTH_RATE_MAX = 10
-const AUTH_RATE_WINDOW_MS = 5 * 60 * 1000
+import { checkPasskeyRateLimit } from '@/lib/passkey-rate-limit'
 
 export async function POST(req: NextRequest) {
   try {
@@ -14,34 +11,17 @@ export async function POST(req: NextRequest) {
     if (!body.credential?.id)
       return NextResponse.json({ error: 'Sign-in request was incomplete. Please try again.' }, { status: 400 })
 
-    // ── Rate limit by IP ──────────────────────────────────────────────────────
+    // ── Rate limit by IP (fails open if DB unavailable) ───────────────────────
     const clientIp =
       req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
       req.headers.get('x-real-ip') ??
       'unknown'
-    const rateLimitKey = `passkey_auth:${clientIp}`
-    const windowStart = new Date(Date.now() - AUTH_RATE_WINDOW_MS).toISOString()
-
-    const { data: rlRow } = await service
-      .from('passkey_rate_limits')
-      .select('attempts, window_start')
-      .eq('key', rateLimitKey)
-      .maybeSingle()
-
-    if (rlRow && rlRow.window_start > windowStart && rlRow.attempts >= AUTH_RATE_MAX) {
+    const rl = await checkPasskeyRateLimit(service, `passkey_auth:${clientIp}`, 10, 5 * 60 * 1000)
+    if (!rl.allowed)
       return NextResponse.json(
         { error: 'Too many sign-in attempts. Please wait a few minutes and try again.' },
         { status: 429 }
       )
-    }
-
-    // Upsert rate limit counter — reset window if expired
-    await service.from('passkey_rate_limits').upsert(
-      rlRow && rlRow.window_start > windowStart
-        ? { key: rateLimitKey, attempts: rlRow.attempts + 1, window_start: rlRow.window_start }
-        : { key: rateLimitKey, attempts: 1, window_start: new Date().toISOString() },
-      { onConflict: 'key' }
-    )
 
     // ── Look up credential ────────────────────────────────────────────────────
     const { data: passkey } = await service

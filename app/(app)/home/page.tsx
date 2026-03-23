@@ -20,7 +20,6 @@ import QuizCard from '@/components/app/QuizCard'
 import UpcomingMilestonesCard from '@/components/app/UpcomingMilestonesCard'
 import SeedsBalancePill from '@/components/app/SeedsBalancePill'
 import StageHeroCard from '@/components/app/StageHeroCard'
-import ThemeToggleButton from '@/components/app/ThemeToggleButton'
 import StoryStrip from '@/components/app/stories/StoryStrip'
 import PasskeyNudge from './PasskeyNudge'
 import { ClipboardIcon, ChatIcon, EditIcon, QuizIcon, CheckIcon } from '@/components/icons'
@@ -257,7 +256,6 @@ export default async function HomePage() {
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
           <GreetingHeader firstName={profile.first_name} />
           <div style={{ flexShrink: 0, marginTop: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <ThemeToggleButton />
             <SeedsBalancePill balance={profile.seeds_balance ?? 0} />
           </div>
         </div>

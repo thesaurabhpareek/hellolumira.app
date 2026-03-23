@@ -11,6 +11,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import fs from 'fs'
 import path from 'path'
+import { getPasskeyEnrollmentNudgeState } from '@/components/app/PasskeyEnrollmentSheet'
 
 // ─── Load source once ─────────────────────────────────────────────────────────
 
@@ -122,15 +123,13 @@ describe('getPasskeyEnrollmentNudgeState()', () => {
 
   it('shouldShow=false when lumira_passkey_enrolled=1', () => {
     localStorage.setItem('lumira_passkey_enrolled', '1')
-    // Re-import to get fresh state
-    const { getPasskeyEnrollmentNudgeState } = require('@/components/app/PasskeyEnrollmentSheet')
+
     const { shouldShow } = getPasskeyEnrollmentNudgeState()
     expect(shouldShow).toBe(false)
   })
 
   it('shouldShow=false when dismissed count >= 3', () => {
     localStorage.setItem('lumira_passkey_nudge_dismissed_count', '3')
-    const { getPasskeyEnrollmentNudgeState } = require('@/components/app/PasskeyEnrollmentSheet')
     const { shouldShow } = getPasskeyEnrollmentNudgeState()
     expect(shouldShow).toBe(false)
   })
@@ -138,14 +137,12 @@ describe('getPasskeyEnrollmentNudgeState()', () => {
   it('shouldShow=false when dismissed within 7 days', () => {
     const sixDaysAgo = Date.now() - 6 * 24 * 60 * 60 * 1000
     localStorage.setItem('lumira_passkey_nudge_dismissed_at', String(sixDaysAgo))
-    const { getPasskeyEnrollmentNudgeState } = require('@/components/app/PasskeyEnrollmentSheet')
     const { shouldShow } = getPasskeyEnrollmentNudgeState()
     expect(shouldShow).toBe(false)
   })
 
   it('shouldShow=true when not enrolled, not dismissed, count < 3', () => {
     // No localStorage values set — fresh state
-    const { getPasskeyEnrollmentNudgeState } = require('@/components/app/PasskeyEnrollmentSheet')
     const { shouldShow } = getPasskeyEnrollmentNudgeState()
     expect(shouldShow).toBe(true)
   })
@@ -154,13 +151,11 @@ describe('getPasskeyEnrollmentNudgeState()', () => {
     const eightDaysAgo = Date.now() - 8 * 24 * 60 * 60 * 1000
     localStorage.setItem('lumira_passkey_nudge_dismissed_at', String(eightDaysAgo))
     localStorage.setItem('lumira_passkey_nudge_dismissed_count', '1')
-    const { getPasskeyEnrollmentNudgeState } = require('@/components/app/PasskeyEnrollmentSheet')
     const { shouldShow } = getPasskeyEnrollmentNudgeState()
     expect(shouldShow).toBe(true)
   })
 
   it('markDismissed() sets dismissed timestamp and increments count', () => {
-    const { getPasskeyEnrollmentNudgeState } = require('@/components/app/PasskeyEnrollmentSheet')
     const { markDismissed } = getPasskeyEnrollmentNudgeState()
     markDismissed()
 
@@ -171,9 +166,7 @@ describe('getPasskeyEnrollmentNudgeState()', () => {
   })
 
   it('shouldShow=false when PublicKeyCredential is undefined (no passkey support)', () => {
-    // @ts-expect-error intentional
     vi.stubGlobal('PublicKeyCredential', undefined)
-    const { getPasskeyEnrollmentNudgeState } = require('@/components/app/PasskeyEnrollmentSheet')
     const { shouldShow } = getPasskeyEnrollmentNudgeState()
     expect(shouldShow).toBe(false)
   })
