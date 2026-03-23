@@ -233,8 +233,8 @@ export function emailWrapper(
               <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
                 <tr>
                   <td align="center" style="padding-bottom:8px;">
-                    <p style="margin:0;font-size:12px;color:${COLORS.terra400};line-height:1;">&#9679;</p>
-                    <p style="margin:4px 0 0 0;font-size:28px;font-weight:700;color:#1A1A2E;letter-spacing:-0.7px;font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;">
+                    <p style="margin:0;font-size:12px;color:${COLORS.terra400};line-height:1;mso-line-height-rule:exactly;">&#9679;</p>
+                    <p style="margin:4px 0 0 0;font-size:28px;font-weight:700;color:#1A1A2E;letter-spacing:-0.7px;font-family:Helvetica,Arial,sans-serif;mso-line-height-rule:exactly;line-height:1.2;">
                       Lumira
                     </p>
                   </td>
@@ -288,8 +288,10 @@ export function emailWrapper(
                     </p>
 
                     <!-- Sent-to disclosure -->
+                    <!-- NOTE: The Supabase auth magic link email template also needs this updated
+                         in the Supabase dashboard > Authentication > Email Templates > Magic Link -->
                     <p style="margin:0 0 8px 0;font-size:11px;color:#B0B0AC;text-align:center;font-family:'Plus Jakarta Sans',Helvetica,Arial,sans-serif;">
-                      This email was sent to ${recipientEmail}. If you didn&rsquo;t create a Lumira account, please ignore this email.
+                      This email was sent to ${recipientEmail}. Received this by mistake? Simply ignore it &mdash; your account is safe.
                     </p>
 
                     <!-- Copyright -->
@@ -879,7 +881,7 @@ export function partnerInviteEmail(
 
     ${ctaButton('Accept Invitation', inviteUrl)}
 
-    ${mutedText('This invitation was sent by ' + safeInviter + ' via Lumira. If you weren\u2019t expecting this, you can safely ignore this email.')}
+    ${mutedText('This invitation was sent by ' + safeInviter + ' via Lumira. Received this by mistake? Simply ignore it \u2014 your account is safe.')}
 
     ${medicalDisclaimer()}
   `

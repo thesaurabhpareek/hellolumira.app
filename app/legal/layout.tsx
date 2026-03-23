@@ -51,6 +51,9 @@ export default function LegalLayout({
               justify-content: space-between;
               height: 56px;
             }
+            .dark .legal-topbar {
+              background: rgba(19, 18, 16, 0.92);
+            }
             @media (min-width: 640px) {
               .legal-topbar {
                 padding: 0 24px;
@@ -92,6 +95,9 @@ export default function LegalLayout({
               position: absolute;
               left: 50%;
               transform: translateX(-50%);
+            }
+            .dark .legal-topbar-brand {
+              color: var(--color-primary, #3D8178);
             }
             .legal-topbar-brand:hover {
               opacity: 0.85;
@@ -141,6 +147,9 @@ export default function LegalLayout({
               flex-wrap: wrap;
               gap: 6px 16px;
             }
+            .dark .legal-meta {
+              color: var(--color-muted, #9C9A94);
+            }
             .legal-section {
               margin-bottom: 36px;
             }
@@ -179,8 +188,14 @@ export default function LegalLayout({
               text-decoration: underline;
               text-underline-offset: 2px;
             }
+            .dark .legal-body a {
+              color: var(--color-primary, #3D8178);
+            }
             .legal-body a:hover {
               color: #1F4F49;
+            }
+            .dark .legal-body a:hover {
+              color: var(--color-primary-mid, #A8CECA);
             }
             .legal-body strong {
               font-weight: 600;
@@ -196,6 +211,10 @@ export default function LegalLayout({
               font-size: 14px;
               line-height: 1.7;
             }
+            .dark .legal-disclaimer-critical {
+              background: var(--error-bg, #2D1515);
+              border-left-color: var(--error-text, #FC8181);
+            }
             .legal-disclaimer-ai {
               background: #FDF8EE;
               border: 1px solid #E8D5A8;
@@ -205,6 +224,10 @@ export default function LegalLayout({
               font-size: 14px;
               line-height: 1.7;
             }
+            .dark .legal-disclaimer-ai {
+              background: var(--warning-bg, #2A2008);
+              border-color: var(--warning-border, #3D3110);
+            }
             .legal-callout {
               background: #FFFFFF;
               border: 1px solid var(--color-border, #E2E8F0);
@@ -213,6 +236,9 @@ export default function LegalLayout({
               margin: 16px 0;
               font-size: 14px;
               line-height: 1.7;
+            }
+            .dark .legal-callout {
+              background: var(--color-white, #1C1A17);
             }
 
             /* Table styles */
@@ -273,6 +299,9 @@ export default function LegalLayout({
               color: inherit;
               transition: border-color 0.15s ease, box-shadow 0.15s ease;
               display: block;
+            }
+            .dark .legal-card {
+              background: var(--color-white, #1C1A17);
             }
             .legal-card:hover {
               border-color: var(--color-primary-mid, #A8CECA);
