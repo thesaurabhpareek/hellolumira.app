@@ -307,7 +307,12 @@ export async function POST(request: NextRequest) {
         max_tokens: 800,
         temperature: 0.4,
         system: fullSystemPrompt,
-        messages: [{ role: 'user', content: userMessage }],
+        // Prefill the assistant turn with '{' — Claude MUST continue from here,
+        // making code fences structurally impossible.
+        messages: [
+          { role: 'user', content: userMessage },
+          { role: 'assistant', content: '{' },
+        ],
       }, { signal: controller.signal })
     } finally {
       clearTimeout(timeout)
@@ -318,8 +323,16 @@ export async function POST(request: NextRequest) {
       throw new Error('Unexpected response type from Claude')
     }
 
-    // Parse JSON response
-    const cleaned = content.text.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '').trim()
+    // Parse JSON response.
+    // The assistant prefill starts with '{' so we prepend it back before parsing.
+    // We also apply robust fence-stripping as a safety net for any edge cases.
+    const rawText = '{' + content.text
+    const cleaned = rawText
+      .trim()
+      .replace(/^```\s*(?:json|JSON)?\s*\n?/, '')
+      .replace(/\n?\s*```\s*$/, '')
+      .trim()
+
     let parsed: {
       message: string
       emotional_signal?: EmotionalSignal | null
@@ -330,8 +343,19 @@ export async function POST(request: NextRequest) {
     try {
       parsed = JSON.parse(cleaned)
     } catch {
-      // If JSON parsing fails, treat the whole response as the message
-      parsed = { message: cleaned }
+      // Fallback: extract the first JSON object from anywhere in the response
+      const jsonMatch = rawText.match(/\{[\s\S]*\}/)
+      if (jsonMatch) {
+        try {
+          parsed = JSON.parse(jsonMatch[0])
+        } catch {
+          // Last resort: extract just the message field value if present
+          const msgMatch = rawText.match(/"message"\s*:\s*"((?:[^"\\]|\\.)*)"/)
+          parsed = { message: msgMatch ? msgMatch[1].replace(/\\n/g, '\n').replace(/\\"/g, '"') : 'I had trouble forming a response. Please try again.' }
+        }
+      } else {
+        parsed = { message: 'I had trouble forming a response. Please try again.' }
+      }
     }
 
     // Combine AI emotional signal with our inferred one

@@ -122,10 +122,35 @@ export async function callClaudeJSON<T>(
   userMessage: string,
   maxTokens = 1000
 ): Promise<T> {
-  const text = await callClaude(systemPrompt, userMessage, maxTokens)
-  // Strip markdown code fences if present — handle leading/trailing whitespace,
-  // varied fence styles (```json, ``` json, ```JSON, etc.)
-  const cleaned = text
+  if (!process.env.ANTHROPIC_API_KEY) {
+    throw new Error('ANTHROPIC_API_KEY is not configured.')
+  }
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), 30000)
+  let response: Awaited<ReturnType<typeof anthropic.messages.create>>
+  try {
+    response = await anthropic.messages.create({
+      model: 'claude-sonnet-4-6',
+      max_tokens: maxTokens,
+      system: systemPrompt,
+      // Prefill assistant turn with '{' — structurally prevents code fences
+      messages: [
+        { role: 'user', content: userMessage },
+        { role: 'assistant', content: '{' },
+      ],
+    }, { signal: controller.signal })
+  } finally {
+    clearTimeout(timeout)
+  }
+
+  const content = response.content[0]
+  if (!content || content.type !== 'text') {
+    throw new Error('Unexpected response type from Claude')
+  }
+
+  // Prepend the prefilled '{' back before parsing
+  const rawText = '{' + content.text
+  const cleaned = rawText
     .trim()
     .replace(/^```\s*(?:json|JSON)?\s*\n?/, '')
     .replace(/\n?\s*```\s*$/, '')
@@ -134,13 +159,17 @@ export async function callClaudeJSON<T>(
   try {
     return JSON.parse(cleaned) as T
   } catch (parseError) {
-    // Last resort: try to extract the first JSON object from the response
-    const jsonMatch = text.match(/\{[\s\S]*\}/)
+    // Fallback: extract the first JSON object/array from the response
+    const jsonMatch = rawText.match(/(\{[\s\S]*\}|\[[\s\S]*\])/)
     if (jsonMatch) {
-      return JSON.parse(jsonMatch[0]) as T
+      try {
+        return JSON.parse(jsonMatch[0]) as T
+      } catch {
+        // fall through to throw
+      }
     }
     throw new Error(
-      `Failed to parse Claude JSON response: ${(parseError as Error).message}. Raw text: ${text.substring(0, 200)}`
+      `Failed to parse Claude JSON response: ${(parseError as Error).message}. Raw: ${rawText.substring(0, 200)}`
     )
   }
 }
