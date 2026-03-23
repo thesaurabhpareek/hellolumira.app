@@ -51,7 +51,7 @@ export default function StoryCircle({
         {/* Inner white ring */}
         <div className="w-full h-full rounded-full bg-white flex items-center justify-center p-[2px]">
           {/* Avatar */}
-          {avatarUrl ? (
+          {avatarUrl && avatarUrl.startsWith('http') ? (
             <Image
               src={avatarUrl}
               alt={displayName}
@@ -60,6 +60,10 @@ export default function StoryCircle({
               className="w-[52px] h-[52px] rounded-full object-cover"
               unoptimized
             />
+          ) : avatarUrl ? (
+            <div className="w-[52px] h-[52px] rounded-full bg-sage-50 flex items-center justify-center">
+              <span className="text-2xl leading-none">{avatarUrl}</span>
+            </div>
           ) : (
             <div className="w-[52px] h-[52px] rounded-full bg-sage-50 flex items-center justify-center">
               <span className="text-lg font-semibold text-sage-500">

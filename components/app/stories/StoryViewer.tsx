@@ -226,7 +226,7 @@ export default function StoryViewer({
       {/* Header */}
       <div className="flex items-center gap-3 px-4 pb-3">
         {/* Avatar */}
-        {group.avatar_url ? (
+        {group.avatar_url && group.avatar_url.startsWith('http') ? (
           <Image
             src={group.avatar_url}
             alt={group.display_name}
@@ -235,6 +235,10 @@ export default function StoryViewer({
             className="w-9 h-9 rounded-full object-cover"
             unoptimized
           />
+        ) : group.avatar_url ? (
+          <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center">
+            <span className="text-xl leading-none">{group.avatar_url}</span>
+          </div>
         ) : (
           <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center">
             <span className="text-sm font-semibold text-white">
@@ -287,7 +291,7 @@ export default function StoryViewer({
 
       {/* Menu dropdown */}
       {showMenu && (
-        <div className="absolute top-20 right-4 z-10 bg-white rounded-lg shadow-lg py-1 min-w-[160px] animate-fade-in">
+        <div className="absolute top-20 right-4 z-10 bg-[var(--color-white)] rounded-lg shadow-lg py-1 min-w-[160px] animate-fade-in">
           <button
             type="button"
             onClick={() => {
