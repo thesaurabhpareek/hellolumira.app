@@ -80,6 +80,37 @@ const LOOKING_FOR_OPTIONS = [
   { value: 'shared_experiences', label: 'Shared Experiences' },
 ]
 
+const COUNTRY_REGION_OPTIONS = [
+  { value: 'us', label: 'United States' },
+  { value: 'uk', label: 'United Kingdom' },
+  { value: 'in', label: 'India' },
+  { value: 'au', label: 'Australia' },
+  { value: 'ca', label: 'Canada' },
+  { value: 'eu', label: 'Europe (other)' },
+  { value: 'other', label: 'Other' },
+]
+
+const SUPPORT_NETWORK_OPTIONS = [
+  { value: 'strong', label: 'Strong — partner, family, or friends nearby' },
+  { value: 'some', label: 'Some — limited but present' },
+  { value: 'solo', label: 'Solo — mostly on my own' },
+]
+
+const BABY_TEMPERAMENT_OPTIONS = [
+  { value: 'easygoing', label: 'Easygoing — generally calm and adaptable' },
+  { value: 'moderate', label: 'Moderate — some fussy periods but manageable' },
+  { value: 'spirited', label: 'Spirited — intense, sensitive, persistent' },
+]
+
+const CONCERNS_PRIORITY_OPTIONS = [
+  { value: 'sleep', label: 'Sleep' },
+  { value: 'feeding', label: 'Feeding' },
+  { value: 'development', label: 'Development' },
+  { value: 'health', label: 'Health & Illness' },
+  { value: 'behavior', label: 'Behavior' },
+  { value: 'mental_health', label: 'My Mental Health' },
+]
+
 // ── Types ──────────────────────────────────────────────────────────────────
 
 interface ProfileFormData {
@@ -97,6 +128,10 @@ interface ProfileFormData {
   work_status: string
   interests: string[]
   looking_for: string[]
+  country_region: string
+  support_network: string
+  baby_temperament: string
+  concerns_priority: string[]
 }
 
 const EMPTY_FORM: ProfileFormData = {
@@ -114,6 +149,10 @@ const EMPTY_FORM: ProfileFormData = {
   work_status: '',
   interests: [],
   looking_for: [],
+  country_region: '',
+  support_network: '',
+  baby_temperament: '',
+  concerns_priority: [],
 }
 
 // ── Component ──────────────────────────────────────────────────────────────
@@ -148,7 +187,7 @@ export default function ProfileEditPage() {
 
       const { data } = await supabase
         .from('profiles')
-        .select('first_name, display_name, pronouns, location_city, bio, birth_month, parenting_style, feeding_method, birth_type, number_of_children, languages_spoken, work_status, interests, looking_for')
+        .select('first_name, display_name, pronouns, location_city, bio, birth_month, parenting_style, feeding_method, birth_type, number_of_children, languages_spoken, work_status, interests, looking_for, country_region, support_network, baby_temperament, concerns_priority')
         .eq('id', user.id)
         .single()
 
@@ -168,6 +207,10 @@ export default function ProfileEditPage() {
           work_status: data.work_status || '',
           interests: data.interests || [],
           looking_for: data.looking_for || [],
+          country_region: data.country_region || '',
+          support_network: data.support_network || '',
+          baby_temperament: data.baby_temperament || '',
+          concerns_priority: data.concerns_priority || [],
         })
       }
       setLoading(false)
@@ -188,7 +231,7 @@ export default function ProfileEditPage() {
     setForm((prev) => ({ ...prev, [field]: value }))
   }
 
-  const toggleArrayItem = (field: 'interests' | 'looking_for', value: string) => {
+  const toggleArrayItem = (field: 'interests' | 'looking_for' | 'concerns_priority', value: string) => {
     setForm((prev) => {
       const arr = prev[field]
       const next = arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value]
@@ -214,6 +257,10 @@ export default function ProfileEditPage() {
         work_status: form.work_status || null,
         interests: form.interests,
         looking_for: form.looking_for,
+        country_region: form.country_region || null,
+        support_network: form.support_network || null,
+        baby_temperament: form.baby_temperament || null,
+        concerns_priority: form.concerns_priority,
       }
 
       const res = await fetch('/api/profile/update', {
@@ -502,6 +549,56 @@ export default function ProfileEditPage() {
               options={LOOKING_FOR_OPTIONS}
               selected={form.looking_for}
               onToggle={(v) => toggleArrayItem('looking_for', v)}
+            />
+          </FormField>
+        </div>
+
+        {/* ── Personalization — makes Lumira smarter ─────── */}
+        <div style={{ marginTop: '24px', marginBottom: '8px' }}>
+          <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', padding: '0 4px' }}>
+            Help Lumira know you better
+          </p>
+          <p style={{ fontSize: '13px', color: 'var(--color-muted)', padding: '4px 4px 0', lineHeight: 1.5 }}>
+            These help Lumira give you more relevant, personalized guidance.
+          </p>
+        </div>
+
+        <div ref={(el) => { fieldRefs.current['country_region'] = el }}>
+          <FormField label="Your Country / Region" highlight={focusField === 'country_region'}>
+            <ChipSelect
+              options={COUNTRY_REGION_OPTIONS}
+              selected={form.country_region}
+              onSelect={(v) => handleChange('country_region', v)}
+            />
+          </FormField>
+        </div>
+
+        <div ref={(el) => { fieldRefs.current['support_network'] = el }}>
+          <FormField label="Your Support Network" highlight={focusField === 'support_network'}>
+            <ChipSelect
+              options={SUPPORT_NETWORK_OPTIONS}
+              selected={form.support_network}
+              onSelect={(v) => handleChange('support_network', v)}
+            />
+          </FormField>
+        </div>
+
+        <div ref={(el) => { fieldRefs.current['baby_temperament'] = el }}>
+          <FormField label="Baby's Temperament" highlight={focusField === 'baby_temperament'}>
+            <ChipSelect
+              options={BABY_TEMPERAMENT_OPTIONS}
+              selected={form.baby_temperament}
+              onSelect={(v) => handleChange('baby_temperament', v)}
+            />
+          </FormField>
+        </div>
+
+        <div ref={(el) => { fieldRefs.current['concerns_priority'] = el }}>
+          <FormField label="What Worries You Most Right Now?" highlight={focusField === 'concerns_priority'}>
+            <ChipMultiSelect
+              options={CONCERNS_PRIORITY_OPTIONS}
+              selected={form.concerns_priority}
+              onToggle={(v) => toggleArrayItem('concerns_priority', v)}
             />
           </FormField>
         </div>
@@ -825,6 +922,51 @@ function MonthInput({
       onFocus={(e) => { e.target.style.borderColor = '#3D8178' }}
       onBlur={(e) => { e.target.style.borderColor = 'var(--color-border)' }}
     />
+  )
+}
+
+function ChipSelect({
+  options,
+  selected,
+  onSelect,
+}: {
+  options: { value: string; label: string }[]
+  selected: string
+  onSelect: (value: string) => void
+}) {
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+      {options.map((opt) => {
+        const isSelected = selected === opt.value
+        return (
+          <button
+            key={opt.value}
+            type="button"
+            onClick={() => onSelect(opt.value)}
+            style={{
+              padding: '8px 16px',
+              borderRadius: '100px',
+              border: isSelected ? '2px solid #3D8178' : '1.5px solid var(--color-border)',
+              background: isSelected ? '#3D817815' : 'var(--color-surface)',
+              color: isSelected ? '#3D8178' : 'var(--color-slate)',
+              fontSize: '14px',
+              fontWeight: isSelected ? 600 : 500,
+              cursor: 'pointer',
+              transition: 'all 0.15s ease',
+              minHeight: '38px',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {isSelected && (
+              <span style={{ marginRight: '4px' }}>
+                <CheckIcon size={14} color="#3D8178" />
+              </span>
+            )}
+            {opt.label}
+          </button>
+        )
+      })}
+    </div>
   )
 }
 

@@ -29,6 +29,10 @@ const FIELD_SEED_REWARDS: Record<string, number> = {
   work_status: 5,
   interests: 10,
   looking_for: 10,
+  country_region: 10,
+  support_network: 10,
+  baby_temperament: 10,
+  concerns_priority: 10,
 }
 
 const VALID_PRONOUNS = ['he/him', 'she/her', 'they/them', 'he/they', 'she/they', 'custom']
@@ -51,6 +55,10 @@ const VALID_LOOKING_FOR = [
   'advice', 'friends', 'support', 'information', 'fun',
   'accountability', 'local_meetups', 'shared_experiences',
 ]
+const VALID_COUNTRY_REGIONS = ['us', 'uk', 'in', 'au', 'ca', 'eu', 'other']
+const VALID_SUPPORT_NETWORKS = ['strong', 'some', 'solo']
+const VALID_BABY_TEMPERAMENTS = ['easygoing', 'moderate', 'spirited']
+const VALID_CONCERNS_PRIORITIES = ['sleep', 'feeding', 'development', 'health', 'behavior', 'mental_health']
 
 interface _ProfileUpdatePayload {
   display_name?: string | null
@@ -66,6 +74,10 @@ interface _ProfileUpdatePayload {
   work_status?: string | null
   interests?: string[]
   looking_for?: string[]
+  country_region?: string | null
+  support_network?: string | null
+  baby_temperament?: string | null
+  concerns_priority?: string[]
   first_name?: string
 }
 
@@ -196,6 +208,40 @@ function validatePayload(body: Record<string, unknown>): {
     data.looking_for = cleaned
   }
 
+  // country_region (enum string)
+  if ('country_region' in body) {
+    const val = body.country_region
+    if (val === null || val === '') { data.country_region = null }
+    else if (typeof val === 'string' && VALID_COUNTRY_REGIONS.includes(val)) { data.country_region = val }
+    else { return { valid: false, data: {}, error: 'Invalid country_region value' } }
+  }
+
+  // support_network (enum string)
+  if ('support_network' in body) {
+    const val = body.support_network
+    if (val === null || val === '') { data.support_network = null }
+    else if (typeof val === 'string' && VALID_SUPPORT_NETWORKS.includes(val)) { data.support_network = val }
+    else { return { valid: false, data: {}, error: 'Invalid support_network value' } }
+  }
+
+  // baby_temperament (enum string)
+  if ('baby_temperament' in body) {
+    const val = body.baby_temperament
+    if (val === null || val === '') { data.baby_temperament = null }
+    else if (typeof val === 'string' && VALID_BABY_TEMPERAMENTS.includes(val)) { data.baby_temperament = val }
+    else { return { valid: false, data: {}, error: 'Invalid baby_temperament value' } }
+  }
+
+  // concerns_priority (string array)
+  if ('concerns_priority' in body) {
+    const arr = body.concerns_priority
+    if (!Array.isArray(arr)) {
+      return { valid: false, data: {}, error: 'concerns_priority must be an array' }
+    }
+    const cleaned = arr.filter((v): v is string => typeof v === 'string' && VALID_CONCERNS_PRIORITIES.includes(v))
+    data.concerns_priority = cleaned
+  }
+
   return { valid: true, data }
 }
 
@@ -239,7 +285,7 @@ export async function POST(request: NextRequest) {
     // Fetch current profile to check which fields are newly filled
     const { data: currentProfile } = await supabase
       .from('profiles')
-      .select('profile_completion_seeds_awarded, display_name, pronouns, location_city, bio, birth_month, parenting_style, feeding_method, birth_type, number_of_children, languages_spoken, work_status, interests, looking_for')
+      .select('profile_completion_seeds_awarded, display_name, pronouns, location_city, bio, birth_month, parenting_style, feeding_method, birth_type, number_of_children, languages_spoken, work_status, interests, looking_for, country_region, support_network, baby_temperament, concerns_priority')
       .eq('id', user.id)
       .single()
 

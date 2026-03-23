@@ -26,7 +26,7 @@ export default async function ProfilePage() {
   // Fetch profile separately so we can handle errors gracefully
   const { data: profileData, error: profileError } = await supabase
     .from('profiles')
-    .select('id, first_name, first_time_parent, partner_invite_email, avatar_emoji, seeds_balance, current_streak, created_at, display_name, pronouns, location_city, bio, birth_month, parenting_style, feeding_method, birth_type, number_of_children, languages_spoken, work_status, interests, looking_for, profile_completion_seeds_awarded')
+    .select('id, first_name, first_time_parent, partner_invite_email, avatar_emoji, seeds_balance, current_streak, created_at, display_name, pronouns, location_city, bio, birth_month, parenting_style, feeding_method, birth_type, number_of_children, languages_spoken, work_status, interests, looking_for, country_region, support_network, baby_temperament, concerns_priority, profile_completion_seeds_awarded')
     .eq('id', user.id)
     .single()
 

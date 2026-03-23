@@ -37,6 +37,10 @@ export type Profile = {
   work_status: string | null
   interests: string[]
   looking_for: string[]
+  country_region: string | null
+  support_network: 'strong' | 'some' | 'solo' | null
+  baby_temperament: 'easygoing' | 'moderate' | 'spirited' | null
+  concerns_priority: string[]
   profile_completion_seeds_awarded: Record<string, boolean>
 }
 

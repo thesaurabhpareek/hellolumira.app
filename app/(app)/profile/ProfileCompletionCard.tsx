@@ -23,6 +23,11 @@ const PROFILE_FIELDS = [
   { key: 'work_status', label: 'Work status', weight: 2, seeds: 5, prompt: 'Share your work situation', core: false },
   { key: 'interests', label: 'Interests', weight: 3, seeds: 10, prompt: 'Choose topics you care about', core: false },
   { key: 'looking_for', label: 'Looking for', weight: 3, seeds: 10, prompt: 'What do you want from community?', core: false },
+  // V2 personalization fields — directly improve Lumira's responses
+  { key: 'country_region', label: 'Region', weight: 3, seeds: 10, prompt: 'Set your country for localized guidance', core: false },
+  { key: 'support_network', label: 'Support network', weight: 3, seeds: 10, prompt: 'Tell us about your support system', core: false },
+  { key: 'baby_temperament', label: 'Baby temperament', weight: 3, seeds: 10, prompt: 'Describe your baby\'s temperament', core: false },
+  { key: 'concerns_priority', label: 'Top concerns', weight: 3, seeds: 10, prompt: 'What worries you most right now?', core: false },
 ] as const
 
 type ProfileData = Record<string, unknown>

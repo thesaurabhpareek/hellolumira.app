@@ -47,7 +47,7 @@ export async function buildContextBlock(
       supabase.from('baby_profiles').select('id, name, due_date, date_of_birth, stage, planning_sub_option, planning_expected_month').eq('id', baby_id).single(),
       supabase
         .from('baby_profile_members')
-        .select('profile_id, profiles(id, first_name, first_time_parent, emotional_state_latest)')
+        .select('profile_id, profiles(id, first_name, first_time_parent, emotional_state_latest, country_region, support_network, baby_temperament, concerns_priority)')
         .eq('baby_id', baby_id),
       supabase
         .from('weekly_summaries')
@@ -82,7 +82,7 @@ export async function buildContextBlock(
   const info = getBabyAgeInfo(baby)
   const tod = getTimeOfDay()
 
-  type PartialProfile = Pick<Profile, 'id' | 'first_name' | 'first_time_parent' | 'emotional_state_latest'>
+  type PartialProfile = Pick<Profile, 'id' | 'first_name' | 'first_time_parent' | 'emotional_state_latest' | 'country_region' | 'support_network' | 'baby_temperament' | 'concerns_priority'>
   const profiles: PartialProfile[] = (membersRes.data || [])
     .map((m: { profile_id: string; profiles: PartialProfile | PartialProfile[] }) =>
       Array.isArray(m.profiles) ? m.profiles[0] : m.profiles
@@ -166,6 +166,13 @@ export async function buildContextBlock(
   if (otherParent) {
     lines.push(`${otherParent.first_name}'s emotional state: ${otherParent.emotional_state_latest || 'unknown'}`)
   }
+
+  // Personalization context — only include if set (zero tokens when null)
+  if (currentParent?.country_region) lines.push(`Region: ${currentParent.country_region}`)
+  if (currentParent?.support_network) lines.push(`Support network: ${currentParent.support_network}`)
+  if (currentParent?.baby_temperament) lines.push(`Baby temperament: ${currentParent.baby_temperament}`)
+  if (currentParent?.concerns_priority?.length) lines.push(`Priority concerns: ${currentParent.concerns_priority.join(', ')}`)
+
   lines.push(
     `Current session parent: ${currentParent?.first_name || 'Parent'}`,
     `Time of day: ${tod.display} (${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })})`
