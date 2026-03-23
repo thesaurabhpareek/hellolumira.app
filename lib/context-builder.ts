@@ -13,6 +13,10 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import { getBabyAgeInfo, getTimeOfDay } from './baby-age'
 import type { BabyProfile, Profile, DailyCheckin } from '@/types/app'
 
+// Module-level cache: key = `${userId}:${babyId}`, value = { context: string, cachedAt: number }
+const contextCache = new Map<string, { context: string; cachedAt: number }>()
+const CONTEXT_TTL_MS = 5 * 60 * 1000 // 5 minutes
+
 /**
  * Builds a multi-line context string for Claude system prompts.
  *
@@ -31,6 +35,12 @@ export async function buildContextBlock(
   baby_id: string,
   requesting_profile_id: string
 ): Promise<string> {
+  const cacheKey = `${requesting_profile_id}:${baby_id}`
+  const cached = contextCache.get(cacheKey)
+  if (cached && Date.now() - cached.cachedAt < CONTEXT_TTL_MS) {
+    return cached.context
+  }
+
   // Parallel fetch all context data
   const [babyRes, membersRes, summaryRes, checkinsRes, concernRes, patternsRes] =
     await Promise.all([
@@ -161,5 +171,14 @@ export async function buildContextBlock(
     `Time of day: ${tod.display} (${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })})`
   )
 
-  return lines.join('\n')
+  const result = lines.join('\n')
+
+  contextCache.set(cacheKey, { context: result, cachedAt: Date.now() })
+  // Prevent unbounded growth
+  if (contextCache.size > 500) {
+    const oldestKey = contextCache.keys().next().value
+    if (oldestKey) contextCache.delete(oldestKey)
+  }
+
+  return result
 }

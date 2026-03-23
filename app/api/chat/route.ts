@@ -265,8 +265,10 @@ export async function POST(request: NextRequest) {
     // 9. Build messages array for multi-turn conversation
     // Filter to only allow 'user' and 'assistant' roles to prevent prompt injection
     // via maliciously crafted role values (e.g. 'system').
-    const safeHistory = Array.isArray(conversation_history)
-      ? conversation_history.filter(
+    // Keep only last 20 messages to prevent context bloat
+    const windowedHistory = conversation_history.slice(-20)
+    const safeHistory = Array.isArray(windowedHistory)
+      ? windowedHistory.filter(
           (m) => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string'
         )
       : []
