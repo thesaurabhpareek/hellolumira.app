@@ -5,9 +5,11 @@ import Link from 'next/link'
 import PasskeyList, { type PasskeyFactor } from '@/components/app/PasskeyList'
 import PasskeyEnrollmentSheet from '@/components/app/PasskeyEnrollmentSheet'
 import { ArrowLeftIcon } from '@/components/icons'
+import { getPlatformInfo } from '@/lib/platform-detect'
 
 export default function SecuritySettingsPage() {
   const [passkeys, setPasskeys] = useState<PasskeyFactor[]>([])
+  const platform = typeof window !== 'undefined' ? getPlatformInfo() : null
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [isRemoving, setIsRemoving] = useState<string | null>(null)
@@ -93,7 +95,7 @@ export default function SecuritySettingsPage() {
           Sign-in &amp; Security
         </h1>
         <p style={{ fontSize: '14px', color: 'var(--color-muted)', marginBottom: '24px', lineHeight: 1.5 }}>
-          Manage your Face ID passkeys and sign-in methods.
+          Manage your {platform?.biometricLabel ?? 'passkey'} sign-in methods.
         </p>
 
         {/* Passkeys card */}
@@ -101,7 +103,7 @@ export default function SecuritySettingsPage() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
             <div>
               <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                Passkeys (Face ID)
+                Passkeys ({platform?.biometricLabel ?? 'Biometric'})
               </p>
             </div>
             <button
@@ -193,7 +195,7 @@ export default function SecuritySettingsPage() {
           }}
         >
           <p style={{ fontSize: '13px', color: 'var(--color-primary)', lineHeight: 1.6 }}>
-            <strong>What is a passkey?</strong> A passkey lets you sign in with Face ID instead of waiting for a magic link email. Your biometric data never leaves your device.
+            <strong>What is a passkey?</strong> A passkey lets you sign in with {platform?.biometricLabel ?? 'your biometric'} instead of waiting for a magic link email. Your biometric data never leaves your device.
           </p>
         </div>
       </div>

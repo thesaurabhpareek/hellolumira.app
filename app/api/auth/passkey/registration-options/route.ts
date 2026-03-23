@@ -6,6 +6,10 @@ import {
   PASSKEY_REGISTRATION_TIMEOUT,
 } from '@/lib/webauthn'
 
+// Rate limit: max 10 registration setup attempts per user per hour
+const REG_RATE_MAX = 10
+const REG_RATE_WINDOW_MS = 60 * 60 * 1000
+
 export async function POST(_req: NextRequest) {
   try {
     const supabase = await createClient()
@@ -17,6 +21,31 @@ export async function POST(_req: NextRequest) {
 
     const service = await createServiceClient()
 
+    // ── Rate limit per user ───────────────────────────────────────────────────
+    const rateLimitKey = `passkey_reg:${user.id}`
+    const windowStart = new Date(Date.now() - REG_RATE_WINDOW_MS).toISOString()
+
+    const { data: rlRow } = await service
+      .from('passkey_rate_limits')
+      .select('attempts, window_start')
+      .eq('key', rateLimitKey)
+      .maybeSingle()
+
+    if (rlRow && rlRow.window_start > windowStart && rlRow.attempts >= REG_RATE_MAX) {
+      return NextResponse.json(
+        { error: 'Too many passkey setup attempts. Please try again in an hour.' },
+        { status: 429 }
+      )
+    }
+
+    await service.from('passkey_rate_limits').upsert(
+      rlRow && rlRow.window_start > windowStart
+        ? { key: rateLimitKey, attempts: rlRow.attempts + 1, window_start: rlRow.window_start }
+        : { key: rateLimitKey, attempts: 1, window_start: new Date().toISOString() },
+      { onConflict: 'key' }
+    )
+
+    // ── Max passkeys per user ─────────────────────────────────────────────────
     const { count } = await service
       .from('passkeys')
       .select('*', { count: 'exact', head: true })
@@ -69,8 +98,8 @@ export async function POST(_req: NextRequest) {
       type: 'registration',
     })
 
-    // Clean expired challenges (fire and forget)
-    service.from('webauthn_challenges').delete().lt('expires_at', new Date().toISOString())
+    // Async cleanup of expired challenges (non-critical, fire and forget)
+    void service.from('webauthn_challenges').delete().lt('expires_at', new Date().toISOString())
 
     return NextResponse.json(options)
   } catch (err) {

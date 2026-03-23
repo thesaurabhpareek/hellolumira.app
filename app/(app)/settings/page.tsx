@@ -245,7 +245,7 @@ export default async function SettingsPage() {
               <LockIcon size={20} color="var(--color-muted)" />
               <div style={{ flex: 1 }}>
                 <p style={{ fontWeight: 600, fontSize: '15px', marginBottom: '2px' }}>Sign-in &amp; Security</p>
-                <p style={{ fontSize: '13px', color: 'var(--color-muted)' }}>Face ID, passkeys, sign-in methods</p>
+                <p style={{ fontSize: '13px', color: 'var(--color-muted)' }}>Passkeys, biometrics, sign-in methods</p>
               </div>
               <ChevronRightIcon size={18} color="var(--color-muted)" />
             </Link>

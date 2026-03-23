@@ -5,6 +5,7 @@ import { useState, useEffect, useRef, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { isPasskeySupported, isConditionalMediationAvailable, signInWithPasskey } from '@/lib/webauthn-client'
+import { getPlatformInfo } from '@/lib/platform-detect'
 
 type AuthState = 'idle' | 'loading' | 'success' | 'success_existing' | 'error' | 'rate_limited'
 type GoogleState = 'idle' | 'loading'
@@ -46,6 +47,7 @@ function LoginForm() {
   const [passkeyEnrolled, setPasskeyEnrolled] = useState(false)
   const [passkeyLoading, setPasskeyLoading] = useState(false)
   const [conditionalMediationReady, setConditionalMediationReady] = useState(false)
+  const platformInfo = typeof window !== 'undefined' ? getPlatformInfo() : null
 
   // On mount: check if passkey is enrolled and if conditional mediation is available
   useEffect(() => {
@@ -325,7 +327,7 @@ function LoginForm() {
                       <path d="M6 11c0-3.31 2.69-6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.5"/>
                       <path d="M18 11c0-1.66-.67-3.16-1.76-4.24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.5"/>
                     </svg>
-                    Sign in with Face ID
+                    {platformInfo?.signInLabel ?? 'Sign in with passkey'}
                   </>
                 )}
               </button>

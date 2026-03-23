@@ -34,7 +34,7 @@ export async function DELETE(
       .eq('user_id', user.id)
       .gte('created_at', since)
 
-    if ((recent ?? 0) >= 2) {
+    if ((recent ?? 0) >= 5) {
       return NextResponse.json(
         {
           error:

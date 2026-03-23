@@ -159,7 +159,7 @@ export async function sendPasskeyRecoveryNudgeEmail({
 
 // ---------------------------------------------------------------------------
 // Passkey setup nudge — sent to users who have never set up a passkey,
-// encouraging them to enable faster Face ID sign-in
+// encouraging them to enable faster passkey sign-in
 // ---------------------------------------------------------------------------
 
 export async function sendPasskeySetupNudgeEmail({

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { enrollPasskey, isPasskeySupported } from '@/lib/webauthn-client'
+import { getPlatformInfo } from '@/lib/platform-detect'
 
 interface PasskeyEnrollmentSheetProps {
   isOpen: boolean
@@ -13,6 +14,7 @@ export default function PasskeyEnrollmentSheet({ isOpen, onClose, onEnrolled }: 
   const [enrolling, setEnrolling] = useState(false)
   const [error, setError] = useState('')
   const [toastVisible, setToastVisible] = useState(false)
+  const platform = typeof window !== 'undefined' ? getPlatformInfo() : null
   const [mounted, setMounted] = useState(false)
   const [supported, setSupported] = useState<boolean | null>(null)
 
@@ -87,7 +89,7 @@ export default function PasskeyEnrollmentSheet({ isOpen, onClose, onEnrolled }: 
             boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
           }}
         >
-          Face ID sign-in is on.
+          {platform?.biometricLabel ?? 'Passkey'} sign-in is on.
         </div>
       )}
 
@@ -110,7 +112,7 @@ export default function PasskeyEnrollmentSheet({ isOpen, onClose, onEnrolled }: 
       <div
         role="dialog"
         aria-modal="true"
-        aria-label="Set up Face ID sign-in"
+        aria-label={platform?.setupLabel ?? 'Set up passkey sign-in'}
         style={{
           position: 'fixed',
           bottom: 0,
@@ -184,11 +186,7 @@ export default function PasskeyEnrollmentSheet({ isOpen, onClose, onEnrolled }: 
             marginBottom: '8px',
           }}
         >
-          No waiting for an email. No expired links.
-          <br />
-          Just Face ID — even at 3am. Nothing is shared
-          <br />
-          with Lumira or Apple.
+          {platform?.howItWorks ?? 'Use a passkey for passwordless sign-in.'}
         </p>
 
         <p
@@ -200,7 +198,7 @@ export default function PasskeyEnrollmentSheet({ isOpen, onClose, onEnrolled }: 
             lineHeight: 1.5,
           }}
         >
-          Works on all your Apple devices automatically.
+          {platform?.ecosystemNote ?? 'Stored securely on your device.'}
         </p>
 
         {/* Inline error */}
@@ -259,7 +257,7 @@ export default function PasskeyEnrollmentSheet({ isOpen, onClose, onEnrolled }: 
                 <path d="M4 20c0-4.418 3.582-8 8-8s8 3.582 8 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                 <path d="M8 12.5C8 10.015 9.79 8 12 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
               </svg>
-              Set up Face ID sign-in
+              {platform?.setupLabel ?? 'Set up passkey sign-in'}
             </>
           )}
         </button>

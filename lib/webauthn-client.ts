@@ -171,7 +171,9 @@ export async function enrollPasskey(): Promise<
         return { success: false, cancelled: false, error: 'This device already has passkey sign-in set up.' }
       }
       if (err.name === 'NotSupportedError') {
-        return { success: false, cancelled: false, error: "Your browser doesn't support passkeys yet. Try Safari on iPhone." }
+        const { getPlatformInfo } = await import('./platform-detect')
+        const info = getPlatformInfo()
+        return { success: false, cancelled: false, error: `Your browser doesn't support passkeys yet. ${info.browserSuggestion}` }
       }
     }
     return { success: false, cancelled: false, error: "Couldn't save your passkey. Check your connection and try again." }

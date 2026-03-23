@@ -3,6 +3,10 @@ import { createServiceClient } from '@/lib/supabase/server'
 import { verifyAuthenticationResponse } from '@/lib/webauthn'
 import { sendPasskeySuspendedAlertEmail } from '@/lib/passkey-email'
 
+// Rate limit: max 10 authentication attempts per IP per 5 minutes
+const AUTH_RATE_MAX = 10
+const AUTH_RATE_WINDOW_MS = 5 * 60 * 1000
+
 export async function POST(req: NextRequest) {
   try {
     const service = await createServiceClient()
@@ -10,6 +14,36 @@ export async function POST(req: NextRequest) {
     if (!body.credential?.id)
       return NextResponse.json({ error: 'Sign-in request was incomplete. Please try again.' }, { status: 400 })
 
+    // ── Rate limit by IP ──────────────────────────────────────────────────────
+    const clientIp =
+      req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
+      req.headers.get('x-real-ip') ??
+      'unknown'
+    const rateLimitKey = `passkey_auth:${clientIp}`
+    const windowStart = new Date(Date.now() - AUTH_RATE_WINDOW_MS).toISOString()
+
+    const { data: rlRow } = await service
+      .from('passkey_rate_limits')
+      .select('attempts, window_start')
+      .eq('key', rateLimitKey)
+      .maybeSingle()
+
+    if (rlRow && rlRow.window_start > windowStart && rlRow.attempts >= AUTH_RATE_MAX) {
+      return NextResponse.json(
+        { error: 'Too many sign-in attempts. Please wait a few minutes and try again.' },
+        { status: 429 }
+      )
+    }
+
+    // Upsert rate limit counter — reset window if expired
+    await service.from('passkey_rate_limits').upsert(
+      rlRow && rlRow.window_start > windowStart
+        ? { key: rateLimitKey, attempts: rlRow.attempts + 1, window_start: rlRow.window_start }
+        : { key: rateLimitKey, attempts: 1, window_start: new Date().toISOString() },
+      { onConflict: 'key' }
+    )
+
+    // ── Look up credential ────────────────────────────────────────────────────
     const { data: passkey } = await service
       .from('passkeys')
       .select('*')
@@ -23,7 +57,10 @@ export async function POST(req: NextRequest) {
         { status: 401 }
       )
 
-    const { data: challengeRow } = await service
+    // ── Atomically claim the challenge (CAS: used=false → used=true) ──────────
+    // SELECT to get the challenge string, then UPDATE WHERE used=false.
+    // Only one concurrent request can win — the loser gets 0 rows back.
+    const { data: pendingChallenges } = await service
       .from('webauthn_challenges')
       .select('*')
       .eq('type', 'authentication')
@@ -31,21 +68,36 @@ export async function POST(req: NextRequest) {
       .gt('expires_at', new Date().toISOString())
       .order('created_at', { ascending: false })
       .limit(1)
-      .single()
 
-    if (!challengeRow)
+    const pending = pendingChallenges?.[0]
+    if (!pending)
       return NextResponse.json(
         { error: 'Session expired. Please try again.' },
         { status: 400 }
       )
 
+    // Atomic claim — if another request already claimed it, data will be empty
+    const { data: claimed } = await service
+      .from('webauthn_challenges')
+      .update({ used: true })
+      .eq('id', pending.id)
+      .eq('used', false) // CAS guard: only succeed if still unused
+      .select('id')
+
+    if (!claimed?.length)
+      return NextResponse.json(
+        { error: 'Session expired. Please try again.' },
+        { status: 400 }
+      )
+
+    // ── Verify assertion ──────────────────────────────────────────────────────
     const rpID = new URL(
       process.env.NEXT_PUBLIC_APP_URL ?? 'https://hellolumira.app'
     ).hostname
 
     const verification = await verifyAuthenticationResponse({
       response: body.credential,
-      expectedChallenge: challengeRow.challenge,
+      expectedChallenge: pending.challenge,
       expectedOrigin: process.env.NEXT_PUBLIC_APP_URL ?? `https://${rpID}`,
       expectedRPID: rpID,
       requireUserVerification: true,
@@ -65,17 +117,17 @@ export async function POST(req: NextRequest) {
 
     const { authenticationInfo } = verification
 
-    // Counter validation — counter=0 on both sides is valid (iCloud Keychain)
+    // ── Counter validation (replay / cloning detection) ───────────────────────
+    // counter=0 on both sides is valid (iCloud Keychain does not increment counters).
+    // Any other case where newCounter ≤ storedCounter signals possible credential cloning.
     if (passkey.counter > 0 && authenticationInfo.newCounter <= passkey.counter) {
-      console.error('[passkey/authenticate] counter mismatch', {
+      console.error('[passkey/authenticate] counter mismatch — credential cloning suspected', {
         stored: passkey.counter,
         received: authenticationInfo.newCounter,
+        credentialId: passkey.credential_id,
+        userId: passkey.user_id,
       })
       await service.from('passkeys').update({ status: 'suspended' }).eq('id', passkey.id)
-      await service
-        .from('webauthn_challenges')
-        .update({ used: true })
-        .eq('id', challengeRow.id)
 
       const { data: ud } = await service.auth.admin.getUserById(passkey.user_id)
       if (ud?.user?.email) {
@@ -100,20 +152,16 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    await Promise.all([
-      service
-        .from('webauthn_challenges')
-        .update({ used: true })
-        .eq('id', challengeRow.id),
-      service
-        .from('passkeys')
-        .update({
-          counter: authenticationInfo.newCounter,
-          last_used_at: new Date().toISOString(),
-        })
-        .eq('id', passkey.id),
-    ])
+    // ── Update counter + last_used_at ─────────────────────────────────────────
+    await service
+      .from('passkeys')
+      .update({
+        counter: authenticationInfo.newCounter,
+        last_used_at: new Date().toISOString(),
+      })
+      .eq('id', passkey.id)
 
+    // ── Generate session token ────────────────────────────────────────────────
     const { data: ud } = await service.auth.admin.getUserById(passkey.user_id)
     if (!ud?.user?.email)
       return NextResponse.json({ error: "We couldn't find your account. Please try signing in with your email." }, { status: 401 })

@@ -159,6 +159,7 @@ export default function PasskeyList({ passkeys, onRemove, isRemoving }: PasskeyL
 
                     {pk.backed_up && (
                       <span
+                        title="Synced across your Apple devices via iCloud Keychain. Removing it here won't delete it from iCloud — manage that in your device's Passwords settings."
                         style={{
                           display: 'inline-flex',
                           alignItems: 'center',
@@ -169,9 +170,30 @@ export default function PasskeyList({ passkeys, onRemove, isRemoving }: PasskeyL
                           fontSize: '11px',
                           fontWeight: 600,
                           whiteSpace: 'nowrap',
+                          cursor: 'help',
                         }}
                       >
-                        iCloud Keychain
+                        ☁ iCloud Keychain
+                      </span>
+                    )}
+
+                    {pk.status !== 'active' && (
+                      <span
+                        title="This passkey was suspended due to a security anomaly. Sign in with a magic link and remove it."
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          padding: '2px 8px',
+                          borderRadius: '100px',
+                          background: '#FEF2F2',
+                          color: '#DC2626',
+                          fontSize: '11px',
+                          fontWeight: 700,
+                          whiteSpace: 'nowrap',
+                          cursor: 'help',
+                        }}
+                      >
+                        ⚠ Suspended
                       </span>
                     )}
                   </div>

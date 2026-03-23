@@ -951,7 +951,7 @@ export function passkeyEnrolledEmail({
   manageUrl: string
   email?: string
 }): EmailTemplate {
-  const subject = `Face ID sign-in is now active on your Lumira account`
+  const subject = `Passkey sign-in is now active on your Lumira account`
   const preheader = `You're all set — next time, just look at your phone. No email needed.`
 
   const safeName = escapeHtml(firstName)
@@ -972,7 +972,7 @@ export function passkeyEnrolledEmail({
     </h1>
 
     <p style="margin:0 0 24px 0;font-size:16px;line-height:1.6;color:${COLORS.slate};text-align:center;">
-      Face ID sign-in is now active on <strong>${safeDevice}</strong>.<br>
+      Passkey sign-in is now active on <strong>${safeDevice}</strong>.<br>
       Next time you open Lumira, just look at your phone.
     </p>
 
@@ -1032,7 +1032,7 @@ export function passkeyNewDeviceAlertEmail({
   email?: string
 }): EmailTemplate {
   const subject = `Security alert: A new passkey was added to your Lumira account`
-  const preheader = `Face ID sign-in was set up on ${deviceHint}. If this wasn't you, act now.`
+  const preheader = `Passkey sign-in was set up on ${deviceHint}. If this wasn't you, act now.`
 
   const safeName = escapeHtml(firstName)
   const safeDevice = escapeHtml(deviceHint)
@@ -1055,7 +1055,7 @@ export function passkeyNewDeviceAlertEmail({
     </h1>
 
     <p style="margin:0 0 24px 0;font-size:16px;line-height:1.6;color:${COLORS.slate};">
-      Hi ${safeName}, Face ID sign-in (passkey) was just set up on <strong>${safeDevice}</strong>. Review the details below.
+      Hi ${safeName}, A passkey was just set up on <strong>${safeDevice}</strong>. Review the details below.
     </p>
 
     <!-- Event details box -->
@@ -1145,7 +1145,7 @@ export function passkeyRemovedEmail({
   email?: string
 }): EmailTemplate {
   const subject = `Passkey removed from your Lumira account`
-  const preheader = `Face ID sign-in was removed from ${deviceHint}. You can still sign in with email.`
+  const preheader = `Passkey sign-in was removed from ${deviceHint}. You can still sign in with email.`
 
   const safeName = escapeHtml(firstName)
   const safeDevice = escapeHtml(deviceHint)
@@ -1167,7 +1167,7 @@ export function passkeyRemovedEmail({
     </h1>
 
     <p style="margin:0 0 24px 0;font-size:16px;line-height:1.6;color:${COLORS.slate};">
-      Hi ${safeName}, the Face ID passkey on <strong>${safeDevice}</strong> has been removed from your Lumira account.
+      Hi ${safeName}, the passkey on <strong>${safeDevice}</strong> has been removed from your Lumira account.
     </p>
 
     <!-- Event details box -->
@@ -1201,7 +1201,7 @@ export function passkeyRemovedEmail({
         <td style="padding:16px 20px;background:#EBF5F4;border-radius:10px;border-left:4px solid ${COLORS.sage500};">
           <p style="margin:0 0 4px 0;font-size:13px;font-weight:600;color:${COLORS.sage600};">Your account is still accessible</p>
           <p style="margin:0;font-size:14px;line-height:1.6;color:${COLORS.slate};">
-            You can still sign in with your email &mdash; just enter your address and we&rsquo;ll send you a link. You can re-add Face ID sign-in anytime in <strong>Settings &rarr; Security</strong>.
+            You can still sign in with your email &mdash; just enter your address and we&rsquo;ll send you a link. You can re-add passkey sign-in anytime in <strong>Settings &rarr; Security</strong>.
           </p>
         </td>
       </tr>
@@ -1380,8 +1380,8 @@ export function passkeyRecoveryNudgeEmail({
   enrollUrl: string
   email?: string
 }): EmailTemplate {
-  const subject = `Set up Face ID on your new device`
-  const preheader = `Re-add Face ID sign-in so you can skip the email wait next time.`
+  const subject = `Set up passkey sign-in on your new device`
+  const preheader = `Re-add passkey sign-in so you can skip the email wait next time.`
 
   const safeName = escapeHtml(firstName)
 
@@ -1400,7 +1400,7 @@ export function passkeyRecoveryNudgeEmail({
     </h1>
 
     <p style="margin:0 0 24px 0;font-size:16px;line-height:1.6;color:${COLORS.slate};">
-      Hi ${safeName}, looks like you&rsquo;re signing in with your email &mdash; which always works. If you have a new phone, you can re-add Face ID sign-in in under a minute.
+      Hi ${safeName}, looks like you&rsquo;re signing in with your email &mdash; which always works. If you have a new phone, you can re-add passkey sign-in in under a minute.
     </p>
 
     <!-- Step-by-step guide with numbered circles -->
@@ -1442,7 +1442,7 @@ export function passkeyRecoveryNudgeEmail({
                     <td style="width:30px;vertical-align:middle;">
                       <span style="display:inline-block;width:24px;height:24px;border-radius:50%;background:${COLORS.sage500};color:#fff;font-size:12px;font-weight:700;line-height:24px;text-align:center;">3</span>
                     </td>
-                    <td style="padding-left:12px;font-size:15px;color:${COLORS.slate};line-height:1.5;">Tap <strong>&ldquo;Add Face ID sign-in&rdquo;</strong></td>
+                    <td style="padding-left:12px;font-size:15px;color:${COLORS.slate};line-height:1.5;">Tap <strong>&ldquo;Add passkey sign-in&rdquo;</strong></td>
                   </tr>
                 </table>
               </td>
@@ -1479,8 +1479,8 @@ export function passkeySetupNudgeEmail({
   enrollUrl: string
   email?: string
 }): EmailTemplate {
-  const subject = `Skip the email wait — sign in to Lumira with Face ID`
-  const preheader = `Set up Face ID sign-in in under 30 seconds. No more hunting for the link.`
+  const subject = `Skip the email wait — sign in to Lumira instantly`
+  const preheader = `Set up passkey sign-in in under 30 seconds. No more hunting for the link.`
 
   const safeName = escapeHtml(firstName)
 
@@ -1518,7 +1518,7 @@ export function passkeySetupNudgeEmail({
                     <td style="padding:14px 16px;background:#EBF5F4;border-radius:10px;text-align:center;">
                       <p style="margin:0 0 4px 0;font-size:20px;">&#128683;</p>
                       <p style="margin:0;font-size:13px;font-weight:700;color:${COLORS.sage600};">No expired links</p>
-                      <p style="margin:4px 0 0 0;font-size:12px;color:${COLORS.muted};line-height:1.4;">Links expire — Face ID never does</p>
+                      <p style="margin:4px 0 0 0;font-size:12px;color:${COLORS.muted};line-height:1.4;">Links expire — passkeys never do</p>
                     </td>
                   </tr>
                 </table>
@@ -1554,7 +1554,7 @@ export function passkeySetupNudgeEmail({
       </tr>
     </table>
 
-    ${ctaButton('Set up Face ID sign-in', enrollUrl)}
+    ${ctaButton('Set up passkey sign-in', enrollUrl)}
 
     <p style="margin:16px 0 0 0;font-size:14px;color:${COLORS.muted};text-align:center;line-height:1.6;">
       Takes less than 30 seconds. Your biometric data never leaves your device.
