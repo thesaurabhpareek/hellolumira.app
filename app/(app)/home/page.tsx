@@ -526,10 +526,12 @@ export default async function HomePage() {
           bottom: 'calc(56px + max(0px, env(safe-area-inset-bottom)))',
           left: 0,
           right: 0,
-          background: 'var(--color-white)',
+          background: 'var(--color-surface)',
           borderTop: '1px solid var(--color-border)',
-          padding: '12px 16px',
+          padding: '10px 16px',
           zIndex: 50,
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
         }}
       >
         <div className="content-width mx-auto" style={{ display: 'flex', gap: '12px' }}>
@@ -550,7 +552,7 @@ export default async function HomePage() {
               justifyContent: 'center',
               borderRadius: 'var(--radius-md)',
               border: '1.5px solid var(--color-border)',
-              background: 'var(--color-white)',
+              background: 'var(--color-card)',
               color: 'var(--color-slate)',
               fontSize: '14px',
               fontWeight: 600,
