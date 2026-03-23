@@ -84,6 +84,43 @@ export default function ProfileCompletionSection({
     }
   }
 
+  // When all basic setup steps are done, show a minimal collapsed state
+  if (allDone) {
+    return (
+      <div
+        className="lumira-card mb-4"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          padding: '14px 16px',
+        }}
+      >
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style={{ flexShrink: 0 }}>
+          <circle cx="9" cy="9" r="9" fill="#22C55E" />
+          <path d="M5 9l3 3 5-5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+        <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-slate)', margin: 0 }}>
+          Getting Started
+        </p>
+        <span
+          style={{
+            marginLeft: 'auto',
+            fontSize: '12px',
+            fontWeight: 600,
+            color: '#15803D',
+            background: '#F0FDF4',
+            border: '1px solid #BBF7D0',
+            padding: '3px 10px',
+            borderRadius: '100px',
+          }}
+        >
+          Done ✓
+        </span>
+      </div>
+    )
+  }
+
   return (
     <div className="lumira-card mb-4">
       {/* Header */}
@@ -97,19 +134,19 @@ export default function ProfileCompletionSection({
             letterSpacing: '0.5px',
           }}
         >
-          Your Journey
+          Getting Started
         </p>
         <span
           style={{
             fontSize: '12px',
             fontWeight: 700,
-            color: allDone ? '#22C55E' : 'var(--color-primary)',
-            background: allDone ? '#F0FDF4' : 'var(--color-primary-light)',
+            color: 'var(--color-primary)',
+            background: 'var(--color-primary-light)',
             padding: '3px 10px',
             borderRadius: '100px',
           }}
         >
-          {allDone ? 'Complete!' : `${completedCount}/${items.length}`}
+          {`${completedCount}/${items.length}`}
         </span>
       </div>
 
@@ -128,9 +165,7 @@ export default function ProfileCompletionSection({
             height: '100%',
             width: `${percentage}%`,
             borderRadius: '3px',
-            background: allDone
-              ? 'linear-gradient(90deg, #22C55E, #16A34A)'
-              : 'linear-gradient(90deg, var(--color-primary), #5BA89F)',
+            background: 'linear-gradient(90deg, var(--color-primary), #5BA89F)',
             transition: 'width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)',
           }}
         />
@@ -325,24 +360,6 @@ export default function ProfileCompletionSection({
           )
         })}
       </div>
-
-      {/* All done celebration */}
-      {allDone && (
-        <div
-          style={{
-            marginTop: '16px',
-            padding: '14px',
-            borderRadius: 'var(--radius-md)',
-            background: '#F0FDF4',
-            border: '1px solid #BBF7D0',
-            textAlign: 'center',
-          }}
-        >
-          <p style={{ fontSize: '14px', fontWeight: 600, color: '#15803D' }}>
-            🎉 Your profile is complete!
-          </p>
-        </div>
-      )}
 
       {/* Toast */}
       {toast && (

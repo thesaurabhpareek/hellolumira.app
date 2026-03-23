@@ -183,7 +183,7 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
         aria-label="Report a bug"
         className="fixed right-4 rounded-full bg-foreground border-none cursor-pointer flex items-center justify-center z-40 transition-[transform,box-shadow] duration-200 ease-in-out"
         style={{
-          bottom: 'calc(70px + max(0px, env(safe-area-inset-bottom)))',
+          bottom: 'calc(120px + max(0px, env(safe-area-inset-bottom)))',
           width: '44px',
           height: '44px',
           boxShadow: '0 4px 12px rgba(0,0,0,0.2)',

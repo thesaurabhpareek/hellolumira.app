@@ -245,7 +245,7 @@ export default async function HomePage() {
         display: 'flex',
         flexDirection: 'column',
         background: 'var(--color-surface)',
-        paddingBottom: '24px',
+        paddingBottom: '160px',
       }}
     >
       <div className="content-width mx-auto px-4 pt-6">
