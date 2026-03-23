@@ -94,6 +94,7 @@ export default function ContentPage() {
   const [loading, setLoading] = useState(true)
   const [activeStage, setActiveStage] = useState<Stage>('pregnancy')
   const [userStage, setUserStage] = useState<Stage | null>(null)
+  const [userWeekOrMonth, setUserWeekOrMonth] = useState<number | null>(null)
   const [activeCategory, setActiveCategory] = useState<Category | 'all'>('all')
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -115,13 +116,31 @@ export default function ContentPage() {
         if (!memberData?.baby_id) return
         const { data: babyData } = await supabase
           .from('baby_profiles')
-          .select('stage')
+          .select('stage, due_date, date_of_birth')
           .eq('id', memberData.baby_id)
           .single()
         if (babyData?.stage) {
           const detectedStage = babyData.stage as Stage
           setUserStage(detectedStage)
           setActiveStage(detectedStage)
+
+          // Compute user's current week/month for proximity-based sorting
+          const today = new Date()
+          if (detectedStage === 'pregnancy' && babyData.due_date) {
+            const msPerWeek = 7 * 24 * 60 * 60 * 1000
+            const dueDate = new Date(babyData.due_date)
+            const pregnancyWeek = Math.round(40 - (dueDate.getTime() - today.getTime()) / msPerWeek)
+            setUserWeekOrMonth(Math.max(1, Math.min(42, pregnancyWeek)))
+          } else if ((detectedStage === 'infant' || detectedStage === 'toddler' || detectedStage === 'postpartum') && babyData.date_of_birth) {
+            const msPerDay = 24 * 60 * 60 * 1000
+            const dob = new Date(babyData.date_of_birth)
+            const daysOld = Math.floor((today.getTime() - dob.getTime()) / msPerDay)
+            if (detectedStage === 'toddler') {
+              setUserWeekOrMonth(Math.floor(daysOld / 30))
+            } else {
+              setUserWeekOrMonth(Math.floor(daysOld / 7))
+            }
+          }
         }
       } catch {
         // Silently fail — default stage is fine
@@ -170,12 +189,26 @@ export default function ContentPage() {
         setError("We couldn't load articles right now. Please try again.")
         setArticles([])
       } else {
-        // Prioritize: articles whose primary stage matches first,
-        // then articles that match via target_stages
+        const isOwnStage = activeStage === userStage
+        const wom = userWeekOrMonth ?? 0
         const sorted = (data || []).sort((a, b) => {
+          // Primary stage articles always rank above cross-stage matches
           const aIsPrimary = a.stage === activeStage ? 0 : 1
           const bIsPrimary = b.stage === activeStage ? 0 : 1
           if (aIsPrimary !== bIsPrimary) return aIsPrimary - bIsPrimary
+
+          // On the user's own stage: sort by proximity to their current week/month
+          // so the most relevant content surfaces first
+          if (isOwnStage && wom > 0) {
+            const aDelta = (a.week_or_month ?? 0) - wom
+            const bDelta = (b.week_or_month ?? 0) - wom
+            // Slight look-ahead preference: up to 4 ahead = same as current
+            const aDist = aDelta >= 0 && aDelta <= 4 ? 0 : Math.abs(aDelta)
+            const bDist = bDelta >= 0 && bDelta <= 4 ? 0 : Math.abs(bDelta)
+            return aDist - bDist
+          }
+
+          // On other stages: chronological order (good for browsing the journey)
           return (a.week_or_month ?? 0) - (b.week_or_month ?? 0)
         })
         setArticles(sorted)
@@ -186,7 +219,7 @@ export default function ContentPage() {
     } finally {
       setLoading(false)
     }
-  }, [activeStage, activeCategory, supabase])
+  }, [activeStage, activeCategory, supabase, userStage, userWeekOrMonth])
 
   useEffect(() => {
     fetchArticles()

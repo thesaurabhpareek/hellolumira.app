@@ -25,8 +25,8 @@ const COPY: Record<Stage, { headline: string; sub: string }> = {
     sub: 'Lumira helps you understand your body, prepare your health, and navigate the emotional side of trying to conceive \u2014 with guidance grounded in real evidence, not noise.',
   },
   pregnancy: {
-    headline: 'You shouldn\u2019t have to figure this out alone.',
-    sub: 'Week-by-week guidance on your pregnancy and your baby \u2014 from someone who notices what you\u2019re afraid to ask about, and never makes you feel behind.',
+    headline: 'Every week brings new questions, new worries, and new wonder. You shouldn\u2019t have to navigate it alone.',
+    sub: 'Lumira gives you week-by-week guidance through every trimester \u2014 noticing the things your appointments don\u2019t have time for, and answering the questions you\u2019re afraid to Google at 2am.',
   },
   infant: {
     headline: 'New baby, new questions \u2014 every single week. You don\u2019t have to figure them out alone.',
