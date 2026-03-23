@@ -2,8 +2,9 @@
 'use client'
 
 import { useState, useEffect, useRef, Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { isPasskeySupported, isConditionalMediationAvailable, signInWithPasskey } from '@/lib/webauthn-client'
 
 type AuthState = 'idle' | 'loading' | 'success' | 'success_existing' | 'error' | 'rate_limited'
 type GoogleState = 'idle' | 'loading'
@@ -30,6 +31,7 @@ function callbackErrorMessage(code: string | null): string {
 
 function LoginForm() {
   const searchParams = useSearchParams()
+  const router = useRouter()
   const callbackError = callbackErrorMessage(searchParams.get('error'))
   const isSignup = searchParams.get('mode') === 'signup'
 
@@ -39,6 +41,25 @@ function LoginForm() {
   const [cooldown, setCooldown] = useState(0)
   const [googleState, setGoogleState] = useState<GoogleState>('idle')
   const cooldownRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  // Passkey state
+  const [passkeyEnrolled, setPasskeyEnrolled] = useState(false)
+  const [passkeyLoading, setPasskeyLoading] = useState(false)
+  const [conditionalMediationReady, setConditionalMediationReady] = useState(false)
+
+  // On mount: check if passkey is enrolled and if conditional mediation is available
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    try {
+      setPasskeyEnrolled(
+        isPasskeySupported() && localStorage.getItem('lumira_passkey_enrolled') === '1'
+      )
+    } catch {}
+
+    isConditionalMediationAvailable().then((available) => {
+      setConditionalMediationReady(available)
+    })
+  }, [])
 
   // Countdown timer for resend cooldown
   useEffect(() => {
@@ -63,6 +84,38 @@ function LoginForm() {
   const startCooldown = () => {
     if (cooldownRef.current) clearInterval(cooldownRef.current)
     setCooldown(RESEND_COOLDOWN_SECONDS)
+  }
+
+  const handlePasskeySignIn = async () => {
+    setPasskeyLoading(true)
+    setErrorMessage('')
+
+    const result = await signInWithPasskey(email || undefined)
+    setPasskeyLoading(false)
+
+    if (!result.success) {
+      if (result.cancelled) {
+        // User dismissed biometric prompt — do nothing
+        return
+      }
+      setErrorMessage(result.error)
+      setState('error')
+      return
+    }
+
+    // Verify OTP using the token hash returned from the passkey API
+    const supabase = createClient()
+    const { error } = await supabase.auth.verifyOtp({
+      token_hash: result.tokenHash,
+      type: 'magiclink',
+    })
+    if (error) {
+      setErrorMessage('Sign-in failed. Please try a magic link.')
+      setState('error')
+      return
+    }
+
+    router.push('/home')
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -228,6 +281,63 @@ function LoginForm() {
               ? 'Join Lumira — your AI parenting companion. Free, private, no download needed.'
               : 'Sign in or create an account to get started.'}
           </p>
+
+          {/* Passkey sign-in button — only for enrolled users */}
+          {passkeyEnrolled && state !== 'success' && state !== 'success_existing' && (
+            <div style={{ marginBottom: '16px' }}>
+              <button
+                onClick={handlePasskeySignIn}
+                disabled={passkeyLoading}
+                style={{
+                  width: '100%',
+                  height: '52px',
+                  borderRadius: 'var(--radius-md)',
+                  background: 'var(--color-primary)',
+                  color: '#fff',
+                  border: 'none',
+                  cursor: passkeyLoading ? 'not-allowed' : 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '10px',
+                  fontSize: '16px',
+                  fontWeight: 600,
+                  opacity: passkeyLoading ? 0.7 : 1,
+                  fontFamily: 'inherit',
+                  transition: 'opacity 0.15s ease',
+                }}
+              >
+                {passkeyLoading ? (
+                  <>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ animation: 'spin 0.8s linear infinite' }} aria-hidden="true">
+                      <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                    </svg>
+                    Signing in...
+                  </>
+                ) : (
+                  <>
+                    {/* Fingerprint / Face ID icon */}
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M12 1C8.5 1 5.5 3.5 5.5 7v1" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                      <path d="M18.5 8V7c0-3.5-3-6-6.5-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                      <path d="M9 11c0-1.66 1.34-3 3-3s3 1.34 3 3v2c0 1.66-1.34 3-3 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                      <path d="M12 17v3" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                      <path d="M6 11c0-3.31 2.69-6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.5"/>
+                      <path d="M18 11c0-1.66-.67-3.16-1.76-4.24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.5"/>
+                    </svg>
+                    Sign in with Face ID
+                  </>
+                )}
+              </button>
+
+              {/* Divider between passkey and other options */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '16px' }}>
+                <div style={{ flex: 1, height: '1px', background: 'var(--color-border)' }} />
+                <span style={{ fontSize: '13px', color: 'var(--color-muted)', fontWeight: 500 }}>or sign in another way</span>
+                <div style={{ flex: 1, height: '1px', background: 'var(--color-border)' }} />
+              </div>
+            </div>
+          )}
 
           {/* Google sign-in button */}
           {state !== 'success' && state !== 'success_existing' && (
@@ -498,7 +608,7 @@ function LoginForm() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
                   disabled={state === 'loading'}
-                  autoComplete="email"
+                  autoComplete={conditionalMediationReady ? 'username webauthn' : 'email'}
                   enterKeyHint="send"
                   autoFocus
                   required
