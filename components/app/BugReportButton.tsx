@@ -115,8 +115,8 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
 
   // Get the app container bounds (respects max-width constraint)
   const getAppBounds = useCallback(() => {
-    // Find the AppShell container (h-dvh flex parent)
-    const appShell = document.querySelector('.h-dvh')
+    // Find the AppShell container via data attribute (reliable across builds)
+    const appShell = document.querySelector('[data-appshell]')
     if (appShell) {
       const rect = appShell.getBoundingClientRect()
       return { left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom, width: rect.width, height: rect.height }
@@ -178,7 +178,7 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
     const dx = touch.clientX - dragRef.current.startX
     const dy = touch.clientY - dragRef.current.startY
 
-    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) {
+    if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
       dragRef.current.moved = true
     }
 
