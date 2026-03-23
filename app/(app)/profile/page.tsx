@@ -658,6 +658,7 @@ export default async function ProfilePage() {
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
             {([
+              { href: '/settings/security', title: 'Sign-in & Security', subtitle: 'Face ID, passkeys, account protection', icon: <ShieldIcon size={20} color="var(--color-primary)" /> },
               { href: '/settings', title: 'My Settings', subtitle: 'Account preferences, notifications', icon: <SettingsIcon size={20} color="var(--color-muted)" /> },
               { href: '/settings/privacy', title: 'Privacy & Data', subtitle: 'AI processing, data retention, exports', icon: <ShieldIcon size={20} color="var(--color-muted)" /> },
               { href: '/share', title: 'Share the Love', subtitle: 'Invite friends and family', icon: <ShareIcon size={20} color="var(--color-muted)" /> },

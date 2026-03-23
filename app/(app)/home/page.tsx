@@ -20,6 +20,7 @@ import SeedsBalancePill from '@/components/app/SeedsBalancePill'
 import StageHeroCard from '@/components/app/StageHeroCard'
 import ThemeToggleButton from '@/components/app/ThemeToggleButton'
 import StoryStrip from '@/components/app/stories/StoryStrip'
+import PasskeyNudge from './PasskeyNudge'
 import { ClipboardIcon, ChatIcon, EditIcon, QuizIcon, CheckIcon } from '@/components/icons'
 import type { Profile, BabyProfile, DailyCheckin, PatternType, Stage } from '@/types/app'
 import type { TribePostPreview } from '@/components/app/TribePeekCard'
@@ -569,6 +570,7 @@ export default async function HomePage() {
         </div>
       </div>
 
+      <PasskeyNudge />
     </div>
   )
 }
