@@ -3,22 +3,7 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { useToast, ToastContainer } from '@/components/ui/toast'
-import PasskeyList from '@/components/app/PasskeyList'
-
-/* ------------------------------------------------------------------ */
-/*  Types                                                              */
-/* ------------------------------------------------------------------ */
-
-export interface PasskeyFactor {
-  id: string
-  friendly_name: string | null
-  factor_type: string
-  status: string
-  created_at: string
-  updated_at: string
-  backed_up?: boolean
-  last_used_at?: string | null
-}
+import PasskeyList, { type PasskeyFactor } from '@/components/app/PasskeyList'
 
 type LoadingState = 'loading' | 'ready' | 'error'
 

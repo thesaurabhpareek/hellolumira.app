@@ -1,13 +1,27 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import type { PasskeyFactor } from '@/app/(app)/settings/security/page'
+
+/* ------------------------------------------------------------------ */
+/*  PasskeyFactor type (exported so security page can import it)      */
+/* ------------------------------------------------------------------ */
+
+export interface PasskeyFactor {
+  id: string
+  friendly_name: string | null
+  factor_type: string
+  status: string
+  created_at: string
+  updated_at: string
+  backed_up?: boolean
+  last_used_at?: string | null
+}
 
 /* ------------------------------------------------------------------ */
 /*  Device icon helpers                                                */
 /* ------------------------------------------------------------------ */
 
-function iPhoneIcon({ color = 'var(--color-primary)' }: { color?: string }) {
+function IPhoneIcon({ color = 'var(--color-primary)' }: { color?: string }) {
   return (
     <svg width={20} height={20} viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <rect x="5" y="2" width="14" height="20" rx="3" stroke={color} strokeWidth={1.75} />
@@ -44,10 +58,10 @@ function ShieldDeviceIcon({ color = 'var(--color-primary)' }: { color?: string }
 
 function DeviceIcon({ name }: { name: string | null }) {
   const lower = (name ?? '').toLowerCase()
-  if (lower.includes('iphone')) return iPhoneIcon({})
-  if (lower.includes('mac') || lower.includes('macbook') || lower.includes('laptop') || lower.includes('windows') || lower.includes('chrome')) return LaptopIcon({})
-  if (lower.includes('android') || lower.includes('pixel') || lower.includes('samsung') || lower.includes('galaxy')) return AndroidIcon({})
-  return ShieldDeviceIcon({})
+  if (lower.includes('iphone')) return <IPhoneIcon />
+  if (lower.includes('mac') || lower.includes('macbook') || lower.includes('laptop') || lower.includes('windows') || lower.includes('chrome')) return <LaptopIcon />
+  if (lower.includes('android') || lower.includes('pixel') || lower.includes('samsung') || lower.includes('galaxy')) return <AndroidIcon />
+  return <ShieldDeviceIcon />
 }
 
 /* ------------------------------------------------------------------ */
@@ -108,7 +122,7 @@ function RemoveModal({ passkey, onConfirm, onCancel }: RemoveModalProps) {
       if (e.message === 'rate_limit') {
         setErrorMsg('Too many passkeys removed recently. Please wait 24 hours.')
       } else {
-        setErrorMsg('Couldn\'t remove passkey. Please try again.')
+        setErrorMsg("Couldn't remove passkey. Please try again.")
       }
       setSubmitting(false)
     }
@@ -211,17 +225,6 @@ function RemoveModal({ passkey, onConfirm, onCancel }: RemoveModalProps) {
 /* ------------------------------------------------------------------ */
 /*  Passkey row                                                        */
 /* ------------------------------------------------------------------ */
-
-interface PasskeyFactor {
-  id: string
-  friendly_name: string | null
-  factor_type: string
-  status: string
-  created_at: string
-  updated_at: string
-  backed_up?: boolean
-  last_used_at?: string | null
-}
 
 interface PasskeyRowProps {
   passkey: PasskeyFactor
@@ -364,7 +367,7 @@ export default function PasskeyList({ passkeys, onRemove }: PasskeyListProps) {
     try {
       await onRemove(factorId)
     } catch (err) {
-      // Re-animate back in on error
+      // Reverse animation on error
       setRemovingIds((prev) => {
         const next = new Set(prev)
         next.delete(factorId)
@@ -394,13 +397,17 @@ export default function PasskeyList({ passkeys, onRemove }: PasskeyListProps) {
         ))}
       </div>
 
-      {confirmingRemove && (
-        <RemoveModal
-          passkey={passkeys.find((p) => p.id === confirmingRemove)!}
-          onConfirm={() => handleConfirmRemove(confirmingRemove)}
-          onCancel={() => setConfirmingRemove(null)}
-        />
-      )}
+      {confirmingRemove && (() => {
+        const found = passkeys.find((p) => p.id === confirmingRemove)
+        if (!found) return null
+        return (
+          <RemoveModal
+            passkey={found}
+            onConfirm={() => handleConfirmRemove(confirmingRemove)}
+            onCancel={() => setConfirmingRemove(null)}
+          />
+        )
+      })()}
     </>
   )
 }
