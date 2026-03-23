@@ -1,8 +1,9 @@
 /**
  * @module BugReportButton
- * @description Floating bug report button + modal. Auto-captures device info,
- *   browser details, console logs, and user context. Submits to /api/bug-report.
- * @version 1.0.0
+ * @description Apple AssistiveTouch-style draggable floating feedback button.
+ *   Semi-transparent, snaps to edges, smooth spring physics on drag.
+ *   Opens a feedback modal on tap.
+ * @version 2.0.0
  * @since March 2026
  */
 'use client'
@@ -20,7 +21,7 @@ interface CapturedLog {
   timestamp: string
 }
 
-// Capture recent console logs globally (guard against duplicate monkey-patching from HMR)
+// Capture recent console logs globally
 const recentLogs: CapturedLog[] = []
 const MAX_LOGS = 50
 
@@ -49,18 +50,9 @@ if (typeof window !== 'undefined' && !((window as unknown) as Record<string, unk
     if (recentLogs.length > MAX_LOGS) recentLogs.shift()
   }
 
-  console.log = (...args: unknown[]) => {
-    captureLog('log', args)
-    originalConsole.log(...args)
-  }
-  console.warn = (...args: unknown[]) => {
-    captureLog('warn', args)
-    originalConsole.warn(...args)
-  }
-  console.error = (...args: unknown[]) => {
-    captureLog('error', args)
-    originalConsole.error(...args)
-  }
+  console.log = (...args: unknown[]) => { captureLog('log', args); originalConsole.log(...args) }
+  console.warn = (...args: unknown[]) => { captureLog('warn', args); originalConsole.warn(...args) }
+  console.error = (...args: unknown[]) => { captureLog('error', args); originalConsole.error(...args) }
 }
 
 function getDeviceInfo() {
@@ -74,7 +66,6 @@ function getDeviceInfo() {
   else if (ua.includes('Edg/')) browser = 'Edge'
   else if (ua.includes('Chrome/') && !ua.includes('Edg/')) browser = 'Chrome'
   else if (ua.includes('Safari/') && !ua.includes('Chrome/')) browser = 'Safari'
-  else if (ua.includes('Opera/') || ua.includes('OPR/')) browser = 'Opera'
 
   let os = 'unknown'
   if (ua.includes('Windows')) os = 'Windows'
@@ -84,9 +75,7 @@ function getDeviceInfo() {
   else if (ua.includes('Linux')) os = 'Linux'
 
   return {
-    deviceType,
-    browser,
-    os,
+    deviceType, browser, os,
     userAgent: ua,
     screenResolution: `${window.screen.width}x${window.screen.height}`,
     pageUrl: window.location.href,
@@ -100,6 +89,11 @@ const CATEGORIES = [
   { value: 'other', label: 'Other', emoji: '📝' },
 ]
 
+const BUTTON_SIZE = 44
+const EDGE_MARGIN = 8
+const IDLE_OPACITY = 0.35
+const ACTIVE_OPACITY = 0.85
+
 export default function BugReportButton({ userEmail, userName }: BugReportButtonProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [subject, setSubject] = useState('')
@@ -108,19 +102,134 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState('')
+
+  // Drag state
+  const [pos, setPos] = useState({ x: 0, y: 0 })
+  const [dragging, setDragging] = useState(false)
+  const [opacity, setOpacity] = useState(IDLE_OPACITY)
+  const dragRef = useRef({ startX: 0, startY: 0, startPosX: 0, startPosY: 0, moved: false })
+  const buttonRef = useRef<HTMLButtonElement>(null)
   const modalRef = useRef<HTMLDivElement>(null)
+  const idleTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // Initialize position — right edge, 60% down
+  useEffect(() => {
+    const vw = window.innerWidth
+    const vh = window.innerHeight
+    setPos({
+      x: vw - BUTTON_SIZE - EDGE_MARGIN,
+      y: Math.round(vh * 0.6),
+    })
+  }, [])
+
+  // Fade to idle after 3s of no interaction
+  const resetIdleTimer = useCallback(() => {
+    if (idleTimer.current) clearTimeout(idleTimer.current)
+    setOpacity(ACTIVE_OPACITY)
+    idleTimer.current = setTimeout(() => setOpacity(IDLE_OPACITY), 3000)
+  }, [])
+
+  useEffect(() => {
+    resetIdleTimer()
+    return () => { if (idleTimer.current) clearTimeout(idleTimer.current) }
+  }, [resetIdleTimer])
+
+  // Snap to nearest edge
+  const snapToEdge = useCallback((x: number, y: number) => {
+    const vw = window.innerWidth
+    const vh = window.innerHeight
+    const centerX = x + BUTTON_SIZE / 2
+    const snapX = centerX < vw / 2 ? EDGE_MARGIN : vw - BUTTON_SIZE - EDGE_MARGIN
+    const snapY = Math.max(EDGE_MARGIN + 60, Math.min(y, vh - BUTTON_SIZE - EDGE_MARGIN - 80))
+    return { x: snapX, y: snapY }
+  }, [])
+
+  // Touch handlers for drag
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    const touch = e.touches[0]
+    dragRef.current = {
+      startX: touch.clientX,
+      startY: touch.clientY,
+      startPosX: pos.x,
+      startPosY: pos.y,
+      moved: false,
+    }
+    setDragging(true)
+    setOpacity(ACTIVE_OPACITY)
+  }, [pos])
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (!dragging) return
+    const touch = e.touches[0]
+    const dx = touch.clientX - dragRef.current.startX
+    const dy = touch.clientY - dragRef.current.startY
+
+    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) {
+      dragRef.current.moved = true
+    }
+
+    setPos({
+      x: dragRef.current.startPosX + dx,
+      y: dragRef.current.startPosY + dy,
+    })
+  }, [dragging])
+
+  const handleTouchEnd = useCallback(() => {
+    setDragging(false)
+    const snapped = snapToEdge(pos.x, pos.y)
+    setPos(snapped)
+    resetIdleTimer()
+
+    // If didn't move, treat as tap
+    if (!dragRef.current.moved) {
+      setIsOpen(true)
+    }
+  }, [pos, snapToEdge, resetIdleTimer])
+
+  // Mouse handlers for desktop drag
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    e.preventDefault()
+    dragRef.current = {
+      startX: e.clientX,
+      startY: e.clientY,
+      startPosX: pos.x,
+      startPosY: pos.y,
+      moved: false,
+    }
+    setDragging(true)
+    setOpacity(ACTIVE_OPACITY)
+
+    const onMove = (ev: MouseEvent) => {
+      const dx = ev.clientX - dragRef.current.startX
+      const dy = ev.clientY - dragRef.current.startY
+      if (Math.abs(dx) > 4 || Math.abs(dy) > 4) dragRef.current.moved = true
+      setPos({
+        x: dragRef.current.startPosX + dx,
+        y: dragRef.current.startPosY + dy,
+      })
+    }
+
+    const onUp = () => {
+      setDragging(false)
+      setPos((p) => snapToEdge(p.x, p.y))
+      resetIdleTimer()
+      if (!dragRef.current.moved) setIsOpen(true)
+      window.removeEventListener('mousemove', onMove)
+      window.removeEventListener('mouseup', onUp)
+    }
+
+    window.addEventListener('mousemove', onMove)
+    window.addEventListener('mouseup', onUp)
+  }, [pos, snapToEdge, resetIdleTimer])
 
   // Close on escape
   useEffect(() => {
     if (!isOpen) return
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsOpen(false)
-    }
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setIsOpen(false) }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [isOpen])
 
-  // Close on outside click
   const handleBackdropClick = useCallback((e: React.MouseEvent) => {
     if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
       setIsOpen(false)
@@ -132,10 +241,8 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
       setError('Please fill in both subject and description.')
       return
     }
-
     setIsSubmitting(true)
     setError('')
-
     try {
       const deviceInfo = getDeviceInfo()
       const res = await fetch('/api/bug-report', {
@@ -154,12 +261,10 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
           console_logs: recentLogs.slice(-30),
         }),
       })
-
       if (!res.ok) {
         const data = await res.json().catch(() => ({}))
         throw new Error(data.error || 'Failed to submit')
       }
-
       setSubmitted(true)
       setTimeout(() => {
         setIsOpen(false)
@@ -169,7 +274,7 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
         setCategory('bug')
       }, 2000)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
+      setError(err instanceof Error ? err.message : 'Something went wrong.')
     } finally {
       setIsSubmitting(false)
     }
@@ -177,29 +282,53 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
 
   return (
     <>
-      {/* Floating button */}
+      {/* Draggable floating button — Apple AssistiveTouch style */}
       <button
-        onClick={() => setIsOpen(true)}
-        aria-label="Report a bug"
-        className="fixed right-4 rounded-full bg-foreground border-none cursor-pointer flex items-center justify-center z-40 transition-[transform,box-shadow] duration-200 ease-in-out"
+        ref={buttonRef}
+        aria-label="Send feedback"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onMouseDown={handleMouseDown}
         style={{
-          bottom: 'calc(120px + max(0px, env(safe-area-inset-bottom)))',
-          width: '44px',
-          height: '44px',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'scale(1.1)'
-          e.currentTarget.style.boxShadow = '0 6px 16px rgba(0,0,0,0.25)'
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'scale(1)'
-          e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)'
+          position: 'fixed',
+          left: pos.x,
+          top: pos.y,
+          width: BUTTON_SIZE,
+          height: BUTTON_SIZE,
+          borderRadius: '50%',
+          border: 'none',
+          cursor: dragging ? 'grabbing' : 'grab',
+          zIndex: 9999,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: 'rgba(120, 120, 128, 0.24)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          boxShadow: dragging
+            ? '0 8px 32px rgba(0,0,0,0.2)'
+            : '0 2px 12px rgba(0,0,0,0.1)',
+          opacity,
+          transition: dragging
+            ? 'box-shadow 0.15s ease'
+            : 'left 0.35s cubic-bezier(0.25, 1, 0.5, 1), top 0.35s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.6s ease, box-shadow 0.2s ease, transform 0.15s ease',
+          transform: dragging ? 'scale(1.1)' : 'scale(1)',
+          touchAction: 'none',
+          WebkitTapHighlightColor: 'transparent',
+          userSelect: 'none',
         }}
       >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="12" r="10" />
-          <path d="M12 8v4M12 16h.01" />
+        {/* Chat bubble icon — universally understood as "feedback" */}
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={{ opacity: 0.7 }}>
+          <path
+            d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            style={{ color: 'var(--color-slate)' }}
+          />
         </svg>
       </button>
 
@@ -210,70 +339,61 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
           className="fixed inset-0 z-[200] flex items-end justify-center p-4"
           style={{
             background: 'rgba(0,0,0,0.4)',
-            animation: 'fadeIn 0.2s ease',
+            animation: 'feedbackFadeIn 0.2s ease',
           }}
         >
           <div
             ref={modalRef}
-            className="bg-[var(--color-white)] w-full overflow-y-auto"
+            className="bg-[var(--color-card)] w-full overflow-y-auto"
             style={{
               borderRadius: '20px 20px 12px 12px',
               maxWidth: '440px',
               maxHeight: '85vh',
               padding: '24px 20px',
               boxShadow: '0 -4px 30px rgba(0,0,0,0.15)',
-              animation: 'slideUp 0.25s ease',
+              animation: 'feedbackSlideUp 0.25s ease',
             }}
           >
             {submitted ? (
               <div className="text-center py-8">
                 <span className="text-[40px]">🎉</span>
-                <p className="font-bold text-[18px] text-foreground mt-3">
-                  Thank you!
-                </p>
+                <p className="font-bold text-[18px] text-foreground mt-3">Thank you!</p>
                 <p className="text-sm text-muted-foreground mt-[6px]">
-                  We have received your report and will look into it.
+                  We received your feedback and will look into it.
                 </p>
               </div>
             ) : (
               <>
-                {/* Header */}
                 <div className="flex items-center justify-between mb-5">
                   <div>
-                    <h2 className="text-[18px] font-bold text-foreground m-0">
-                      Report an Issue
-                    </h2>
-                    <p className="text-[13px] text-muted-foreground mt-0.5">
-                      Help us make Lumira better
-                    </p>
+                    <h2 className="text-[18px] font-bold text-foreground m-0">Share Feedback</h2>
+                    <p className="text-[13px] text-muted-foreground mt-0.5">Help us make Lumira better</p>
                   </div>
                   <button
                     onClick={() => setIsOpen(false)}
                     aria-label="Close"
-                    className="bg-background border-none rounded-full w-8 h-8 flex items-center justify-center cursor-pointer text-[18px] text-muted-foreground"
+                    className="bg-[var(--color-surface)] border-none rounded-full w-8 h-8 flex items-center justify-center cursor-pointer text-[18px] text-muted-foreground"
                   >
                     &times;
                   </button>
                 </div>
 
-                {/* Auto-captured info pill */}
                 <div className="flex flex-wrap gap-[6px] mb-4">
                   {userName && (
-                    <span className="text-[11px] bg-background px-[10px] py-[3px] rounded-[100px] text-muted-foreground font-medium">
+                    <span className="text-[11px] bg-[var(--color-surface)] px-[10px] py-[3px] rounded-[100px] text-muted-foreground font-medium">
                       {userName}
                     </span>
                   )}
                   {userEmail && (
-                    <span className="text-[11px] bg-background px-[10px] py-[3px] rounded-[100px] text-muted-foreground font-medium">
+                    <span className="text-[11px] bg-[var(--color-surface)] px-[10px] py-[3px] rounded-[100px] text-muted-foreground font-medium">
                       {userEmail}
                     </span>
                   )}
-                  <span className="text-[11px] bg-background px-[10px] py-[3px] rounded-[100px] text-muted-foreground font-medium">
+                  <span className="text-[11px] bg-[var(--color-surface)] px-[10px] py-[3px] rounded-[100px] text-muted-foreground font-medium">
                     Auto-capturing device info
                   </span>
                 </div>
 
-                {/* Category chips */}
                 <div className="flex gap-2 mb-4">
                   {CATEGORIES.map((cat) => (
                     <button
@@ -291,50 +411,33 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
                   ))}
                 </div>
 
-                {/* Subject */}
                 <input
                   type="text"
                   placeholder="What went wrong?"
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
                   autoFocus
-                  className="w-full rounded-md text-[15px] text-foreground bg-[var(--color-white)] outline-none mb-3 min-h-[48px]"
-                  style={{
-                    padding: '12px 16px',
-                    border: '1.5px solid var(--color-border)',
-                    fontFamily: 'inherit',
-                  }}
+                  className="w-full rounded-md text-[15px] text-foreground bg-[var(--color-card)] outline-none mb-3 min-h-[48px]"
+                  style={{ padding: '12px 16px', border: '1.5px solid var(--color-border)', fontFamily: 'inherit' }}
                 />
 
-                {/* Description */}
                 <textarea
-                  placeholder="Tell us more — what were you doing when this happened? What did you expect?"
+                  placeholder="Tell us more — what were you doing when this happened?"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   rows={4}
-                  className="w-full rounded-md text-[15px] text-foreground bg-[var(--color-white)] outline-none resize-y leading-[1.5] mb-4"
-                  style={{
-                    padding: '12px 16px',
-                    border: '1.5px solid var(--color-border)',
-                    minHeight: '100px',
-                    fontFamily: 'inherit',
-                  }}
+                  className="w-full rounded-md text-[15px] text-foreground bg-[var(--color-card)] outline-none resize-y leading-[1.5] mb-4"
+                  style={{ padding: '12px 16px', border: '1.5px solid var(--color-border)', minHeight: '100px', fontFamily: 'inherit' }}
                 />
 
-                {/* Error */}
-                {error && (
-                  <p className="text-[13px] text-destructive mb-3 font-medium">
-                    {error}
-                  </p>
-                )}
+                {error && <p className="text-[13px] text-destructive mb-3 font-medium">{error}</p>}
 
-                {/* Submit */}
                 <button
                   onClick={handleSubmit}
                   disabled={isSubmitting || !subject.trim() || !description.trim()}
                   className="btn-primary w-full"
                 >
-                  {isSubmitting ? 'Submitting...' : 'Submit Report'}
+                  {isSubmitting ? 'Submitting...' : 'Submit Feedback'}
                 </button>
               </>
             )}
@@ -343,8 +446,8 @@ export default function BugReportButton({ userEmail, userName }: BugReportButton
       )}
 
       <style>{`
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes feedbackFadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes feedbackSlideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
       `}</style>
     </>
   )
