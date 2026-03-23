@@ -6,7 +6,6 @@ import { createClient } from '@/lib/supabase/client'
 import type {
   PrivacyPreferences,
   ConsentRecord,
-  DataExportRequest,
 } from '@/types/app'
 import IOSToggle from '@/components/ui/ios-toggle'
 
@@ -85,7 +84,7 @@ export default function PrivacySettingsPage() {
   const [consentRecords, setConsentRecords] = useState<ConsentRecord[]>([])
 
   // Data export
-  const [exportRequest, setExportRequest] = useState<DataExportRequest | null>(null)
+  const [exportDownloaded, setExportDownloaded] = useState(false)
   const [exportSubmitting, setExportSubmitting] = useState(false)
 
   // Delete modal
@@ -151,17 +150,6 @@ export default function PrivacySettingsPage() {
 
       if (consents) setConsentRecords(consents as ConsentRecord[])
 
-      // Load latest export request
-      const { data: exportData } = await supabase
-        .from('data_export_requests')
-        .select('*')
-        .eq('profile_id', user.id)
-        .order('requested_at', { ascending: false })
-        .limit(1)
-        .maybeSingle()
-
-      if (exportData) setExportRequest(exportData as DataExportRequest)
-
       setState('ready')
     } catch {
       setState('error')
@@ -224,21 +212,29 @@ export default function PrivacySettingsPage() {
   /* ---------------------------------------------------------------- */
 
   async function requestExport() {
-    if (!userId) return
     setExportSubmitting(true)
 
-    const { data } = await supabase
-      .from('data_export_requests')
-      .insert({
-        profile_id: userId,
-        status: 'pending',
-        requested_at: new Date().toISOString(),
-      })
-      .select()
-      .single()
+    try {
+      const res = await fetch('/api/privacy/request-export', { method: 'POST' })
+      if (!res.ok) throw new Error('Export request failed')
 
-    if (data) setExportRequest(data as DataExportRequest)
-    setExportSubmitting(false)
+      const result = await res.json()
+      const blob = new Blob([JSON.stringify(result.data, null, 2)], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const date = new Date().toISOString().slice(0, 10)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `lumira-export-${date}.json`
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      URL.revokeObjectURL(url)
+      setExportDownloaded(true)
+    } catch {
+      // silently fail — user can retry
+    } finally {
+      setExportSubmitting(false)
+    }
   }
 
   /* ---------------------------------------------------------------- */
@@ -533,11 +529,11 @@ export default function PrivacySettingsPage() {
         <div className="lumira-card" style={{ borderRadius: '14px', marginBottom: '24px' }}>
           <SectionLabel>Download My Data</SectionLabel>
           <p style={{ fontSize: '13px', color: 'var(--color-muted)', lineHeight: 1.5, marginBottom: '16px' }}>
-            You can request a copy of all the data Lumira holds about you. This is your right under GDPR Article 20.
-            Your download will be prepared and you&apos;ll be notified when it&apos;s ready.
+            Download a copy of all the data Lumira holds about you. This is your right under GDPR Article 20.
+            Your file will be prepared and downloaded immediately.
           </p>
 
-          {exportRequest && exportRequest.status !== 'expired' ? (
+          {exportDownloaded && (
             <div
               style={{
                 padding: '14px 16px',
@@ -547,37 +543,20 @@ export default function PrivacySettingsPage() {
                 marginBottom: '12px',
               }}
             >
-              <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-primary)', marginBottom: '4px' }}>
-                Export status: {exportRequest.status}
+              <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-primary)' }}>
+                Your data has been downloaded
               </p>
-              <p style={{ fontSize: '13px', color: 'var(--color-muted)' }}>
-                Requested {new Date(exportRequest.requested_at).toLocaleDateString('en-US', {
-                  month: 'short',
-                  day: 'numeric',
-                  year: 'numeric',
-                })}
-              </p>
-              {exportRequest.status === 'ready' && exportRequest.download_url && (
-                <a
-                  href={exportRequest.download_url}
-                  download
-                  className="btn-primary"
-                  style={{ marginTop: '12px', textDecoration: 'none' }}
-                >
-                  Download
-                </a>
-              )}
             </div>
-          ) : (
-            <button
-              className="btn-ghost"
-              onClick={requestExport}
-              disabled={exportSubmitting}
-              style={{ maxWidth: '220px' }}
-            >
-              {exportSubmitting ? 'Requesting...' : 'Download my data'}
-            </button>
           )}
+
+          <button
+            className="btn-ghost"
+            onClick={requestExport}
+            disabled={exportSubmitting}
+            style={{ maxWidth: '220px' }}
+          >
+            {exportSubmitting ? 'Preparing...' : 'Download my data'}
+          </button>
 
           <p style={{ fontSize: '12px', color: 'var(--color-muted)', marginTop: '12px', lineHeight: 1.5 }}>
             Your data export will include check-ins, journal entries, consent records, and profile information.
