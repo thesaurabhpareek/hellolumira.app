@@ -16,10 +16,14 @@ const SAND_400 = '#857F78'  // WCAG AA compliant on #FAFAF8 (~4.7:1)
 const SAND_500 = '#706D67'  // WCAG AA compliant on white footer background (~5.2:1)
 const SLATE    = '#2D3748'
 
-type Stage = 'pregnancy' | 'infant'
+type Stage = 'planning' | 'pregnancy' | 'infant'
 type PainPoint = { quote: string; answer: string }
 
 const COPY: Record<Stage, { headline: string; sub: string }> = {
+  planning: {
+    headline: 'Planning a baby is one of the biggest decisions you\u2019ll ever make. You shouldn\u2019t have to figure it out alone.',
+    sub: 'Lumira helps you understand your body, prepare your health, and navigate the emotional side of trying to conceive \u2014 with guidance grounded in real evidence, not noise.',
+  },
   pregnancy: {
     headline: 'You shouldn\u2019t have to figure this out alone.',
     sub: 'Week-by-week guidance on your pregnancy and your baby \u2014 from someone who notices what you\u2019re afraid to ask about, and never makes you feel behind.',
@@ -128,6 +132,7 @@ export default function LandingPage() {
                 style={{ display: 'flex', gap: 6, padding: 4, borderRadius: 28, background: 'white', border: `1px solid ${SAND_100}` }}
               >
                 {([
+                  { key: 'planning'  as Stage, label: 'Planning a baby' },
                   { key: 'pregnancy' as Stage, label: "We're expecting" },
                   { key: 'infant'    as Stage, label: 'Our baby is here' },
                 ]).map(({ key, label }) => (

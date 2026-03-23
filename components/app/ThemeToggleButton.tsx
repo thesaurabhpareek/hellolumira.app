@@ -9,17 +9,24 @@ export default function ThemeToggleButton() {
   return (
     <button
       onClick={() => setTheme(isDark ? 'light' : 'dark')}
-      className="press-scale flex items-center justify-center w-9 h-9 rounded-full transition-colors"
       style={{
-        background: 'transparent',
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '36px',
+        height: '36px',
+        borderRadius: '50%',
+        background: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.04)',
         border: 'none',
         cursor: 'pointer',
+        padding: 0,
+        flexShrink: 0,
+        transition: 'background 0.2s ease',
       }}
       aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
     >
       {isDark ? (
-        /* Sun icon — shown in dark mode (tap to go light) */
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary, #C8C4BC)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F6E05E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="5" />
           <line x1="12" y1="1" x2="12" y2="3" />
           <line x1="12" y1="21" x2="12" y2="23" />
@@ -31,8 +38,7 @@ export default function ThemeToggleButton() {
           <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
         </svg>
       ) : (
-        /* Moon icon — shown in light mode (tap to go dark) */
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary, #718096)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
         </svg>
       )}
