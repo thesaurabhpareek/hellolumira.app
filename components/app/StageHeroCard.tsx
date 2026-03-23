@@ -38,8 +38,8 @@ function getStageConfig(stage: Stage, babyName: string | null, planningSubOption
       : 'conception'
 
     return {
-      tagline: 'Planning your journey to parenthood',
-      description: `We're here to support you through every step of your ${subLabel} journey.`,
+      tagline: 'Planning your path to parenthood',
+      description: `We'll guide you through your ${subLabel} journey.`,
       ctaLabel: 'Talk to Lumira',
       ctaHref: '/chat',
       bgGradient: 'linear-gradient(135deg, #87A28F, #6B8F73)',
@@ -141,6 +141,7 @@ export default function StageHeroCard({ stage, babyName, planningSubOption }: Pr
           opacity: 0.9,
           lineHeight: 1.5,
           marginBottom: '16px',
+          minHeight: '21px',
         }}
       >
         {config.description}
