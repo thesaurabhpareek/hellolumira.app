@@ -563,8 +563,21 @@ export async function POST(request: NextRequest) {
       concern_category: concernCategory as ConcernCategory,
     })
   } catch (err) {
-    const errMsg = err instanceof Error ? err.message : String(err)
-    console.error('[chat] Error:', errMsg)
+    console.error('[chat] Unhandled error:', err)
+    // Anthropic SDK errors (instanceof Anthropic.APIError or err.status exists)
+    // should be surfaced as 503 so the client shows "temporarily unavailable".
+    // Only truly unexpected errors (no .status) become 500.
+    const isApiError =
+      err instanceof Error && (
+        (err as Error & { status?: number }).status !== undefined ||
+        err.constructor?.name === 'APIError'
+      )
+    if (isApiError) {
+      return NextResponse.json(
+        { error: true, message: 'Chat service is temporarily unavailable. Please try again later.' },
+        { status: 503, headers: SECURITY_HEADERS }
+      )
+    }
     return NextResponse.json(
       { error: true, message: 'Lumira is taking a moment. Try again.' },
       { status: 500, headers: SECURITY_HEADERS }

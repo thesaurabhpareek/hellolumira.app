@@ -142,8 +142,12 @@ export function useChatThread(initialMessages: ChatMsg[] = []): UseChatThreadRes
     } catch (e) {
       const status = (e as Error & { status?: number }).status
       const errorContent =
-        status === 503
+        status === undefined
+          ? "I'm having trouble connecting right now. Check your connection and tap to try again."
+          : status === 503
           ? "Chat is temporarily unavailable — we're on it. Your conversation is saved."
+          : status === 500
+          ? "I'm having trouble connecting right now. Your conversation is saved — tap to try again."
           : status === 429
           ? "You're sending messages too quickly. Please wait a moment and try again."
           : status === 401 || status === 403
