@@ -43,10 +43,18 @@ export async function GET(request: NextRequest) {
       .from('profiles')
       .select('first_name')
       .eq('id', user.id)
-      .single()
+      .maybeSingle()
 
-    // No profile → new user → onboarding
-    if (!profile?.first_name) {
+    // No profile row → new user → upsert a blank row then redirect to onboarding
+    if (!profile) {
+      await supabase
+        .from('profiles')
+        .upsert({ id: user.id }, { onConflict: 'id', ignoreDuplicates: true })
+      return NextResponse.redirect(`${origin}/onboarding`)
+    }
+
+    // Profile exists but onboarding incomplete → onboarding
+    if (!profile.first_name) {
       return NextResponse.redirect(`${origin}/onboarding`)
     }
 

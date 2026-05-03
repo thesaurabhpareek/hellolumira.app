@@ -114,10 +114,7 @@ export async function buildContextBlock(
   } else if (baby.stage === 'pregnancy') {
     lines.push(`Pregnancy: Week ${info.pregnancy_week || '?'} of 40 (due ${baby.due_date || 'unknown'})`)
   } else {
-    const ageDetail = (info.age_in_months ?? 0) < 3
-      ? `${info.age_in_weeks ?? 0} weeks old`
-      : `${info.age_in_months ?? 0} months old (${info.age_in_weeks ?? 0} weeks)`
-    lines.push(`Baby: ${baby.name || 'Baby'}, ${ageDetail}`)
+    lines.push(`Baby: ${baby.name || 'Baby'}, ${info.age_display_string}`)
   }
 
   lines.push(

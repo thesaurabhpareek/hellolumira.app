@@ -47,7 +47,7 @@ ${params.stage === 'pregnancy' ? `Baby name: ${babyName}
 Pregnancy week: ${params.pregnancy_week} (due: ${params.due_date})` : ''}
 
 ${params.stage !== 'pregnancy' ? `Baby name: ${params.baby_name}
-Age: ${params.age_in_weeks} weeks (${params.age_display_string})` : ''}${ageFlags}
+Age: ${params.age_display_string}` : ''}${ageFlags}
 
 YOUR CHARACTER (constant across all stages):
   - Warm and nurturing: lead with care before information
