@@ -1,0 +1,235 @@
+name: Letters CI
+
+# Mechanical enforcement of docs/LETTERS-ENGINEERING-CONTRACT.md. Dozens of agents write
+# this code in parallel; this workflow is the backstop, not discipline. Every gate here
+# maps to a line in the contract — see the comment above each step.
+#
+# Runs only on PRs touching Letters-owned paths, targeting feat/letters (contract: never
+# commit to main or fixes-from-session, so that's the only base this feature merges to).
+
+on:
+  pull_request:
+    branches:
+      - feat/letters
+    paths:
+      - 'app/(app)/letters/**'
+      - 'components/app/letters/**'
+      - 'app/api/letters/**'
+      - 'lib/letters/**'
+      - 'hooks/useLettersSession.ts'
+      - 'hooks/useVoiceCapture.ts'
+      - 'hooks/useLetterTimeline.ts'
+      - '__tests__/letters/**'
+      - 'types/letters.ts'
+      - 'supabase/migrations/*letters*'
+      - 'tokens/**'
+      - 'scripts/build-tokens.ts'
+      - 'scripts/lint-tokens.ts'
+      - 'docs/LETTERS-ENGINEERING-CONTRACT.md'
+      - 'docs/LETTERS-MODEL-CHANGE.md'
+      - 'docs/Lumira-Letters-PRD.md'
+      - 'docs/Lumira-Design-System-iOS.md'
+      - '.github/workflows/letters-ci.yml'
+
+# Cancel stale runs when a PR gets new commits — matches the fast-iteration, many-small-PRs
+# shape of this feature.
+concurrency:
+  group: letters-ci-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  letters-ci:
+    name: Letters contract gates
+    runs-on: ubuntu-latest
+    steps:
+      # fetch-depth 0 so later steps can diff base...head to scope the token-lint gate to
+      # files this PR actually changed (repo has ~893 pre-existing token-lint violations —
+      # see that step for why).
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Contract §3: "Code compiles: npx tsc --noEmit passes with no new errors."
+      - name: Type check
+        run: npx tsc --noEmit
+
+      # Contract §3: "Lint passes: npm run lint with no new warnings in your files."
+      - name: Lint
+        run: npm run lint
+
+      # Contract §3: "Tests written and passing." Scoped explicitly to __tests__/letters
+      # so a config change elsewhere can never silently drop Letters coverage from this
+      # gate — this workflow's whole job is to not depend on anyone getting that right.
+      - name: Test — Letters suite
+        run: npx vitest run __tests__/letters
+
+      # Contract §2: "Idempotent migrations" + design spec's token pipeline — generated
+      # CSS/RN theme files must never drift from tokens/*.ts. --check exits non-zero if
+      # `npx tsx scripts/build-tokens.ts` (no flag) would change any generated output.
+      - name: Token staleness check
+        run: npx tsx scripts/build-tokens.ts --check
+
+      # Design spec §2.1 governance check: no raw hex / rgba() literal outside tokens/.
+      #
+      # SCOPING CAVEAT (read before touching this step): scripts/lint-tokens.ts scans the
+      # entire components/ and app/ trees with no path argument and no changed-files
+      # awareness — it is a DS3-owned file and out of this lane's ownership, so it can't be
+      # taught to scope itself. As of this writing it reports ~893 pre-existing violations
+      # repo-wide (almost none of them Letters code), so wiring its raw exit code into this
+      # gate would make it permanently red and train everyone to ignore it.
+      #
+      # Fix: run it, capture its full output, then only fail the build if one of the
+      # violation lines it printed points at a file this PR actually touched under
+      # components/ or app/. Pre-existing violations in untouched files are ignored; a
+      # brand-new violation in a file this PR added or edited fails the build. This is a
+      # workflow-level workaround, not a fix to the underlying repo-wide debt — that's a
+      # separate, tracked cleanup, not this gate's job.
+      - name: Token lint (scoped to files changed in this PR)
+        run: |
+          set -uo pipefail
+
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+
+          CHANGED_FILES=$(git diff --name-only --diff-filter=ACMR "$BASE_SHA" "$HEAD_SHA" -- 'components/*.ts' 'components/*.tsx' 'components/**/*.ts' 'components/**/*.tsx' 'app/*.ts' 'app/*.tsx' 'app/**/*.ts' 'app/**/*.tsx')
+
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "No changed components/ or app/ files in this PR — nothing for lint-tokens to scope to. Skipping."
+            exit 0
+          fi
+
+          echo "Files this PR changed under components/ or app/:"
+          echo "$CHANGED_FILES"
+          echo
+
+          # lint-tokens.ts sets a non-zero exitCode on violations but keeps printing —
+          # capture output regardless of its own exit status, then decide ourselves.
+          LINT_OUTPUT=$(npx tsx scripts/lint-tokens.ts 2>&1) || true
+          echo "$LINT_OUTPUT"
+          echo
+
+          FAILED=0
+          while IFS= read -r f; do
+            [ -z "$f" ] && continue
+            # lint-tokens.ts prints violations as "  <repo-relative-path>:<line>  [<kind>]"
+            if echo "$LINT_OUTPUT" | grep -qE "^[[:space:]]*${f//\//\\/}:[0-9]+"; then
+              echo "::error::Token lint violation in a file this PR changed: $f"
+              FAILED=1
+            fi
+          done <<< "$CHANGED_FILES"
+
+          if [ "$FAILED" -eq 1 ]; then
+            echo
+            echo "Token lint failed for file(s) this PR changed (see ::error:: lines above)."
+            echo "Pre-existing violations in files this PR did not touch are intentionally ignored — see the comment on this workflow step."
+            exit 1
+          fi
+
+          echo "Token lint: no violations in files this PR changed. (Repo-wide pre-existing violations, if any, were ignored — see this step's comment.)"
+
+      # Contract §1.1: "Everything is behind a feature flag... No module reads
+      # process.env for a Letters flag directly — flags.ts is the only place that is
+      # allowed to." This checks the *consumption* side: every file under the three
+      # Letters UI/route surfaces must at least reference the flags module somehow.
+      #
+      # HONESTY CAVEAT: this is a crude textual grep, not a control-flow or import-graph
+      # analysis. It cannot verify the flag check actually gates rendering/execution
+      # (e.g. it would pass a file that imports isLettersEnabled but never calls it, or
+      # calls it and ignores the result), and it cannot see re-exports or indirection
+      # through a shared wrapper outside these three directories. It exists to catch the
+      # common, honest mistake — a whole new page or route that never touches flags.ts at
+      # all — not to replace code review of the actual gating logic. A crude check that
+      # runs beats a perfect one that doesn't.
+      - name: Flag guard — every Letters surface references flags.ts
+        run: |
+          set -uo pipefail
+
+          LETTERS_DIRS=(
+            "app/(app)/letters"
+            "components/app/letters"
+            "app/api/letters"
+          )
+          FLAG_PATTERN='letters/flags|isLettersEnabled|isSubFlagEnabled'
+          FAILED=0
+
+          for dir in "${LETTERS_DIRS[@]}"; do
+            if [ ! -d "$dir" ]; then
+              continue
+            fi
+            while IFS= read -r -d '' file; do
+              if ! grep -qE "$FLAG_PATTERN" "$file"; then
+                echo "::error::No reference to the flags module (lib/letters/flags.ts) found in: $file"
+                FAILED=1
+              fi
+            done < <(find "$dir" -type f \( -name '*.ts' -o -name '*.tsx' \) -print0)
+          done
+
+          if [ "$FAILED" -eq 1 ]; then
+            echo
+            echo "Flag guard failed: contract §1.1 requires every Letters surface to be flag-gated."
+            echo "This is a textual grep (see this step's comment) — fix by actually gating the surface via lib/letters/flags.ts, not by adding an unused import to satisfy the grep."
+            exit 1
+          fi
+
+          echo "Flag guard passed: every file under the Letters surfaces references the flags module."
+
+      # Contract §1.5: "Never log transcript text, entry bodies, or safety-trigger text.
+      # Log ids, counts, tiers, durations. This is a hard privacy boundary, not a style
+      # preference."
+      #
+      # HONESTY CAVEAT: this is a grep for console.* calls whose line also contains a
+      # variable/field name commonly holding transcript or body text (per types/letters.ts:
+      # raw_transcript, composed_body, edited_body, body, and camelCase equivalents). It
+      # cannot see data flow — a console.log of a differently-named variable that happens
+      # to hold the same text will not be caught, and a console.log mentioning "body" as
+      # part of an unrelated identifier (e.g. an HTTP response body) will false-positive.
+      # Treat a hit here as "look at this line," not as proof of a leak; treat a pass as
+      # "no obvious hit," not proof of absence. Reviewers still own this boundary.
+      - name: Privacy guard — no transcript/body text in console output
+        run: |
+          set -uo pipefail
+
+          SCAN_PATHS=(
+            "lib/letters"
+            "app/api/letters"
+            "components/app/letters"
+            "app/(app)/letters"
+            "hooks/useLettersSession.ts"
+            "hooks/useVoiceCapture.ts"
+            "hooks/useLetterTimeline.ts"
+          )
+          CONTENT_PATTERN='transcript|raw_?transcript|composed_?body|edited_?body|entry_?body|letter_?body|log_?body|\bbody\b'
+          FOUND=""
+
+          for path in "${SCAN_PATHS[@]}"; do
+            if [ ! -e "$path" ]; then
+              continue
+            fi
+            HIT=$(grep -rnEI 'console\.(log|warn|error|debug|info)\(' "$path" --include='*.ts' --include='*.tsx' 2>/dev/null | grep -iE "$CONTENT_PATTERN" || true)
+            if [ -n "$HIT" ]; then
+              FOUND="${FOUND}${HIT}"$'\n'
+            fi
+          done
+
+          if [ -n "$FOUND" ]; then
+            echo "::error::Possible transcript/body text passed to console.* — this is a hard privacy boundary (contract §1.5):"
+            echo "$FOUND"
+            echo
+            echo "If this is a false positive (e.g. an unrelated HTTP 'body' variable), rename the variable or log only an id/count/tier/duration instead — see this step's comment for why this check is intentionally crude."
+            exit 1
+          fi
+
+          echo "Privacy guard passed: no console.* call in scanned Letters paths appears to log transcript or body text."

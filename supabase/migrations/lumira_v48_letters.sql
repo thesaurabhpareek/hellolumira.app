@@ -1,5 +1,9 @@
 -- lumira_v48_letters.sql
--- "Letters" — nightly voice journaling in the parent's own voice.
+-- Journaling + Letters.
+--   'log'    = the nightly journal entry. The HABIT. Low ceremony, always created.
+--   'letter' = an ARTIFACT composed from one or more logs. Opt-in, on demand.
+--   'ai_summary' = the pre-existing Lumira weekly summary. Untouched.
+-- Capture happens once; the output kind is a choice made after.
 -- Extends journal_entries rather than superseding it, preserving existing RLS + list UI.
 -- entry_kind separates Lumira-writing-about-the-parent from the-parent-writing-to-the-child.
 
@@ -23,12 +27,14 @@ ALTER TABLE public.journal_entries
   ADD COLUMN IF NOT EXISTS duration_seconds int,
   ADD COLUMN IF NOT EXISTS covers_from date,
   ADD COLUMN IF NOT EXISTS covers_to date,
+  ADD COLUMN IF NOT EXISTS source_entry_ids uuid[] NOT NULL DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS letter_span text,
   ADD COLUMN IF NOT EXISTS composed_at timestamptz,
   ADD COLUMN IF NOT EXISTS updated_at timestamptz NOT NULL DEFAULT now();
 
 DO $$ BEGIN
   ALTER TABLE public.journal_entries ADD CONSTRAINT journal_entries_entry_kind_chk
-    CHECK (entry_kind IN ('ai_summary','nightly_letter'));
+    CHECK (entry_kind IN ('ai_summary','log','letter'));
 EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 DO $$ BEGIN
@@ -48,6 +54,22 @@ EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 CREATE INDEX IF NOT EXISTS idx_journal_entries_kind_date
   ON public.journal_entries (profile_id, entry_kind, entry_date DESC);
+DO $$ BEGIN
+  ALTER TABLE public.journal_entries ADD CONSTRAINT journal_entries_letter_span_chk
+    CHECK (letter_span IS NULL OR letter_span IN ('single','week','month','milestone','custom'));
+EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+
+-- A letter must cite its sources; a log must not have any.
+DO $$ BEGIN
+  ALTER TABLE public.journal_entries ADD CONSTRAINT journal_entries_sources_chk
+    CHECK (
+      (entry_kind = 'letter' AND array_length(source_entry_ids, 1) >= 1)
+      OR (entry_kind <> 'letter' AND array_length(source_entry_ids, 1) IS NULL)
+    );
+EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+
+CREATE INDEX IF NOT EXISTS idx_journal_entries_sources
+  ON public.journal_entries USING gin (source_entry_ids);
 CREATE INDEX IF NOT EXISTS idx_journal_entries_baby
   ON public.journal_entries (baby_id, entry_date DESC);
 -- Full-text search over the reader-facing body (PRD 15.3 / D9 timeline search)
@@ -158,3 +180,8 @@ EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 -- 6. Backfill: existing rows are Lumira's AI weekly summaries
 -- ─────────────────────────────────────────────────────────────
 UPDATE public.journal_entries SET entry_kind = 'ai_summary' WHERE entry_kind IS NULL;
+
+-- Race guard for the nightly log: one log per baby per day.
+CREATE UNIQUE INDEX IF NOT EXISTS uniq_journal_log_per_day
+  ON public.journal_entries (profile_id, baby_id, entry_date)
+  WHERE entry_kind = 'log';

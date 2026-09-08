@@ -5,7 +5,16 @@
  *   requires updating every consumer in the same PR.
  */
 
-export type EntryKind = 'ai_summary' | 'nightly_letter'
+/**
+ * The capture is one thing; the output is a choice made after it.
+ *   'log'        — the nightly journal entry. THE HABIT. Low ceremony, always created.
+ *   'letter'     — an artifact composed from one or more logs. Opt-in, on demand.
+ *   'ai_summary' — the pre-existing Lumira weekly summary. Untouched by this feature.
+ */
+export type EntryKind = 'ai_summary' | 'log' | 'letter'
+
+/** What a letter was built from. Null on logs. */
+export type LetterSpan = 'single' | 'week' | 'month' | 'milestone' | 'custom'
 export type ComposeMode = 'keep_words' | 'shaped' | 'raw'
 export type CaptureMode = 'spoken' | 'typed' | 'mixed' | 'not_much'
 export type Visibility = 'private' | 'partner' | 'child_safe'
@@ -30,13 +39,16 @@ export type FollowUp = {
   skipped: boolean
 }
 
-/** A single nightly letter. Mirrors journal_entries after migration v48. */
-export type Letter = {
+/** A journal entry — either a nightly log or a composed letter. Mirrors journal_entries after v48. */
+export type JournalEntryRow = {
   id: string
   profile_id: string
   baby_id: string | null
   entry_kind: EntryKind
   entry_date: string           // YYYY-MM-DD
+  /** Logs this letter was composed from. Empty on logs; >=1 on letters. */
+  source_entry_ids: string[]
+  letter_span: LetterSpan | null
   /** Reader-facing text. Always populated. This is what the timeline renders. */
   body: string
   raw_transcript: string | null
@@ -117,4 +129,17 @@ export type OpeningPrompt = {
   source: 'milestone' | 'checkin' | 'age_band' | 'evergreen' | 'gap_recovery'
   /** Traceable back to the row that produced it. Null for evergreen. */
   sourceRef: string | null
+}
+
+/** Back-compat alias. A "Letter" is a JournalEntryRow with entry_kind === 'letter'. */
+export type Letter = JournalEntryRow
+
+/** Input for composing a letter from one or more existing logs. */
+export type LetterCompositionInput = {
+  span: LetterSpan
+  /** The log rows being turned into a letter. Never empty. */
+  sources: Array<Pick<JournalEntryRow, 'id' | 'entry_date' | 'body' | 'raw_transcript'>>
+  voiceProfile: VoiceProfile | null
+  babyName: string | null
+  ageInMonths: number | null
 }
